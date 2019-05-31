@@ -51,7 +51,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalance? = null
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -82,14 +82,14 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun getTxRequest(): TransactionsBroadcastRequest {
         return TransactionsBroadcastRequest(
-                selectedAsset!!.assetId,
+                selectedAsset?.assetId ?: "",
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient ?: "",
                 MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 EnvironmentManager.getTime(),
                 fee,
                 "",
-                feeAsset.assetId)
+                feeAsset?.assetId ?: "")
     }
 
     private fun validateTransfer(): Int {
@@ -104,7 +104,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 return R.string.attachment_too_long
             } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                 return R.string.invalid_amount
-            } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
+            } else if (tx.fee <= 0 || (feeAsset?.isWaves() != false && tx.fee < Constants.WAVES_MIN_FEE)) {
                 return R.string.insufficient_fee
             } else if (!isFundSufficient(tx)) {
                 return R.string.insufficient_funds
@@ -148,7 +148,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun isSameSendingAndFeeAssets(): Boolean {
         if (selectedAsset != null) {
-            return feeAsset.assetId == selectedAsset!!.assetId
+            return feeAsset?.assetId == selectedAsset!!.assetId
         }
         return false
     }
@@ -156,7 +156,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     fun loadXRate(assetId: String) {
         val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
         if (currencyTo.isNullOrEmpty()) {
-            type = SendPresenter.Type.UNKNOWN
+            type = Type.UNKNOWN
             runOnUiThread {
                 viewState.showXRateError()
             }
@@ -167,7 +167,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         runAsync {
             addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
                     .subscribe({ xRate ->
-                        type = SendPresenter.Type.GATEWAY
+                        type = Type.GATEWAY
                         gatewayCommission = BigDecimal(xRate.feeOut ?: "0")
                         gatewayMin = BigDecimal(xRate.inMin ?: "0")
                         gatewayMax = BigDecimal(xRate.inMax ?: "0")
@@ -179,7 +179,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                             }
                         }
                     }, {
-                        type = SendPresenter.Type.UNKNOWN
+                        type = Type.UNKNOWN
                         runOnUiThread {
                             viewState.showXRateError()
                         }

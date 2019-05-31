@@ -118,8 +118,9 @@ public class MoneyUtil {
         return getTextStripZeros(amount, 8);
     }
 
-    public static long getUnscaledValue(String amount, AssetBalance ab) {
-        return getUnscaledValue(amount, ab.getDecimals(), RoundingMode.HALF_EVEN);
+    public static long getUnscaledValue(
+            String amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
+        return getUnscaledValue(amount, ab.getDecimals());
     }
 
     public static long getUnscaledValue(String amount, int decimals) {

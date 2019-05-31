@@ -150,7 +150,11 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         // configure top avatars pager
         adapterAvatar.items = sortedToFirstFavoriteList
         adapterAvatar.notifyDataSetChanged()
-        view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
+        val position = intent.getIntExtra(BUNDLE_ASSET_POSITION, 0)
+        if (view_pager.adapter == null || view_pager.adapter!!.count < position) {
+            return
+        }
+        view_pager.setCurrentItem(position, false)
         view_pager.post {
             if (view_pager.beginFakeDrag() && view_pager.adapter?.count != 0) {
                 view_pager.fakeDragBy(0f)
