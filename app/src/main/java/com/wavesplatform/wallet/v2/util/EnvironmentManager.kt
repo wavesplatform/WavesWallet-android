@@ -12,7 +12,6 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.LastAppVersionResponse
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -21,6 +20,7 @@ import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
@@ -46,7 +46,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
         private const val GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data"
         private const val GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment"
         private const val GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction"
-        private const val GLOBAL_CURRENT_LAST_VERSION_APP = "global_current_last_version_app"
 
         val netCode: Byte
             get() = environment.configuration.scheme[0].toByte()
@@ -73,13 +72,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
                 return preferenceManager.getString(
                         GLOBAL_CURRENT_ENVIRONMENT, ClientEnvironment.MAIN_NET.name)
             }
-
-
-        fun getLastAppVersion(): String {
-            return PreferenceManager
-                    .getDefaultSharedPreferences(App.getAppContext())
-                    .getString(GLOBAL_CURRENT_LAST_VERSION_APP, "0.0.0") ?: "0.0.0" // todo check
-        }
 
         fun getTime(): Long {
             val timeCorrection = if (instance == null) {
@@ -187,7 +179,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             instance!!.versionDisposable = githubService.loadLastAppVersion(Constants.URL_GITHUB_CONFIG_VERSION)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
-                        setLastAppVersion(version)
+                        PreferencesHelper(App.getAppContext()).lastAppVersion = version.lastVersion
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
@@ -224,14 +216,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
             } else {
                 environment.configuration
             }
-        }
-
-        private fun setLastAppVersion(version: LastAppVersionResponse) {
-            PreferenceManager
-                    .getDefaultSharedPreferences(App.getAppContext())
-                    .edit()
-                    .putString(GLOBAL_CURRENT_LAST_VERSION_APP, version.lastVersion)
-                    .apply()
         }
 
         private fun setTimeCorrection(timeCorrection: Long) {

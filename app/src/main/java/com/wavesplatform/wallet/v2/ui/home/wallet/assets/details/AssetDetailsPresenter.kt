@@ -58,8 +58,8 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
             }
             result.addAll(hiddenAssets)
 
-            addSubscription(queryAllAsSingle<Transaction>()
-                    .map { allTransaction = it }
+            addSubscription(queryAllAsSingle<TransactionDb>()
+                    .map { allTransaction = TransactionDb.convertFromDb(it) }
                     .subscribe({
                         runOnUiThread {
                             viewState.afterSuccessLoadAssets(result)
