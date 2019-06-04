@@ -6,7 +6,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import com.arellomobile.mvp.InjectViewState
-import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -19,6 +18,7 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import timber.log.Timber
 import javax.inject.Inject
 
 @InjectViewState
@@ -31,31 +31,40 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
 
 
     fun loadSearchAssets(query: String) {
-        if (findAssetList.isEmpty()) {
-            findAssetList = queryAll()
-        }
-        val find = findAssetBalanceInDb(query, findAssetList)
-        val result = mutableListOf<AssetBalance>()
-        val hiddenAssets = mutableListOf<AssetBalance>()
-
-        find.forEach {
-            if (it.isFavorite) {
-                result.add(it)
+        runAsync {
+            if (findAssetList.isEmpty()) {
+                findAssetList = queryAll()
             }
-        }
+            val find = findAssetBalanceInDb(query, findAssetList)
+            val result = mutableListOf<AssetBalance>()
+            val hiddenAssets = mutableListOf<AssetBalance>()
 
-        find.forEach {
-            if (!it.isFavorite) {
-                if (it.isHidden) {
-                    hiddenAssets.add(it)
-                } else {
+            find.forEach {
+                if (it.isFavorite) {
                     result.add(it)
                 }
             }
-        }
-        result.addAll(hiddenAssets)
-        runOnUiThread {
-            viewState.afterSuccessLoadAssets(result)
+
+            find.forEach {
+                if (!it.isFavorite) {
+                    if (it.isHidden) {
+                        hiddenAssets.add(it)
+                    } else {
+                        result.add(it)
+                    }
+                }
+            }
+            result.addAll(hiddenAssets)
+
+            addSubscription(queryAllAsSingle<Transaction>()
+                    .map { allTransaction = it }
+                    .subscribe({
+                        runOnUiThread {
+                            viewState.afterSuccessLoadAssets(result)
+                        }
+                    }, {
+                        Timber.e(it)
+                    }))
         }
     }
 
