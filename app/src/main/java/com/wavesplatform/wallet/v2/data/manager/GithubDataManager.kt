@@ -11,7 +11,7 @@ import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
-import com.wavesplatform.sdk.net.model.response.SpamAssetResponse
+import com.wavesplatform.sdk.model.response.SpamAssetResponse
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService

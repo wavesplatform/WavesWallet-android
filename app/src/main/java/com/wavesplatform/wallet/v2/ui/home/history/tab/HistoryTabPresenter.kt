@@ -9,10 +9,10 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.net.model.Language
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
-import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.transactionType

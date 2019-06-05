@@ -9,7 +9,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.annotation.NonNull
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.AppCompatImageView
 import android.text.TextPaint
@@ -19,8 +18,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.defaultAssetsAvatar
 import pers.victor.ext.resize

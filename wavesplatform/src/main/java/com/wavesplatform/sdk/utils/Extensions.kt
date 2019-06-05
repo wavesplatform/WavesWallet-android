@@ -3,8 +3,8 @@ package com.wavesplatform.sdk.utils
 import android.util.Patterns
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
-import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.sdk.model.response.*
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
 import java.math.RoundingMode

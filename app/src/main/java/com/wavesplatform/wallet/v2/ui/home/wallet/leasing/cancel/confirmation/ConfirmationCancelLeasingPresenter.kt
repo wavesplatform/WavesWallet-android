@@ -6,13 +6,12 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.request.CancelLeasingRequest
+import com.wavesplatform.sdk.model.transaction.node.CancelLeasingTransaction
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
-import com.wavesplatform.sdk.net.model.response.ScriptInfoResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.response.ScriptInfoResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import com.wavesplatform.wallet.v2.util.errorBody
@@ -25,16 +24,16 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
 
     var address: String = ""
     var amount: String = ""
-    var cancelLeasingRequest: CancelLeasingRequest = CancelLeasingRequest()
+    var cancelLeasingRequest: CancelLeasingTransaction? = null
     var transactionId: String = ""
     var fee = 0L
 
     var success = false
 
     fun cancelLeasing() {
-        cancelLeasingRequest.leaseId = transactionId
-        cancelLeasingRequest.fee = fee
-        addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest)
+        cancelLeasingRequest = CancelLeasingTransaction(leaseId = transactionId)
+        cancelLeasingRequest?.fee = fee
+        addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest ?: CancelLeasingTransaction())
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     success = true

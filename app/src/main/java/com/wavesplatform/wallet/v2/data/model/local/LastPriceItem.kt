@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.net.model.response.LastTradesResponse
+import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookAdapter
 
 class LastPriceItem : MultiItemEntity {

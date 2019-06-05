@@ -8,11 +8,10 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.wavesplatform.sdk.net.model.OrderStatus
+import com.wavesplatform.sdk.model.OrderStatus
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.net.model.response.MarketResponse
-import com.wavesplatform.sdk.net.model.response.AssetPairOrderResponse
-import com.wavesplatform.sdk.utils.roundTo
+import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.model.response.AssetPairOrderResponse
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment.Companion.FILLED_ORDER_PERCENT
 import kotlinx.android.synthetic.main.item_my_orders.view.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString

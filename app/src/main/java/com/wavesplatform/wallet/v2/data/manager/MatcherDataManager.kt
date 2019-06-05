@@ -9,13 +9,12 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
-import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
-import com.wavesplatform.sdk.net.model.request.OrderRequest
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.model.transaction.matcher.CancelOrderRequest
+import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App

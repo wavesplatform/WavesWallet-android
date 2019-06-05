@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.model.local
 
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 
 data class SponsoredAssetItem(
         var assetBalance: AssetBalanceResponse,

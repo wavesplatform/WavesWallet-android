@@ -10,12 +10,10 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
-import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
-import com.wavesplatform.sdk.net.model.request.TransferTransactionRequest
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.transaction.node.TransferTransaction
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.utils.*
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -76,16 +74,14 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
-    private fun getTxRequest(): TransactionsBroadcastRequest {
-        return TransactionsBroadcastRequest(
-                selectedAsset?.assetId ?: "",
-                App.getAccessManager().getWallet()!!.publicKeyStr,
-                recipient ?: "",
-                MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
-                EnvironmentManager.getTime(),
-                fee,
-                "",
-                feeAsset?.assetId ?: "")
+    private fun getTxRequest(): TransferTransaction {
+        return TransferTransaction(
+                assetId = selectedAsset?.assetId ?: "",
+                recipient = recipient ?: "",
+                amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
+                fee = fee,
+                attachment = "",
+                feeAssetId = feeAsset?.assetId ?: "")
     }
 
     private fun validateTransfer(): Int {
@@ -95,8 +91,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return R.string.invalid_address
         } else {
             val tx = getTxRequest()
-            if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
-                    > TransferTransactionRequest.MaxAttachmentSize) {
+            if (TransferTransaction.getAttachmentSize(tx.attachment)
+                    > TransferTransaction.MaxAttachmentSize) {
                 return R.string.attachment_too_long
             } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                 return R.string.invalid_amount
@@ -128,7 +124,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    private fun isFundSufficient(tx: TransactionsBroadcastRequest): Boolean {
+    private fun isFundSufficient(tx: TransferTransaction): Boolean {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {

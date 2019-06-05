@@ -23,13 +23,13 @@ import com.github.mikephil.charting.listener.BarLineChartTouchListener
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
-import com.wavesplatform.sdk.net.model.OrderType
+import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
-import com.wavesplatform.sdk.net.model.response.LastTradesResponse
+import com.wavesplatform.sdk.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener

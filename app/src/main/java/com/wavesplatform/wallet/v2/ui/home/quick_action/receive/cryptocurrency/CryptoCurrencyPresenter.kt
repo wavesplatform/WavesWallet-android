@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App

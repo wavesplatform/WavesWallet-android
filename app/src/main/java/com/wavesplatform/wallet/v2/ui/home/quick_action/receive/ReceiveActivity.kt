@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment

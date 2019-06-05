@@ -13,7 +13,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.net.model.response.AliasResponse
+import com.wavesplatform.sdk.model.response.AliasResponse
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -112,7 +112,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 })
 
         button_create_alias.click {
-            presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString())
+            presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString() ?: "")
         }
 
         presenter.loadWavesBalance()
@@ -171,7 +171,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     companion object {
-        const val RESULT_ALIAS = "alias"
+        const val RESULT_ALIAS = "aliasBytes"
         const val BUNDLE_BLOCKCHAIN_COMMISSION = "blockchain_commission"
     }
 }

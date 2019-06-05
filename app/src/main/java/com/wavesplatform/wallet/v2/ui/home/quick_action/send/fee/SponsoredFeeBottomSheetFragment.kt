@@ -15,7 +15,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 

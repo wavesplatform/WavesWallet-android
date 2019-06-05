@@ -6,9 +6,9 @@
 package com.wavesplatform.sdk.utils
 
 
-import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
-import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.TransactionType
 import javax.inject.Inject
 
 class TransactionUtil @Inject constructor() {

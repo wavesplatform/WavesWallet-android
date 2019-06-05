@@ -9,9 +9,9 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.transaction.node.TransferTransaction
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -64,18 +64,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun signTransaction(): TransactionsBroadcastRequest? {
-        val pk = App.getAccessManager().getWallet()!!.privateKey
-        return if (pk != null) {
-            val signed = getTxRequest()
-            signed.sign(pk)
-            signed
-        } else {
-            null
-        }
+    private fun signTransaction(): TransferTransaction? {
+        val signed = getTxRequest()
+        signed.sign(App.getAccessManager().getWallet().privateKeyStr)
+        return signed
     }
 
-    private fun submitPayment(signedTransaction: TransactionsBroadcastRequest) {
+    private fun submitPayment(signedTransaction: TransferTransaction) {
         if (type == SendPresenter.Type.GATEWAY) {
             createGateAndPayment()
         } else {
@@ -97,7 +92,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun checkRecipientAlias(signedTransaction: TransactionsBroadcastRequest) {
+    private fun checkRecipientAlias(signedTransaction: TransferTransaction) {
         signedTransaction.attachment = Base58.encode(
                 (signedTransaction.attachment ?: "").toByteArray())
         if (signedTransaction.recipient.length <= 30) {
@@ -105,7 +100,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun getTxRequest(): TransactionsBroadcastRequest {
+    private fun getTxRequest(): TransferTransaction {
         if (recipient == null || recipient!!.length < 4) {
             recipient = ""
         } else if (recipient!!.length <= 30) {
@@ -118,15 +113,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             amount
         }
 
-        return TransactionsBroadcastRequest(
-                selectedAsset!!.assetId,
-                App.getAccessManager().getWallet()!!.publicKeyStr,
-                recipient!!,
-                MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
-                EnvironmentManager.getTime(),
-                blockchainCommission,
-                attachment,
-                feeAsset.assetId)
+        return TransferTransaction(
+                assetId = selectedAsset!!.assetId,
+                recipient = recipient!!,
+                amount = MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
+                fee = blockchainCommission,
+                attachment = attachment,
+                feeAssetId = feeAsset.assetId)
     }
 
     fun getAddressName(address: String) {

@@ -14,7 +14,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.model.transaction.node.TransferTransaction
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.sdk.utils.getTicker
@@ -138,7 +138,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.confirmSend()
     }
 
-    override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
+    override fun onShowTransactionSuccess(signed: TransferTransaction) {
         completeTransactionProcessing()
         text_leasing_result_value.text = getString(
                 R.string.send_success_you_have_sent_sum,
@@ -174,7 +174,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         relative_success.gone()
     }
 
-    private fun setSaveAddress(signed: TransactionsBroadcastRequest) {
+    private fun setSaveAddress(signed: TransferTransaction) {
         val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", signed.recipient) }
         if (addressBookUser == null) {
             sent_to_address.text = signed.recipient

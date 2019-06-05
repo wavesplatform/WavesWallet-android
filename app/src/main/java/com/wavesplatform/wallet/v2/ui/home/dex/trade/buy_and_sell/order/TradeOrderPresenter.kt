@@ -6,9 +6,9 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.OrderType
-import com.wavesplatform.sdk.net.model.request.OrderRequest
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
+import com.wavesplatform.sdk.model.response.*
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData

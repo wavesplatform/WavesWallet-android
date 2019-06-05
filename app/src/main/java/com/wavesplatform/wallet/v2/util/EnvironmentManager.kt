@@ -12,7 +12,7 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.NodeService
 import com.wavesplatform.sdk.utils.WavesConstants

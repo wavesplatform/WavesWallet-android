@@ -20,7 +20,6 @@ package com.wavesplatform.sdk
 
 import android.app.Application
 import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.crypto.WavesCryptoImpl
 import com.wavesplatform.sdk.net.WavesService
 import com.wavesplatform.sdk.utils.Environment
 
@@ -48,7 +47,7 @@ class Wavesplatform {
             instance = Wavesplatform()
             instance!!.environment = environment
             instance!!.service = WavesService(application)
-            instance!!.crypto = WavesCryptoImpl()
+            instance!!.crypto = WavesCrypto.Companion
         }
 
         /**

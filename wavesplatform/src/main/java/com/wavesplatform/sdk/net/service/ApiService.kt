@@ -5,7 +5,7 @@
 
 package com.wavesplatform.sdk.net.service
 
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.response.*
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
