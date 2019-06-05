@@ -79,7 +79,7 @@ interface NodeService {
      * @param transaction CreateLeasingTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun broadcastLeasing(@Body transaction: CreateLeasingTransaction): Observable<TransactionResponse>
+    fun broadcastCreateLeasing(@Body transaction: CreateLeasingTransaction): Observable<TransactionResponse>
 
     /**
      * Broadcast a signed cancel leasing transaction

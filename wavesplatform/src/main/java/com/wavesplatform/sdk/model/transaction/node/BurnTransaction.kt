@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
 class BurnTransaction(
@@ -17,7 +17,7 @@ class BurnTransaction(
         @SerializedName("quantity") var quantity: Long) : BaseTransaction(BURN) {
 
     @SerializedName("chainId")
-    val chainId: Byte = Wavesplatform.getEnvironment().scheme
+    val chainId: Byte = WavesPlatform.getEnvironment().scheme
     @SerializedName("id")
     var id: String? = null
 

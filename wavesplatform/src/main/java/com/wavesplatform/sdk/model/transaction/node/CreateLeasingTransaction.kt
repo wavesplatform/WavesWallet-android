@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.isAlias
@@ -19,10 +19,10 @@ import java.nio.charset.Charset
 class CreateLeasingTransaction(
         @SerializedName("recipient") var recipient: String,
         @SerializedName("amount") var amount: Long)
-    : BaseTransaction(LEASE) {
+    : BaseTransaction(CREATE_LEASING) {
 
     @SerializedName("scheme")
-    var scheme: String = Wavesplatform.getEnvironment().scheme.toString()
+    var scheme: String = WavesPlatform.getEnvironment().scheme.toString()
 
     override fun toBytes(): ByteArray {
         return try {

@@ -28,7 +28,7 @@ import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.App
@@ -173,7 +173,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private fun addErrorListener() {
         // todo check refactor without clients recreation & Check Errors to show or log
-        Wavesplatform.service().addOnErrorListener(onErrorListener!!)
+        WavesPlatform.service().addOnErrorListener(onErrorListener!!)
         dataManager.coinomatService = CoinomatManager.create(onErrorListener)
         dataManager.githubService = GithubDataManager.create(onErrorListener)
     }
@@ -181,7 +181,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
-        Wavesplatform.service().removeOnErrorListener(onErrorListener!!)
+        WavesPlatform.service().removeOnErrorListener(onErrorListener!!)
         CoinomatManager.removeOnErrorListener()
         GithubDataManager.removeOnErrorListener()
     }

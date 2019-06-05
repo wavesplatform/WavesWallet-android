@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.MatcherService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -29,11 +29,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Singleton
-open class WavesService(var context: Context) {
+open class WavesService(private var context: Context) {
 
-    lateinit var nodeService: NodeService
-    lateinit var apiService: ApiService
-    lateinit var matcherService: MatcherService
+    private lateinit var nodeService: NodeService
+    private lateinit var apiService: ApiService
+    private lateinit var matcherService: MatcherService
     private var cookies: HashSet<String> = hashSetOf()
     private var adapterFactory: CallAdapter.Factory
     private val onErrorListeners = mutableListOf<OnErrorListener>()
@@ -47,17 +47,17 @@ open class WavesService(var context: Context) {
         createServices()
     }
 
-    fun createServices() {
-        nodeService = createService(addSlash(Wavesplatform.getEnvironment().nodeUrl), adapterFactory)
-                .create(NodeService::class.java)
-
-        apiService = createService(addSlash(Wavesplatform.getEnvironment().dataUrl), adapterFactory)
-                .create(ApiService::class.java)
-
-        matcherService = createService(addSlash(Wavesplatform.getEnvironment().matcherUrl), adapterFactory)
-                .create(MatcherService::class.java)
+    fun getNode(): NodeService {
+        return nodeService
     }
 
+    fun getMatcher(): MatcherService {
+        return matcherService
+    }
+
+    fun getApiService(): ApiService {
+        return apiService
+    }
 
     fun addOnErrorListener(errorListener: OnErrorListener) {
         onErrorListeners.add(errorListener)
@@ -79,6 +79,17 @@ open class WavesService(var context: Context) {
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
+    }
+
+    internal fun createServices() {
+        nodeService = createService(addSlash(WavesPlatform.getEnvironment().nodeUrl), adapterFactory)
+                .create(NodeService::class.java)
+
+        apiService = createService(addSlash(WavesPlatform.getEnvironment().dataUrl), adapterFactory)
+                .create(ApiService::class.java)
+
+        matcherService = createService(addSlash(WavesPlatform.getEnvironment().matcherUrl), adapterFactory)
+                .create(MatcherService::class.java)
     }
 
     private fun addSlash(url: String): String {
@@ -140,7 +151,7 @@ open class WavesService(var context: Context) {
     }
 
     private fun createHostInterceptor(): HostSelectionInterceptor {
-        return HostSelectionInterceptor(Wavesplatform.getEnvironment())
+        return HostSelectionInterceptor(WavesPlatform.getEnvironment())
     }
 
     private fun createCache(): Cache {

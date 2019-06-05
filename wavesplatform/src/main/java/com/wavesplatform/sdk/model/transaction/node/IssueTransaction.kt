@@ -9,8 +9,8 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.SignUtil.arrayWithSize
 
 class IssueTransaction(
@@ -25,8 +25,7 @@ class IssueTransaction(
 
     init {
         this.fee = WAVES_ISSUE_MIN_FEE
-        this.id = Wavesplatform.crypto().base58encode(
-                Wavesplatform.crypto().blake2b(toBytes()))
+        this.id = WavesCrypto.base58encode(WavesCrypto.blake2b(toBytes()))
     }
 
     override fun toBytes(): ByteArray {

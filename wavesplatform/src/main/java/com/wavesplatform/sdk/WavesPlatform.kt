@@ -19,22 +19,20 @@
 package com.wavesplatform.sdk
 
 import android.app.Application
-import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.net.WavesService
 import com.wavesplatform.sdk.utils.Environment
 
-class Wavesplatform {
+class WavesPlatform {
 
     private lateinit var environment: Environment
-    private lateinit var crypto: WavesCrypto
     private lateinit var service: WavesService
 
     companion object {
 
-        private var instance: Wavesplatform? = null
+        private var instance: WavesPlatform? = null
 
         /**
-         * Initialisation Wavesplatform method must be call first.
+         * Initialisation WavesPlatform method must be call first.
          * @param application Application context ot the app
          */
         @JvmStatic
@@ -44,23 +42,11 @@ class Wavesplatform {
 
         @JvmStatic
         fun init(application: Application, environment: Environment) {
-            instance = Wavesplatform()
+            instance = WavesPlatform()
             instance!!.environment = environment
             instance!!.service = WavesService(application)
-            instance!!.crypto = WavesCrypto.Companion
         }
 
-        /**
-         * Access to crypto-methods
-         */
-        @JvmStatic
-        fun crypto(): WavesCrypto {
-            return get().crypto
-        }
-
-        /**
-         * Access to net
-         */
         @JvmStatic
         fun service(): WavesService {
             return get().service
@@ -77,9 +63,9 @@ class Wavesplatform {
             service().createServices()
         }
 
-        private fun get(): Wavesplatform {
+        private fun get(): WavesPlatform {
             if (instance == null) {
-                throw NullPointerException("Wavesplatform must be init first!")
+                throw NullPointerException("WavesPlatform must be init first!")
             }
             return instance!!
         }

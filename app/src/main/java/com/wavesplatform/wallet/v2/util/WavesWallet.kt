@@ -60,7 +60,7 @@ class WavesWallet(val seed: ByteArray) {
                 instance!!.guid = guid
                 guid
             } catch (e: Exception) {
-                Timber.e(e, "WavesWallet: Error create Wavesplatform wallet from seed")
+                Timber.e(e, "WavesWallet: Error create WavesPlatform wallet from seed")
                 e.printStackTrace()
                 ""
             }
@@ -82,7 +82,7 @@ class WavesWallet(val seed: ByteArray) {
                 instance!!.guid = guid
                 guid
             } catch (e: Exception) {
-                Timber.e(e, "WavesWallet: Error create Wavesplatform wallet from encrypted data")
+                Timber.e(e, "WavesWallet: Error create WavesPlatform wallet from encrypted data")
                 e.printStackTrace()
                 ""
             }

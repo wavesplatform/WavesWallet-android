@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
@@ -59,7 +59,7 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
                     CoinomatManager.onErrorListener?.onError(exception)
                 }
             })
-            return Wavesplatform.service().createService(Constants.URL_COINOMAT, adapterFactory)
+            return WavesPlatform.service().createService(Constants.URL_COINOMAT, adapterFactory)
                     .create(CoinomatService::class.java)
         }
 

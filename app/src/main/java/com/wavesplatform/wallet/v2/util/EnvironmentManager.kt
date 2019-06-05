@@ -11,7 +11,7 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.preference.PreferenceManager
 import com.google.gson.Gson
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -119,11 +119,11 @@ class EnvironmentManager(var current: ClientEnvironment) {
                             config.scheme[0].toByte()),
                     timeCorrection)
 
-            Wavesplatform.setEnvironment(environment)
+            WavesPlatform.setEnvironment(environment)
 
             loadConfiguration(
-                    Wavesplatform.service().apiService,
-                    Wavesplatform.service().nodeService,
+                    WavesPlatform.service().apiService,
+                    WavesPlatform.service().nodeService,
                     GithubDataManager.create(null))
         }
 
@@ -157,7 +157,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                                 pair.first.scheme[0].toByte()),
                                         timeCorrection)
 
-                                Wavesplatform.setEnvironment(environment)
+                                WavesPlatform.setEnvironment(environment)
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }

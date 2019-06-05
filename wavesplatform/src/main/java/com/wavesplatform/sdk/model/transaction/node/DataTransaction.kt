@@ -4,16 +4,16 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
 // todo check Not completed!
 class DataTransaction(
         @SerializedName("data") var data: ByteArray)
-    : BaseTransaction(LEASE) {
+    : BaseTransaction(CREATE_LEASING) {
 
     @SerializedName("scheme")
-    var scheme: String = Wavesplatform.getEnvironment().scheme.toString()
+    var scheme: String = WavesPlatform.getEnvironment().scheme.toString()
 
     override fun toBytes(): ByteArray {
         return try {

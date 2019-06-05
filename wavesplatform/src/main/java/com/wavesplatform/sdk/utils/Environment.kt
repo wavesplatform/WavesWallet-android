@@ -45,7 +45,6 @@ class Environment(
     }
 
     companion object {
-
         val DEFAULT = Environment(server = Server.MainNet, timestampServerDiff = 0L)
     }
 

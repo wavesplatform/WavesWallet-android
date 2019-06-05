@@ -1,7 +1,8 @@
 package com.wavesplatform.sdk.model.transaction.node
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
 abstract class BaseTransaction(@SerializedName("type")
@@ -22,10 +23,10 @@ abstract class BaseTransaction(@SerializedName("type")
 
     fun sign(privateKey: String) {
         if (senderPublicKey == "") {
-            senderPublicKey = Wavesplatform.crypto().publicKey(privateKey)
+            senderPublicKey = WavesCrypto.publicKey(privateKey)
         }
         if (timestamp == 0L) {
-            timestamp = Wavesplatform.getEnvironment().getTime()
+            timestamp = WavesPlatform.getEnvironment().getTime()
         }
         if (fee == 0L) {
             fee = WavesConstants.WAVES_MIN_FEE
@@ -37,24 +38,24 @@ abstract class BaseTransaction(@SerializedName("type")
     }
 
     fun getSignedBytes(privateKey: String): ByteArray {
-        return Wavesplatform.crypto().signBytesWithSeed(toBytes(), privateKey)
+        return WavesCrypto.signBytesWithSeed(toBytes(), privateKey)
     }
 
     fun getSignedString(privateKey: String): String {
-        return Wavesplatform.crypto().base58encode(getSignedBytes(privateKey))
+        return WavesCrypto.base58encode(getSignedBytes(privateKey))
     }
 
     companion object {
 
-        const val GENESIS = 1
-        const val PAYMENT = 2
+        const val GENESIS = 1 // Not using
+        const val PAYMENT = 2 // Not using
         const val ISSUE = 3
         const val TRANSFER = 4
         const val REISSUE = 5
         const val BURN = 6
         const val EXCHANGE = 7
-        const val LEASE = 8
-        const val LEASE_CANCEL = 9
+        const val CREATE_LEASING = 8
+        const val CANCEL_LEASING = 9
         const val CREATE_ALIAS = 10
         const val MASS_TRANSFER = 11
         const val DATA = 12
@@ -66,17 +67,17 @@ abstract class BaseTransaction(@SerializedName("type")
         private fun getNameBy(type: Int): String {
             return when (type) {
                 GENESIS -> "Genesis"
-                PAYMENT -> "PaymentResponse"
+                PAYMENT -> "Payment"
                 ISSUE -> "Issue"
-                TRANSFER -> "TransferResponse"
+                TRANSFER -> "Transfer"
                 REISSUE -> "Reissue"
                 BURN -> "Burn"
                 EXCHANGE -> "Exchange"
-                LEASE -> "LeaseResponse"
-                LEASE_CANCEL -> "LeaseResponse Cancel"
-                CREATE_ALIAS -> "Create AliasResponse"
-                MASS_TRANSFER -> "Mass TransferResponse"
-                DATA -> "DataResponse"
+                CREATE_LEASING -> "Create Leasing"
+                CANCEL_LEASING -> "Cancel Leasing"
+                CREATE_ALIAS -> "Create Alias"
+                MASS_TRANSFER -> "MassTransfer"
+                DATA -> "Data"
                 ADDRESS_SCRIPT -> "Address Script"
                 SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"

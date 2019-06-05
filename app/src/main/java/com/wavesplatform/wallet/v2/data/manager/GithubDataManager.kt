@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
@@ -66,7 +66,7 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
                     GithubDataManager.onErrorListener?.onError(exception)
                 }
             })
-            return Wavesplatform.service().createService(Constants.URL_GITHUB_CONFIG, adapterFactory)
+            return WavesPlatform.service().createService(Constants.URL_GITHUB_CONFIG, adapterFactory)
                     .create(GithubService::class.java)
         }
 

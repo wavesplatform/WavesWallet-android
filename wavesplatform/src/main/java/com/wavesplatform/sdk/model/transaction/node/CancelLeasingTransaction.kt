@@ -9,14 +9,14 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
 class CancelLeasingTransaction(@SerializedName("leaseId") var leaseId: String = "")
-    : BaseTransaction(LEASE_CANCEL) {
+    : BaseTransaction(CANCEL_LEASING) {
 
     @SerializedName("chainId")
-    var scheme: Byte = Wavesplatform.getEnvironment().scheme
+    var scheme: Byte = WavesPlatform.getEnvironment().scheme
 
     override fun toBytes(): ByteArray {
         return try {

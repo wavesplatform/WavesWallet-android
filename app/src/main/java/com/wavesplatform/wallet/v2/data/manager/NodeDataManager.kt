@@ -293,7 +293,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         App.getAccessManager().getWallet().privateKeyStr.notNull {
             createLeasingRequest.sign(it)
         }
-        return nodeService.broadcastLeasing(createLeasingRequest)
+        return nodeService.broadcastCreateLeasing(createLeasingRequest)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }

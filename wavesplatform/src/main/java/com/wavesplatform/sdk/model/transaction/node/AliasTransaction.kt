@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
@@ -21,11 +21,11 @@ class AliasTransaction(@SerializedName("aliasBytes") var alias: String = "")
         return try {
             Bytes.concat(
                     byteArrayOf(type.toByte()),
-                    byteArrayOf(Wavesplatform.getEnvironment().scheme),
+                    byteArrayOf(WavesPlatform.getEnvironment().scheme),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(
                             byteArrayOf(version.toByte()),
-                            byteArrayOf(Wavesplatform.getEnvironment().scheme),
+                            byteArrayOf(WavesPlatform.getEnvironment().scheme),
                             alias.toByteArray(
                                     Charset.forName("UTF-8")).arrayWithSize()
                     ).arrayWithSize(),

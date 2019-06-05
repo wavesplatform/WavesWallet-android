@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.utils
 
 import com.google.common.primitives.Bytes
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
 import java.util.*
@@ -18,7 +18,7 @@ fun String?.isValidWavesAddress(): Boolean {
         val bytes = Base58.decode(this)
         if (bytes.size == ADDRESS_LENGTH &&
                 bytes[0] == ADDRESS_VERSION &&
-                bytes[1] == Wavesplatform.getEnvironment().scheme) {
+                bytes[1] == WavesPlatform.getEnvironment().scheme) {
             val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
             val checkSumGenerated = calcCheckSum(bytes.copyOf(bytes.size - CHECK_SUM_LENGTH))
             Arrays.equals(checkSum, checkSumGenerated)
@@ -35,7 +35,7 @@ fun String.isAlias(): Boolean {
 }
 
 fun String.makeAsAlias(): String {
-    return "alias:${Wavesplatform.getEnvironment().scheme.toChar()}:$this"
+    return "alias:${WavesPlatform.getEnvironment().scheme.toChar()}:$this"
 }
 
 fun String.parseAlias(): String {
@@ -54,7 +54,7 @@ fun addressFromPublicKey(publicKey: ByteArray): String {
     return try {
         val publicKeyHash = Hash.keccak(publicKey).copyOf(HASH_LENGTH)
         val withoutChecksum = Bytes.concat(
-                byteArrayOf(ADDRESS_VERSION, Wavesplatform.getEnvironment().scheme),
+                byteArrayOf(ADDRESS_VERSION, WavesPlatform.getEnvironment().scheme),
                 publicKeyHash)
         Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)))
     } catch (e: Exception) {

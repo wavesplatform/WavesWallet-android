@@ -26,7 +26,7 @@ object Constants {
     const val URL_TWITTER = "https://twitter.com/wavesplatform"
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
-    const val URL_REDDIT = "https://www.reddit.com/r/Wavesplatform/"
+    const val URL_REDDIT = "https://www.reddit.com/r/WavesPlatform/"
 
     const val ACC_TWITTER = "wavesplatform"
     const val ACC_TELEGRAM = "wavesnews"
