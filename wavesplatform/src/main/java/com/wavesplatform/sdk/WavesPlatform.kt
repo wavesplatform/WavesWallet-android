@@ -24,8 +24,8 @@ import com.wavesplatform.sdk.utils.Environment
 
 class WavesPlatform {
 
-    private lateinit var environment: Environment
-    private lateinit var service: WavesService
+    internal lateinit var environment: Environment
+    internal lateinit var service: WavesService
 
     companion object {
 

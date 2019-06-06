@@ -59,13 +59,13 @@ interface NodeService {
      *
      */
     @POST("assets/broadcast/issue")
-    fun broadcastIssue(@Body tx: IssueTransaction): Observable<IssueTransaction>
+    fun broadcastIssue(@Body transaction: IssueTransaction): Observable<IssueTransaction>
 
     /**
      *
      */
     @POST("assets/broadcast/reissue")
-    fun broadcastReissue(@Body tx: ReissueTransaction): Observable<ReissueTransaction>
+    fun broadcastReissue(@Body transaction: ReissueTransaction): Observable<ReissueTransaction>
 
     /**
      * Create alias - short name for address
@@ -83,24 +83,24 @@ interface NodeService {
 
     /**
      * Broadcast a signed cancel leasing transaction
-     * @param cancelLeasingRequest CancelLeasingTransaction with signature by privateKey
+     * @param transaction CancelLeasingTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun broadcastCancelLeasing(@Body cancelLeasingRequest: CancelLeasingTransaction): Observable<TransactionResponse>
+    fun broadcastCancelLeasing(@Body transaction: CancelLeasingTransaction): Observable<TransactionResponse>
 
     /**
      * Broadcast a signed burn transaction
-     * @param burnRequest BurnTransaction with signature by privateKey
+     * @param transaction BurnTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun broadcastBurn(@Body burnRequest: BurnTransaction): Observable<BurnTransaction>
+    fun broadcastBurn(@Body transaction: BurnTransaction): Observable<BurnTransaction>
 
     /**
      * Broadcast a signed transfer transaction
-     * @param tx TransferTransaction with signature by privateKey
+     * @param transaction TransferTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun broadcastTransfer(@Body tx: TransferTransaction): Observable<TransferTransaction>
+    fun broadcastTransfer(@Body transaction: TransferTransaction): Observable<TransferTransaction>
 
     /**
      * Get current Waves block-chain height

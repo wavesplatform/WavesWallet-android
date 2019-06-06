@@ -122,8 +122,8 @@ class EnvironmentManager(var current: ClientEnvironment) {
             WavesPlatform.setEnvironment(environment)
 
             loadConfiguration(
-                    WavesPlatform.service().apiService,
-                    WavesPlatform.service().nodeService,
+                    WavesPlatform.service().getApiService(),
+                    WavesPlatform.service().getNode(),
                     GithubDataManager.create(null))
         }
 
