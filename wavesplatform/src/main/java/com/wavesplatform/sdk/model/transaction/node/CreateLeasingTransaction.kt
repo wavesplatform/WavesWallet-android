@@ -28,7 +28,7 @@ class CreateLeasingTransaction(
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
-                    byteArrayOf(scheme.toByte()),
+                    byteArrayOf(0.toByte()),
                     Base58.decode(senderPublicKey),
                     resolveRecipientBytes(recipient.isAlias()),
                     Longs.toByteArray(amount),
@@ -50,4 +50,35 @@ class CreateLeasingTransaction(
             Base58.decode(recipient)
         }
     }
+
+
+    /*fun toSignBytes(recipientIsAlias: Boolean): ByteArray {
+        return try {
+            Bytes.concat(byteArrayOf(type.toByte()),
+                    byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(0.toByte()),
+                    Base58.decode(senderPublicKey),
+                    resolveRecipientBytes(recipientIsAlias),
+                    Longs.toByteArray(amount),
+                    Longs.toByteArray(fee),
+                    Longs.toByteArray(timestamp))
+        } catch (e: Exception) {
+            Log.e("CreateLeasingRequest", "Couldn't create toSignBytes", e)
+            ByteArray(0)
+        }
+    }
+
+    private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
+        return if (recipientIsAlias) {
+            Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(EnvironmentManager.netCode),
+                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+        } else {
+            Base58.decode(recipient)
+        }
+    }
+
+    fun sign(privateKey: ByteArray, recipientIsAlias: Boolean) {
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes(recipientIsAlias))))
+    }*/
 }
