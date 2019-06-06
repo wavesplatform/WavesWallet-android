@@ -2,6 +2,8 @@ package com.wavesplatform.sdk.model.transaction.node
 
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
@@ -23,7 +25,8 @@ abstract class BaseTransaction(@SerializedName("type")
 
     fun sign(privateKey: String) {
         if (senderPublicKey == "") {
-            senderPublicKey = WavesCrypto.publicKey(privateKey)
+            // todo seed not pk senderPublicKey = WavesCrypto.publicKey(privateKey)
+            senderPublicKey = Base58.encode(CryptoProvider.get().generatePublicKey(Base58.decode(privateKey)))
         }
         if (timestamp == 0L) {
             timestamp = WavesPlatform.getEnvironment().getTime()
