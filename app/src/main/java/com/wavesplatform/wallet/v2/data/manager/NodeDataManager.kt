@@ -252,9 +252,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     fun createAlias(request: AliasTransaction): Observable<AliasResponse> {
         request.senderPublicKey = getPublicKeyStr()
         request.timestamp = EnvironmentManager.getTime()
-        App.getAccessManager().getWallet().privateKeyStr.notNull {
-            request.sign(it)
-        }
+        request.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.broadcastAlias(request)
                 .map {
                     it.address = getAddress()
@@ -267,9 +265,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun cancelLeasing(transaction: CancelLeasingTransaction): Observable<TransactionResponse> {
-        App.getAccessManager().getWallet().privateKeyStr.notNull {
-            transaction.sign(it)
-        }
+        transaction.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.broadcastCancelLeasing(transaction)
                 .map {
                     val first = queryFirst<TransactionDb> {
@@ -289,10 +285,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             fee: Long
     ): Observable<TransactionResponse> {
         createLeasingRequest.fee = fee
-
-        App.getAccessManager().getWallet().privateKeyStr.notNull {
-            createLeasingRequest.sign(it)
-        }
+        createLeasingRequest.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.broadcastCreateLeasing(createLeasingRequest)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())

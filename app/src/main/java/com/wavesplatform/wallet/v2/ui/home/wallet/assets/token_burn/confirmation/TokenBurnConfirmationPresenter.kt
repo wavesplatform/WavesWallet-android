@@ -35,7 +35,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
         val request = BurnTransaction(
                 assetId = assetBalance!!.assetId,
                 quantity = quantity)
-        request.sign(App.getAccessManager().getWallet().privateKeyStr)
+        request.sign(App.getAccessManager().getWallet().seedStr)
 
         addSubscription(nodeDataManager.burn(request)
                 .compose(RxUtil.applySchedulersToObservable())

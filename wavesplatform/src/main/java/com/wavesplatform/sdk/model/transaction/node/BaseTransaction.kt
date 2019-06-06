@@ -2,8 +2,6 @@ package com.wavesplatform.sdk.model.transaction.node
 
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
-import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
@@ -23,10 +21,9 @@ abstract class BaseTransaction(@SerializedName("type")
 
     abstract fun toBytes(): ByteArray
 
-    fun sign(privateKey: String) {
+    fun sign(seed: String) {
         if (senderPublicKey == "") {
-            // todo seed not pk senderPublicKey = WavesCrypto.publicKey(privateKey)
-            senderPublicKey = Base58.encode(CryptoProvider.get().generatePublicKey(Base58.decode(privateKey)))
+            senderPublicKey = WavesCrypto.publicKey(seed)
         }
         if (timestamp == 0L) {
             timestamp = WavesPlatform.getEnvironment().getTime()
@@ -37,15 +34,23 @@ abstract class BaseTransaction(@SerializedName("type")
         if (version == 0) {
             version = WavesConstants.VERSION
         }
-        proofs.add(getSignedString(privateKey))
+        proofs.add(getSignedStringWithSeed(seed))
     }
 
-    fun getSignedBytes(privateKey: String): ByteArray {
-        return WavesCrypto.signBytesWithSeed(toBytes(), privateKey)
+    fun getSignedBytesWithSeed(seed: String): ByteArray {
+        return WavesCrypto.signBytesWithSeed(toBytes(), seed)
     }
 
-    fun getSignedString(privateKey: String): String {
-        return WavesCrypto.base58encode(getSignedBytes(privateKey))
+    fun getSignedStringWithSeed(seed: String): String {
+        return WavesCrypto.base58encode(getSignedBytesWithSeed(seed))
+    }
+
+    fun getSignedBytesWithPrivateKey(privateKey: String): ByteArray {
+        return WavesCrypto.signBytesWithPrivateKey(toBytes(), privateKey)
+    }
+
+    fun getSignedStringWithPrivateKey(privateKey: String): String {
+        return WavesCrypto.base58encode(getSignedBytesWithPrivateKey(privateKey))
     }
 
     companion object {

@@ -41,7 +41,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_backup_pharse
 
-    override fun askPassCode() = App.getAccessManager().getWallet() != null
+    override fun askPassCode() = App.getAccessManager().isAuthenticated()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
@@ -55,7 +55,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
             setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED, ""))
         } else {
-            setSeed(App.getAccessManager().getWallet()?.seedStr ?: "")
+            setSeed(App.getAccessManager().getWallet().seedStr)
         }
 
         if (!App.getAccessManager().isCurrentAccountBackupSkipped()) {

@@ -66,7 +66,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     private fun signTransaction(): TransferTransaction? {
         val signed = getTxRequest()
-        signed.sign(App.getAccessManager().getWallet().privateKeyStr)
+        signed.sign(App.getAccessManager().getWallet().seedStr)
         return signed
     }
 
