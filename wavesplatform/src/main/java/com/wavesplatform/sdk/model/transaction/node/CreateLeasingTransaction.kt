@@ -28,7 +28,7 @@ class CreateLeasingTransaction(
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
-                    byteArrayOf(scheme.toByte()), // todo check scheme was 0
+                    byteArrayOf(scheme.toByte()),
                     Base58.decode(senderPublicKey),
                     resolveRecipientBytes(recipient.isAlias()),
                     Longs.toByteArray(amount),
