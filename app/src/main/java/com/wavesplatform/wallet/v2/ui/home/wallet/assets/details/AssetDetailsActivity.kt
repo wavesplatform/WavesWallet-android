@@ -110,7 +110,13 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
         assetDetailsContentPageAdapter = AssetDetailsContentPageAdapter(
                 supportFragmentManager, emptyList())
-        presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
+
+        if (intent.hasExtra(BUNDLE_ASSET_SEARCH)) {
+            val search = intent.getStringExtra(BUNDLE_ASSET_SEARCH)
+            presenter.loadSearchAssets(search)
+        } else {
+            presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
+        }
     }
 
     private fun configureTitleForAssets(position: Int) {
@@ -144,7 +150,11 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         // configure top avatars pager
         adapterAvatar.items = sortedToFirstFavoriteList
         adapterAvatar.notifyDataSetChanged()
-        view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
+        val position = intent.getIntExtra(BUNDLE_ASSET_POSITION, 0)
+        if (view_pager.adapter == null || view_pager.adapter!!.count < position) {
+            return
+        }
+        view_pager.setCurrentItem(position, false)
         view_pager.post {
             if (view_pager.beginFakeDrag() && view_pager.adapter?.count != 0) {
                 view_pager.fakeDragBy(0f)
@@ -233,5 +243,6 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     companion object {
         var BUNDLE_ASSET_POSITION = "position"
         var BUNDLE_ASSET_TYPE = "type"
+        var BUNDLE_ASSET_SEARCH = "search"
     }
 }

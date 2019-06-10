@@ -125,7 +125,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
             }
             AssetSortingItem.TYPE_EMPTY_DEFAULT -> {
                 helper.setText(R.id.text_empty, mContext.getString(R.string.wallet_sorting_default_empty))
-                        .setImageResource(R.id.image_empty, R.drawable.ic_userimg_empty_80_multi)
+                        .setImageResource(R.id.image_empty, R.drawable.userimg_empty_80)
             }
             AssetSortingItem.TYPE_EMPTY_HIDDEN -> {
                 helper.setText(R.id.text_empty, mContext.getString(R.string.wallet_sorting_hidden_empty))

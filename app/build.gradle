@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
-apply plugin: 'io.sentry.android.gradle'
+//apply plugin: 'io.sentry.android.gradle'
 apply from: 'api-keys.properties'
 
 def getGitHash = { ->
@@ -31,14 +31,14 @@ android {
     buildToolsVersion '28.0.3'
     flavorDimensions "default"
     dexOptions {
-        javaMaxHeapSize "3g"
+        javaMaxHeapSize "6g"
     }
     defaultConfig {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 422
-        versionName "2.3.2"
+        versionCode 423
+        versionName "2.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -59,7 +59,7 @@ android {
         // Configures multiple APKs based on ABI.
         abi {
             // Enables building multiple APKs per ABI.
-            enable false
+            enable gradle.startParameter.taskNames.contains("assembleProdRelease")
 
             // By default all ABIs are included, so use reset() and include to specify that we only
             // want APKs for x86, armeabi-v7a, and mips.
@@ -181,10 +181,10 @@ android {
 }
 
 
-sentry {
-    autoProguardConfig true
-    autoUpload true
-}
+//sentry {
+//    autoProguardConfig false
+//    autoUpload false
+//}
 
 def getAppName() {
     def stringsFile = file("./src/main/res/values/strings.xml")
@@ -320,12 +320,10 @@ dependencies {
     implementation 'com.github.VictorChow:kotlin-android-lib:1.2.3'
 
     implementation "com.google.dagger:dagger:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     implementation "com.google.dagger:dagger-android:$daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     implementation 'com.pddstudio:encrypted-preferences:1.3.0'
 

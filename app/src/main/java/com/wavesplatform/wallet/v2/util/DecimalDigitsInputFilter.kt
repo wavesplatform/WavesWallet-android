@@ -83,7 +83,9 @@ class DecimalDigitsInputFilter(private val mMaxIntegerDigitsLength: Int,
 
     private fun deleteCharAtIndex(dest: Spanned, dStart: Int): String {
         val builder = StringBuilder(dest)
-        builder.deleteCharAt(dStart)
+        if (dStart > 0 && dStart <= builder.lastIndex) {
+            builder.deleteCharAt(dStart)
+        }
         return builder.toString()
     }
 

@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
@@ -123,43 +124,20 @@ class EnvironmentManager {
                         setConfiguration(globalConfiguration)
                         globalConfiguration.generalAssets.map { it.assetId }
                     }
+                    .onErrorReturn {
+                        Timber.e(it, "EnvironmentManager: Can't download global configuration!")
+                        setConfiguration(environment.configuration!!)
+                        globalConfiguration.generalAssets.map { it.assetId }
+                    }
                     .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
                     .map { info ->
-                        defaultAssets.clear()
-                        for (assetInfo in info.data) {
-                            val assetBalance = AssetBalance(
-                                    assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
-                                        Constants.WAVES_ASSET_ID_EMPTY
-                                    } else {
-                                        assetInfo.assetInfo.id
-                                    },
-                                    quantity = assetInfo.assetInfo.quantity,
-                                    isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
-                                    issueTransaction = IssueTransaction(
-                                            id = assetInfo.assetInfo.id,
-                                            assetId = assetInfo.assetInfo.id,
-                                            name = findAssetIdByAssetId(
-                                                    assetInfo.assetInfo.id)?.displayName
-                                                    ?: assetInfo.assetInfo.name,
-                                            decimals = assetInfo.assetInfo.precision,
-                                            quantity = assetInfo.assetInfo.quantity,
-                                            description = assetInfo.assetInfo.description,
-                                            sender = assetInfo.assetInfo.sender,
-                                            timestamp = assetInfo.assetInfo.timestamp.time),
-                                    isGateway = findAssetIdByAssetId(
-                                            assetInfo.assetInfo.id)?.isGateway ?: false,
-                                    isFiatMoney = findAssetIdByAssetId(
-                                            assetInfo.assetInfo.id)?.isFiat ?: false)
-                            defaultAssets.add(assetBalance)
-                        }
+                        setDefaultAssets(info)
                     }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
-                        error.printStackTrace()
-                        setConfiguration(environment.configuration!!)
+                        Timber.e(error, "EnvironmentManager: Can't download global configuration & set default assets!")
                         instance!!.configurationDisposable!!.dispose()
                     })
 
@@ -191,6 +169,36 @@ class EnvironmentManager {
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })
+        }
+
+        private fun setDefaultAssets(info: AssetsInfoResponse) {
+            defaultAssets.clear()
+            for (assetInfo in info.data) {
+                val assetBalance = AssetBalance(
+                        assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
+                            Constants.WAVES_ASSET_ID_EMPTY
+                        } else {
+                            assetInfo.assetInfo.id
+                        },
+                        quantity = assetInfo.assetInfo.quantity,
+                        isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
+                        issueTransaction = IssueTransaction(
+                                id = assetInfo.assetInfo.id,
+                                assetId = assetInfo.assetInfo.id,
+                                name = findAssetIdByAssetId(
+                                        assetInfo.assetInfo.id)?.displayName
+                                        ?: assetInfo.assetInfo.name,
+                                decimals = assetInfo.assetInfo.precision,
+                                quantity = assetInfo.assetInfo.quantity,
+                                description = assetInfo.assetInfo.description,
+                                sender = assetInfo.assetInfo.sender,
+                                timestamp = assetInfo.assetInfo.timestamp.time),
+                        isGateway = findAssetIdByAssetId(
+                                assetInfo.assetInfo.id)?.isGateway ?: false,
+                        isFiatMoney = findAssetIdByAssetId(
+                                assetInfo.assetInfo.id)?.isFiat ?: false)
+                defaultAssets.add(assetBalance)
+            }
         }
 
         private fun setConfiguration(globalConfiguration: GlobalConfiguration) {

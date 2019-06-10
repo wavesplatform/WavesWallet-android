@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import android.os.Bundle
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
@@ -51,8 +52,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     @Inject
     lateinit var adapterActiveAdapter: LeasingActiveAdapter
-    var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
     private var skeletonScreen: ViewSkeletonScreen? = null
+    var elevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_leasing
 
@@ -61,7 +62,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 .subscribe {
                     if (it.position == MainActivity.WALLET_SCREEN) {
                         nested_scroll_view.smoothScrollTo(0, 0)
-                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
                 })
 
@@ -114,7 +114,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
                         .rotation(0f)
                         .setDuration(500)
                         .withEndAction {
-                            changeTabBarVisibilityListener?.changeTabBarVisibility(false, true)
                             nested_scroll_view.fullScroll(View.FOCUS_DOWN)
                         }
                         .start()
@@ -134,7 +133,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
                         .rotation(0f)
                         .setDuration(500)
                         .withEndAction {
-                            changeTabBarVisibilityListener?.changeTabBarVisibility(false, true)
                             nested_scroll_view.smoothScrollTo(0, (linear_active_leasing.y.toInt() + relative_active_leasing_title_container.y.toInt()) - nested_scroll_view.scrollY)
                         }
                         .start()
@@ -160,6 +158,12 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 .load(R.layout.skeleton_leasing_layout)
                 .show()
 
+        nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener {
+            nestedScrollView, p1, p2, p3, p4 ->
+            presenter.enableElevation = nestedScrollView.computeVerticalScrollOffset() > 4
+            elevationAppBarChangeListener?.onChange(presenter.enableElevation)
+        })
+
         presenter.getActiveLeasing()
     }
 
@@ -172,6 +176,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_your_address -> {
+                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()
             }
         }

@@ -24,6 +24,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.github.mikephil.charting.utils.ObjectPool
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
@@ -85,7 +86,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             linear_charts.gone()
             progress_bar.show()
 
-            presenter.loadCandles(Date().time, true)
+            presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
         }
 
@@ -93,7 +94,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             error_layout.gone()
             progress_bar.show()
 
-            presenter.loadCandles(Date().time, true)
+            presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
         }
 
@@ -126,7 +127,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             linear_charts.gone()
             progress_bar.show()
 
-            presenter.loadCandles(Date().time, true)
+            presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
 
             rxEventBus.post(Events.UpdateMarketAfterChangeChartTimeFrame(presenter.watchMarket?.market?.id, presenter.timeFrameList[presenter.selectedTimeFrame].timeServer))

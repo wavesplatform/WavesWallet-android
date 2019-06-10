@@ -34,6 +34,7 @@ import javax.inject.Inject
 @InjectViewState
 class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var needToScroll: Boolean = false
+    var enableElevation: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         if (App.getAccessManager().getWallet() == null) {
@@ -182,6 +183,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     private fun postSuccess(it: Triple<MutableList<AssetBalance>, MutableList<AssetBalance>,
             MutableList<AssetBalance>>, withApiUpdate: Boolean, fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
+
+        val searchItem = MultiItemEntity {
+             AssetsAdapter.TYPE_SEARCH
+        }
+        listToShow.add(searchItem)
 
         // add all main assets
         listToShow.addAll(it.first)

@@ -28,6 +28,8 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.News
 import com.wavesplatform.wallet.v2.data.service.HistoryRepeatUpdater
@@ -41,7 +43,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFr
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.activity_main_v2.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
 import pers.victor.ext.click
@@ -63,7 +65,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
 
-    override fun configLayoutRes() = R.layout.activity_main_v2
+    override fun configLayoutRes() = R.layout.activity_main
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -164,7 +166,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        walletFragment.setOnElevationChangeListener(elevationListener)
         dexFragment.setOnElevationChangeListener(elevationListener)
         historyFragment.setOnElevationChangeListener(elevationListener)
         profileFragment.setOnElevationChangeListener(elevationListener)
@@ -222,6 +223,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun showQuickActionDialog() {
         if (isNetworkConnected()) {
+            analytics.trackEvent(AnalyticEvents.WavesActionPanelEvent)
             val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
             val ft = supportFragmentManager.beginTransaction()
             ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
