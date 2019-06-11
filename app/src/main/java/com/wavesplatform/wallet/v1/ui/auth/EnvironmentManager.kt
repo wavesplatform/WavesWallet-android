@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
+import com.wavesplatform.wallet.v2.util.MonkeyTest
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.disposables.Disposable
 import pers.victor.ext.currentTimeMillis
@@ -135,6 +136,7 @@ class EnvironmentManager {
                     }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
+                        MonkeyTest.startIfNeed()
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
                         Timber.e(error, "EnvironmentManager: Can't download global configuration & set default assets!")

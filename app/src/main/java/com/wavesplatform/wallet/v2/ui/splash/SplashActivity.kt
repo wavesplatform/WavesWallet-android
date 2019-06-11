@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.util.MonkeyTest
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import pyxis.uzuki.live.richutilskt.utils.setStatusNavBarColor
@@ -43,7 +44,7 @@ class SplashActivity : BaseActivity(), SplashView {
         setSystemBarTheme(false)
         if (intent.getBooleanExtra(EXIT, false)) {
             finish()
-        } else {
+        } else if (!MonkeyTest.isTurnedOn()) {
             presenter.storeIncomingURI(intent)
             presenter.resolveNextAction()
         }
