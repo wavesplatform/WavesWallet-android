@@ -97,11 +97,14 @@ object Constants {
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
-    var MRTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+    var MrtGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
             gatewayId = "MRT", displayName = "MinersReward")
 
-    var WCTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+    var WctGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
+
+    var VstGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
+            gatewayId = "VST", displayName = "Vostok")
 
     fun find(assetId: String): AssetBalance? {
         return if (App.getAccessManager().getWallet() == null) {
