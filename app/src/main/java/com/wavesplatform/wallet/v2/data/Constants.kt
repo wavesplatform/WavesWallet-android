@@ -104,7 +104,7 @@ object Constants {
             gatewayId = "WCT", displayName = "WavesCommunity")
 
     var VstGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
-            gatewayId = "VST", displayName = "Vostok")
+            gatewayId = "VST", displayName = "Vostok") // github returns gatewayId = "Vostok"
 
     fun find(assetId: String): AssetBalance? {
         return if (App.getAccessManager().getWallet() == null) {
@@ -114,9 +114,18 @@ object Constants {
         }
     }
 
+    fun findInConstantsGeneralAssets(ticker: String): AssetBalance? {
+        for (asset in listOf(MrtGeneralAsset, WctGeneralAsset, VstGeneralAsset)) {
+            if (asset.gatewayId.contains(ticker)) {
+                return find(asset.assetId)
+            }
+        }
+        return null
+    }
+
     fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
         for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
-            if (asset.gatewayId == gatewayId) {
+            if (asset.gatewayId.contains(gatewayId)) {
                 return find(asset.assetId)
             }
         }
