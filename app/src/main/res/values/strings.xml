@@ -20,7 +20,7 @@
     <string name="address_book_search">Search</string>
     <string name="address_book_success_deleted">Address deleted</string>
     <string name="address_book_toolbar_title">Address book</string>
-    <string name="addresses">Assets</string>
+    <string name="addresses">Tokens</string>
     <string name="addresses_and_keys_aliases">Aliases</string>
     <string name="addresses_and_keys_private_key">Private key</string>
     <string name="addresses_and_keys_public_key">Public key</string>
@@ -42,7 +42,7 @@
     <string name="asset_details_cryptocurrency">Cryptocurrency</string>
     <string name="asset_details_decimal">Decimal points</string>
     <string name="asset_details_description">Description</string>
-    <string name="asset_details_error_perfom_transaction">You can not perform transactions with this asset</string>
+    <string name="asset_details_error_perfom_transaction">You can not perform transactions with this token</string>
     <string name="asset_details_fiat_money">Fiat Money</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">In order</string>
@@ -200,9 +200,9 @@
     <string name="dex_last_update_value">Last update: %s</string>
     <string name="dex_market_empty">Nothing here…</string>
     <string name="dex_market_toolbar_title">Markets</string>
-    <string name="dex_markets_info_dialog_amount_asset">Amount Asset — %s</string>
+    <string name="dex_markets_info_dialog_amount_asset">Amount Token — %s</string>
     <string name="dex_markets_info_dialog_popular">Popular</string>
-    <string name="dex_markets_info_dialog_price_asset">Price Asset — %s</string>
+    <string name="dex_markets_info_dialog_price_asset">Price Token — %s</string>
     <string name="dex_markets_list_search">Search</string>
     <string name="dex_markets_list_toolbar_title">Markets</string>
     <string name="dex_sorting_empty">Nothing here…</string>
@@ -260,7 +260,7 @@
     <string name="history_details_active_now">ACTIVE NOW</string>
     <string name="history_details_add_address">Save address</string>
     <string name="history_details_amount_per_transaction">Amount per transaction</string>
-    <string name="history_details_asset">Asset</string>
+    <string name="history_details_asset">Token</string>
     <string name="history_details_block">Block</string>
     <string name="history_details_cancel_leasing">Cancel leasing</string>
     <string name="history_details_completed">COMPLETED</string>
@@ -271,7 +271,7 @@
     <string name="history_details_edit_address">Edit name</string>
     <string name="history_details_exchange_price">Price</string>
     <string name="history_details_fee">Fee</string>
-    <string name="history_details_id">Asset ID</string>
+    <string name="history_details_id">Token ID</string>
     <string name="history_details_leasing_from">Leasing from</string>
     <string name="history_details_leasing_to">Leasing to</string>
     <string name="history_details_node_address">Node address</string>
@@ -465,7 +465,7 @@
     <string name="receive_address_your_qr_code">Your QR Code</string>
     <string name="receive_amount">Amount</string>
     <string name="receive_amount_title">Amount in %1$s</string>
-    <string name="receive_asset">Asset</string>
+    <string name="receive_asset">Token</string>
     <string name="receive_card">Card</string>
     <string name="receive_contact_msg">In case of problems with verification or payment processing, please contact the Coinomat support team — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
@@ -489,7 +489,7 @@
     <string name="receive_minimum_amount">The minimum amount of deposit is %1$s %2$s</string>
     <string name="receive_not_verified">Your account is not verified</string>
     <string name="receive_payment_method">Payment method</string>
-    <string name="receive_sellect_asset">Select your asset or from the list</string>
+    <string name="receive_sellect_asset">Select your token or from the list</string>
     <string name="receive_step_1">Step 1</string>
     <string name="receive_step_1_msg">In order to deposit Euro directly from your bank account through SEPA transfer you must get verified by our partner IDNow.eu</string>
     <string name="receive_step_1_msg_link">IDNow.eu</string>
@@ -503,8 +503,8 @@
     <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
     <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
     <string name="scripted_account_error_dialog_btn_txt">Okay</string>
-    <string name="scripted_account_error_dialog_description">To work with a scripted account/asset, use the Waves Client</string>
-    <string name="scripted_account_error_dialog_title">A script is installed on your account or asset</string>
+    <string name="scripted_account_error_dialog_description">To work with a scripted account/token, use the Waves Client</string>
+    <string name="scripted_account_error_dialog_title">A script is installed on your account or token</string>
     <string name="secret_phrase_back_up_now">Back Up Now</string>
     <string name="secret_phrase_do_it_later">Do it later</string>
     <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
@@ -512,7 +512,7 @@
     <string name="sell_btn_txt">Sell %s</string>
     <string name="send_amount">Amount</string>
     <string name="send_amount_error_insufficient_funds">Insufficient funds</string>
-    <string name="send_asset">Asset</string>
+    <string name="send_asset">Token</string>
     <string name="send_choose_from_address_book">Choose from Address book</string>
     <string name="send_confirmation_confirm">Confirm</string>
     <string name="send_confirmation_description">Description</string>
@@ -540,10 +540,10 @@
     <string name="send_progress_sending">Sending…</string>
     <string name="send_recipient">Recipient</string>
     <string name="send_recipient_address_hint">Recipient address…</string>
-    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
+    <string name="send_recipient_asset_is_not_valid">The token is not valid</string>
     <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
     <string name="send_select_your_asset">Select your asset</string>
-    <string name="send_spam_error">Sending funds to suspicious asset is not possible</string>
+    <string name="send_spam_error">Sending funds to suspicious token is not possible</string>
     <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
     <string name="send_success_okay">Okay</string>
     <string name="send_success_you_have_sent_sum">You have sent %1$s %2$s</string>
@@ -595,10 +595,10 @@
     <string name="use_fingerprint_submit_txt">Use fingerprint</string>
     <string name="use_fingerprint_subtitle">Use your fingerprint for faster, easier access to your account</string>
     <string name="use_fingerprint_title">Use fingerprint to sign in?</string>
-    <string name="wallet_assets">Assets</string>
-    <string name="wallet_assets_hidden_category">Hidden assets (%1$s)</string>
-    <string name="wallet_assets_my_asset">/ My Asset</string>
-    <string name="wallet_assets_spam_category">Suspicious assets (%1$s)</string>
+    <string name="wallet_assets">Tokens</string>
+    <string name="wallet_assets_hidden_category">Hidden tokens (%1$s)</string>
+    <string name="wallet_assets_my_asset">/ My token</string>
+    <string name="wallet_assets_spam_category">Suspicious tokens (%1$s)</string>
     <string name="wallet_assets_spam_tag">Suspicious</string>
     <string name="wallet_leasing">Leasing</string>
     <string name="wallet_leasing_active_now">Active now (%1$s)</string>
@@ -615,7 +615,7 @@
     <string name="wallet_sorting_toolbar_title">Sorting</string>
     <string name="wallet_sorting_toolbar_visibility_action">Visibility</string>
     <string name="wallet_toolbar_title">Wallet</string>
-    <string name="welcome_blockchain_description">Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets.</string>
+    <string name="welcome_blockchain_description">Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto tokens.</string>
     <string name="welcome_blockchain_title">Get Started with Blockchain</string>
     <string name="welcome_create_import_description">via pairing code or manually</string>
     <string name="welcome_create_import_title">Import account</string>
@@ -626,7 +626,7 @@
     <string name="welcome_dex_title">Decentralised Exchange</string>
     <string name="welcome_token_description">Issue your own tokens. These can be integrated into your business not only as an internal currency but also as a token for decentralised voting, as a rating system, or loyalty program.</string>
     <string name="welcome_token_title">Token Launcher</string>
-    <string name="welcome_wallet_description">Store, manage and receive interest on your digital assets balance, easily and securely.</string>
+    <string name="welcome_wallet_description">Store, manage and receive interest on your digital tokens balance, easily and securely.</string>
     <string name="welcome_wallet_title">Wallet</string>
     <string name="whats_new_next">Next</string>
     <string name="whats_new_okay">Okay</string>
@@ -634,8 +634,8 @@
     <string name="your_address_your_qr_code">Your QR Code</string>
     <string name="your_asset_activity_all">All</string>
     <string name="your_asset_activity_greater_zero">With balance</string>
-    <string name="your_assets_empty_state">Nothing Here…\nYou do not have assets with funds</string>
-    <string name="your_assets_toolbar_title">Your assets</string>
+    <string name="your_assets_empty_state">Nothing Here…\nYou do not have tokens with funds</string>
+    <string name="your_assets_toolbar_title">Your tokens</string>
     <string name="confirm_card_tutorial_submit">Begin</string>
     <string name="confirm_card_tutorial_title">Confirm and Begin</string>
     <string name="confirm_card_tutorial_terms_and_conditions">Terms and conditions</string>
@@ -654,15 +654,21 @@
     <string name="my_orders_details_amount_hint">Amount</string>
     <string name="my_orders_details_price_hint">Price</string>
     <string name="my_orders_details_total_hint">Total</string>
+    <string name="clean_banner_title">No more mess!</string>
+    <string name="clean_banner_description">We have redesigned the display of tokens to allow you to keep your wallet clean and tidy. You can customise your token list however you want!</string>
+    <string name="search_asset_hint">Search</string>
+    <string name="search_asset_cancel">Cancel</string>
+    <string name="search_asset_empty">You do not have such tokens</string>
     <string name="history_type_script_invocation">Script Invocation</string>
     <string name="history_details_script_invocation_payment">Payment</string>
     <string name="history_details_script_invocation_script_address">Script address</string>
     <string name="need_update_alert_title">It\'s time to update your app!</string>
     <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
-    <string name="search_asset_hint">Search</string>
-    <string name="search_asset_cancel">Cancel</string>
-    <string name="search_asset_hidden_title">Hidden assets</string>
-    <string name="search_asset_empty">You do not have such assets</string>
-    <string name="clean_banner_title">No more mess!</string>
-    <string name="clean_banner_description">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
+    <string name="search_asset_hidden_title">Hidden tokens</string>
+    <string name="my_orders_details_filled_hint">Filled</string>
+
+    <string name="wallet_sorting_hidden_section">Hidden assets</string>
+    <string name="wallet_sorting_favorite_empty">You didn\'t add assets in favorite</string>
+    <string name="wallet_sorting_default_empty">The list of assets is empty</string>
+    <string name="wallet_sorting_hidden_empty">You didn\'t add assets in hidden</string>
 </resources>

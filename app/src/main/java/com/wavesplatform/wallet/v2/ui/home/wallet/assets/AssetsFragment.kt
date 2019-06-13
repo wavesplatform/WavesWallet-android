@@ -30,6 +30,8 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -166,6 +168,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (position == 0) {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSearchEvent)
                 launchActivity<SearchAssetActivity>(withoutAnimation = true)
                 activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             } else {
@@ -230,8 +233,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun startServiceToLoadData() {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(activity, UpdateApiDataService::class.java)
                 activity?.let {
+                    val intent = Intent(activity, UpdateApiDataService::class.java)
                     ContextCompat.startForegroundService(it, intent)
                 }
             }
@@ -294,9 +297,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_sorting -> {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSortingPageEvent)
                 launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
             }
             R.id.action_your_address -> {
+                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()
             }
         }

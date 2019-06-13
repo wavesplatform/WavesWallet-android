@@ -21,6 +21,8 @@ import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
 import com.wavesplatform.wallet.v2.data.rules.AddressBookNameRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -126,6 +128,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             alertDialog.setTitle(getString(R.string.edit_address_delete_alert_title))
             alertDialog.setMessage(getString(R.string.edit_address_delete_alert_description))
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.edit_address_delete_alert_delete)) { dialog, which ->
+                analytics.trackEvent(AnalyticEvents.ProfileAddressBookDeleteEvent)
                 presenter.deleteAddress()
                 dialog.dismiss()
             }

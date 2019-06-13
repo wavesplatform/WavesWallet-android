@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 
 class AssetSortingItem : MultiItemEntity {
     var type: Int = 0
@@ -26,8 +26,13 @@ class AssetSortingItem : MultiItemEntity {
     }
 
     companion object {
-        val TYPE_FAVORITE = 1
-        val TYPE_NOT_FAVORITE = 2
-        val TYPE_LINE = 3
+        const val TYPE_FAVORITE_ITEM = 1
+        const val TYPE_DEFAULT_ITEM = 2
+        const val TYPE_HIDDEN_ITEM = 3
+        const val TYPE_HIDDEN_HEADER = 4
+        const val TYPE_FAVORITE_SEPARATOR = 5
+        const val TYPE_EMPTY_FAVORITE = 6
+        const val TYPE_EMPTY_DEFAULT  = 7
+        const val TYPE_EMPTY_HIDDEN  = 8
     }
 }

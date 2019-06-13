@@ -19,8 +19,8 @@ public class PayloadJsonTest {
                 "\"signature\":\"5foqUXywB3r2uDMqVCEzdf8tuwoRmRsjuWcENDBP2jCfqdoESuyA7ptY1HNRC7arLhW31v6ij87q1KDBrktCEX7b\"}}";
 
         Gson gson = new Gson();
-        com.wavesplatform.sdk.net.model.response.AssetBalanceResponse ab = gson
-                .fromJson(abJson, com.wavesplatform.sdk.net.model.response.AssetBalanceResponse.class);
+        com.wavesplatform.sdk.model.response.AssetBalanceResponse ab = gson
+                .fromJson(abJson, com.wavesplatform.sdk.model.response.AssetBalanceResponse.class);
         assertEquals(100000000L, ab.getBalance() == null ? 0 : ab.getBalance());
     }
 
@@ -33,8 +33,8 @@ public class PayloadJsonTest {
                 "  \"issueTransaction\":{\"type\":3,\"id\":\"AnAU5Kp8Dev7GZHQ5nxH4FPB12qdMTYHLYMBGCNeq4pE\",\"senderPublicKey\":\"3N5GRqzDBhjVXnCn44baHcz2GoZy5qLxtTh\",\"senderPublicKey\":\"FM5ojNqW7e9cZ9zhPYGkpSP1Pcd8Z3e3MNKYVS5pGJ8Z\",\"fee\":100000000,\"timestamp\":1485946444602,\"signature\":\"42dma4RzojZAtSwMhZJRyHtCfX9ojj8vnvHVkxi4221MJoCLpGARcyHfwzmfCEtKW1RDssaW7w7DMNHuibjDHQ8r\",\"assetId\":\"AnAU5Kp8Dev7GZHQ5nxH4FPB12qdMTYHLYMBGCNeq4pE\",\"name\":\"DEXsuper\",\"description\":\"string\",\"quantity\":100000000,\"decimals\":2,\"reissuable\":true}}]}";
 
         Gson gson = new Gson();
-        com.wavesplatform.sdk.net.model.response.AssetBalancesResponse abs = gson
-                .fromJson(abJson, com.wavesplatform.sdk.net.model.response.AssetBalancesResponse.class);
+        com.wavesplatform.sdk.model.response.AssetBalancesResponse abs = gson
+                .fromJson(abJson, com.wavesplatform.sdk.model.response.AssetBalancesResponse.class);
         assertEquals(2, abs.getBalances().size());
     }
 

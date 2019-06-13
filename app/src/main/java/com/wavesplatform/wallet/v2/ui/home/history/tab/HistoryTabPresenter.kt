@@ -9,11 +9,11 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.net.model.Language
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
-import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.App
@@ -72,38 +72,38 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                         }
             }
             HistoryTabFragment.exchanged -> {
-                queryAsSingle { `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) }
+                queryAsSingle { `in`("transactionTypeId", arrayOf(WavesConstants.ID_EXCHANGE_TYPE)) }
             }
             HistoryTabFragment.issued -> {
                 queryAsSingle {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_TOKEN_REISSUE_TYPE,
-                            Constants.ID_TOKEN_BURN_TYPE, Constants.ID_TOKEN_GENERATION_TYPE))
+                    `in`("transactionTypeId", arrayOf(WavesConstants.ID_TOKEN_REISSUE_TYPE,
+                            WavesConstants.ID_TOKEN_BURN_TYPE, WavesConstants.ID_TOKEN_GENERATION_TYPE))
                 }
             }
             HistoryTabFragment.leased -> {
                 queryAsSingle<TransactionDb> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
-                            Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
+                    `in`("transactionTypeId", arrayOf(WavesConstants.ID_INCOMING_LEASING_TYPE,
+                            WavesConstants.ID_CANCELED_LEASING_TYPE, WavesConstants.ID_STARTED_LEASING_TYPE))
                 }.map {
                     return@map filterNodeCancelLeasing(it)
                 }
             }
             HistoryTabFragment.send -> {
                 queryAsSingle {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_SENT_TYPE, Constants.ID_MASS_SEND_TYPE,
-                            Constants.ID_SELF_TRANSFER_TYPE, Constants.ID_SPAM_SELF_TRANSFER))
+                    `in`("transactionTypeId", arrayOf(WavesConstants.ID_SENT_TYPE, WavesConstants.ID_MASS_SEND_TYPE,
+                            WavesConstants.ID_SELF_TRANSFER_TYPE, WavesConstants.ID_SPAM_SELF_TRANSFER))
                 }
             }
             HistoryTabFragment.received -> {
                 queryAsSingle {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE,
-                            Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
+                    `in`("transactionTypeId", arrayOf(WavesConstants.ID_RECEIVED_TYPE, WavesConstants.ID_MASS_RECEIVE_TYPE,
+                            WavesConstants.ID_MASS_SPAM_RECEIVE_TYPE, WavesConstants.ID_SPAM_RECEIVE_TYPE))
                 }
             }
             HistoryTabFragment.leasing_all -> {
                 queryAsSingle<TransactionDb> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
-                            Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
+                    `in`("transactionTypeId", arrayOf(WavesConstants.ID_STARTED_LEASING_TYPE,
+                            WavesConstants.ID_INCOMING_LEASING_TYPE, WavesConstants.ID_CANCELED_LEASING_TYPE))
                 }.map {
                     return@map filterNodeCancelLeasing(it)
                 }
@@ -112,12 +112,12 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 queryAsSingle {
                     equalTo("status", LeasingStatus.ACTIVE.status)
                             .and()
-                            .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
+                            .equalTo("transactionTypeId", WavesConstants.ID_STARTED_LEASING_TYPE)
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
                 queryAsSingle<TransactionDb> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
+                    `in`("transactionTypeId", arrayOf(WavesConstants.ID_CANCELED_LEASING_TYPE))
                 }.map {
                     return@map filterNodeCancelLeasing(it)
                 }

@@ -14,8 +14,8 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
@@ -28,7 +28,7 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
     private var rootView: View? = null
 
     private var selectedAssetId: String? = null
-    private var wavesFee: Long = Constants.WAVES_MIN_FEE
+    private var wavesFee: Long = WavesConstants.WAVES_MIN_FEE
 
     var onSelectedAssetListener: SponsoredAssetSelectedListener? = null
 

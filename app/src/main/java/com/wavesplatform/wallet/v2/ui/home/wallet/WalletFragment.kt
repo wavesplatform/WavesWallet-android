@@ -8,16 +8,19 @@ package com.wavesplatform.wallet.v2.ui.home.wallet
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
-import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil // todo check
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import javax.inject.Inject
 
@@ -69,14 +72,13 @@ class WalletFragment : BaseFragment(), WalletView {
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        stl_wallet.currentTab = 0
 
         viewpager_wallet.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
                 // do nothing
             }
 
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 // do nothing
             }
 
@@ -89,6 +91,8 @@ class WalletFragment : BaseFragment(), WalletView {
                 enableElevation(enable)
             }
         })
+
+        stl_wallet.setCurrentTab(0, false)
     }
 
     private fun enableElevation(enable: Boolean) {
@@ -107,9 +111,11 @@ class WalletFragment : BaseFragment(), WalletView {
                 setDescription(R.string.need_update_alert_description)
                 setActionIcon(R.drawable.ic_arrowright_14_basic_200)
                 onAlertClick {
+                    analytics.trackEvent(AnalyticEvents.WalletUpdateBannerEvent)
                     openAppInPlayMarket()
                 }
             }.show()
+            setScrollAlert(true)
         }
     }
 
@@ -122,8 +128,20 @@ class WalletFragment : BaseFragment(), WalletView {
                 info_alert.hide()
                 presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
                 presenter.showTopBannerIfNeed()
+                setScrollAlert(false)
             }
         }.show()
+        setScrollAlert(true)
+    }
+
+    private fun setScrollAlert(scroll: Boolean) {
+        val params = info_alert?.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = if (scroll) {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        } else {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
+        }
+        info_alert.layoutParams = params
     }
 
     private fun openAppInPlayMarket() {

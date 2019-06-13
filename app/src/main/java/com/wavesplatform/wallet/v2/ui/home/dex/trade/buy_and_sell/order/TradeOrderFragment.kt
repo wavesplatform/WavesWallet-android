@@ -13,7 +13,7 @@ import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_trade_order.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -79,7 +80,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.loadPairBalancesAndCommission()
         presenter.loadWavesBalance()
 
-        val amountAssetDecimalInputFilter =DecimalDigitsInputFilter(
+        val amountAssetDecimalInputFilter = DecimalDigitsInputFilter(
                 Integer.MAX_VALUE,
                 presenter.data?.watchMarket?.market?.amountAssetDecimals ?: 8,
                 Double.MAX_VALUE)
@@ -172,8 +173,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
-                        val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText((presenter.currentAmountBalance
-                                ?: 0) - getFeeIfNeed(), presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText(
+                                presenter.currentAmountBalance - getFeeIfNeed(),
+                                presenter.data?.watchMarket?.market?.amountAssetDecimals
                                 ?: 0).clearBalance().toBigDecimal()
                         presenter.amountValidation = isValid
 
@@ -443,7 +445,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         var amountValue = 0L
         safeLet(presenter.data?.watchMarket?.market, presenter.data?.initSum, presenter.data?.initPrice) { market, sum, price ->
             val amountTemp = sum.toDouble() / price.toDouble()
-            val unscaledAmount = MoneyUtil.getUnscaledValue(amountTemp.toString(), market.amountAssetDecimals)
+            val unscaledAmount = MoneyUtil.getUnscaledValue(
+                    amountTemp.toString(),
+                    market.amountAssetDecimals,
+                    RoundingMode.UP)
             amountValue = if (unscaledAmount > presenter.currentAmountBalance) {
                 presenter.currentAmountBalance - getFeeIfNeed()
             } else {
@@ -584,7 +589,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun showCommissionSuccess(unscaledAmount: Long) {
         fillInputsWithValues()
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
-                "${Constants.WAVES_ASSET_INFO.name}"
+                "${WavesConstants.WAVES_ASSET_INFO.name}"
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
     }

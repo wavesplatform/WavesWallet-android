@@ -8,8 +8,8 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
@@ -28,7 +28,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     @Inject
     lateinit var coinomatManager: CoinomatManager
 
-    var crypto: String = Constants.WAVES_ASSET_ID_FILLED
+    var crypto: String = WavesConstants.WAVES_ASSET_ID_FILLED
     private var amount: String = "0"
     var fiat: String = "USD"
     private var min: Float = 0F

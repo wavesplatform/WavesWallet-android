@@ -5,12 +5,16 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.net.model.LastAppVersionResponse
-import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
-import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
-import com.wavesplatform.sdk.net.model.response.NewsResponse
-import com.wavesplatform.sdk.net.model.response.SpamAssetResponse
+import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.net.CallAdapterFactory
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
+import com.wavesplatform.sdk.model.response.SpamAssetResponse
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -39,18 +43,35 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadNews(): Observable<NewsResponse> {
-        return githubService.news(NewsResponse.URL)
-    }
-
-    fun globalConfiguration(url: String): Observable<GlobalConfigurationResponse> {
-        return githubService.globalConfiguration(url)
+        val newsUrl = if (preferencesHelper.useTestNews) {
+            NewsResponse.URL_TEST
+        } else {
+            NewsResponse.URL
+        }
+        return githubService.news(newsUrl)
     }
 
     fun getGlobalCommission(): Observable<GlobalTransactionCommissionResponse> {
         return githubService.globalCommission()
     }
 
-    fun loadLastAppVersion(): Observable<LastAppVersionResponse> {
-        return githubService.loadLastAppVersion()
+    companion object {
+
+        private var onErrorListener: OnErrorListener? = null
+
+        fun create(onErrorListener: OnErrorListener? = null): GithubService {
+            this.onErrorListener = onErrorListener
+            val adapterFactory = CallAdapterFactory(object : OnErrorListener{
+                override fun onError(exception: RetrofitException) {
+                    GithubDataManager.onErrorListener?.onError(exception)
+                }
+            })
+            return WavesPlatform.service().createService(Constants.URL_GITHUB_CONFIG, adapterFactory)
+                    .create(GithubService::class.java)
+        }
+
+        fun removeOnErrorListener() {
+            onErrorListener = null
+        }
     }
 }

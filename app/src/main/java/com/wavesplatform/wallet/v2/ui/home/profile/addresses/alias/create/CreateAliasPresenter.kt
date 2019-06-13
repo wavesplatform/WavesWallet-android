@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.request.AliasRequest
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.transaction.node.AliasTransaction
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @InjectViewState
 class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView>() {
 
-    var aliasRequest: AliasRequest = AliasRequest()
+    var aliasRequest: AliasTransaction = AliasTransaction()
     var wavesBalance: AssetBalanceResponse = AssetBalanceResponse()
     var aliasValidation = false
     var fee = 0L
@@ -42,7 +42,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                 }))
     }
 
-    fun createAlias(alias: String?) {
+    fun createAlias(alias: String) {
         aliasRequest.alias = alias
         aliasRequest.fee = fee
 

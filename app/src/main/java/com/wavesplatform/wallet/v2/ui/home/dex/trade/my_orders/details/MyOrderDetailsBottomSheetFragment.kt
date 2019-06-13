@@ -8,10 +8,10 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details
 import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.sdk.net.model.OrderStatus
-import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.sdk.net.model.response.AssetPairOrderResponse
-import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.model.OrderStatus
+import com.wavesplatform.sdk.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.AssetPairOrderResponse
+import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
@@ -81,12 +81,18 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
         view?.let {
             view.text_amount_value.text = data.orderResponse.getScaledAmount(data.amountAssetInfo?.precision)
+            view.text_filled_value.text = data.orderResponse.getType().directionSign
+                    .plus(data.orderResponse.getScaledFilled(data.amountAssetInfo?.precision))
             view.text_price_value.text = data.orderResponse.getScaledPrice(data.amountAssetInfo?.precision, data.priceAssetInfo?.precision)
             view.text_total_value.text = data.orderResponse.getScaledTotal(data.priceAssetInfo?.precision)
 
             showTickerOrSimple(view.text_amount_value, view.text_amount_tag, data.amountAssetInfo)
+            showTickerOrSimple(view.text_filled_value, view.text_filled_tag, data.amountAssetInfo)
             showTickerOrSimple(view.text_price_value, view.text_price_tag, data.priceAssetInfo)
             showTickerOrSimple(view.text_total_value, view.text_total_tag, data.priceAssetInfo)
+
+            view.text_filled_value.makeTextHalfBold(true)
+            view.text_total_value.makeTextHalfBold(true)
         }
 
         return view
@@ -94,7 +100,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfoResponse?) {
         if (isShowTicker(assetInfo?.id)) {
-            val ticker = assetInfo?.getTicker()
+            val ticker = assetInfo?.getTokenTicker()
             if (!ticker.isNullOrBlank()) {
                 tickerView.text = ticker
                 tickerView.visiable()
@@ -115,7 +121,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             view.relative_confirmations.gone()
 
             // fill fee field
-            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, Constants.WAVES_ASSET_INFO.precision).stripZeros()
+            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, WavesConstants.WAVES_ASSET_INFO.precision).stripZeros()
             view.text_base_info_tag.visiable()
 
             // fill time field

@@ -17,11 +17,11 @@ import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.R
-import pers.victor.ext.findColor
+import com.wavesplatform.wallet.v2.data.Constants.defaultAssetsAvatar
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
@@ -97,42 +97,33 @@ class AssetAvatarView : AppCompatImageView {
     }
 
     /*
-   * Set asset info object to get initials for drawable
-   * */
+    * Set asset info object to get initials for drawable
+    * */
     fun setAsset(asset: AssetInfoResponse) {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
     /*
-    * Set asset info object to get initials for drawable
+    * Get initials for asset drawable
     * */
-    private fun getInitialsFromAssetName(text: String?): String {
-        if (text.isNullOrEmpty()) {
-            return context.getString(R.string.common_persist)
-        }
-
-        val letter = text.trim().substring(0, 1)
-        val letterColor = com.wavesplatform.wallet.v2.data.Constants.alphabetColor[letter.toLowerCase()]
-
-        return if (letterColor != null) {
-            letter.toUpperCase()
-        } else {
+    private fun getInitial(text: String?): String {
+        return if (text.isNullOrEmpty()) {
             context.getString(R.string.common_persist)
+        } else {
+            text.trim().substring(0, 1).toUpperCase()
         }
     }
 
-    private fun getPlaceholderColorFromAssetName(text: String?): Int {
-        if (TextUtils.isEmpty(text?.trim())) {
-            return findColor(R.color.persist)
+    private fun getColorBackgroundBy(assetId: String): Int {
+        if (TextUtils.isEmpty(assetId)) {
+            return com.wavesplatform.wallet.v2.data.Constants.alphabetColor[0]
         }
-
-        val letterColor = com.wavesplatform.wallet.v2.data.Constants.alphabetColor[text!!.trim().substring(0, 1).toLowerCase()]
-
-        return if (letterColor != null) {
-            findColor(letterColor)
-        } else {
-            findColor(R.color.persist)
-        }
+        val sum = assetId.split("")
+                .filter { it != "" }
+                .map { char -> char.codePointAt(0) }
+                .reduce { acc, code -> acc + code }
+        return com.wavesplatform.wallet.v2.data.Constants.alphabetColor[
+                sum % com.wavesplatform.wallet.v2.data.Constants.alphabetColor.size]
     }
 
     /*
@@ -140,13 +131,12 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
-            else -> Constants.defaultAssetsAvatar()[assetId]
+            "" -> defaultAssetsAvatar()[WavesConstants.WAVES_ASSET_ID_FILLED]
+            else -> defaultAssetsAvatar()[assetId]
         }
 
-        val color = getPlaceholderColorFromAssetName(name)
-        paint.color = color
-        text = getInitialsFromAssetName(name)
+        paint.color = getColorBackgroundBy(assetId)
+        text = getInitial(name)
 
         setDrawable(isSponsoredAsset, isScriptAsset)
 

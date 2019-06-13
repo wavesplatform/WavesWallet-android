@@ -87,52 +87,61 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <HorizontalScrollView
-            android:id="@+id/scroll_buttons"
+        <com.wavesplatform.wallet.v2.ui.custom.HorizontalScrollViewWrapperWithOpacityEdge
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relative_top_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginBottom="44dp"
             android:layout_marginTop="44dp"
-            android:overScrollMode="never"
-            android:scrollbars="none">
+            android:layout_marginBottom="44dp"
+            app:left_edge_block_background="@drawable/bg_opacity_scroll_left_edge_basic50"
+            app:right_edge_block_background="@drawable/bg_opacity_scroll_right_edge_basic50">
 
-            <LinearLayout
-                android:id="@+id/linear_buttons"
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:id="@+id/scroll_buttons"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_terms_of_use"
+                <LinearLayout
+                    android:id="@+id/linear_buttons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_btn_basic_100"
-                    android:paddingStart="14dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="14dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/confirm_card_tutorial_privacy_policy"
-                    android:textColor="@color/black" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_terms_and_conditions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/selector_btn_basic_100"
-                    android:paddingStart="14dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="14dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/confirm_card_tutorial_terms_and_conditions"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal">
 
 
-            </LinearLayout>
-        </HorizontalScrollView>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_terms_of_use"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:background="@drawable/selector_btn_basic_100"
+                        android:paddingStart="14dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/confirm_card_tutorial_privacy_policy"
+                        android:textColor="@color/black" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_terms_and_conditions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/selector_btn_basic_100"
+                        android:paddingStart="14dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/confirm_card_tutorial_terms_and_conditions"
+                        android:textColor="@color/black" />
+
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </com.wavesplatform.wallet.v2.ui.custom.HorizontalScrollViewWrapperWithOpacityEdge>
 
     </RelativeLayout>
 </ScrollView>

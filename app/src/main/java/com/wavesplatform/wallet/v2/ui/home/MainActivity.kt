@@ -21,14 +21,16 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
-import com.wavesplatform.sdk.net.model.response.NewsResponse
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -218,6 +220,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun showQuickActionDialog() {
         if (isNetworkConnected()) {
+            analytics.trackEvent(AnalyticEvents.WavesActionPanelEvent)
             val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
             val ft = supportFragmentManager.beginTransaction()
             ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
@@ -343,10 +346,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
             // enable quick action tab
-            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.ENABLE_VIEW
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.View.ENABLE_VIEW
         } else {
             // disable quick action tab
-            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.DISABLE_VIEW
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.View.DISABLE_VIEW
         }
     }
 

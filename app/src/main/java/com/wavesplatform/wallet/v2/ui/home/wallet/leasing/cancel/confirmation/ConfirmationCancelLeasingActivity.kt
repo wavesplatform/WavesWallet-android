@@ -9,10 +9,12 @@ import android.app.Activity
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_confirm_cancel_leasing.*
@@ -75,8 +77,12 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        if (presenter.success) {
+            launchActivity<MainActivity>(clear = true)
+        } else {
+            finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        }
     }
 
     override fun successCancelLeasing() {
@@ -114,7 +120,7 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8)} ${Constants.WAVES_ASSET_INFO.name}"
+        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8)} ${WavesConstants.WAVES_ASSET_INFO.name}"
         button_okay.isEnabled = true
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()

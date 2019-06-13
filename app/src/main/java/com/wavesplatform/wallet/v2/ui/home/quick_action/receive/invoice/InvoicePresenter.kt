@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 

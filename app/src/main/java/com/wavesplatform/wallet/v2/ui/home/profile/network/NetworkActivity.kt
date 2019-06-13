@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.network
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events

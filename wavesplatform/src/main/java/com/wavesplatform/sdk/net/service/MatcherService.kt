@@ -6,11 +6,11 @@
 package com.wavesplatform.sdk.net.service
 
 import com.google.gson.internal.LinkedTreeMap
-import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
-import com.wavesplatform.sdk.net.model.request.OrderRequest
-import com.wavesplatform.sdk.net.model.response.MarketsResponse
-import com.wavesplatform.sdk.net.model.response.OrderBookResponse
-import com.wavesplatform.sdk.net.model.response.AssetPairOrderResponse
+import com.wavesplatform.sdk.model.transaction.matcher.CancelOrderRequest
+import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
+import com.wavesplatform.sdk.model.response.MarketsResponse
+import com.wavesplatform.sdk.model.response.OrderBookResponse
+import com.wavesplatform.sdk.model.response.AssetPairOrderResponse
 import io.reactivex.Observable
 import retrofit2.http.*
 

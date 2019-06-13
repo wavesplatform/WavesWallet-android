@@ -9,8 +9,8 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.request.BurnRequest
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.transaction.node.BurnTransaction
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
@@ -66,7 +66,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         text_description.text = presenter.assetBalance!!.getDescription()
 
         text_fee_value.text = "${getScaledAmount(presenter.fee, 8)} " +
-                "${Constants.CUSTOM_FEE_ASSET_NAME}"
+                "${WavesConstants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click {
             analytics.trackEvent(AnalyticEvents.BurnTokenConfirmTapEvent)
@@ -85,7 +85,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         )
     }
 
-    override fun onShowBurnSuccess(tx: BurnRequest?, totalBurn: Boolean) {
+    override fun onShowBurnSuccess(tx: BurnTransaction?, totalBurn: Boolean) {
         completeBurnProcessing()
         relative_success.visiable()
 
@@ -100,8 +100,12 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     }
 
     override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        if (presenter.success) {
+            launchActivity<MainActivity>(clear = true)
+        } else {
+            finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        }
     }
 
     override fun onShowError(errorMessageRes: String) {

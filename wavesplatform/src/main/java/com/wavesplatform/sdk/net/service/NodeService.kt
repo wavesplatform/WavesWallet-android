@@ -5,8 +5,8 @@
 
 package com.wavesplatform.sdk.net.service
 
-import com.wavesplatform.sdk.net.model.request.*
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.transaction.node.*
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -58,40 +58,49 @@ interface NodeService {
     /**
      *
      */
-    @POST("assets/broadcast/transfer")
-    fun broadcastTransfer(@Body tx: TransferTransactionRequest): Observable<TransferTransactionRequest>
-
-    /**
-     *
-     */
     @POST("assets/broadcast/issue")
-    fun broadcastIssue(@Body tx: IssueTransactionRequest): Observable<IssueTransactionRequest>
+    fun broadcastIssue(@Body transaction: IssueTransaction): Observable<IssueTransaction>
 
     /**
      *
      */
     @POST("assets/broadcast/reissue")
-    fun broadcastReissue(@Body tx: ReissueTransactionRequest): Observable<ReissueTransactionRequest>
+    fun broadcastReissue(@Body transaction: ReissueTransaction): Observable<ReissueTransaction>
 
     /**
      * Create alias - short name for address
-     * @param createAliasRequest AliasRequest with signature by privateKey
+     * @param transaction AliasTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun createAlias(@Body createAliasRequest: AliasRequest): Observable<AliasResponse>
+    fun broadcastAlias(@Body transaction: AliasTransaction): Observable<AliasResponse>
 
     /**
-     * Get list of unconfirmed transactions
+     * Broadcast a signed create leasing transaction
+     * @param transaction CreateLeasingTransaction with signature by privateKey
      */
-    @GET("transactions/unconfirmed")
-    fun unconfirmedTransactions(): Observable<List<TransactionResponse>>
+    @POST("transactions/broadcast")
+    fun broadcastCreateLeasing(@Body transaction: CreateLeasingTransaction): Observable<TransactionResponse>
+
+    /**
+     * Broadcast a signed cancel leasing transaction
+     * @param transaction CancelLeasingTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun broadcastCancelLeasing(@Body transaction: CancelLeasingTransaction): Observable<TransactionResponse>
+
+    /**
+     * Broadcast a signed burn transaction
+     * @param transaction BurnTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun broadcastBurn(@Body transaction: BurnTransaction): Observable<BurnTransaction>
 
     /**
      * Broadcast a signed transfer transaction
-     * @param tx TransactionsBroadcastRequest with signature by privateKey
+     * @param transaction TransferTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest>
+    fun broadcastTransfer(@Body transaction: TransferTransaction): Observable<TransferTransaction>
 
     /**
      * Get current Waves block-chain height
@@ -105,27 +114,6 @@ interface NodeService {
      */
     @GET("leasing/active/{address}")
     fun activeLeasing(@Path("address") address: String?): Observable<List<TransactionResponse>>
-
-    /**
-     * Broadcast a signed create leasing transaction
-     * @param createLeasingRequest CreateLeasingRequest with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun createLeasing(@Body createLeasingRequest: CreateLeasingRequest): Observable<TransactionResponse>
-
-    /**
-     * Broadcast a signed cancel leasing transaction
-     * @param cancelLeasingRequest CancelLeasingRequest with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<TransactionResponse>
-
-    /**
-     * Broadcast a signed burn transaction
-     * @param burnRequest BurnRequest with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun burn(@Body burnRequest: BurnRequest): Observable<BurnRequest>
 
     /**
      * Account's script
@@ -146,4 +134,10 @@ interface NodeService {
      */
     @GET("/utils/time")
     fun utilsTime(): Observable<UtilsTimeResponse>
+
+    /**
+     * Get list of unconfirmed transactions
+     */
+    @GET("transactions/unconfirmed")
+    fun unconfirmedTransactions(): Observable<List<TransactionResponse>>
 }

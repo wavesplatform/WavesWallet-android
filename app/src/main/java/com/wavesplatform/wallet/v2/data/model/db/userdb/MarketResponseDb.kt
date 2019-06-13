@@ -2,9 +2,9 @@ package com.wavesplatform.wallet.v2.data.model.db.userdb
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.AmountAssetInfoResponse
-import com.wavesplatform.sdk.net.model.response.MarketResponse
-import com.wavesplatform.sdk.net.model.response.PriceAssetInfoResponse
+import com.wavesplatform.sdk.model.response.AmountAssetInfoResponse
+import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.model.response.PriceAssetInfoResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.Ignore

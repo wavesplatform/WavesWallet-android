@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
@@ -129,15 +130,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             card_transaction.click {
                 launchActivity<HistoryActivity> {
                     val bundle = Bundle().apply {
-                        val tabs = arrayListOf(
-                                HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
-                                HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
-                                HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
-                                HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
-                                HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
-                                HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
                         putParcelable(HistoryFragment.BUNDLE_ASSET, presenter.assetBalance)
-                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, configureTabsAccordingTo(presenter.assetBalance))
                     }
                     putExtras(bundle)
                 }
@@ -154,6 +148,22 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             text_last_transaction_title.text = getString(R.string.asset_details_last_transactions_empty)
             card_transaction.click {}
         }
+    }
+
+    private fun configureTabsAccordingTo(assetBalance: AssetBalanceResponse?): ArrayList<HistoryTab> {
+        val tabs = arrayListOf<HistoryTab>()
+        assetBalance?.let { asset ->
+            tabs.add(HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)))
+            tabs.add(HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)))
+            tabs.add(HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)))
+            tabs.add(HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)))
+            if (asset.isWaves()) {
+                tabs.add(HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)))
+            } else {
+                tabs.add(HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
+            }
+        }
+        return tabs
     }
 
     private fun fillInformation(assetBalance: AssetBalanceResponse?) {
@@ -253,12 +263,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     private fun enableView(view: View) {
         view.isClickable = true
-        view.alpha = Constants.ENABLE_VIEW
+        view.alpha = Constants.View.ENABLE_VIEW
     }
 
     private fun disableView(view: View) {
         view.isClickable = false
-        view.alpha = Constants.DISABLE_VIEW
+        view.alpha = Constants.View.DISABLE_VIEW
     }
 
     override fun onDestroyView() {

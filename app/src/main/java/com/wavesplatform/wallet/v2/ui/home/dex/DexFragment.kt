@@ -16,7 +16,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil

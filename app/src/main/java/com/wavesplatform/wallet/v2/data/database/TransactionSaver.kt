@@ -6,10 +6,9 @@
 package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
-import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
@@ -20,6 +19,8 @@ import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionType
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -46,7 +47,7 @@ class TransactionSaver @Inject constructor() {
             changeListener: OnTransactionLimitChangeListener? = null
     ) {
         currentLimit = limit
-        if (Wavesplatform.getWallet() == null
+        if (!WavesWallet.isAuthenticated()
                 || sortedList.isEmpty()
                 || limit < 1) {
             rxEventBus.post(Events.NeedUpdateHistoryScreen())
@@ -133,13 +134,13 @@ class TransactionSaver @Inject constructor() {
                     mergeAndSaveAllAssets(ArrayList(it)) { assetsInfo ->
                         transactions.forEach { trans ->
                             if (trans.assetId.isNullOrEmpty()) {
-                                trans.asset = Constants.WAVES_ASSET_INFO
+                                trans.asset = WavesConstants.WAVES_ASSET_INFO
                             } else {
                                 trans.asset = allAssets.firstOrNull { it.id == trans.assetId }
                             }
 
                             if (trans.feeAssetId.isNullOrEmpty()) {
-                                trans.feeAssetObject = Constants.WAVES_ASSET_INFO
+                                trans.feeAssetObject = WavesConstants.WAVES_ASSET_INFO
                             } else {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
@@ -147,7 +148,7 @@ class TransactionSaver @Inject constructor() {
                             if (!trans.payment.isNullOrEmpty()) {
                                 trans.payment.first()?.let { payment ->
                                     if (payment.assetId.isNullOrEmpty()) {
-                                        payment.asset = Constants.WAVES_ASSET_INFO
+                                        payment.asset = WavesConstants.WAVES_ASSET_INFO
                                     } else {
                                         payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
                                     }
@@ -159,7 +160,8 @@ class TransactionSaver @Inject constructor() {
                                     val aliasName = trans.recipient.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.recipientAddress = address
-                                        trans.transactionTypeId = getTransactionType(trans)
+                                        trans.transactionTypeId = getTransactionType(
+                                                trans, WavesWallet.getAddress())
                                         TransactionDb(trans).save()
                                     }
 
@@ -168,7 +170,8 @@ class TransactionSaver @Inject constructor() {
                                     val aliasName = trans.lease?.recipient?.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.lease?.recipientAddress = address
-                                        trans.transactionTypeId = getTransactionType(trans)
+                                        trans.transactionTypeId = getTransactionType(
+                                                trans, WavesWallet.getAddress())
                                         TransactionDb(trans).save()
                                     }
                                 }
@@ -194,13 +197,13 @@ class TransactionSaver @Inject constructor() {
                             if (trans.order1 != null) {
                                 val amountAsset =
                                         if (trans.order1?.assetPair?.amountAsset.isNullOrEmpty()) {
-                                            Constants.WAVES_ASSET_INFO
+                                            WavesConstants.WAVES_ASSET_INFO
                                         } else {
                                             allAssets.firstOrNull { it.id == trans.order1?.assetPair?.amountAsset }
                                         }
                                 val priceAsset =
                                         if (trans.order1?.assetPair?.priceAsset.isNullOrEmpty()) {
-                                            Constants.WAVES_ASSET_INFO
+                                            WavesConstants.WAVES_ASSET_INFO
                                         } else {
                                             allAssets.firstOrNull { it.id == trans.order1?.assetPair?.priceAsset }
                                         }
@@ -212,7 +215,8 @@ class TransactionSaver @Inject constructor() {
                                     it.assetPair?.priceAssetObject = priceAsset
                                 }
                             }
-                            trans.transactionTypeId = TransactionUtil.getTransactionType(trans)
+                            trans.transactionTypeId = getTransactionType(
+                                    trans, WavesWallet.getAddress())
                         }
 
                         if (needCheckToUpdateBalance) {
@@ -249,12 +253,14 @@ class TransactionSaver @Inject constructor() {
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
-        alias.notNull {
-            subscriptions.add(apiDataManager.loadAlias(it)
-                    .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe {
-                        listener.invoke(it.address)
-                    })
+        if (App.getAccessManager().isAuthenticated()) {
+            alias.notNull {
+                subscriptions.add(apiDataManager.loadAlias(it)
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe {
+                            listener.invoke(it.address)
+                        })
+            }
         }
     }
 

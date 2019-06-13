@@ -9,15 +9,13 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.request.*
-import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.transaction.node.*
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
@@ -28,7 +26,8 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
-import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -76,8 +75,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun transactionsBroadcast(tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest> {
-        return nodeService.transactionsBroadcast(tx)
+    fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransaction> {
+        return nodeService.broadcastTransfer(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -114,7 +113,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
                                 val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
-                                if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
+                                if (assetsFromDb != null && assetsFromDb.isNotEmpty()) {
                                     // merge db data and API data
                                     tripple.third.balances.forEachIndexed { index, assetBalance ->
                                         val dbAsset = mapDbAssets?.get(assetBalance.assetId)
@@ -168,7 +167,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                                     if (savedAssetPrefs.isEmpty()) {
                                         mapDbAssets?.let {
-                                            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                                            if (mapDbAssets[assetBalance.assetId] == null
+                                                    && assetBalance.isMyWavesToken(
+                                                            WavesWallet.getAddress())) {
                                                 assetBalance.isFavorite = true
                                             }
                                         }
@@ -210,11 +211,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             offsetAsset?.forEach { id ->
                 if (id.isNotEmpty()) {
                     val assetBalance = queryFirst<AssetBalanceDb> { equalTo("assetId", id) }
-                    if (assetBalance?.isGateway == false) {
-                        assetBalance.delete { equalTo("assetId", id) }
-                    } else {
-                        assetBalance?.balance = 0
-                        assetBalance?.save()
+                    assetBalance.notNull {
+                        if (isGateway(it.assetId) || isFiat(it.assetId)) {
+                            it.balance = 0
+                            it.save()
+                        } else {
+                            it.delete { equalTo("assetId", id) }
+                        }
                     }
                 }
             }
@@ -234,7 +237,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 // load in order balance
                 matcherDataManager.loadReservedBalances()
                         .map {
-                            return@map it[Constants.WAVES_ASSET_INFO.name] ?: 0L
+                            return@map it[WavesConstants.WAVES_ASSET_INFO.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
                     val currentWaves = loadDbWavesBalance()
@@ -246,13 +249,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 })
     }
 
-    fun createAlias(createAliasRequest: AliasRequest): Observable<AliasResponse> {
-        createAliasRequest.senderPublicKey = getPublicKeyStr()
-        createAliasRequest.timestamp = EnvironmentManager.getTime()
-        App.getAccessManager().getWallet()?.privateKey.notNull {
-            createAliasRequest.sign(it)
-        }
-        return nodeService.createAlias(createAliasRequest)
+    fun createAlias(request: AliasTransaction): Observable<AliasResponse> {
+        request.senderPublicKey = getPublicKeyStr()
+        request.timestamp = EnvironmentManager.getTime()
+        request.sign(App.getAccessManager().getWallet().seedStr)
+        return nodeService.broadcastAlias(request)
                 .map {
                     it.address = getAddress()
                     AliasDb(it).save()
@@ -263,16 +264,12 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<TransactionResponse> {
-        cancelLeasingRequest.senderPublicKey = getPublicKeyStr()
-        cancelLeasingRequest.timestamp = EnvironmentManager.getTime()
-        App.getAccessManager().getWallet()?.privateKey.notNull {
-            cancelLeasingRequest.sign(it)
-        }
-        return nodeService.cancelLeasing(cancelLeasingRequest)
+    fun cancelLeasing(transaction: CancelLeasingTransaction): Observable<TransactionResponse> {
+        transaction.sign(App.getAccessManager().getWallet().seedStr)
+        return nodeService.broadcastCancelLeasing(transaction)
                 .map {
                     val first = queryFirst<TransactionDb> {
-                        equalTo("id", cancelLeasingRequest.leaseId)
+                        equalTo("id", transaction.leaseId)
                     }
                     first?.status = LeasingStatus.CANCELED.status
                     first?.save()
@@ -284,18 +281,12 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun startLeasing(
-            createLeasingRequest: CreateLeasingRequest,
-            recipientIsAlias: Boolean,
+            createLeasingRequest: CreateLeasingTransaction,
             fee: Long
     ): Observable<TransactionResponse> {
-        createLeasingRequest.senderPublicKey = getPublicKeyStr()
         createLeasingRequest.fee = fee
-        createLeasingRequest.timestamp = EnvironmentManager.getTime()
-
-        App.getAccessManager().getWallet()?.privateKey.notNull {
-            createLeasingRequest.sign(it, recipientIsAlias)
-        }
-        return nodeService.createLeasing(createLeasingRequest)
+        createLeasingRequest.sign(App.getAccessManager().getWallet().seedStr)
+        return nodeService.broadcastCreateLeasing(createLeasingRequest)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -337,16 +328,17 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.activeLeasing(getAddress())
                 .map {
                     return@map it.filter {
-                        it.asset = Constants.WAVES_ASSET_INFO
-                        it.transactionTypeId = TransactionUtil.getTransactionType(it)
-                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
+                        it.asset = WavesConstants.WAVES_ASSET_INFO
+                        it.transactionTypeId = TransactionUtil.getTransactionType(
+                                it, WavesWallet.getAddress())
+                        it.transactionTypeId == WavesConstants.ID_STARTED_LEASING_TYPE
                                 && it.sender == App.getAccessManager().getWallet()?.address
                     }
                 }
                 .flatMap {
                     return@flatMap Observable.fromIterable(it)
                             .flatMap { transaction ->
-                                if (transaction.recipient.contains("alias")) {
+                                if (transaction.recipient.contains("aliasBytes")) {
                                     val aliasName = transaction.recipient.substringAfterLast(":")
                                     return@flatMap apiDataManager.loadAlias(aliasName)
                                             .flatMap {
@@ -361,8 +353,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun burn(burn: BurnRequest): Observable<BurnRequest> {
-        return nodeService.burn(burn)
+    fun burn(burn: BurnTransaction): Observable<BurnTransaction> {
+        return nodeService.broadcastBurn(burn)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -376,8 +368,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun assetDetails(assetId: String?): Observable<AssetsDetailsResponse> {
-        return if (TextUtils.isEmpty(assetId) || assetId == Constants.WAVES_ASSET_ID_FILLED) {
-            Observable.just(AssetsDetailsResponse(assetId = Constants.WAVES_ASSET_ID_FILLED, scripted = false))
+        return if (TextUtils.isEmpty(assetId) || assetId == WavesConstants.WAVES_ASSET_ID_FILLED) {
+            Observable.just(AssetsDetailsResponse(assetId = WavesConstants.WAVES_ASSET_ID_FILLED, scripted = false))
         } else {
             nodeService.assetDetails(assetId!!)
         }
@@ -401,7 +393,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     params.transactionType = TransactionResponse.EXCHANGE
                     params.smartPriceAsset = priceAssetsDetails.scripted
                     params.smartAmountAsset = amountAssetsDetails.scripted
-                    return@flatMap Observable.just(TransactionUtil.countCommission(commission, params))
+                    return@flatMap Observable.just(TransactionCommissionUtil.countCommission(commission, params))
                 }
 
     }

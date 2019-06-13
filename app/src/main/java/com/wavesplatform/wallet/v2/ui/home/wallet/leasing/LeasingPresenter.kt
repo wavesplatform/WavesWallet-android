@@ -7,13 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -25,13 +25,13 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
     var enableElevation: Boolean = false
 
     fun getActiveLeasing() {
-        if (Wavesplatform.isAuthenticated()) {
+        if (WavesWallet.isAuthenticated()) {
             runAsync {
                 addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),
                         queryAsSingle<TransactionDb> {
                             equalTo("status", LeasingStatus.ACTIVE.status)
                                     .and()
-                                    .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
+                                    .equalTo("transactionTypeId", WavesConstants.ID_STARTED_LEASING_TYPE)
                         }.map {
                             return@map ArrayList(it.sortedByDescending { it.timestamp })
                         }.toObservable(),

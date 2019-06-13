@@ -19,13 +19,14 @@ import com.github.moduth.blockcanary.BlockCanary;
 import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
-import com.wavesplatform.sdk.Wavesplatform;
+import com.wavesplatform.sdk.WavesPlatform;
 import com.wavesplatform.wallet.v2.data.analytics.Analytics;
-import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
+import com.wavesplatform.wallet.v2.util.EnvironmentManager;
+import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.util.connectivity.ConnectivityManager;
 
 import javax.inject.Inject;
@@ -74,7 +75,9 @@ public class App extends DaggerApplication {
         RxJavaPlugins.setErrorHandler(Timber::e);
 
         accessManager = new AccessManager(mPrefsUtil, authHelper);
-        Wavesplatform.init(this, true, null);
+
+        WavesPlatform.init(this);
+        EnvironmentManager.update();
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
@@ -94,7 +97,7 @@ public class App extends DaggerApplication {
         SimpleChromeCustomTabs.initialize(this);
     }
 
-    public static Context getAppContext() {
+    public static App getAppContext() {
         return application;
     }
 

@@ -22,8 +22,8 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
@@ -175,6 +175,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_your_address -> {
+                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()
             }
         }

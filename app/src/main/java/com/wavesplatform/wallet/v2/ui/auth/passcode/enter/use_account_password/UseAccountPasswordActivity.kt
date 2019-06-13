@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.crypto.WavesWallet
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity

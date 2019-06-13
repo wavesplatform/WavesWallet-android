@@ -17,7 +17,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.net.model.response.AliasResponse
+import com.wavesplatform.sdk.model.response.AliasResponse
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment

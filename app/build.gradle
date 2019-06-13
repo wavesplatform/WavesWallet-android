@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: 'realm-android'
-apply plugin: 'io.sentry.android.gradle'
+//apply plugin: 'io.sentry.android.gradle'
 apply from: 'api-keys.properties'
 apply from: "$rootDir/ktlint.gradle"
 apply from: "$rootDir/detekt.gradle"
@@ -34,14 +34,15 @@ android {
     buildToolsVersion '28.0.3'
     flavorDimensions "default"
     dexOptions {
-        javaMaxHeapSize "3g"
+        incremental true
+        javaMaxHeapSize "6g"
     }
     defaultConfig {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 421
-        versionName "2.3.1"
+        versionCode 423
+        versionName "2.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -61,22 +62,8 @@ android {
     splits {
         // Configures multiple APKs based on ABI.
         abi {
-            def isReleaseBuild = false
-
-            gradle.startParameter.taskNames.find {
-                // Enable split for release builds in different build flavors
-                // (assembleProdRelease, assembleDevRelease, etc.).
-                if (it ==~ /:app:assemble.*Release/) {
-                    isReleaseBuild = true
-                    return true // break
-                }
-
-                return false // continue
-            }
-
             // Enables building multiple APKs per ABI.
-            enable isReleaseBuild
-//            enable true
+            enable gradle.startParameter.taskNames.contains("assembleProdRelease")
 
             // By default all ABIs are included, so use reset() and include to specify that we only
             // want APKs for x86, armeabi-v7a, and mips.
@@ -203,10 +190,10 @@ android {
 }
 
 
-sentry {
-    autoProguardConfig true
-    autoUpload true
-}
+//sentry {
+//    autoProguardConfig false
+//    autoUpload false
+//}
 
 def getAppName() {
     def stringsFile = file("./src/main/res/values/strings.xml")
@@ -244,9 +231,9 @@ dependencies {
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    implementation "com.google.firebase:firebase-core:16.0.8"
-    implementation "com.google.firebase:firebase-database:16.1.0"
-    implementation "com.google.firebase:firebase-messaging:17.6.0"
+    implementation "com.google.firebase:firebase-core:16.0.9"
+    implementation "com.google.firebase:firebase-database:17.0.0"
+    implementation "com.google.firebase:firebase-messaging:18.0.0"
     implementation "com.google.firebase:firebase-inappmessaging-display:17.1.1"
     releaseImplementation "com.google.firebase:firebase-crash:16.2.1"
     implementation 'commons-io:commons-io:2.4'

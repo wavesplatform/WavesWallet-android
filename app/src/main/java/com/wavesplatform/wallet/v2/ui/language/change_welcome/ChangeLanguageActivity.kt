@@ -11,8 +11,8 @@ import android.support.v7.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.wavesplatform.sdk.net.model.Language
-import com.wavesplatform.sdk.net.model.LanguageItem
+import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.sdk.model.LanguageItem
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity

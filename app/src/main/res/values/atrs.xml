@@ -37,4 +37,10 @@
     <declare-styleable name="AssetAvatarView">
         <attr name="avatar_text_size" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="HorizontalScrollViewWrapperWithOpacityEdge">
+        <attr name="left_edge_block_background" format="reference" />
+        <attr name="right_edge_block_background" format="reference" />
+        <attr name="edge_block_width" format="dimension" />
+        <attr name="edge_block_height" format="dimension" />
+    </declare-styleable>
 </resources>

@@ -39,6 +39,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -46,16 +47,14 @@ import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.net.RetrofitException
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.ErrorResponse
-import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.net.model.response.OrderResponse
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.ErrorResponse
+import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
@@ -79,6 +78,31 @@ val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
         return@InputFilter ""
     }
     null
+}
+
+inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (measuredWidth > 0 && measuredHeight > 0) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                f()
+            }
+        }
+    })
+}
+
+fun View.animateVisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_VISIBILITY)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
+
+fun View.animateInvisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_GONE)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
 }
 
 fun EditText.applyFilterStartWithDot() {
@@ -524,28 +548,30 @@ fun View.setMargins(
     layoutParams = lp
 }
 
-fun TextView.makeTextHalfBold() {
-    val textBefore = this.text.toString().substringBefore(" ")
-    val textAfter = if (text.indexOf(" ") != -1) {
+fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
+    val value = this.text.toString().substringBefore(" ")
+    val tokenName = if (text.indexOf(" ") != -1) {
         this.text.toString().substringAfter(" ")
     } else {
         ""
     }
-    val str = SpannableStringBuilder(textBefore)
+    val str = SpannableStringBuilder(value)
     when {
-        textBefore.indexOf(".") != -1 ->
-            str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."),
+        value.indexOf(".") != -1 && !boldWholeValue ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf("."),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        textBefore.indexOf(" ") != -1 ->
-            str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "),
+        value.indexOf(" ") != -1 ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf(" "),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        else -> str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        else ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, value.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
-    this.text = str.append(" $textAfter")
+    this.text = str.append(" $tokenName")
 }
 
 fun loadDbWavesBalance(): AssetBalanceResponse {
-    return find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    return find(com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun find(assetId: String): AssetBalanceResponse? {
@@ -652,4 +678,34 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
                             || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
                 }
     }
+}
+
+fun isShowTicker(assetId: String?): Boolean {
+    return assetId.isNullOrEmpty() || com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
+            .plus(com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.assets)
+            .any {
+                it.assetId == assetId
+            }
+}
+
+fun isFiat(assetId: String): Boolean {
+    for (fiat in Constants.defaultFiat()) {
+        if (assetId == fiat) {
+            return true
+        }
+    }
+    return false
+}
+
+fun isGateway(assetId: String): Boolean {
+    if (assetId == "") {
+        return false
+    }
+
+    for (fiat in Constants.defaultCrypto()) {
+        if (assetId == fiat) {
+            return true
+        }
+    }
+    return false
 }

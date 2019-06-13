@@ -19,6 +19,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -86,6 +88,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onEditClicked(position: Int) {
+        analytics.trackEvent(AnalyticEvents.StartAccountEditEvent)
+
         val item = adapter.getItem(position) as AddressBookUserDb
         launchActivity<EditAccountNameActivity>(REQUEST_EDIT_ACCOUNT_NAME) {
             putExtra(KEY_INTENT_ITEM_ADDRESS, item)
@@ -94,6 +98,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onDeleteClicked(position: Int) {
+        analytics.trackEvent(AnalyticEvents.StartAccountDeleteEvent)
+
         val item = adapter.getItem(position) as AddressBookUserDb
         val guid = App.getAccessManager().findGuidBy(item.address)
 

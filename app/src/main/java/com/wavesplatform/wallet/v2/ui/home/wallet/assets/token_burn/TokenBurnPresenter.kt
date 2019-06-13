@@ -6,10 +6,11 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import javax.inject.Inject
@@ -54,7 +55,7 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
                     params.transactionType = TransactionResponse.BURN
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
-                    fee = TransactionUtil.countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)
                 }, {
                     it.printStackTrace()

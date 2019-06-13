@@ -10,9 +10,9 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.TransactionResponse
-import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb

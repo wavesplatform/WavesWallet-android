@@ -20,9 +20,9 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -81,6 +81,7 @@ class SendActivity : BaseActivity(), SendView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
                 R.drawable.ic_toolbar_back_black)
+        presenter.feeAsset = find(WavesConstants.WAVES_ASSET_ID_EMPTY)
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
@@ -179,13 +180,13 @@ class SendActivity : BaseActivity(), SendView {
         image_arrows.visiable()
         commission_card.click {
             val dialog = SponsoredFeeBottomSheetFragment()
-            dialog.configureData(presenter.feeAsset.assetId, presenter.feeWaves)
+            dialog.configureData(presenter.feeAsset?.assetId ?: "", presenter.feeWaves)
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
                 override fun onSelected(asset: AssetBalanceResponse, fee: Long) {
                     presenter.feeAsset = asset
                     presenter.fee = fee
 
-                    if (presenter.feeAsset.assetId.isWaves()) {
+                    if (presenter.feeAsset?.assetId?.isWaves() != false) {
                         text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
                         commission_asset_name_text.visiable()
                     } else {
@@ -302,7 +303,8 @@ class SendActivity : BaseActivity(), SendView {
                 horizontal_amount_suggestion.gone()
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
-                        "${getScaledAmount(presenter.fee, presenter.feeAsset.getDecimals())} ${presenter.feeAsset.getName()}",
+                        "${getScaledAmount(
+                                presenter.fee, presenter.feeAsset?.getDecimals() ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
@@ -552,7 +554,7 @@ class SendActivity : BaseActivity(), SendView {
                     .replace("/%23send/", "/send/"))
             try {
                 var assetId = uri.path.split("/")[2]
-                if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
+                if (WavesConstants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
                 }
                 val assetBalance = queryFirst<AssetBalanceDb> {
@@ -656,7 +658,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun loadGatewayXRate(assetId: String) {
-        if (AssetBalanceResponse.isGateway(assetId)) {
+        if (isGateway(assetId)) {
             relative_do_not_withdraw.visiable()
             relative_gateway_fee.visiable()
             if (xRateSkeletonView == null) {

@@ -5,18 +5,10 @@
 
 package com.wavesplatform.sdk.crypto;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.common.base.Joiner;
-import com.wavesplatform.sdk.R;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,36 +16,27 @@ import java.util.List;
 public class WalletManager {
     private static WalletManager instance;
 
-    public static String createWalletSeed(Context context) {
+    /**
+     * @return Generated random secret seed-phrase, seed recovery phrase or backup seed phrase
+     * and contains 15 different words from dictionary.
+     */
+    public static String createWalletSeed() {
         try {
             int nbWords = 15;
             int len = nbWords / 3 * 4;
             SecureRandom random = new SecureRandom();
             byte[] seed = new byte[len];
             random.nextBytes(seed);
-            return Joiner.on(" ").join(toMnemonic(seed, readWordList(context)));
+
+            if (Words.INSTANCE.getList().size() != 2048) {
+                throw new IllegalArgumentException("WalletManager: Words list did not contain 2048 words");
+            }
+
+            return Joiner.on(" ").join(toMnemonic(seed, Words.INSTANCE.getList()));
         } catch (Exception e) {
             Log.e(WalletManager.class.getSimpleName(), "createWalletSeed: ", e);
             return null;
         }
-    }
-
-    private static List<String> readWordList(Context context) throws IOException, IllegalArgumentException, NoSuchAlgorithmException {
-        InputStream wis = context.getResources().openRawResource(R.raw.wordlist);
-        BufferedReader br = new BufferedReader(new InputStreamReader(wis, "UTF-8"));
-        List<String> wordList = new ArrayList<String>(2048);
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        String word;
-        while ((word = br.readLine()) != null) {
-            md.update(word.getBytes());
-            wordList.add(word);
-        }
-        br.close();
-
-        if (wordList.size() != 2048)
-            throw new IllegalArgumentException("input stream did not contain 2048 words");
-
-        return wordList;
     }
 
     private static List<String> toMnemonic(byte[] entropy, List<String> allWords) throws IllegalAccessException {

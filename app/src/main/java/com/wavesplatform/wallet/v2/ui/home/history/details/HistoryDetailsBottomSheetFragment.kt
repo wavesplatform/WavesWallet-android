@@ -18,10 +18,10 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.net.model.OrderType
-import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.net.service.CoinomatService
+import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
@@ -29,6 +29,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
@@ -502,11 +504,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val view = inflater?.inflate(R.layout.fragment_bottom_sheet_script_invocation_layout, historyContainer, false)
 
                 view?.let {
-                    view.text_script_address_value?.text = transaction.dappAddress
+                    view.text_script_address_value?.text = transaction.dApp
 
                     val payment = transaction.payment.firstOrNull()
 
-                    if (payment != null){
+                    if (payment != null) {
                         view.relative_payment.visiable()
                         if (isShowTicker(payment.assetId)) {
                             view.text_payment_value?.text = MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()
@@ -518,7 +520,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                         } else {
                             view.text_payment_value?.text = "${MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()} ${payment.asset?.name}"
                         }
-                    }else{
+                    } else {
                         view.relative_payment.gone()
                     }
 
@@ -659,7 +661,8 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(TransactionResponse.getInfo(transaction), view.text_copy_all_data,
+                    copyToClipboard(TransactionResponse.getInfo(transaction,
+                            WavesWallet.getAddress()), view.text_copy_all_data,
                             R.string.history_details_copy_all_data)
                 })
 
@@ -673,11 +676,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .subscribe {
                     if (view.check_box_staging_on_explorer.isChecked) {
                         openUrlWithChromeTab(String.format(
-                                com.wavesplatform.sdk.utils.Constants.URL_WAVES_STAGE_EXPLORER,
+                                com.wavesplatform.sdk.utils.WavesConstants.URL_WAVES_STAGE_EXPLORER,
                                 transaction.id))
                     } else {
                         openUrlWithChromeTab(String.format(
-                                com.wavesplatform.sdk.utils.Constants.URL_WAVES_EXPLORER,
+                                com.wavesplatform.sdk.utils.WavesConstants.URL_WAVES_EXPLORER,
                                 transaction.id))
                     }
                 })
@@ -762,7 +765,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == com.wavesplatform.sdk.utils.Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == com.wavesplatform.sdk.utils.WavesConstants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -775,8 +778,8 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED) {
-            com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED
+        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_FILLED) {
+            com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }
@@ -809,6 +812,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.text = getString(R.string.history_details_add_address)
 
             textAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressSaveEvent)
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
@@ -824,6 +828,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.text = getString(R.string.history_details_edit_address)
 
             textAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressEditEvent)
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
@@ -860,6 +865,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.setImageResource(R.drawable.ic_add_address_submit_300)
 
             imageAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressSaveEvent)
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
@@ -874,6 +880,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
 
             imageAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressEditEvent)
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
