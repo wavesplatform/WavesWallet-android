@@ -11,8 +11,9 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.*
-import pers.victor.ext.date
 import java.math.BigInteger
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 open class LeaseResponse(
@@ -225,9 +226,13 @@ open class TransactionResponse(
             } else {
                 " (${transaction.feeAssetId})"
             }
+
+            val time = SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.ENGLISH)
+                    .format(Date(transaction.timestamp))
+
             return "Transaction ID: ${transaction.id}\n" +
                     type(transaction, address) +
-                    "Date: ${transaction.timestamp.date("MM/dd/yyyy HH:mm")}\n" +
+                    "Date: $time\n" +
                     "Sender: ${transaction.sender}\n" +
                     recipient(transaction) +
                     amount(transaction) +

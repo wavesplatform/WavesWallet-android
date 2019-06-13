@@ -5,12 +5,12 @@
 
 package com.wavesplatform.sdk.model
 
+import android.graphics.Color
 import com.wavesplatform.sdk.R
-import pers.victor.ext.findColor
 
 enum class OrderStatus(val status: Int, val color: Int) {
-    Accepted(R.string.my_orders_status_open, findColor(R.color.submit400)),
-    PartiallyFilled(R.string.my_orders_status_partial_filled, findColor(R.color.submit400)),
-    Cancelled(R.string.my_orders_status_canceled, findColor(R.color.error400)),
-    Filled(R.string.my_orders_status_filled, findColor(R.color.submit400))
+    Accepted(R.string.my_orders_status_open, Color.parseColor("#1F5AF6")),
+    PartiallyFilled(R.string.my_orders_status_partial_filled, Color.parseColor("#1F5AF6")),
+    Cancelled(R.string.my_orders_status_canceled, Color.parseColor("#E5494D")),
+    Filled(R.string.my_orders_status_filled, Color.parseColor("#E5494D"))
 }

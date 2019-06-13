@@ -26,9 +26,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
-@Singleton
 open class WavesService(private var context: Context) {
 
     private lateinit var nodeService: NodeService
@@ -37,6 +35,8 @@ open class WavesService(private var context: Context) {
     private var cookies: HashSet<String> = hashSetOf()
     private var adapterFactory: CallAdapter.Factory
     private val onErrorListeners = mutableListOf<OnErrorListener>()
+    private val interceptors = mutableListOf(CacheForceInterceptorNoNet())
+    private val netInterceptors = mutableListOf(CacheInterceptorOnNet())
 
     init {
         adapterFactory = CallAdapterFactory(object : OnErrorListener {
@@ -70,9 +70,12 @@ open class WavesService(private var context: Context) {
     fun createService(baseUrl: String,
                       adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
             : Retrofit {
+        // todo add RetrofitCache.getInstance().addRetrofit(retrofit) in the app
         val retrofit = Retrofit.Builder()
                 .baseUrl(addSlash(baseUrl))
-                .client(createClient())
+                .client(createClient(
+                        interceptors = interceptors,
+                        netInterceptors = netInterceptors))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(adapterFactory)
                 .addConverterFactory(createGsonFactory())
@@ -100,16 +103,17 @@ open class WavesService(private var context: Context) {
         }
     }
 
-    private fun createClient(timeout: Long = 30L): OkHttpClient {
-        return OkHttpClient.Builder()
+    private fun createClient(
+            timeout: Long = 30L,
+            interceptors: List<Interceptor>? = null,
+            netInterceptors: List<Interceptor>? = null): OkHttpClient {
+        val okHttpClientBuilder = OkHttpClient.Builder()
                 .cache(createCache())
                 .readTimeout(timeout, TimeUnit.SECONDS)
                 .writeTimeout(timeout, TimeUnit.SECONDS)
                 .addInterceptor(receivedCookiesInterceptor())
                 .addInterceptor(addCookiesInterceptor())
-                .addInterceptor(CacheForceInterceptorNoNet())
                 .addInterceptor(createHostInterceptor())
-                .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
                         .setLevel(Level.BASIC)
@@ -117,7 +121,20 @@ open class WavesService(private var context: Context) {
                         .request("Request")
                         .response("Response")
                         .build())
-                .build()
+
+        if (interceptors != null && interceptors.isNotEmpty()) {
+            for (interceptor in interceptors) {
+                okHttpClientBuilder.addInterceptor(interceptor)
+            }
+        }
+
+        if (netInterceptors != null && netInterceptors.isNotEmpty()) {
+            for (interceptor in netInterceptors) {
+                okHttpClientBuilder.addNetworkInterceptor(interceptor)
+            }
+        }
+
+        return okHttpClientBuilder.build()
     }
 
     private fun receivedCookiesInterceptor(): Interceptor {

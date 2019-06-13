@@ -1,7 +1,6 @@
 package com.wavesplatform.sdk.utils
 
 import com.google.gson.annotations.SerializedName
-import pers.victor.ext.currentTimeMillis
 
 class Environment(
         @SerializedName("server") var server: Server,
@@ -41,7 +40,7 @@ class Environment(
     }
 
     fun getTime(): Long {
-        return currentTimeMillis + timestampServerDiff
+        return System.currentTimeMillis() + timestampServerDiff
     }
 
     companion object {
