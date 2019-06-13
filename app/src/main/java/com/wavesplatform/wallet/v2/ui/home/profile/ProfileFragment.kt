@@ -132,12 +132,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
-                analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
+                if (!MonkeyTest.isTurnedOn()) {
+                    analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
 
-                App.getAccessManager().deleteCurrentWavesWallet()
+                    App.getAccessManager().deleteCurrentWavesWallet()
 
-                presenter.prefsUtil.logOut()
-                restartApp()
+                    presenter.prefsUtil.logOut()
+                    restartApp()
+                }
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -148,8 +150,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         button_logout.click {
-            analytics.trackEvent(AnalyticEvents.ProfileLogoutDownEvent)
-            logout()
+            if (!MonkeyTest.isTurnedOn()) {
+                analytics.trackEvent(AnalyticEvents.ProfileLogoutDownEvent)
+                logout()
+            }
         }
 
         initFingerPrintControl()
@@ -291,8 +295,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_logout -> {
-                analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)
-                logout()
+                if (!MonkeyTest.isTurnedOn()) {
+                    analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)
+                    logout()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

@@ -48,6 +48,7 @@ android {
         archivesBaseName = "waves-wallet-$versionName"
         buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
         buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
+        buildConfigField "String", "MONKEY_TEST_SEED", "\"\""
         manifestPlaceholders = [
                 appIcon     : "@mipmap/ic_launcher",
                 appIconRound: "@mipmap/ic_launcher_round",
@@ -137,6 +138,14 @@ android {
         devTest {
             applicationIdSuffix ".test"
             buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
+            manifestPlaceholders = [
+                    appIcon     : "@mipmap/ic_launcher_test",
+                    appIconRound: "@mipmap/ic_launcher_test_round",
+                    fabricApiKey: fabricApiKey]
+        }
+        monkeyTest {
+            applicationIdSuffix ".dev"
+            buildConfigField "String", "MONKEY_TEST_SEED", "\"" + monkeyTestSeed + "\""
             manifestPlaceholders = [
                     appIcon     : "@mipmap/ic_launcher_test",
                     appIconRound: "@mipmap/ic_launcher_test_round",

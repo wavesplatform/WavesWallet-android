@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.showSuccess
+import com.wavesplatform.wallet.v2.util.* // todo check
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
@@ -80,10 +81,14 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun onItemClicked(item: AddressBookUserDb) {
         val guid = App.getAccessManager().findGuidBy(item.address)
-        launchActivity<EnterPassCodeActivity>(
-                requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
-            putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-            putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
+        if (MonkeyTest.isTurnedOn()) {
+            MonkeyTest.startIfNeed()
+        } else {
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+                putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
+            }
         }
     }
 

@@ -199,7 +199,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         val notAuthenticated = !App.getAccessManager().isAuthenticated()
         val hasGuidToLogin = !TextUtils.isEmpty(guid)
 
-        if (hasGuidToLogin && notAuthenticated && askPassCode()) {
+        if (!MonkeyTest.isTurnedOn() && hasGuidToLogin && notAuthenticated && askPassCode()) {
             launchActivity<EnterPassCodeActivity>(
                     requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
                 putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
