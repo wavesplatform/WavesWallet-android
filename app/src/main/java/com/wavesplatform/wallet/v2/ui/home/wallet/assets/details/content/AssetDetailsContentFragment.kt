@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -109,7 +110,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
                 .subscribe {
-                    presenter.reloadAssetAddressBalance()
+                    presenter.reloadAssetDetails()
                 })
     }
 
@@ -207,7 +208,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 else assetBalance.issueTransaction?.decimals.toString()
 
         text_view_total_amount_value.text = getString(R.string.common_dash)
-        assetBalance?.issueTransaction?.quantity.notNull {
+        assetBalance?.quantity.notNull {
             text_view_total_amount_value.text = MoneyUtil.getScaledText(it, assetBalance).stripZeros()
         }
 
@@ -233,7 +234,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     private fun setBurnButton(cardBurnContainer: View) {
         cardBurnContainer.click {
             analytics.trackEvent(AnalyticEvents.BurnTokenTapEvent)
-            launchActivity<TokenBurnActivity> {
+            launchActivity<TokenBurnActivity>(requestCode = TokenBurnActivity.REQUEST_BURN_CONFIRM) {
                 putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
             }
         }
@@ -281,5 +282,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     companion object {
         var BUNDLE_ASSET = "asset"
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Constants.RESULT_OK) {
+            if (requestCode == TokenBurnActivity.REQUEST_BURN_CONFIRM) {
+                presenter.reloadAssetDetails(3000)
+            }
+        }
     }
 }

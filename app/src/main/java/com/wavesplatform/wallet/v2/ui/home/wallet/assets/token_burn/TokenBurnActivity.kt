@@ -170,6 +170,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             REQUEST_BURN_CONFIRM -> {
                 when (resultCode) {
                     Constants.RESULT_OK -> {
+                        setResult(Constants.RESULT_OK)
                         finish()
                     }
                     Constants.RESULT_SMART_ERROR -> {

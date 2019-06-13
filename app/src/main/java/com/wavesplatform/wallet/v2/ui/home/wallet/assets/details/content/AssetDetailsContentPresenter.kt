@@ -8,20 +8,24 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.TransactionResponse
 import com.wavesplatform.sdk.model.TransactionType
-import com.wavesplatform.sdk.utils.isWavesId
-import com.wavesplatform.sdk.utils.transactionType
-import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
-import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.sdk.model.response.AddressAssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.AssetsDetailsResponse
+import com.wavesplatform.sdk.model.response.TransactionResponse
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.transactionType
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
@@ -39,7 +43,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                         return@map it.asSequence().filter { transaction ->
                             isNotSpam(transaction) &&
                                     (asset.assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
-                                    AssetDetailsContentPresenter.isAssetIdInExchange(transaction, asset.assetId) ||
+                                    isAssetIdInExchange(transaction, asset.assetId) ||
                                     transaction.assetId == asset.assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
                                     (transaction.feeAssetId == asset.assetId && transaction.isSponsorshipTransaction())
                         }
@@ -73,19 +77,29 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         }
     }
 
-    fun reloadAssetAddressBalance() {
-        addSubscription(nodeDataManager.addressAssetBalance(
-                App.getAccessManager().getWallet()?.address ?: "",
-                assetBalance?.assetId ?: "")
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe { assetAddressBalance ->
+    fun reloadAssetDetails(delay: Long = 0) { // todo check
+        addSubscription(Observable.zip(
+                nodeDataManager.addressAssetBalance(
+                        App.getAccessManager().getWallet()?.address,
+                        assetBalance?.assetId ?: ""),
+                nodeDataManager.assetDetails(assetBalance?.assetId),
+                BiFunction { assetAddressBalance: AddressAssetBalanceResponse,
+                             details: AssetsDetailsResponse ->
                     val dbAssetBalance = queryFirst<AssetBalanceDb> {
                         equalTo("assetId", assetBalance?.assetId ?: "")
                     }
                     dbAssetBalance.notNull {
                         it.balance = assetAddressBalance.balance
+                        it.quantity = details.quantity
                         it.save()
-                        viewState.onAssetAddressBalanceLoadSuccess(it.convertFromDb())
+                        assetBalance = it.convertFromDb()
+                    }
+                })
+                .delay(delay, TimeUnit.MILLISECONDS)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe {
+                    assetBalance.notNull {
+                        viewState.onAssetAddressBalanceLoadSuccess(it)
                     }
                 })
     }
@@ -94,7 +108,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         fun isAssetIdInExchange(transaction: TransactionResponse, assetId: String) =
                 transaction.transactionType() == TransactionType.EXCHANGE_TYPE &&
                         (transaction.order1?.assetPair?.amountAssetObject?.id == assetId ||
-                        transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
+                                transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
 
         private fun isNotSpam(transaction: TransactionResponse) =
                 transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE ||
