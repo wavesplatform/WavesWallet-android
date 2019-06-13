@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">We werken er voortdurend aan om Waves Wallet beter en nuttiger te maken. Update uw app om toegang te krijgen tot nieuwe functies.</string>
   <string name="search_asset_hidden_title">Verborgen tokens</string>
   <string name="my_orders_details_filled_hint">Gevuld</string>
+  <string name="wallet_sorting_hidden_section">Verborgen tokens</string>
+  <string name="wallet_sorting_favorite_empty">U heeft geen favoriete tokens</string>
+  <string name="wallet_sorting_default_empty">De lijst met tokens is leeg</string>
+  <string name="wallet_sorting_hidden_empty">U hebt geen verborgen tokens</string>
 </resources>

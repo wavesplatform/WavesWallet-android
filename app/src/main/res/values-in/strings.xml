@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">Kami terus berupaya menjadikan Waves Wallet lebih baik dan lebih bermanfaat. Perbarui aplikasi Anda untuk mendapatkan akses ke fitur baru.</string>
   <string name="search_asset_hidden_title">Token tersembunyi</string>
   <string name="my_orders_details_filled_hint">Terisi</string>
+  <string name="wallet_sorting_hidden_section">Token tersembunyi</string>
+  <string name="wallet_sorting_favorite_empty">Anda tidak menambahkan token di favorit</string>
+  <string name="wallet_sorting_default_empty">Daftar token kosong</string>
+  <string name="wallet_sorting_hidden_empty">Anda tidak menambah token di token tersembunyi</string>
 </resources>

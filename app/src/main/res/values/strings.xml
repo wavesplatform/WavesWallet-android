@@ -666,9 +666,8 @@
     <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
     <string name="search_asset_hidden_title">Hidden tokens</string>
     <string name="my_orders_details_filled_hint">Filled</string>
-
-    <string name="wallet_sorting_hidden_section">Hidden assets</string>
-    <string name="wallet_sorting_favorite_empty">You didn\'t add assets in favorite</string>
-    <string name="wallet_sorting_default_empty">The list of assets is empty</string>
-    <string name="wallet_sorting_hidden_empty">You didn\'t add assets in hidden</string>
+    <string name="wallet_sorting_hidden_section">Hidden tokens</string>
+    <string name="wallet_sorting_favorite_empty">You didn\'t add tokens in favorite</string>
+    <string name="wallet_sorting_default_empty">The list of tokens is empty</string>
+    <string name="wallet_sorting_hidden_empty">You didn\'t add tokens in hidden</string>
 </resources>

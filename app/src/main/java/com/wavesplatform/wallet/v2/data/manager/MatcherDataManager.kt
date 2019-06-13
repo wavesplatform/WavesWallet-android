@@ -95,8 +95,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
                         val globalAssets = it.generalAssets.toMutableList()
-                        globalAssets.add(Constants.MRTGeneralAsset)
-                        globalAssets.add(Constants.WCTGeneralAsset)
+                        globalAssets.add(Constants.VstGeneralAsset)
+                        globalAssets.add(Constants.MrtGeneralAsset)
+                        globalAssets.add(Constants.WctGeneralAsset)
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()
