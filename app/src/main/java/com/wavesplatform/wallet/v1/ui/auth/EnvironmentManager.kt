@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.model.local.EnvironmentExternalProperties
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
@@ -37,7 +38,7 @@ class EnvironmentManager {
     private var versionDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
-    class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
+    class Environment internal constructor(val name: String, val url: String, jsonFileName: String, val externalProperties: EnvironmentExternalProperties) {
         var configuration: GlobalConfiguration? = null
 
         init {
@@ -53,8 +54,8 @@ class EnvironmentManager {
         companion object {
 
             internal var environments: MutableList<Environment> = mutableListOf()
-            var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
-            var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
+            var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET, EnvironmentExternalProperties(Constants.Vostok.TEST_NET_CODE))
+            var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET, EnvironmentExternalProperties(Constants.Vostok.MAIN_NET_CODE))
 
             init {
                 environments.add(TEST_NET)
@@ -64,7 +65,7 @@ class EnvironmentManager {
     }
 
     companion object {
-        private const val BRANCH = "mobile/v2.3"
+        private const val BRANCH = "mobile/v2.5"
 
         const val KEY_ENV_TEST_NET = "env_testnet"
         const val KEY_ENV_MAIN_NET = "env_prod"
@@ -263,6 +264,9 @@ class EnvironmentManager {
 
         val netCode: Byte
             get() = environment.configuration!!.scheme[0].toByte()
+
+        val vostokNetCode: Byte
+            get() = environment.externalProperties.vostokNetCode.toByte()
 
         val globalConfiguration: GlobalConfiguration
             get() = environment.configuration!!

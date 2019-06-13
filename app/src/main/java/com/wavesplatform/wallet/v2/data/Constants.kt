@@ -93,6 +93,13 @@ object Constants {
         const val FULL_GONE = 0f
     }
 
+    object Vostok {
+        const val PROD_GATEWAY_URL = "https://gateways-dev.wvservices.com/api/v1/"
+        const val TEST_GATEWAY_URL = "https://gw.wavesplatform.com"
+        const val MAIN_NET_CODE = 'V'
+        const val TEST_NET_CODE = 'F'
+    }
+
     val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)

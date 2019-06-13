@@ -19,7 +19,8 @@ data class GlobalConfiguration(
         @SerializedName("nodeUrl") var nodeUrl: String = "",
         @SerializedName("dataUrl") var dataUrl: String = "",
         @SerializedName("spamUrl") var spamUrl: String = "",
-        @SerializedName("matcherUrl") var matcherUrl: String = ""
+        @SerializedName("matcherUrl") var matcherUrl: String = "",
+        @SerializedName("gatewayUrl") var gatewayUrl: String = ""
     )
 
     data class ConfigAsset(
