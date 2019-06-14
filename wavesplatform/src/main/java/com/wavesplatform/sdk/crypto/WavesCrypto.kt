@@ -49,7 +49,7 @@ interface WavesCrypto {
     fun verifyPublicKey(publicKey: PublicKey): Boolean
     fun verifyAddress(address: Address, chainId: String? = null, publicKey: PublicKey? = null): Boolean
 
-    companion object : WavesCrypto  {
+    companion object : WavesCrypto {
 
         override fun blake2b(input: Bytes): Bytes {
             return Hash.blake2b(input)
@@ -100,11 +100,18 @@ interface WavesCrypto {
         }
 
         override fun addressByPublicKey(publicKey: PublicKey, chainId: String?): Address {
-            return addressFromPublicKey(Base58.decode(publicKey))
+            return when {
+                chainId == null ->
+                    addressFromPublicKey(Base58.decode(publicKey))
+                chainId.length == 1 ->
+                    addressFromPublicKey(Base58.decode(publicKey), chainId[0].toByte())
+                else ->
+                    "Unknown address"
+            }
         }
 
         override fun addressBySeed(seed: Seed, chainId: String?): Address {
-            return addressFromPublicKey(publicKey(seed))
+            return addressByPublicKey(publicKey(seed), chainId)
         }
 
         override fun randomSeed(): Seed {
@@ -130,15 +137,30 @@ interface WavesCrypto {
         }
 
         override fun verifyAddress(address: Address, chainId: String?, publicKey: PublicKey?): Boolean {
-            // todo что значит publicKey вместе с address?
-            if (address.isEmpty() || chainId == null) {
+            if (address.isEmpty()) {
                 return false
             }
+
+            val bytes = Base58.decode(address)
+
+            if (chainId != null) {
+                if (chainId.length == 1) {
+                    if (chainId[0].toByte() != bytes[1]) {
+                        return false
+                    }
+                } else {
+                    return false
+                }
+            }
+
+            if (publicKey != null
+                    && addressByPublicKey(publicKey, chainId) != address) {
+                return false
+            }
+
             return try {
-                val bytes = Base58.decode(address)
-                if (bytes.size == ADDRESS_LENGTH &&
-                        bytes[0] == ADDRESS_VERSION &&
-                        bytes[1] == chainId[0].toByte()) {
+                if (bytes.size == ADDRESS_LENGTH
+                        && bytes[0] == ADDRESS_VERSION) {
                     val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
                     val checkSumGenerated = calcCheckSum(bytes.copyOf(bytes.size - CHECK_SUM_LENGTH))
                     Arrays.equals(checkSum, checkSumGenerated)

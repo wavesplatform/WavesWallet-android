@@ -50,11 +50,12 @@ fun calcCheckSum(bytes: ByteArray): ByteArray {
     return Arrays.copyOfRange(Hash.keccak(bytes), 0, CHECK_SUM_LENGTH)
 }
 
-fun addressFromPublicKey(publicKey: ByteArray): String {
+fun addressFromPublicKey(publicKey: ByteArray, scheme: Byte = WavesPlatform.getEnvironment().scheme)
+        : String {
     return try {
         val publicKeyHash = Hash.keccak(publicKey).copyOf(HASH_LENGTH)
         val withoutChecksum = Bytes.concat(
-                byteArrayOf(ADDRESS_VERSION, WavesPlatform.getEnvironment().scheme),
+                byteArrayOf(ADDRESS_VERSION, scheme),
                 publicKeyHash)
         Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)))
     } catch (e: Exception) {

@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import io.reactivex.Observable
-import ren.yale.android.retrofitcachelibrx2.RetrofitCache
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -60,7 +59,6 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
                     CoinomatManager.onErrorListener?.onError(exception)
                 }
             })
-            // todo RetrofitCache.getInstance().addRetrofit(coinomatRetrofit)
             return WavesPlatform.service().createService(Constants.URL_COINOMAT, adapterFactory)
                     .create(CoinomatService::class.java)
         }

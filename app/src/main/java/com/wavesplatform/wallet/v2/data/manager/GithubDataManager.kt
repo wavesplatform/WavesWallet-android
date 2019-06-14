@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import io.reactivex.Observable
-import ren.yale.android.retrofitcachelibrx2.RetrofitCache
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -67,7 +66,6 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
                     GithubDataManager.onErrorListener?.onError(exception)
                 }
             })
-            // todo RetrofitCache.getInstance().addRetrofit(githubRetrofit)
             return WavesPlatform.service().createService(Constants.URL_GITHUB_CONFIG, adapterFactory)
                     .create(GithubService::class.java)
         }
