@@ -184,6 +184,14 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         })
     }
 
+    fun getSettings(): Observable<MatcherSettings> {
+        return matcherService.getMatcherSettings()
+    }
+
+    fun getSettingsRates(): Observable<MutableMap<String, Double>> {
+        return matcherService.getMatcherSettingsRates()
+    }
+
     companion object {
         var OTHER_GROUP = "other"
     }

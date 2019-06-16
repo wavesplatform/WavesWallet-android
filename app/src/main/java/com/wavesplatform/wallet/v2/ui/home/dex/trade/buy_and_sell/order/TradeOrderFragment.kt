@@ -25,7 +25,9 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeB
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.content_commission.*
 import kotlinx.android.synthetic.main.fragment_trade_order.*
+import kotlinx.android.synthetic.main.fragment_trade_order.progress_bar_fee_transaction
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
@@ -66,6 +68,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.orderType = it.getInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE)
             presenter.initBalances()
         }
+
+        presenter.loadCommission()
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
             horizontal_amount_suggestion.visiable()
@@ -625,7 +629,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.isEnabled = presenter.isAllFieldsValid() && networkConnected
     }
 
-    override fun showCommissionLoading() {
+    /*override fun showCommissionLoading() {
         progress_bar_fee_transaction.show()
         text_fee_value.gone()
     }
@@ -643,10 +647,30 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         progress_bar_fee_transaction.hide()
         orderListener?.showError(getString(R.string.common_error_commission_receiving))
         text_fee_value.visiable()
-    }
+    }*/
 
     override fun onDestroyView() {
         progress_bar_fee_transaction.hide()
         super.onDestroyView()
+    }
+
+
+    override fun showCommissionLoading() {
+        progress_bar_fee_transaction.show()
+        text_fee_transaction.gone()
+    }
+
+    override fun showCommissionSuccess(unscaledAmount: Long) {
+        commission_card.visiable()
+        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+        progress_bar_fee_transaction.hide()
+        text_fee_transaction.visiable()
+    }
+
+    override fun showCommissionError() {
+        text_fee_transaction.text = "-"
+        showError(R.string.common_error_commission_receiving, R.id.root)
+        progress_bar_fee_transaction.hide()
+        text_fee_transaction.visiable()
     }
 }

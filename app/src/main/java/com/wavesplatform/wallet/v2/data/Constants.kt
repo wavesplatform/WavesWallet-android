@@ -43,6 +43,7 @@ object Constants {
 
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
     const val WAVES_MIN_FEE: Long = 100000L
+    const val WAVES_ORDER_MIN_FEE: Long = 300000L
     const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
 
     const val SELL_ORDER_TYPE = "sell"
