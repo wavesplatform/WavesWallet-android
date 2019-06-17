@@ -208,6 +208,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
         presenter.wavesAssetBalance.notNull {
             text_asset_value.text = MoneyUtil.getScaledText(it, Constants.wavesAssetInfo)
+            image_asset_icon.setAsset(Constants.wavesAssetInfo)
 
             presenter.loadCommission(it)
         }
