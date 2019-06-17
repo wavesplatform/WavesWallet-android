@@ -57,7 +57,7 @@
                 android:background="@drawable/basic50_rounded_border"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
                     android:id="@+id/image_asset_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
