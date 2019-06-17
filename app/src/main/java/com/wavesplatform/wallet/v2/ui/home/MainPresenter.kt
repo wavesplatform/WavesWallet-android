@@ -11,6 +11,7 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
@@ -41,24 +42,24 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
             val singleData: Single<List<TransactionDb>> = if (afterUrlChanged) {
                 queryAsSingle {
                     `in`("transactionTypeId", arrayOf(
-                            WavesConstants.ID_MASS_SPAM_RECEIVE_TYPE,
-                            WavesConstants.ID_SPAM_RECEIVE_TYPE,
-                            WavesConstants.ID_RECEIVED_TYPE,
-                            WavesConstants.ID_MASS_RECEIVE_TYPE))
+                            Constants.ID_MASS_SPAM_RECEIVE_TYPE,
+                            Constants.ID_SPAM_RECEIVE_TYPE,
+                            Constants.ID_RECEIVED_TYPE,
+                            Constants.ID_MASS_RECEIVE_TYPE))
                 }
             } else {
                 val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
                 if (!enableSpamFilter) {
                     queryAsSingle {
                         `in`("transactionTypeId", arrayOf(
-                                WavesConstants.ID_RECEIVED_TYPE,
-                                WavesConstants.ID_MASS_RECEIVE_TYPE))
+                                Constants.ID_RECEIVED_TYPE,
+                                Constants.ID_MASS_RECEIVE_TYPE))
                     }
                 } else {
                     queryAsSingle {
                         `in`("transactionTypeId", arrayOf(
-                                WavesConstants.ID_MASS_SPAM_RECEIVE_TYPE,
-                                WavesConstants.ID_SPAM_RECEIVE_TYPE))
+                                Constants.ID_MASS_SPAM_RECEIVE_TYPE,
+                                Constants.ID_SPAM_RECEIVE_TYPE))
                     }
                 }
             }

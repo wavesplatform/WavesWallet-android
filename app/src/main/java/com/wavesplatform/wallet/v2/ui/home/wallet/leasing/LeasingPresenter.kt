@@ -10,6 +10,7 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -31,7 +32,7 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
                         queryAsSingle<TransactionDb> {
                             equalTo("status", LeasingStatus.ACTIVE.status)
                                     .and()
-                                    .equalTo("transactionTypeId", WavesConstants.ID_STARTED_LEASING_TYPE)
+                                    .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
                         }.map {
                             return@map ArrayList(it.sortedByDescending { it.timestamp })
                         }.toObservable(),

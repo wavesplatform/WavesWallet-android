@@ -9,8 +9,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 
-class RetrofitException internal constructor(
-    message: String?,
+class RetrofitException internal constructor(message: String?,
     /** The request URL which produced the error.  */
     val url: String?,
     /** Response object containing status code, headers, body, etc.  */

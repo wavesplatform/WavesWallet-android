@@ -15,6 +15,7 @@ import com.wavesplatform.sdk.model.transaction.node.*
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
@@ -330,7 +331,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                         it.asset = WavesConstants.WAVES_ASSET_INFO
                         it.transactionTypeId = getTransactionType(
                                 it, WavesWallet.getAddress())
-                        it.transactionTypeId == WavesConstants.ID_STARTED_LEASING_TYPE
+                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                                 && it.sender == App.getAccessManager().getWallet()?.address
                     }
                 }

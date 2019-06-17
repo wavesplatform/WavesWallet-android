@@ -49,7 +49,7 @@ public class WalletManager {
         // We take initial entropy of ENT bits and compute its
         // checksum by taking first ENT / 32 bits of its SHA256 hash.
 
-        byte[] hash = Sha256.Companion.hash(entropy);
+        byte[] hash = WavesCrypto.Companion.sha256(entropy);
         boolean[] hashBits = bytesToBits(hash);
 
         boolean[] entropyBits = bytesToBits(entropy);

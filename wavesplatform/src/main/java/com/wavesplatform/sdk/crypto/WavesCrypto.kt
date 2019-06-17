@@ -2,6 +2,8 @@ package com.wavesplatform.sdk.crypto
 
 import com.wavesplatform.sdk.utils.*
 import org.apache.commons.codec.binary.Base64
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.util.*
 
 typealias Bytes = ByteArray
@@ -60,7 +62,12 @@ interface WavesCrypto {
         }
 
         override fun sha256(input: Bytes): Bytes {
-            return Sha256.hash(input)
+            try {
+                return MessageDigest.getInstance("SHA-256").digest(input)
+            } catch (e: NoSuchAlgorithmException) {
+                e.printStackTrace()
+                throw IllegalStateException("NoSuchAlgorithmException", e)
+            }
         }
 
         override fun base58encode(input: Bytes): String {

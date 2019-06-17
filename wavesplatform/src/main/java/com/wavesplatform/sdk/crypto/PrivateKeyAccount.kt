@@ -20,7 +20,7 @@ class PrivateKeyAccount(seed: ByteArray) {
         get() = Base58.encode(privateKey)
 
     init {
-        val hashedSeed = Sha256.hash(Hash.keccak(Bytes.concat(Ints.toByteArray(0), seed)))
+        val hashedSeed = WavesCrypto.sha256(Hash.keccak(Bytes.concat(Ints.toByteArray(0), seed)))
         privateKey = CryptoProvider.get().generatePrivateKey(hashedSeed)
         publicKey = CryptoProvider.get().generatePublicKey(privateKey)
     }

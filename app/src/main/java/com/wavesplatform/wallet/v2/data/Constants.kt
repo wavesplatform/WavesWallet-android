@@ -92,4 +92,31 @@ object Constants {
             assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
             gatewayId = "VST",
             displayName = "Vostok") // github returns gatewayId = "Vostok"
+
+    // TransactionResponse view types non TransactionResponse block-chain type
+    const val ID_RECEIVED_TYPE = 0
+    const val ID_SENT_TYPE = 1
+    const val ID_STARTED_LEASING_TYPE = 2
+    const val ID_SELF_TRANSFER_TYPE = 3
+    const val ID_CANCELED_LEASING_TYPE = 4
+    const val ID_TOKEN_GENERATION_TYPE = 5
+    const val ID_TOKEN_BURN_TYPE = 6
+    const val ID_TOKEN_REISSUE_TYPE = 7
+    const val ID_EXCHANGE_TYPE = 8
+    const val ID_CREATE_ALIAS_TYPE = 9
+    const val ID_INCOMING_LEASING_TYPE = 10
+    const val ID_UNRECOGNISED_TYPE = 11
+    const val ID_MASS_SEND_TYPE = 12
+    const val ID_MASS_RECEIVE_TYPE = 13
+    const val ID_SPAM_RECEIVE_TYPE = 14
+    const val ID_MASS_SPAM_RECEIVE_TYPE = 15
+    const val ID_DATA_TYPE = 16
+    const val ID_SPAM_SELF_TRANSFER = 17
+    const val ID_SET_ADDRESS_SCRIPT_TYPE = 18
+    const val ID_CANCEL_ADDRESS_SCRIPT_TYPE = 19
+    const val ID_RECEIVE_SPONSORSHIP_TYPE = 20
+    const val ID_SET_SPONSORSHIP_TYPE = 21
+    const val ID_CANCEL_SPONSORSHIP_TYPE = 22
+    const val ID_UPDATE_ASSET_SCRIPT_TYPE = 23
+    const val ID_SCRIPT_INVOCATION_TYPE = 24
 }
