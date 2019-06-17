@@ -676,7 +676,8 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
                             || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
                             || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
-                }
+                            || it.assetId == Constants.findInConstantsGeneralAssets(query.toUpperCase())?.assetId
+                } // todo check
     }
 }
 
