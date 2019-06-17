@@ -207,7 +207,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         }
     }
 
-    // todo check item: AssetBalanceResponse
     interface OnHiddenChangeListener {
         fun onHiddenStateChanged(item: AssetSortingItem, checked: Boolean, position: Int)
     }

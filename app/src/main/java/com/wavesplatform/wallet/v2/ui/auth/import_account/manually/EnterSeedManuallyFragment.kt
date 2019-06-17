@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R // todo check
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule

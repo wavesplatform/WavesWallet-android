@@ -77,7 +77,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         }
     }
 
-    fun reloadAssetDetails(delay: Long = 0) { // todo check
+    fun reloadAssetDetails(delay: Long = 0) {
         addSubscription(Observable.zip(
                 nodeDataManager.addressAssetBalance(
                         App.getAccessManager().getWallet()?.address,

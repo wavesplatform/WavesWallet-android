@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
-import com.wavesplatform.wallet.v2.util.PrefsUtil // todo check
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import javax.inject.Inject
 

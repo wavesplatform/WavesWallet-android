@@ -580,7 +580,16 @@ fun find(assetId: String): AssetBalanceResponse? {
 
 fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
     for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
-        if (asset.gatewayId == gatewayId) {
+        if (asset.gatewayId.contains(gatewayId)) {
+            return find(asset.assetId)
+        }
+    }
+    return null
+}
+
+fun findInConstantsGeneralAssets(ticker: String): AssetBalanceResponse? {
+    for (asset in listOf(Constants.MrtGeneralAsset, Constants.WctGeneralAsset, Constants.VstGeneralAsset)) {
+        if (asset.gatewayId.contains(ticker)) {
             return find(asset.assetId)
         }
     }
@@ -676,8 +685,8 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
                             || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
                             || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
-                            || it.assetId == Constants.findInConstantsGeneralAssets(query.toUpperCase())?.assetId
-                } // todo check
+                            || it.assetId == findInConstantsGeneralAssets(query.toUpperCase())?.assetId
+                }
     }
 }
 

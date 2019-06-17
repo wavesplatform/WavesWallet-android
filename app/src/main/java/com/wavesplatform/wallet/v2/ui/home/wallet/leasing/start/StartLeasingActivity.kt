@@ -208,9 +208,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }))
 
         presenter.wavesAssetBalance.notNull {
-            // todo check WavesConstants.WAVES_ASSET_INFO
-            text_asset_value.text = MoneyUtil.getScaledText(it, Constants.wavesAssetInfo)
-            image_asset_icon.setAsset(Constants.wavesAssetInfo)
+            WavesConstants.WAVES_ASSET_INFO
+            text_asset_value.text = MoneyUtil.getScaledText(it, WavesConstants.WAVES_ASSET_INFO)
+            image_asset_icon.setAsset(WavesConstants.WAVES_ASSET_INFO)
 
             presenter.loadCommission(it)
         }
