@@ -3,11 +3,11 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.sdk.model
+package com.wavesplatform.wallet.v2.data.model.local
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import com.wavesplatform.sdk.R
+import com.wavesplatform.wallet.R
 import java.util.*
 
 enum class Language(

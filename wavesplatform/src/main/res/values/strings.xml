@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wavesplatform</string>
+    <string name="app_name">WavesPlatform</string>
     <string name="history_type_cancel_address_script">Cancel Script Transaction</string>
     <string name="history_type_cancel_sponsorship">Disable Sponsorship</string>
     <string name="history_type_canceled_leasing">Canceled Leasing</string>

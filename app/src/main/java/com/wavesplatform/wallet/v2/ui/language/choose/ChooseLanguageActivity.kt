@@ -10,10 +10,10 @@ import android.support.v7.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.ViewUtils
-import com.wavesplatform.sdk.model.LanguageItem
+import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter

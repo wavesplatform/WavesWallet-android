@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.sdk.model
+package com.wavesplatform.wallet.v2.data.model.local
 
 data class LanguageItem(
         var language: Language,
