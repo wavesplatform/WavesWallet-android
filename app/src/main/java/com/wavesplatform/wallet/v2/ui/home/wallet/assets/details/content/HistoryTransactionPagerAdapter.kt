@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.TransactionResponse
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -74,7 +74,7 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    layout.text_transaction_value.text = TransactionUtil.getTransactionAmount(
+                    layout.text_transaction_value.text = getTransactionAmount(
                             transaction = item.data, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {

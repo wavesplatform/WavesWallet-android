@@ -19,7 +19,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
@@ -91,7 +91,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    view.text_transaction_value.text = TransactionUtil.getTransactionAmount(
+                    view.text_transaction_value.text = getTransactionAmount(
                             transaction = transaction, decimals = decimals, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
@@ -676,11 +676,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .subscribe {
                     if (view.check_box_staging_on_explorer.isChecked) {
                         openUrlWithChromeTab(String.format(
-                                com.wavesplatform.sdk.utils.WavesConstants.URL_WAVES_STAGE_EXPLORER,
+                                WavesConstants.URL_WAVES_STAGE_EXPLORER,
                                 transaction.id))
                     } else {
                         openUrlWithChromeTab(String.format(
-                                com.wavesplatform.sdk.utils.WavesConstants.URL_WAVES_EXPLORER,
+                                WavesConstants.URL_WAVES_EXPLORER,
                                 transaction.id))
                     }
                 })

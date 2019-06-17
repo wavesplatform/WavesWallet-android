@@ -12,10 +12,9 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.TransactionResponse
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
-import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
@@ -25,6 +24,8 @@ import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.isSponsorshipTransaction
+import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

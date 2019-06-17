@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.data.database
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.TransactionResponse
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
@@ -18,9 +18,10 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionType
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.WavesWallet
+import com.wavesplatform.wallet.v2.util.getTransactionType
+import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread

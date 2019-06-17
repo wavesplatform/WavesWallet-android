@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.TransactionResponse
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -102,7 +102,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.MASS_SPAM_RECEIVE_TYPE,
                             TransactionType.MASS_RECEIVE_TYPE,
                             TransactionType.MASS_SEND_TYPE -> {
-                                view.text_transaction_value.text = TransactionUtil.getTransactionAmount(
+                                view.text_transaction_value.text = getTransactionAmount(
                                         transaction = item.data, decimals = decimals)
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {

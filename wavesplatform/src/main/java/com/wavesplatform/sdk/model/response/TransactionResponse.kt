@@ -8,7 +8,6 @@ package com.wavesplatform.sdk.model.response
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import java.math.BigInteger
 import java.text.SimpleDateFormat
@@ -137,18 +136,6 @@ open class TransactionResponse(
 
     val decimals: Int
         get() = 8
-
-    fun getOrderSum(): Long {
-        if (transactionType() == TransactionType.EXCHANGE_TYPE) {
-            return BigInteger.valueOf(amount).multiply(BigInteger.valueOf(price)).divide(BigInteger.valueOf(100000000)).toLong()
-        }
-        return 0
-    }
-
-    fun isSponsorshipTransaction(): Boolean {
-        return transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
-                transactionType() == TransactionType.CANCEL_SPONSORSHIP_TYPE
-    }
 
     fun getScaledPrice(amountAssetDecimals: Int?, priceAssetDecimals: Int?): String {
         return MoneyUtil.getScaledPrice(price,

@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.AddressAssetBalanceResponse
 import com.wavesplatform.sdk.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.AssetsDetailsResponse
@@ -16,11 +16,12 @@ import com.wavesplatform.sdk.model.response.TransactionResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.isSponsorshipTransaction
+import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync

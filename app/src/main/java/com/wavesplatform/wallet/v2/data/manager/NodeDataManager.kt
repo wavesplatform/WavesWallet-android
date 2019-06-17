@@ -12,7 +12,6 @@ import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.model.transaction.node.*
-import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
@@ -329,7 +328,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .map {
                     return@map it.filter {
                         it.asset = WavesConstants.WAVES_ASSET_INFO
-                        it.transactionTypeId = TransactionUtil.getTransactionType(
+                        it.transactionTypeId = getTransactionType(
                                 it, WavesWallet.getAddress())
                         it.transactionTypeId == WavesConstants.ID_STARTED_LEASING_TYPE
                                 && it.sender == App.getAccessManager().getWallet()?.address

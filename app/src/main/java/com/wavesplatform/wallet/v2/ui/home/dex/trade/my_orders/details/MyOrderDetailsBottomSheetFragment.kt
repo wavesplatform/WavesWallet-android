@@ -11,7 +11,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.sdk.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.AssetPairOrderResponse
-import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
