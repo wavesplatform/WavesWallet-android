@@ -23,7 +23,7 @@ import com.github.mikephil.charting.listener.BarLineChartTouchListener
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
-import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.wavesplatform.wallet.v2.data.Events
@@ -37,6 +37,7 @@ import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.util.getType
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
 import kotlinx.android.synthetic.main.content_global_server_error_layout.*

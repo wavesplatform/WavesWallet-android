@@ -18,7 +18,7 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService

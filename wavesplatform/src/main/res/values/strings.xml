@@ -24,10 +24,4 @@
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="history_type_update_asset_script">Set Asset Script</string>
     <string name="history_type_script_invocation">Script Invocation</string>
-    <string name="my_orders_type_buy">Buy</string>
-    <string name="my_orders_type_sell">Sell</string>
-    <string name="my_orders_status_open">Open</string>
-    <string name="my_orders_status_partial_filled">Partial</string>
-    <string name="my_orders_status_canceled">Cancelled</string>
-    <string name="my_orders_status_filled">Filled</string>
 </resources>

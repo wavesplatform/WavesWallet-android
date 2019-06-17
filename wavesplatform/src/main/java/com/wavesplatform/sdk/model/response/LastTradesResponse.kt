@@ -6,8 +6,6 @@
 package com.wavesplatform.sdk.model.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.OrderType
 
 data class LastTradesResponse(
         @SerializedName("__type")
@@ -86,14 +84,6 @@ data class LastTradesResponse(
                     @SerializedName("priceAsset")
                     var priceAsset: String = ""
                 )
-
-                fun getType(): OrderType {
-                    return when (orderType) {
-                        WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
-                        WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
-                        else -> OrderType.BUY
-                    }
-                }
             }
 
             fun getMyOrder(): ExchangeOrderResponse {

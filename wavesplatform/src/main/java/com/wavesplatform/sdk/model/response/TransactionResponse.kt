@@ -8,7 +8,6 @@ package com.wavesplatform.sdk.model.response
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.sdk.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import java.math.BigInteger
@@ -44,16 +43,7 @@ open class OrderResponse(
         @SerializedName("expiration") var expiration: Long = 0,
         @SerializedName("matcherFee") var matcherFee: Long = 0,
         @SerializedName("signature") var signature: String = ""
-) {
-
-    fun getType(): OrderType {
-        return when (orderType) {
-            WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
-            WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
-            else -> OrderType.BUY
-        }
-    }
-}
+)
 
 
 open class AssetPairResponse(

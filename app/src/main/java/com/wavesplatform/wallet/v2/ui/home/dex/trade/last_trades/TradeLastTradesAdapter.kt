@@ -13,6 +13,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.sdk.model.response.MarketResponse
 import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.wallet.v2.util.getType
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
 import java.text.ParsePosition

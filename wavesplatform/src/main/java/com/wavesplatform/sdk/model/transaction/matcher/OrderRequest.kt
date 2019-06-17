@@ -12,7 +12,6 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.sdk.model.response.OrderBookResponse
 import com.wavesplatform.sdk.WavesPlatform
 
@@ -20,7 +19,7 @@ data class OrderRequest(
         @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("assetPair") var assetPair: OrderBookResponse.PairResponse = OrderBookResponse.PairResponse(),
-        @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
+        @SerializedName("orderType") var orderType: Int = 0,
         @SerializedName("price") var price: Long = 0L,
         @SerializedName("amount") var amount: Long = 0L,
         @SerializedName("timestamp") var timestamp: Long = WavesPlatform.getEnvironment().getTime(),
@@ -30,14 +29,14 @@ data class OrderRequest(
         @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
-    fun toSignBytes(): ByteArray {
+    private fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(
                     byteArrayOf(WavesConstants.VERSION.toByte()),
                     Base58.decode(senderPublicKey),
                     Base58.decode(matcherPublicKey),
                     assetPair.toBytes(),
-                    orderType.toBytes(),
+                    byteArrayOf(orderType.toByte()),
                     Longs.toByteArray(price),
                     Longs.toByteArray(amount),
                     Longs.toByteArray(timestamp),

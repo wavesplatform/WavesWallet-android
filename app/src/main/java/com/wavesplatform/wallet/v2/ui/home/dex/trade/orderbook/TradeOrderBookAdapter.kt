@@ -8,13 +8,14 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.sdk.model.response.MarketResponse
 import com.wavesplatform.sdk.model.response.OrderBookResponse
 import com.wavesplatform.sdk.utils.stripZeros
+import com.wavesplatform.wallet.v2.util.getType
 import pers.victor.ext.findColor
 import javax.inject.Inject
 

@@ -46,11 +46,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.sdk.net.RetrofitException
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.TransactionType
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -718,4 +720,44 @@ fun isGateway(assetId: String): Boolean {
         }
     }
     return false
+}
+
+fun AssetPairOrderResponse.getStatus(): OrderStatus {
+    return when (status) {
+        AssetPairOrderResponse.API_STATUS_ACCEPTED -> OrderStatus.Accepted
+        AssetPairOrderResponse.API_STATUS_PARTIALLY_FILLED -> OrderStatus.PartiallyFilled
+        AssetPairOrderResponse.API_STATUS_CANCELLED -> OrderStatus.Cancelled
+        AssetPairOrderResponse.API_STATUIS_FILLED -> OrderStatus.Filled
+        else -> OrderStatus.Filled
+    }
+}
+
+fun AssetPairOrderResponse.getScaledFilled(amountAssetDecimals: Int?): String {
+    val notScaledValue = if (getStatus() == OrderStatus.Filled) {
+        amount
+    } else {
+        filled
+    }
+    return MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(notScaledValue,
+            amountAssetDecimals ?: 8))
+}
+
+fun AssetPairOrderResponse.getType(): OrderType {
+    return type.getOrderType()
+}
+
+fun LastTradesResponse.DataResponse.ExchangeTransactionResponse.ExchangeOrderResponse.getType(): OrderType {
+    return orderType.getOrderType()
+}
+
+fun OrderResponse.getType(): OrderType {
+    return orderType.getOrderType()
+}
+
+fun String.getOrderType(): OrderType {
+    return when (this) {
+        WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
+        WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
+        else -> OrderType.BUY
+    }
 }

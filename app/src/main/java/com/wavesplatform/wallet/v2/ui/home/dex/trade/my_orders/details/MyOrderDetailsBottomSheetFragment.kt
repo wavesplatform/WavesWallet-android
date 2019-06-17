@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details
 import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.sdk.model.OrderStatus
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.sdk.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.AssetPairOrderResponse
 import com.wavesplatform.sdk.model.TransactionType

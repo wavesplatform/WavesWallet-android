@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
 import com.wavesplatform.sdk.model.response.*
 import com.vicpin.krealmextensions.queryFirst
@@ -108,7 +108,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 ?: 0).minus(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0)), RoundingMode.HALF_UP).unscaledValue().toLong()
 
-        orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
+        orderRequest.orderType = orderType
         orderRequest.assetPair = createPair()
         orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer
