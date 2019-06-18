@@ -24,7 +24,7 @@ interface MatcherService {
      * Get non-zero balance of open orders
      */
     @GET("matcher/balance/reserved/{publicKey}")
-    fun loadReservedBalances(
+    fun balanceReserved(
         @Path("publicKey") publicKey: String?,
         @Header("Timestamp") timestamp: Long,
         @Header("Signature") signature: String
@@ -34,35 +34,44 @@ interface MatcherService {
      * Get the open trading markets along with trading pairs meta data
      */
     @GET("matcher/orderbook")
-    fun getAllMarkets(): Observable<MarketsResponse>
+    fun orderBook(): Observable<MarketsResponse>
 
+    /**
+     * Get OrderResponse Book for a given Asset Pair
+     */
+    @GET("matcher/orderbook/{amountAsset}/{priceAsset}")
+    fun orderBook(
+            @Path("amountAsset") amountAsset: String?,
+            @Path("priceAsset") priceAsset: String?
+    ): Observable<OrderBookResponse>
+
+    /**
+     * Get Tradable balance for the given Asset Pair
+     */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/tradableBalance/{address}")
-    fun getBalanceFromAssetPair(
+    fun orderBookTradableBalance(
         @Path("amountAsset") amountAsset: String?,
         @Path("priceAsset") priceAsset: String?,
         @Path("address") address: String?
     ): Observable<LinkedTreeMap<String, Long>>
 
     /**
-     * Get OrderResponse Book for a given Asset Pair
-     */
-    @GET("matcher/orderbook/{amountAsset}/{priceAsset}")
-    fun getOrderBook(
-        @Path("amountAsset") amountAsset: String?,
-        @Path("priceAsset") priceAsset: String?
-    ): Observable<OrderBookResponse>
-
-    /**
      * Get OrderResponse History for a given Asset Pair and Public Key
      */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/publicKey/{publicKey}")
-    fun getMyOrders(
+    fun myOrders(
         @Path("amountAsset") amountAsset: String?,
         @Path("priceAsset") priceAsset: String?,
         @Path("publicKey") publicKey: String?,
         @Header("signature") signature: String?,
         @Header("timestamp") timestamp: Long
     ): Observable<List<AssetPairOrderResponse>>
+
+    /**
+     * Place a new limit order (buy or sell)
+     */
+    @POST("matcher/orderbook")
+    fun createOrder(@Body orderRequest: CreateOrderRequest): Observable<Any>
 
     /**
      * Cancel previously submitted order if it's not already filled completely
@@ -78,11 +87,5 @@ interface MatcherService {
      * Get matcher public key
      */
     @GET("matcher")
-    fun getMatcherKey(): Observable<String>
-
-    /**
-     * Place a new limit order (buy or sell)
-     */
-    @POST("matcher/orderbook")
-    fun placeOrder(@Body orderRequest: CreateOrderRequest): Observable<Any>
+    fun matcherPublicKey(): Observable<String>
 }

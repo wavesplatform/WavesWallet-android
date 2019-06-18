@@ -46,7 +46,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
-        return matcherService.loadReservedBalances(getPublicKeyStr(), timestamp, signature)
+        return matcherService.balanceReserved(getPublicKeyStr(), timestamp, signature)
     }
 
     fun loadMyOrders(watchMarket: WatchMarketResponse?): Observable<List<AssetPairOrderResponse>> {
@@ -57,11 +57,11 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
-        return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
+        return matcherService.myOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }
 
     fun loadOrderBook(watchMarket: WatchMarketResponse?): Observable<OrderBookResponse> {
-        return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
+        return matcherService.orderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
     }
 
     fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
@@ -78,11 +78,11 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun getBalanceFromAssetPair(watchMarket: WatchMarketResponse?): Observable<LinkedTreeMap<String, Long>> {
-        return matcherService.getBalanceFromAssetPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
+        return matcherService.orderBookTradableBalance(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
     }
 
     fun getMatcherKey(): Observable<String> {
-        return matcherService.getMatcherKey()
+        return matcherService.matcherPublicKey()
     }
 
     fun placeOrder(orderRequest: CreateOrderRequest): Observable<Any> {
@@ -90,7 +90,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)
         }
-        return matcherService.placeOrder(orderRequest)
+        return matcherService.createOrder(orderRequest)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -106,7 +106,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         globalAssets.add(Constants.WctGeneralAsset)
                         return@map globalAssets.associateBy { it.assetId }
                     },
-                    matcherService.getAllMarkets()
+                    matcherService.orderBook()
                             .map { it.markets },
                     BiFunction { configure: Map<String, GlobalConfigurationResponse.ConfigAsset>, apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
