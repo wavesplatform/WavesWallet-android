@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurrencyView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatManager: CoinomatDataManager
     var assetBalance: AssetBalance? = null
     var tunnel: GetTunnel? = null
     private var lang: String = "ru_RU"

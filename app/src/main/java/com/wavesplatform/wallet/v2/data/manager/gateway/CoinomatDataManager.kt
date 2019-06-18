@@ -1,9 +1,9 @@
 /*
- * Created by Eduard Zaydel on 1/4/2019
+ * Created by Eduard Zaydel on 18/6/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.manager
+package com.wavesplatform.wallet.v2.data.manager.gateway
 
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CoinomatManager @Inject constructor() : BaseDataManager() {
+class CoinomatDataManager @Inject constructor() : BaseDataManager() {
 
     fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
         return coinomatService.rate(crypto, address, fiat, amount)

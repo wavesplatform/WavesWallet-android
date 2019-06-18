@@ -25,6 +25,8 @@ open class BaseDataManager @Inject constructor() {
     @Inject
     lateinit var matcherService: MatcherService
     @Inject
+    lateinit var gatewayService: GatewayService
+    @Inject
     lateinit var preferencesHelper: PreferencesHelper
     @Inject
     lateinit var prefsUtil: PrefsUtil

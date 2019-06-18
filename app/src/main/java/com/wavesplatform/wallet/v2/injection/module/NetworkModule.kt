@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactor
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
+import com.wavesplatform.wallet.v2.util.formatBaseUrl
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -89,10 +90,10 @@ class NetworkModule {
     @Singleton
     @Provides
     internal fun provideOkHttpClient(
-        cache: Cache,
-        @Named("timeout") timeout: Int,
-        @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
-        @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
+            cache: Cache,
+            @Named("timeout") timeout: Int,
+            @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
+            @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
                 .cache(cache)
@@ -129,7 +130,7 @@ class NetworkModule {
     @Provides
     internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.nodeUrl)
+                .baseUrl(EnvironmentManager.servers.nodeUrl.formatBaseUrl())
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -144,7 +145,22 @@ class NetworkModule {
     @Provides
     internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.matcherUrl)
+                .baseUrl(EnvironmentManager.servers.matcherUrl.formatBaseUrl())
+                .client(httpClient)
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        RetrofitCache.getInstance().addRetrofit(retrofit)
+        return retrofit
+    }
+
+    @Singleton
+    @Named("GatewayRetrofit")
+    @Provides
+    internal fun provideGatewayRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(EnvironmentManager.servers.gatewayUrl.formatBaseUrl())
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -159,7 +175,7 @@ class NetworkModule {
     @Provides
     internal fun provideGithubRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_GITHUB_PROXY)
+                .baseUrl(Constants.URL_GITHUB_PROXY.formatBaseUrl())
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
@@ -175,7 +191,7 @@ class NetworkModule {
     @Provides
     internal fun provideCoinomatRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_COINOMAT)
+                .baseUrl(Constants.URL_COINOMAT.formatBaseUrl())
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
@@ -191,7 +207,7 @@ class NetworkModule {
     @Provides
     internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.dataUrl)
+                .baseUrl(EnvironmentManager.servers.dataUrl.formatBaseUrl())
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -229,6 +245,12 @@ class NetworkModule {
     @Provides
     internal fun provideCoinomatService(@Named("CoinomatRetrofit") retrofit: Retrofit): CoinomatService {
         return retrofit.create(CoinomatService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    internal fun provideGatewayService(@Named("GatewayRetrofit") retrofit: Retrofit): GatewayService {
+        return retrofit.create(GatewayService::class.java)
     }
 
     @Named("timeout")

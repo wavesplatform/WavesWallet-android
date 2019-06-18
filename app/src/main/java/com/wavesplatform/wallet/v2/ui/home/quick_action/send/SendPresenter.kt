@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -37,7 +37,7 @@ import javax.inject.Inject
 class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatManager: CoinomatDataManager
 
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""

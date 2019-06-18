@@ -89,6 +89,14 @@ inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
     })
 }
 
+fun String.formatBaseUrl(): String {
+    return if (this.last() == '/') {
+        this
+    } else {
+        this.plus("/")
+    }
+}
+
 fun View.animateVisible() {
     this.animate()
             .alpha(Constants.View.FULL_VISIBILITY)
