@@ -20,7 +20,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.TransactionResponse
 import com.wavesplatform.sdk.model.response.node.TransferResponse

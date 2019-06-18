@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.sdk.model.response.api
+package com.wavesplatform.sdk.model.response.data
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

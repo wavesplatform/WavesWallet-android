@@ -21,7 +21,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
     fun getMarkets() {
         runAsync {
-            addSubscription(matcherDataManager.getAllMarkets()
+            addSubscription(matcherServiceManager.getAllMarkets()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         viewState.afterSuccessGetMarkets(it)

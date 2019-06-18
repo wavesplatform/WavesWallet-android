@@ -171,7 +171,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     }
 
     fun loadLastTransactions() {
-        addSubscription(nodeDataManager.loadLightTransactions()
+        addSubscription(nodeServiceManager.loadLightTransactions()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ list ->

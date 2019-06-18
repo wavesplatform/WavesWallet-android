@@ -80,10 +80,10 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
 
     fun reloadAssetDetails(delay: Long = 0) {
         addSubscription(Observable.zip(
-                nodeDataManager.addressAssetBalance(
+                nodeServiceManager.addressAssetBalance(
                         App.getAccessManager().getWallet()?.address,
                         assetBalance?.assetId ?: ""),
-                nodeDataManager.assetDetails(assetBalance?.assetId),
+                nodeServiceManager.assetDetails(assetBalance?.assetId),
                 BiFunction { assetAddressBalance: AddressAssetBalanceResponse,
                              details: AssetsDetailsResponse ->
                     val dbAssetBalance = queryFirst<AssetBalanceDb> {

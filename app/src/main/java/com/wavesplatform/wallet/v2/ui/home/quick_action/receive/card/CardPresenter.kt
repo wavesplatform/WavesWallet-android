@@ -12,7 +12,7 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Single
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatServiceManager: CoinomatServiceManager
 
     var crypto: String = WavesConstants.WAVES_ASSET_ID_FILLED
     private var amount: String = "0"
@@ -88,7 +88,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
         }
 
         runAsync {
-            addSubscription(coinomatManager.loadRate(crypto, getWavesAddress(), fiat, amount).subscribe({ rate ->
+            addSubscription(coinomatServiceManager.loadRate(crypto, getWavesAddress(), fiat, amount).subscribe({ rate ->
                 this.rate = rate
                 runOnUiThread {
                     viewState.showRate(rate)
@@ -103,7 +103,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     private fun loadLimits() {
         runAsync {
-            addSubscription(coinomatManager.loadLimits(crypto, getWavesAddress(), fiat).subscribe({ limits ->
+            addSubscription(coinomatServiceManager.loadLimits(crypto, getWavesAddress(), fiat).subscribe({ limits ->
                 min = if (limits?.min == null) {
                     0F
                 } else {

@@ -30,7 +30,7 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
     }
 
     fun loadWavesBalance() {
-        addSubscription(nodeDataManager.loadWavesBalance()
+        addSubscription(nodeServiceManager.loadWavesBalance()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     wavesBalance = it
@@ -41,9 +41,9 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
-                nodeDataManager.assetDetails(assetId),
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
+                nodeServiceManager.assetDetails(assetId),
                 Function3 { t1: GlobalTransactionCommissionResponse,
                             t2: ScriptInfoResponse,
                             t3: AssetsDetailsResponse ->

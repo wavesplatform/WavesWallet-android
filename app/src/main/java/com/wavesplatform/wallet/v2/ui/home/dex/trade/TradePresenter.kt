@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class TradePresenter @Inject constructor() : BasePresenter<TradeView>() {
     var priceAssetInfo: AssetInfoResponse? = null
 
     fun loadAssetsInfoOfPair() {
-        addSubscription(apiDataManager.assetsInfoByIds(arrayListOf(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset))
+        addSubscription(dataServiceManager.assetsInfoByIds(arrayListOf(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset))
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe { assetsInfo ->
                     val map = assetsInfo.associateBy { it.id }

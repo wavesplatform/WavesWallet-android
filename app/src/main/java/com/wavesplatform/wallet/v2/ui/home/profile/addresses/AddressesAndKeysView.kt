@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
-import com.wavesplatform.sdk.model.response.api.AliasResponse
+import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface AddressesAndKeysView : BaseMvpView {

@@ -9,12 +9,12 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
+import com.wavesplatform.wallet.v2.data.manager.MatcherServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
@@ -31,7 +31,7 @@ import kotlin.math.roundToInt
 class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyOrderTransaction>() {
 
     @Inject
-    lateinit var matcherDataManager: MatcherDataManager
+    lateinit var matcherServiceManager: MatcherServiceManager
 
     var cancelOrderListener: CancelOrderListener? = null
 
@@ -159,7 +159,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     private fun cancelOrder(data: MyOrderTransaction) {
         showProgressBar(true)
-        eventSubscriptions.add(matcherDataManager.cancelOrder(data.orderResponse.id, data.amountAssetInfo?.id, data.priceAssetInfo?.id)
+        eventSubscriptions.add(matcherServiceManager.cancelOrder(data.orderResponse.id, data.amountAssetInfo?.id, data.priceAssetInfo?.id)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     showProgressBar(false)

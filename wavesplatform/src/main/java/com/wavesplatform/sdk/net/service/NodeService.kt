@@ -6,7 +6,7 @@
 package com.wavesplatform.sdk.net.service
 
 import com.wavesplatform.sdk.model.request.node.*
-import com.wavesplatform.sdk.model.response.api.AliasResponse
+import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.sdk.model.response.node.*
 import io.reactivex.Observable
 import retrofit2.http.Body

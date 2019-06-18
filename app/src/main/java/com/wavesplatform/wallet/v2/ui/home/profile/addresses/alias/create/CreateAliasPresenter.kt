@@ -23,7 +23,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
     var fee = 0L
 
     fun loadAlias(alias: String) {
-        addSubscription(apiDataManager.loadAlias(alias)
+        addSubscription(dataServiceManager.loadAlias(alias)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.aliasIsNotAvailable()
@@ -33,7 +33,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
     }
 
     fun loadWavesBalance() {
-        addSubscription(nodeDataManager.loadWavesBalance()
+        addSubscription(nodeServiceManager.loadWavesBalance()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     wavesBalance = it
@@ -48,7 +48,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
 
         viewState.showProgressBar(true)
 
-        addSubscription(nodeDataManager.createAlias(aliasRequest)
+        addSubscription(nodeServiceManager.createAlias(aliasRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.showProgressBar(false)

@@ -241,8 +241,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
     }
 
-    override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (withApiUpdate) {
+    override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withNetUpdate: Boolean) {
+        if (withNetUpdate) {
             if (fromDB) {
                 swipe_container?.isRefreshing = true
                 skeletonScreen.notNull {

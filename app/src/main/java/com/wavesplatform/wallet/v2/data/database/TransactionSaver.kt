@@ -6,13 +6,13 @@
 package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.TransactionResponse
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.TransferDb
@@ -33,9 +33,9 @@ class TransactionSaver @Inject constructor() {
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeServiceManager: NodeServiceManager
     @Inject
-    lateinit var apiDataManager: ApiDataManager
+    lateinit var dataServiceManager: DataServiceManager
     private var allAssets = arrayListOf<AssetInfoResponse>()
     private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var currentLimit = DEFAULT_LIMIT
@@ -129,7 +129,7 @@ class TransactionSaver @Inject constructor() {
                 .distinct()
                 .toMutableList()
 
-        subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
+        subscriptions.add(dataServiceManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     mergeAndSaveAllAssets(ArrayList(it)) { assetsInfo ->
@@ -256,7 +256,7 @@ class TransactionSaver @Inject constructor() {
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
         if (App.getAccessManager().isAuthenticated()) {
             alias.notNull {
-                subscriptions.add(apiDataManager.loadAlias(it)
+                subscriptions.add(dataServiceManager.loadAlias(it)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe {
                             listener.invoke(it.address)

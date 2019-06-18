@@ -4,7 +4,7 @@ import android.util.Patterns
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.model.response.*
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.OrderResponse
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal

@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
@@ -37,7 +37,7 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
     }
 
     fun loadDexPairInfo(watchMarket: WatchMarketResponse, index: Int) {
-        pairSubscriptions.add(apiDataManager.loadDexPairInfo(watchMarket)
+        pairSubscriptions.add(dataServiceManager.loadDexPairInfo(watchMarket)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.afterSuccessLoadPairInfo(it, index)

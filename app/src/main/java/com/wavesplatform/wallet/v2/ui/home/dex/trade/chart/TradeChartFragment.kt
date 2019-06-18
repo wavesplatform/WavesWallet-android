@@ -28,8 +28,8 @@ import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.api.LastTradesResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener

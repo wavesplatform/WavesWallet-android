@@ -13,7 +13,7 @@ import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCo
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import io.reactivex.Observable
 import java.util.*
@@ -21,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GithubDataManager @Inject constructor() : BaseDataManager() {
+class GithubServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun isValidNewSpamUrl(url: String): Observable<Boolean> {
         return githubService.spamAssets(url)
@@ -63,7 +63,7 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
             this.onErrorListener = onErrorListener
             val adapterFactory = CallAdapterFactory(object : OnErrorListener{
                 override fun onError(exception: RetrofitException) {
-                    GithubDataManager.onErrorListener?.onError(exception)
+                    GithubServiceManager.onErrorListener?.onError(exception)
                 }
             })
             return WavesPlatform.service().createService(Constants.URL_GITHUB_CONFIG, adapterFactory)

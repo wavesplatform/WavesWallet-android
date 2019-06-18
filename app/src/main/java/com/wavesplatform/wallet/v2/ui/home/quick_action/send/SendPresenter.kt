@@ -15,7 +15,7 @@ import com.wavesplatform.sdk.utils.*
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatServiceManager: CoinomatServiceManager
 
     var selectedAsset: AssetBalanceResponse? = null
     var recipient: String? = ""
@@ -59,7 +59,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     fun checkAlias(alias: String) {
         if (alias.length in 4..30) {
             addSubscription(
-                    apiDataManager.loadAlias(alias)
+                    dataServiceManager.loadAlias(alias)
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({ _ ->
                                 type = Type.ALIAS
@@ -157,7 +157,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
         val currencyFrom = "W$currencyTo"
         runAsync {
-            addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
+            addSubscription(coinomatServiceManager.getXRate(currencyFrom, currencyTo, LANG)
                     .subscribe({ xRate ->
                         type = Type.GATEWAY
                         gatewayCommission = BigDecimal(xRate.feeOut ?: "0")
@@ -207,9 +207,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
-                nodeDataManager.assetDetails(assetId),
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
+                nodeServiceManager.assetDetails(assetId),
                 Function3 { t1: GlobalTransactionCommissionResponse,
                             t2: ScriptInfoResponse,
                             t3: AssetsDetailsResponse ->
@@ -236,7 +236,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     fun loadAssetForLink(assetId: String, url: String) {
         addSubscription(
-                nodeDataManager.assetDetails(assetId)
+                nodeServiceManager.assetDetails(assetId)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe({ assetsDetails ->
                             val assetBalance = AssetBalanceResponse(

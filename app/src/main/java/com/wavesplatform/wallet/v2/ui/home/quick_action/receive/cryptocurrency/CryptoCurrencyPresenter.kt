@@ -12,7 +12,7 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.coinomatCryptoCurrencies
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurrencyView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatServiceManager: CoinomatServiceManager
     var assetBalance: AssetBalanceResponse? = null
     var tunnel: GetTunnelResponse? = null
     private var lang: String = "ru_RU"
@@ -36,9 +36,9 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
         val currencyTo = "W$currencyFrom"
 
-        addSubscription(coinomatManager.createTunnel(currencyFrom, currencyTo, getWavesAddress(), null)
+        addSubscription(coinomatServiceManager.createTunnel(currencyFrom, currencyTo, getWavesAddress(), null)
                 .flatMap { createTunnel ->
-                    coinomatManager.getTunnel(
+                    coinomatServiceManager.getTunnel(
                             createTunnel.tunnelId,
                             createTunnel.k1,
                             createTunnel.k2,

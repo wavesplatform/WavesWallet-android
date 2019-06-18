@@ -105,7 +105,7 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
     }
 
     fun loadNews() {
-        addSubscription(githubDataManager.loadNews()
+        addSubscription(githubServiceManager.loadNews()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     viewState.showNews(it)

@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrders
     var fee: Long = 0
 
     fun loadMyOrders() {
-        addSubscription(matcherDataManager.loadMyOrders(watchMarket)
+        addSubscription(matcherServiceManager.loadMyOrders(watchMarket)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.afterSuccessLoadMyOrders(it)
@@ -27,7 +27,7 @@ class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrders
     }
 
     fun loadCommission() {
-        addSubscription(nodeDataManager.getCommissionForPair(watchMarket?.market?.amountAsset,
+        addSubscription(nodeServiceManager.getCommissionForPair(watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {

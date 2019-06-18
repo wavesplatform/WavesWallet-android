@@ -50,9 +50,9 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
@@ -86,7 +86,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var mErrorManager: ErrorManager
     @Inject
-    lateinit var dataManager: BaseDataManager
+    lateinit var dataManager: BaseServiceManager
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
 
@@ -174,16 +174,16 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     private fun addErrorListener() {
         // todo check refactor without clients recreation & Check Errors to show or log
         WavesPlatform.service().addOnErrorListener(onErrorListener!!)
-        dataManager.coinomatService = CoinomatManager.create(onErrorListener)
-        dataManager.githubService = GithubDataManager.create(onErrorListener)
+        dataManager.coinomatService = CoinomatServiceManager.create(onErrorListener)
+        dataManager.githubService = GithubServiceManager.create(onErrorListener)
     }
 
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
         WavesPlatform.service().removeOnErrorListener(onErrorListener!!)
-        CoinomatManager.removeOnErrorListener()
-        GithubDataManager.removeOnErrorListener()
+        CoinomatServiceManager.removeOnErrorListener()
+        GithubServiceManager.removeOnErrorListener()
     }
 
     override fun onDestroy() {

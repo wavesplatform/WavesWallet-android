@@ -11,7 +11,7 @@ import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.request.node.*
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.response.api.AliasResponse
+import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
@@ -41,14 +41,14 @@ import javax.inject.Singleton
 import kotlin.collections.ArrayList
 
 @Singleton
-class NodeDataManager @Inject constructor() : BaseDataManager() {
+class NodeServiceManager @Inject constructor() : BaseServiceManager() {
 
     @Inject
-    lateinit var apiDataManager: ApiDataManager
+    lateinit var dataServiceManager: DataServiceManager
     @Inject
-    lateinit var githubDataManager: GithubDataManager
+    lateinit var githubServiceManager: GithubServiceManager
     @Inject
-    lateinit var matcherDataManager: MatcherDataManager
+    lateinit var matcherServiceManager: MatcherServiceManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
     var transactions: List<TransactionResponse> = ArrayList()
@@ -107,7 +107,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
-                                return@flatMap Observable.zip(loadWavesBalance(), matcherDataManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalanceResponse, t2: Map<String, Long>, t3: AssetBalancesResponse ->
+                                return@flatMap Observable.zip(loadWavesBalance(), matcherServiceManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalanceResponse, t2: Map<String, Long>, t3: AssetBalancesResponse ->
                                     return@Function3 Triple(t1, t2, t3)
                                 })
                             }
@@ -237,7 +237,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     return@map it.sumByLong { it.amount }
                 },
                 // load in order balance
-                matcherDataManager.loadReservedBalances()
+                matcherServiceManager.loadReservedBalances()
                         .map {
                             return@map it[WavesConstants.WAVES_ASSET_INFO.name] ?: 0L
                         },
@@ -342,7 +342,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             .flatMap { transaction ->
                                 if (transaction.recipient.contains("aliasBytes")) {
                                     val aliasName = transaction.recipient.substringAfterLast(":")
-                                    return@flatMap apiDataManager.loadAlias(aliasName)
+                                    return@flatMap dataServiceManager.loadAlias(aliasName)
                                             .flatMap {
                                                 transaction.recipientAddress = it.address
                                                 return@flatMap Observable.just(transaction)
@@ -379,7 +379,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun getCommissionForPair(amountAsset: String?, priceAsset: String?): Observable<Long> {
         return Observable.zip(
-                githubDataManager.getGlobalCommission(),
+                githubServiceManager.getGlobalCommission(),
                 assetDetails(amountAsset),
                 assetDetails(priceAsset),
                 Function3 { t1: GlobalTransactionCommissionResponse,

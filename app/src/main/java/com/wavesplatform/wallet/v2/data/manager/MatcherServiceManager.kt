@@ -11,7 +11,7 @@ import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.sdk.model.request.matcher.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
@@ -35,7 +35,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MatcherDataManager @Inject constructor() : BaseDataManager() {
+class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
     var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
@@ -108,8 +108,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     },
                     matcherService.orderBook()
                             .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfigurationResponse.ConfigAsset>, apiMarkets: List<MarketResponse> ->
-                        return@BiFunction Pair(configure, apiMarkets)
+                    BiFunction { configure: Map<String, GlobalConfigurationResponse.ConfigAsset>, netMarkets: List<MarketResponse> ->
+                        return@BiFunction Pair(configure, netMarkets)
                     })
                     .flatMap {
                         // configure hash groups
@@ -175,11 +175,11 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         .map {
                             return@map MarketResponseDb.convertFromDb(it).associateBy { it.id }
                         }
-                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAssetResponse>, dbMarkets: Map<String?, MarketResponse> ->
+                , Function3 { netMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAssetResponse>, dbMarkets: Map<String?, MarketResponse> ->
             val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
+                netMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
             } else {
-                apiMarkets.toMutableList()
+                netMarkets.toMutableList()
             }.toMutableList()
 
             filteredSpamList.forEach { market ->

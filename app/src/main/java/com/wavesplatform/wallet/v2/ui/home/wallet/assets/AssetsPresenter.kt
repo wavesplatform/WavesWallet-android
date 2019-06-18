@@ -38,7 +38,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var needToScroll: Boolean = false
     var enableElevation: Boolean = false
 
-    fun loadAssetsBalance(withApiUpdate: Boolean = true) {
+    fun loadAssetsBalance(withNetUpdate: Boolean = true) {
         if (!WavesWallet.isAuthenticated()) {
             runOnUiThread {
                 viewState.afterFailedLoadAssets()
@@ -78,16 +78,16 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                 dbSpamAssets)
                         return@map createTripleSortedLists(dbAssets)
                     }
-                    .doOnNext { postSuccess(it, withApiUpdate, true) }
-                    .flatMap { tryUpdateWithApi(
-                            withApiUpdate, AssetBalanceDb.convertFromDb(dbAssets)) }
+                    .doOnNext { postSuccess(it, withNetUpdate, true) }
+                    .flatMap { tryUpdateWithNet(
+                            withNetUpdate, AssetBalanceDb.convertFromDb(dbAssets)) }
                     .map { netAssetDb ->
                         updateSpamSettingsAndEvent()
                         return@map removeSpamAssets(AssetBalanceDb.convertToDb(netAssetDb), dbSpamAssets)
                     }
                     .map { createTripleSortedLists(it) }
                     .subscribe({
-                        postSuccess(it, withApiUpdate, false)
+                        postSuccess(it, withNetUpdate, false)
                     }, {
                         it.printStackTrace()
                         runOnUiThread {
@@ -113,7 +113,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     .map { createTripleSortedLists(it) }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        postSuccess(it, withApiUpdate = false, fromDb = true)
+                        postSuccess(it, withNetUpdate = false, fromDb = true)
                     }, {
                         it.printStackTrace()
                         viewState.afterFailedUpdateAssets()
@@ -144,7 +144,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun reloadAssetsAfterSpamUrlChanged() {
         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, true)
         runAsync {
-            addSubscription(nodeDataManager.loadSpamAssets()
+            addSubscription(nodeServiceManager.loadSpamAssets()
                     .flatMap { newSpamAssets ->
                         Observable.zip(
                                 queryAllAsSingle<AssetBalanceDb>().toObservable(),
@@ -180,16 +180,16 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
     }
 
-    private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalanceResponse>): Observable<List<AssetBalanceResponse>> {
-        return if (withApiUpdate) {
-            nodeDataManager.loadAssets(it)
+    private fun tryUpdateWithNet(withNetUpdate: Boolean, it: List<AssetBalanceResponse>): Observable<List<AssetBalanceResponse>> {
+        return if (withNetUpdate) {
+            nodeServiceManager.loadAssets(it)
         } else {
             Observable.just(it)
         }
     }
 
     private fun postSuccess(it: Triple<MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>,
-            MutableList<AssetBalanceDb>>, withApiUpdate: Boolean, fromDb: Boolean) {
+            MutableList<AssetBalanceDb>>, withNetUpdate: Boolean, fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         val searchItem = MultiItemEntity {
@@ -227,7 +227,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
         // show all assets with sections
         runOnUiThread {
-            viewState.afterSuccessLoadAssets(listToShow, fromDb, withApiUpdate)
+            viewState.afterSuccessLoadAssets(listToShow, fromDb, withNetUpdate)
         }
     }
 
@@ -253,7 +253,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
     fun loadAliases() {
         if (WavesWallet.isAuthenticated()) {
-            addSubscription(apiDataManager.loadAliases()
+            addSubscription(dataServiceManager.loadAliases()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe {})
         }

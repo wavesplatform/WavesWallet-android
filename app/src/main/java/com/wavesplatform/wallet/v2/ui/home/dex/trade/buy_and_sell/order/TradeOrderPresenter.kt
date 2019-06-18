@@ -60,7 +60,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     }
 
     fun getMatcherKey() {
-        addSubscription(matcherDataManager.getMatcherKey()
+        addSubscription(matcherServiceManager.getMatcherKey()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     orderRequest.matcherPublicKey = it.replace("\"", "")
@@ -68,7 +68,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     }
 
     fun loadWavesBalance() {
-        addSubscription(nodeDataManager.loadWavesBalance()
+        addSubscription(nodeServiceManager.loadWavesBalance()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     wavesBalance = it
@@ -78,13 +78,13 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     fun loadPairBalancesAndCommission() {
         viewState.showCommissionLoading()
         fee = 0L
-        addSubscription(matcherDataManager.getBalanceFromAssetPair(data?.watchMarket)
+        addSubscription(matcherServiceManager.getBalanceFromAssetPair(data?.watchMarket)
                 .flatMap {
                     // save balance
                     currentAmountBalance = it[data?.watchMarket?.market?.amountAsset] ?: 0
                     currentPriceBalance = it[data?.watchMarket?.market?.priceAsset] ?: 0
 
-                    return@flatMap nodeDataManager.getCommissionForPair(data?.watchMarket?.market?.amountAsset,
+                    return@flatMap nodeServiceManager.getCommissionForPair(data?.watchMarket?.market?.amountAsset,
                             data?.watchMarket?.market?.priceAsset)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -113,7 +113,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer
 
-        addSubscription(matcherDataManager.placeOrder(orderRequest)
+        addSubscription(matcherServiceManager.placeOrder(orderRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.showProgressBar(false)

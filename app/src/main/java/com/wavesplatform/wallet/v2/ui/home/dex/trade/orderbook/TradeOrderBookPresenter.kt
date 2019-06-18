@@ -8,8 +8,8 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.api.LastTradesResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
@@ -36,8 +36,8 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                 Observable.interval(0, 10, TimeUnit.SECONDS)
                         .retry(3)
                         .flatMap {
-                            return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
-                                    apiDataManager.getLastTradeByPair(watchMarket),
+                            return@flatMap Observable.zip(matcherServiceManager.loadOrderBook(watchMarket),
+                                    dataServiceManager.getLastTradeByPair(watchMarket),
                                     BiFunction { orderBook: OrderBookResponse, lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })

@@ -21,7 +21,7 @@ class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
 
     fun checkValidUrl(url: String) {
         viewState.showProgressBar(true)
-        addSubscription(githubDataManager.isValidNewSpamUrl(url)
+        addSubscription(githubServiceManager.isValidNewSpamUrl(url)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
                     viewState.showProgressBar(false)

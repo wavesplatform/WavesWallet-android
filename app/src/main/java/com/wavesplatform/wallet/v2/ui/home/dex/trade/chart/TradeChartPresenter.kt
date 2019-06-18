@@ -11,7 +11,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
@@ -105,7 +105,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         barEntries = ArrayList()
         val fromTimestamp = to!! - 100L * currentTimeFrame.toLong() * 1000 * 60
 
-        addSubscription(apiDataManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
+        addSubscription(dataServiceManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
                 .flatMap { candles ->
                     chartModel.candleList = candles
                     Observable.fromIterable(candles)
@@ -135,7 +135,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun refreshCandles() {
         val to = EnvironmentManager.getTime()
-        addSubscription(apiDataManager.loadCandles(
+        addSubscription(dataServiceManager.loadCandles(
                 watchMarket,
                 currentTimeFrame, prevToDate, to)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -158,7 +158,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     fun getTradesByPair() {
-        addSubscription(apiDataManager.getLastTradeByPair(watchMarket)
+        addSubscription(dataServiceManager.getLastTradeByPair(watchMarket)
                 .map { it.firstOrNull() }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ tradesMarket ->

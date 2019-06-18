@@ -37,7 +37,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
                 quantity = quantity)
         request.sign(App.getAccessManager().getWallet().seedStr)
 
-        addSubscription(nodeDataManager.burn(request)
+        addSubscription(nodeServiceManager.burn(request)
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe({
                     success = true

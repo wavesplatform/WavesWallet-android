@@ -33,7 +33,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
     fun cancelLeasing() {
         cancelLeasingRequest = CancelLeasingTransaction(leaseId = transactionId)
         cancelLeasingRequest?.fee = fee
-        addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest ?: CancelLeasingTransaction())
+        addSubscription(nodeServiceManager.cancelLeasing(cancelLeasingRequest ?: CancelLeasingTransaction())
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     success = true
@@ -58,8 +58,8 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
                 BiFunction { t1: GlobalTransactionCommissionResponse,
                              t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)

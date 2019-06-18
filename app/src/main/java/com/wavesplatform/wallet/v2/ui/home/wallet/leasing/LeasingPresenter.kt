@@ -27,7 +27,7 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
     fun getActiveLeasing() {
         if (WavesWallet.isAuthenticated()) {
             runAsync {
-                addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),
+                addSubscription(Observable.zip(nodeServiceManager.loadWavesBalance(),
                         queryAsSingle<TransactionDb> {
                             equalTo("status", LeasingStatus.ACTIVE.status)
                                     .and()

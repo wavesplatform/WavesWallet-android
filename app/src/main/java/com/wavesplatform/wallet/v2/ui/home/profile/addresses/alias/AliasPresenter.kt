@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.model.response.api.AliasResponse
+import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
 import com.wavesplatform.sdk.model.response.node.TransactionResponse
@@ -42,8 +42,8 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
         callback.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
                 BiFunction { t1: GlobalTransactionCommissionResponse,
                              t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)

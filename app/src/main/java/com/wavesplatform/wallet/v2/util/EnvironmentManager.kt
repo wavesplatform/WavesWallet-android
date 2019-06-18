@@ -12,11 +12,11 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesPlatform
-import com.wavesplatform.sdk.model.response.api.AssetsInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
 import com.wavesplatform.sdk.model.response.node.UtilsTimeResponse
-import com.wavesplatform.sdk.net.service.ApiService
+import com.wavesplatform.sdk.net.service.DataService
 import com.wavesplatform.sdk.net.service.NodeService
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.Environment
@@ -24,7 +24,7 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import io.reactivex.Observable
@@ -125,12 +125,12 @@ class EnvironmentManager(var current: ClientEnvironment) {
             WavesPlatform.setEnvironment(environment)
 
             loadConfiguration(
-                    WavesPlatform.service().getApiService(),
+                    WavesPlatform.service().getDataService(),
                     WavesPlatform.service().getNode(),
-                    GithubDataManager.create(null))
+                    GithubServiceManager.create(null))
         }
 
-        private fun loadConfiguration(apiService: ApiService,
+        private fun loadConfiguration(apiService: DataService,
                                       nodeService: NodeService,
                                       githubService: GithubService) {
             instance!!.configurationDisposable =

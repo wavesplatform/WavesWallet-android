@@ -11,13 +11,13 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.coinomatCryptoCurrencies
 import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfirmationView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatServiceManager: CoinomatServiceManager
 
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
@@ -75,7 +75,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             createGateAndPayment()
         } else {
             checkRecipientAlias(signedTransaction)
-            addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
+            addSubscription(nodeServiceManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable())
                     .subscribe({ tx ->
                         tx.recipient = tx.recipient.parseAlias()
@@ -149,13 +149,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             null
         }
 
-        addSubscription(coinomatManager.createTunnel(
+        addSubscription(coinomatServiceManager.createTunnel(
                 currencyFrom,
                 currencyTo,
                 recipient,
                 moneroPaymentId)
                 .flatMap { createTunnel ->
-                    coinomatManager.getTunnel(
+                    coinomatServiceManager.getTunnel(
                             createTunnel.tunnelId,
                             createTunnel.k1,
                             createTunnel.k2,
@@ -169,7 +169,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                         null
                     } else {
                         checkRecipientAlias(signedTransaction)
-                        nodeDataManager.transactionsBroadcast(signedTransaction)
+                        nodeServiceManager.transactionsBroadcast(signedTransaction)
                     }
                 }
                 .compose(RxUtil.applySchedulersToObservable())

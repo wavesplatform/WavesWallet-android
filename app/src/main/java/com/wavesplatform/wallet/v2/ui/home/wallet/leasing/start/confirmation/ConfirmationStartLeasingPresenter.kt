@@ -36,7 +36,7 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
                     recipient = address,
                     amount = MoneyUtil.getUnscaledValue(amount, 8))
         }
-        addSubscription(nodeDataManager.startLeasing(createLeasingRequest!!, fee)
+        addSubscription(nodeServiceManager.startLeasing(createLeasingRequest!!, fee)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     success = true

@@ -10,21 +10,21 @@ import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import javax.inject.Inject
 
-open class BaseDataManager @Inject constructor() {
+open class BaseServiceManager @Inject constructor() {
 
     var nodeService: NodeService = WavesPlatform.service().getNode()
-    var apiService: ApiService = WavesPlatform.service().getApiService()
+    var apiService: DataService = WavesPlatform.service().getDataService()
     var matcherService: MatcherService = WavesPlatform.service().getMatcher()
-    var githubService: GithubService = GithubDataManager.create()
-    var coinomatService: CoinomatService = CoinomatManager.create()
+    var githubService: GithubService = GithubServiceManager.create()
+    var coinomatService: CoinomatService = CoinomatServiceManager.create()
     var preferencesHelper: PreferencesHelper = PreferencesHelper(App.getAppContext())
     var prefsUtil: PrefsUtil = PrefsUtil(App.getAppContext())
     var rxEventBus: RxEventBus = RxEventBus()

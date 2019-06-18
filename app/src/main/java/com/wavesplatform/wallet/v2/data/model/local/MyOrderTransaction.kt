@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.model.local
 
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 
 data class MyOrderTransaction(var orderResponse: AssetPairOrderResponse,

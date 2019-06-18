@@ -8,15 +8,15 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.api.AliasResponse
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.api.CandlesResponse
-import com.wavesplatform.sdk.model.response.api.LastTradesResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.CandlesResponse
+import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import io.reactivex.Observable
@@ -26,7 +26,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ApiDataManager @Inject constructor() : BaseDataManager() {
+class DataServiceManager @Inject constructor() : BaseServiceManager() {
 
     companion object {
         var DEFAULT_LAST_TRADES_LIMIT = 50

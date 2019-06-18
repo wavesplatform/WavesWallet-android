@@ -68,7 +68,7 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
                 }
                 .observeOn(Schedulers.io())
                 .flatMap {
-                    apiDataManager.loadAliases()
+                    dataServiceManager.loadAliases()
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {

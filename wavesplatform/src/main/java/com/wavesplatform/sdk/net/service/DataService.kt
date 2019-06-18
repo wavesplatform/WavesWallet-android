@@ -5,7 +5,7 @@
 
 package com.wavesplatform.sdk.net.service
 
-import com.wavesplatform.sdk.model.response.api.*
+import com.wavesplatform.sdk.model.response.data.*
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,7 +16,7 @@ import retrofit2.http.Query
  * and convenient way to get data from Waves blockchain.
  * For more information: [WavesPlatform API Swagger]({https://api.wavesplatform.com/v0/docs/)
  */
-interface ApiService {
+interface DataService {
 
     /**
      * Get a list of aliases for a given address

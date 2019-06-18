@@ -6,7 +6,7 @@
 package com.wavesplatform.sdk.utils
 
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat

@@ -15,13 +15,13 @@ import com.wavesplatform.wallet.v2.data.model.service.coinomat.LimitResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CoinomatManager @Inject constructor() : BaseDataManager() {
+class CoinomatServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
         return coinomatService.rate(crypto, address, fiat, amount)
@@ -56,7 +56,7 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
             this.onErrorListener = onErrorListener
             val adapterFactory = CallAdapterFactory(object : OnErrorListener{
                 override fun onError(exception: RetrofitException) {
-                    CoinomatManager.onErrorListener?.onError(exception)
+                    CoinomatServiceManager.onErrorListener?.onError(exception)
                 }
             })
             return WavesPlatform.service().createService(Constants.URL_COINOMAT, adapterFactory)

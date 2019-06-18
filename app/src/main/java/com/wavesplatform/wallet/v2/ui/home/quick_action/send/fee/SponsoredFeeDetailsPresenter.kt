@@ -24,7 +24,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
 
     fun loadSponsoredAssets(listener: (MutableList<SponsoredAssetItem>) -> Unit) {
         addSubscription(
-                nodeDataManager.assetsBalances()
+                nodeServiceManager.assetsBalances()
                         .flatMapIterable { it }
                         .filter { it.isSponsored() || it.isWaves() }
                         .map {
