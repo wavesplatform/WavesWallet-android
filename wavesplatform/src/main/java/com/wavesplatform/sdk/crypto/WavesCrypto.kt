@@ -26,13 +26,57 @@ interface KeyPair {
 
 interface WavesCrypto {
 
+    /**
+     * BLAKE2 are cryptographic hash function
+     *
+     * @param input byte array of input data
+     * @return byte array of hash values
+     */
     fun blake2b(input: Bytes): Bytes
+    /**
+     * Keccak are secure hash algorithm
+     *
+     * @param input byte array of input data
+     * @return byte array of hash values
+     */
     fun keccak(input: Bytes): Bytes
+    /**
+     * SHA-256 are cryptographic hash function
+     *
+     * @param input byte array of input data
+     * @return byte array of hash values
+     */
     fun sha256(input: Bytes): Bytes
 
+    /**
+     * Base58 binary-to-text function used to represent large integers as alphanumeric text.
+     * Compared to Base64, the following similar-looking letters are omitted:
+     * 0 (zero), O (capital o), I (capital i) and l (lower case L) as well
+     * as the non-alphanumeric characters + (plus) and / (slash)
+     *
+     * @param input byte array to encode
+     * @return encoded string
+     */
     fun base58encode(input: Bytes): String
+
+    /**
+     * Base58 text-to-binary function used to restore data encoded by Base58 @see WavesCrypto.base58encode
+     *
+     * @param input encoded Base58 string
+     * @return decoded byte array
+     */
     fun base58decode(input: String): Bytes
+    /**
+     * SHA-256 are cryptographic hash function
+     * @param input byte array of input data
+     * @return byte array of hash values
+     */
     fun base64encode(input: Bytes): String
+    /**
+     * SHA-256 are cryptographic hash function
+     * @param input byte array of input data
+     * @return byte array of hash values
+     */
     fun base64decode(input: String): Bytes
 
     fun keyPair(seed: Seed): KeyPair
@@ -62,12 +106,7 @@ interface WavesCrypto {
         }
 
         override fun sha256(input: Bytes): Bytes {
-            try {
-                return MessageDigest.getInstance("SHA-256").digest(input)
-            } catch (e: NoSuchAlgorithmException) {
-                e.printStackTrace()
-                throw IllegalStateException("NoSuchAlgorithmException", e)
-            }
+            return Hash.sha256(input)
         }
 
         override fun base58encode(input: Bytes): String {

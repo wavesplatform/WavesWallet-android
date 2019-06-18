@@ -10,10 +10,9 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.TransactionResponse
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

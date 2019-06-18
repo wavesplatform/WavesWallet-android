@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -6,11 +6,11 @@
 package com.wavesplatform.sdk.net.service
 
 import com.google.gson.internal.LinkedTreeMap
-import com.wavesplatform.sdk.model.transaction.matcher.CancelOrderRequest
-import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
-import com.wavesplatform.sdk.model.response.MarketsResponse
-import com.wavesplatform.sdk.model.response.OrderBookResponse
-import com.wavesplatform.sdk.model.response.AssetPairOrderResponse
+import com.wavesplatform.sdk.model.request.matcher.CancelOrderRequest
+import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
+import com.wavesplatform.sdk.model.response.matcher.MarketsResponse
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -84,5 +84,5 @@ interface MatcherService {
      * Place a new limit order (buy or sell)
      */
     @POST("matcher/orderbook")
-    fun placeOrder(@Body orderRequest: OrderRequest): Observable<Any>
+    fun placeOrder(@Body orderRequest: CreateOrderRequest): Observable<Any>
 }

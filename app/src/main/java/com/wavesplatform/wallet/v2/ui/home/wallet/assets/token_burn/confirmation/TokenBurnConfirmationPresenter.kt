@@ -6,9 +6,9 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.transaction.node.BurnTransaction
+import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.wallet.App
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

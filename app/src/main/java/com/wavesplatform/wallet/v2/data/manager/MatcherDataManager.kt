@@ -11,10 +11,12 @@ import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.model.response.WatchMarketResponse
-import com.wavesplatform.sdk.model.transaction.matcher.CancelOrderRequest
-import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.request.matcher.CancelOrderRequest
+import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
+import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -25,6 +27,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -82,7 +85,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getMatcherKey()
     }
 
-    fun placeOrder(orderRequest: OrderRequest): Observable<Any> {
+    fun placeOrder(orderRequest: CreateOrderRequest): Observable<Any> {
         orderRequest.senderPublicKey = getPublicKeyStr()
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)

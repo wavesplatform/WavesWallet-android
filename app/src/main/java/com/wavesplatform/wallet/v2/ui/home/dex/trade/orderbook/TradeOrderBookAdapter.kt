@@ -12,8 +12,8 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
-import com.wavesplatform.sdk.model.response.MarketResponse
-import com.wavesplatform.sdk.model.response.OrderBookResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.util.getType
 import pers.victor.ext.findColor

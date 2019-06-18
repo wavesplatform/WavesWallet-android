@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 
-import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.model.response.api.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TradeLastTradesView : BaseMvpView {

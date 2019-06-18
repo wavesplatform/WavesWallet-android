@@ -9,7 +9,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import kotlinx.android.synthetic.main.item_asset_details_avatar.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject

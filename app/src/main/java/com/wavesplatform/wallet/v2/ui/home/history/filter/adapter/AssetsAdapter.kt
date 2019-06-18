@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.history.filter.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import kotlinx.android.synthetic.main.item_history_asset.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable

@@ -2,6 +2,8 @@ package com.wavesplatform.sdk.crypto
 
 import com.wavesplatform.sdk.crypto.hash.Blake2b
 import com.wavesplatform.sdk.crypto.hash.Keccak256
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 object Hash {
 
@@ -18,5 +20,15 @@ object Hash {
     @JvmStatic
     fun blake2b(input: ByteArray): ByteArray {
         return blake.digest(input)
+    }
+
+    @JvmStatic
+    fun sha256(input: ByteArray): ByteArray {
+        try {
+            return MessageDigest.getInstance("SHA-256").digest(input)
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+            throw IllegalStateException("NoSuchAlgorithmException", e)
+        }
     }
 }

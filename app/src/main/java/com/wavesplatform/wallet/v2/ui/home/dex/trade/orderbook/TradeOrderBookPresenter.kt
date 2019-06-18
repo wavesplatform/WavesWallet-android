@@ -8,9 +8,9 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
-import com.wavesplatform.sdk.model.response.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.LastTradesResponse
-import com.wavesplatform.sdk.model.response.OrderBookResponse
+import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.api.LastTradesResponse
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookBidMultiItemEntity

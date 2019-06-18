@@ -10,7 +10,7 @@ import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.transaction.node.BurnTransaction
+import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents

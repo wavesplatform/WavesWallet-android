@@ -6,7 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
+import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
+import com.wavesplatform.sdk.model.response.node.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse

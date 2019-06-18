@@ -8,11 +8,11 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.response.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.AliasResponse
-import com.wavesplatform.sdk.model.response.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.CandlesResponse
-import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.model.response.api.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.api.AliasResponse
+import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.api.CandlesResponse
+import com.wavesplatform.sdk.model.response.api.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.PrefsUtil

@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
-import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.model.response.api.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TradeChartView : BaseMvpView {

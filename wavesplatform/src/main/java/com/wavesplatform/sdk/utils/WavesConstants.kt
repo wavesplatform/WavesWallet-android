@@ -1,6 +1,6 @@
 package com.wavesplatform.sdk.utils
 
-import com.wavesplatform.sdk.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
 
 class WavesConstants {
 

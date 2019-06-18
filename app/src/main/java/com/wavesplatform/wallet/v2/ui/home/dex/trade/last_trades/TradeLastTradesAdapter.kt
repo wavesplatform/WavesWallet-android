@@ -10,8 +10,8 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.internal.bind.util.ISO8601Utils
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.model.response.LastTradesResponse
-import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.model.response.api.LastTradesResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.wallet.v2.util.getType
 import pyxis.uzuki.live.richutilskt.utils.asDateString

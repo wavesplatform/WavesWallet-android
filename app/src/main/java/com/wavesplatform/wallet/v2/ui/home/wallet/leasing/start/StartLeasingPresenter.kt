@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
-import com.wavesplatform.sdk.model.response.ScriptInfoResponse
-import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
+import com.wavesplatform.sdk.model.response.node.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil

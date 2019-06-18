@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.analytics
 
-import com.wavesplatform.sdk.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import javax.inject.Inject
 import javax.inject.Singleton

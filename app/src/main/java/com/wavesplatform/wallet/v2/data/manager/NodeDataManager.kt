@@ -9,9 +9,10 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
+import com.wavesplatform.sdk.model.request.node.*
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.response.*
-import com.wavesplatform.sdk.model.transaction.node.*
+import com.wavesplatform.sdk.model.response.api.AliasResponse
+import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
@@ -27,6 +28,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -76,7 +78,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransaction> {
-        return nodeService.broadcastTransfer(tx)
+        return nodeService.transactionsBroadcast(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -253,7 +255,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         request.senderPublicKey = getPublicKeyStr()
         request.timestamp = EnvironmentManager.getTime()
         request.sign(App.getAccessManager().getWallet().seedStr)
-        return nodeService.broadcastAlias(request)
+        return nodeService.transactionsBroadcast(request)
                 .map {
                     it.address = getAddress()
                     AliasDb(it).save()
@@ -266,7 +268,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun cancelLeasing(transaction: CancelLeasingTransaction): Observable<TransactionResponse> {
         transaction.sign(App.getAccessManager().getWallet().seedStr)
-        return nodeService.broadcastCancelLeasing(transaction)
+        return nodeService.transactionsBroadcast(transaction)
                 .map {
                     val first = queryFirst<TransactionDb> {
                         equalTo("id", transaction.leaseId)
@@ -286,7 +288,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     ): Observable<TransactionResponse> {
         createLeasingRequest.fee = fee
         createLeasingRequest.sign(App.getAccessManager().getWallet().seedStr)
-        return nodeService.broadcastCreateLeasing(createLeasingRequest)
+        return nodeService.transactionsBroadcast(createLeasingRequest)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -297,7 +299,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .retry(3)
                 .flatMap {
                     if (ProcessLifecycleOwner.get().lifecycle.currentState == Lifecycle.State.RESUMED) {
-                        return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
+                        return@flatMap nodeService.transactionsAddress(getAddress(), currentLoadTransactionLimitPerRequest)
                                 .map { r -> r[0] }
                     } else {
                         return@flatMap Observable.just(listOf<TransactionResponse>())
@@ -307,7 +309,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadLightTransactions(): Observable<List<TransactionResponse>> {
-        return nodeService.transactionList(getAddress(), 100)
+        return nodeService.transactionsAddress(getAddress(), 100)
                 .map { r -> r[0] }
     }
 
@@ -315,7 +317,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return Observable.interval(0, 60, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
-                    return@flatMap nodeService.currentBlocksHeight()
+                    return@flatMap nodeService.blockHeight()
                 }
                 .map {
                     preferencesHelper.currentBlocksHeight = it.height
@@ -325,7 +327,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     private fun activeLeasing(): Observable<List<TransactionResponse>> {
-        return nodeService.activeLeasing(getAddress())
+        return nodeService.leasingActive(getAddress())
                 .map {
                     return@map it.filter {
                         it.asset = WavesConstants.WAVES_ASSET_INFO
@@ -354,14 +356,14 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun burn(burn: BurnTransaction): Observable<BurnTransaction> {
-        return nodeService.broadcastBurn(burn)
+        return nodeService.transactionsBroadcast(burn)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
     }
 
     fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfoResponse> {
-        return nodeService.scriptAddressInfo(address)
+        return nodeService.scriptInfo(address)
                 .doOnNext {
                     prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
                 }
@@ -399,6 +401,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalanceResponse> {
-        return nodeService.addressAssetBalance(address, assetId)
+        return nodeService.addressBalance(address, assetId)
     }
 }

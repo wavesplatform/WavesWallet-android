@@ -10,10 +10,10 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
-import com.wavesplatform.sdk.model.transaction.node.TransferTransaction
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.utils.*
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -92,7 +92,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         } else {
             val tx = getTxRequest()
             if (TransferTransaction.getAttachmentSize(tx.attachment)
-                    > TransferTransaction.MaxAttachmentSize) {
+                    > TransferTransaction.MAX_ATTACHMENT_SIZE) {
                 return R.string.attachment_too_long
             } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                 return R.string.invalid_amount

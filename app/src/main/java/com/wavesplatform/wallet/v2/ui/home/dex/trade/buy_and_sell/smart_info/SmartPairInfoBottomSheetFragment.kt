@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wavesplatform.sdk.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.api.AssetInfoResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_smart_pair_info_layout.view.*

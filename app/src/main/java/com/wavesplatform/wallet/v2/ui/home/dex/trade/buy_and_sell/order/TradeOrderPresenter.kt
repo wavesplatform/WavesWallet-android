@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.sdk.model.transaction.matcher.OrderRequest
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @InjectViewState
 class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>() {
     var data: BuySellData? = BuySellData()
-    var orderRequest: OrderRequest = OrderRequest()
+    var orderRequest: CreateOrderRequest = CreateOrderRequest()
     var wavesBalance: AssetBalanceResponse = AssetBalanceResponse()
 
     var humanTotalTyping = false
@@ -63,7 +63,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         addSubscription(matcherDataManager.getMatcherKey()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
-                    orderRequest.matcherPublicKey = it
+                    orderRequest.matcherPublicKey = it.replace("\"", "")
                 })
     }
 

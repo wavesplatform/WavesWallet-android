@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.response.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.TransactionResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.icon
