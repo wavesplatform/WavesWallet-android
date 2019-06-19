@@ -14,9 +14,9 @@ data class InitWithdrawResponse(
         @SerializedName("processId")
         var processId: String,
         @SerializedName("fee")
-        var fee: Int,
+        var fee: Long,
         @SerializedName("maxAmount")
-        var maxAmount: Int,
+        var maxAmount: Long,
         @SerializedName("minAmount")
-        var minAmount: Int
+        var minAmount: Long
 )

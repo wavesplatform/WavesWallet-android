@@ -12,6 +12,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTun
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.InitDepositResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.InitWithdrawResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.SendTransactionResponse
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,16 +22,16 @@ import javax.inject.Singleton
 @Singleton
 class GatewayDataManager @Inject constructor() : BaseDataManager() {
 
-    fun prepareSendTransaction(userAddress: String, assetId: String) {
-        gatewayService.initDeposit(InitGatewayRequest(userAddress, assetId))
+    fun prepareSendTransaction(userAddress: String, assetId: String): Observable<InitWithdrawResponse> {
+        return gatewayService.initWithdraw(InitGatewayRequest(userAddress, assetId))
     }
 
-    fun receiveTransaction(userAddress: String, assetId: String) {
-        gatewayService.initWithdraw(InitGatewayRequest(userAddress, assetId))
+    fun receiveTransaction(userAddress: String, assetId: String): Observable<InitDepositResponse> {
+        return gatewayService.initDeposit(InitGatewayRequest(userAddress, assetId))
     }
 
-    fun sendTransaction(transaction: TransactionsBroadcastRequest) {
-        gatewayService.sendWithdrawTransaction(transaction)
+    fun sendTransaction(transaction: TransactionsBroadcastRequest): Observable<SendTransactionResponse> {
+        return gatewayService.sendWithdrawTransaction(transaction)
     }
 
 }

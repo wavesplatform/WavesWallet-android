@@ -39,6 +39,8 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendCo
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_FEE_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_COMMISSION
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_PROCESS_ID
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_RECIPIENT_ADDRESS
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
@@ -273,6 +275,8 @@ class SendActivity : BaseActivity(), SendView {
                 putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
             }
             putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
+            putExtra(KEY_INTENT_GATEWAY_PROCESS_ID, presenter.gatewayProcessId)
+            putExtra(KEY_INTENT_GATEWAY_RECIPIENT_ADDRESS, presenter.gatewayRecipientAddress)
             putExtra(KEY_INTENT_TYPE, presenter.type)
             putExtra(KEY_INTENT_BLOCKCHAIN_COMMISSION, presenter.fee)
             putExtra(KEY_INTENT_FEE_ASSET, presenter.feeAsset)
@@ -291,7 +295,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalance) {
-        if (presenter.type == SendPresenter.Type.GATEWAY) {
+        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
             val total = BigDecimal.valueOf(amount,
                     assetBalance.getDecimals())
                     .minus(presenter.gatewayCommission)
@@ -305,9 +309,10 @@ class SendActivity : BaseActivity(), SendView {
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
                         "${getScaledAmount(
-                                presenter.fee, presenter.feeAsset?.getDecimals() ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
+                                presenter.fee, presenter.feeAsset?.getDecimals()
+                                ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
                         presenter.gatewayCommission.toPlainString(),
-                        assetBalance.getName() ?: "")
+                        assetBalance.getName())
                 presenter.amount = BigDecimal.ZERO
             }
         } else if (presenter.type == SendPresenter.Type.WAVES &&
@@ -340,26 +345,12 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    override fun showXRate(xRate: XRate, ticker: String) {
+    override fun showXRate(ticker: String) {
         xRateSkeletonView?.hide()
 
-        val fee = if (xRate.feeOut == null) {
-            "-"
-        } else {
-            BigDecimal(xRate.feeOut).toString()
-        }
-
-        val inMin = if (xRate.inMin == null) {
-            "-"
-        } else {
-            BigDecimal(xRate.inMin).toString()
-        }
-
-        val inMax = if (xRate.inMax == null) {
-            "-"
-        } else {
-            BigDecimal(xRate.inMax).toString()
-        }
+        val fee = presenter.gatewayCommission.toString()
+        val inMin = presenter.gatewayMin.toString()
+        val inMax = presenter.gatewayMax.toString()
 
         gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
                 fee, ticker)
@@ -393,11 +384,17 @@ class SendActivity : BaseActivity(), SendView {
                     presenter.checkAlias(recipient)
                     relative_gateway_fee.gone()
                 }
-                SendPresenter.isWavesAddress(recipient) -> {
+                recipient.isValidWavesAddress() -> {
                     presenter.recipientAssetId = ""
                     presenter.type = SendPresenter.Type.WAVES
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
+                }
+                recipient.isValidVostokAddress() -> {
+                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)
+                    presenter.type = SendPresenter.Type.VOSTOK
+                    setRecipientValid(true)
+                    loadGatewayXRate(presenter.recipientAssetId!!)
                 }
                 else -> {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)

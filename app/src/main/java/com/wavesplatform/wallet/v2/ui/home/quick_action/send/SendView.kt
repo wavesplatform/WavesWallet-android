@@ -13,7 +13,7 @@ interface SendView : BaseMvpView {
 
     fun onShowError(errorMsgRes: Int)
     fun onShowPaymentDetails()
-    fun showXRate(xRate: XRate, ticker: String)
+    fun showXRate(ticker: String)
     fun showXRateError()
     fun setRecipientValid(valid: Boolean?)
     fun showCommissionLoading()

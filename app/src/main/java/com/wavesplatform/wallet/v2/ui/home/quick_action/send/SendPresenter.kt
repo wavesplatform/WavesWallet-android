@@ -18,16 +18,15 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.GatewayDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
-import com.wavesplatform.wallet.v2.util.isSpamConsidered
-import com.wavesplatform.wallet.v2.util.isValidWavesAddress
-import com.wavesplatform.wallet.v2.util.isWaves
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
+import pyxis.uzuki.live.richutilskt.utils.isEmpty
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
@@ -38,12 +37,16 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
+    @Inject
+    lateinit var gatewayDataManager: GatewayDataManager
 
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
     var moneroPaymentId: String? = null
+    var gatewayProcessId: String? = null
+    var gatewayRecipientAddress: String? = null
     var recipientAssetId: String? = null
     var type: Type? = null
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
@@ -121,7 +124,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun isGatewayAmountError(): Boolean {
-        if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
+        if ((type == Type.VOSTOK || type == Type.GATEWAY) && selectedAsset != null && gatewayMax.toFloat() > 0) {
             val totalAmount = amount + gatewayCommission
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
                     selectedAsset!!.getDecimals())
@@ -163,6 +166,25 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return
         }
 
+        if (type == Type.VOSTOK) {
+            addSubscription(gatewayDataManager.prepareSendTransaction(recipient!!, assetId)
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({ response ->
+                        gatewayProcessId = response.processId
+                        gatewayRecipientAddress = response.recipientAddress
+
+                        gatewayCommission = MoneyUtil.getScaledText(response.fee, selectedAsset).clearBalance().toBigDecimal()
+                        gatewayMin = MoneyUtil.getScaledText(response.minAmount, selectedAsset).clearBalance().toBigDecimal()
+                        gatewayMax = MoneyUtil.getScaledText(response.maxAmount, selectedAsset).clearBalance().toBigDecimal()
+
+                        viewState.showXRate(currencyTo)
+                    }, {
+                        type = Type.UNKNOWN
+                        viewState.showXRateError()
+                    }))
+            return
+        }
+
         val currencyFrom = "W$currencyTo"
         runAsync {
             addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
@@ -175,7 +197,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                             if (xRate == null) {
                                 viewState.showXRateError()
                             } else {
-                                viewState.showXRate(xRate, currencyTo)
+                                viewState.showXRate(currencyTo)
                             }
                         }
                     }, {
@@ -196,11 +218,15 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return null
         }
 
-        if (type == Type.GATEWAY && selectedAsset!!.assetId.equals(recipientAssetId)) {
+        if (type == Type.GATEWAY && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
-        if (type == Type.WAVES && isWavesAddress(recipient)) {
+        if (type == Type.WAVES && recipient.isValidWavesAddress()) {
+            return true
+        }
+
+        if (type == Type.VOSTOK && recipient.isValidVostokAddress() && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
@@ -282,43 +308,19 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val configAsset = EnvironmentManager.globalConfiguration.generalAssets
                     .firstOrNull { it.assetId == assetBalance?.assetId }
 
-            return if (recipient?.matches("${configAsset?.addressRegEx}$".toRegex()) == true) {
+            return if (recipient?.matches("${configAsset?.addressRegEx}$".toRegex()) == true
+                    || configAsset?.addressRegEx?.isEmpty() == true) {
                 configAsset?.assetId
             } else {
                 null
             }
-        }
-
-        fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidWavesAddress()) {
-                return false
-            }
-
-            val addressBytes = Base58.decode(address)
-
-            if (addressBytes[0] != 1.toByte() ||
-                    addressBytes[1] != EnvironmentManager.netCode) {
-                return false
-            }
-
-            val key = addressBytes.slice(IntRange(0, 21))
-            val check = addressBytes.slice(IntRange(22, 25))
-            val keyHash = Hash.secureHash(key.toByteArray())
-                    .toList()
-                    .slice(IntRange(0, 3))
-
-            for (i in 0..3) {
-                if (check[i] != keyHash[i]) {
-                    return false
-                }
-            }
-            return true
         }
     }
 
     enum class Type {
         ALIAS,
         WAVES,
+        VOSTOK,
         GATEWAY,
         UNKNOWN
     }

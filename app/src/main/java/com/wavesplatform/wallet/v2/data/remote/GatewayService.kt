@@ -19,7 +19,7 @@ interface GatewayService {
     @POST("v1/external/withdraw")
     fun initWithdraw(@Body request: InitGatewayRequest): Observable<InitWithdrawResponse>
 
-    @POST("v1/external/withdraw")
+    @POST("v1/external/send")
     fun sendWithdrawTransaction(@Body request: TransactionsBroadcastRequest): Observable<SendTransactionResponse>
 
     @POST("v1/external/deposit")

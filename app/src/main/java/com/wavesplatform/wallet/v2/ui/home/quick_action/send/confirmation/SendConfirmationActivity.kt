@@ -63,13 +63,15 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.recipient = intent!!.extras!!.getString(KEY_INTENT_SELECTED_RECIPIENT)
         presenter.amount = BigDecimal(intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT))
         presenter.moneroPaymentId = intent!!.extras!!.getString(KEY_INTENT_MONERO_PAYMENT_ID)
+        presenter.gatewayProcessId = intent!!.extras!!.getString(KEY_INTENT_GATEWAY_PROCESS_ID)
+        presenter.gatewayRecipientAddress = intent!!.extras!!.getString(KEY_INTENT_GATEWAY_RECIPIENT_ADDRESS)
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
         presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
         presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
                 ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
-        if (presenter.type == SendPresenter.Type.GATEWAY) {
+        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
             presenter.gatewayCommission = BigDecimal(
                     intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
             text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
@@ -97,7 +99,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset.getDecimals())} " +
                 presenter.feeAsset.getName()
 
-        if (presenter.type == SendPresenter.Type.GATEWAY) {
+        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
             attachment_layout.gone()
         } else {
             attachment_layout.visiable()
@@ -231,6 +233,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         const val KEY_INTENT_BLOCKCHAIN_COMMISSION = "intent_blockchain_commission"
         const val KEY_INTENT_ATTACHMENT = "intent_attachment"
         const val KEY_INTENT_MONERO_PAYMENT_ID = "intent_monero_payment_id"
+        const val KEY_INTENT_GATEWAY_PROCESS_ID = "intent_gateway_process_id"
+        const val KEY_INTENT_GATEWAY_RECIPIENT_ADDRESS = "intent_gateway_recipient_address"
         const val KEY_INTENT_TYPE = "intent_type"
     }
 }

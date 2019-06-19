@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.GatewayDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
@@ -34,6 +35,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
+    @Inject
+    lateinit var gatewayDataManager: GatewayDataManager
 
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
@@ -41,6 +44,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var selectedAsset: AssetBalance? = null
     var assetInfo: AssetInfo? = null
     var moneroPaymentId: String? = null
+    var gatewayProcessId: String? = null
+    var gatewayRecipientAddress: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
@@ -78,17 +83,42 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun submitPayment(signedTransaction: TransactionsBroadcastRequest) {
-        if (type == SendPresenter.Type.GATEWAY) {
-            createGateAndPayment()
-        } else {
+        when (type) {
+            SendPresenter.Type.GATEWAY -> createGateAndPayment()
+            SendPresenter.Type.VOSTOK -> signAndSendGatewayTransaction()
+            else -> {
+                checkRecipientAlias(signedTransaction)
+                addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
+                        .compose(RxUtil.applySchedulersToObservable())
+                        .subscribe({ tx ->
+                            tx.recipient = tx.recipient.parseAlias()
+                            saveLastSentAddress(tx.recipient)
+                            success = true
+                            viewState.onShowTransactionSuccess(tx)
+                        }, {
+                            if (it.errorBody()?.isSmartError() == true) {
+                                viewState.failedSendCauseSmart()
+                            } else {
+                                viewState.onShowError(R.string.transaction_failed)
+                            }
+                        }))
+            }
+        }
+    }
+
+    private fun signAndSendGatewayTransaction() {
+        attachment = gatewayProcessId ?: ""
+        recipient = gatewayRecipientAddress ?: ""
+        val signedTransaction = signTransaction()
+        if (signedTransaction != null) {
             checkRecipientAlias(signedTransaction)
-            addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
+            addSubscription(gatewayDataManager.sendTransaction(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable())
-                    .subscribe({ tx ->
-                        tx.recipient = tx.recipient.parseAlias()
-                        saveLastSentAddress(tx.recipient)
+                    .subscribe({ response ->
+                        signedTransaction.recipient = signedTransaction.recipient.parseAlias()
+                        saveLastSentAddress(signedTransaction.recipient)
                         success = true
-                        viewState.onShowTransactionSuccess(tx)
+                        viewState.onShowTransactionSuccess(signedTransaction)
                     }, {
                         if (it.errorBody()?.isSmartError() == true) {
                             viewState.failedSendCauseSmart()
@@ -96,6 +126,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                             viewState.onShowError(R.string.transaction_failed)
                         }
                     }))
+        } else {
+            viewState.onShowError(R.string.transaction_failed)
         }
     }
 
@@ -114,13 +146,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             recipient = recipient!!.makeAsAlias()
         }
 
-        val totalAmount = if (type == SendPresenter.Type.GATEWAY) {
+        val totalAmount = if (type == SendPresenter.Type.GATEWAY || type == SendPresenter.Type.VOSTOK) {
             amount + gatewayCommission
         } else {
             amount
         }
 
-        return TransactionsBroadcastRequest(
+        val request = TransactionsBroadcastRequest(
                 selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient!!,
@@ -129,10 +161,12 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 blockchainCommission,
                 attachment,
                 feeAsset.assetId)
+        request.sender = App.getAccessManager().getWallet()?.address
+        return request
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address)}
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address) }
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {
