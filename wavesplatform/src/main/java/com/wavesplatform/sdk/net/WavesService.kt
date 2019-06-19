@@ -15,7 +15,6 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import ren.yale.android.retrofitcachelibrx2.RetrofitCache
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -73,7 +72,6 @@ open class WavesService(private var context: Context) {
                 .addCallAdapterFactory(adapterFactory)
                 .addConverterFactory(createGsonFactory())
                 .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
     }
 

@@ -155,11 +155,6 @@
 -keep class org.robovm.** { *; }
 # End Retrofit ------------------------------------------------
 
-# LeakCanary -------------------------------------------------#
--keep class org.eclipse.mat.** { *; }
--keep class com.squareup.leakcanary.** { *; }
-# End LeakCanary ----------------------------------------------
-
 # Reactive Network -------------------------------------------#
 -dontwarn com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
 -dontwarn io.reactivex.functions.Function
@@ -196,22 +191,6 @@
 # A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 # End OkHttp3 -------------------------------------------------
-
-# Dagger 2 ---------------------------------------------------#
--dontwarn com.google.errorprone.annotations.**
-# End Dagger 2 ------------------------------------------------
-
-# Retrofitcachelibrx2 (retrofit2 + okhttp3 + rxjava2) --------#
--dontwarn ren.yale.android.retrofitcachelibrx2.**
--keep class ren.yale.android.retrofitcachelibrx2.** { *; }
--keepclasseswithmembernames class retrofit2.adapter.rxjava2.BodyObservable { *; }
--keepclasseswithmembernames class retrofit2.adapter.rxjava2.ResultObservable { *; }
--keepclasseswithmembernames class retrofit2.adapter.rxjava2.CallEnqueueObservable { *; }
--keepclasseswithmembernames class retrofit2.adapter.rxjava2.CallExecuteObservable { *; }
--keepclasseswithmembernames class retrofit2.Retrofit { *; }
--keepclasseswithmembernames class retrofit2.ServiceMethod { *; }
--keepclasseswithmembernames class retrofit2.OkHttpCall { *; }
-# End Retrofitcachelibrx2 (retrofit2 + okhttp3 + rxjava2) -----
 
 # Apache commons.io ------------------------------------------#
 -dontwarn java.beans.*
