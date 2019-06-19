@@ -54,8 +54,8 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             addSubscription(Observable.zip(
                     queryAllAsSingle<AssetBalanceDb>().toObservable(),
                     queryAllAsSingle<SpamAssetDb>().toObservable(),
-                    BiFunction { t1: List<AssetBalanceDb>, t2: List<SpamAssetDb> ->
-                        return@BiFunction Pair(t1, t2)
+                    BiFunction { assets: List<AssetBalanceDb>, spams: List<SpamAssetDb> ->
+                        return@BiFunction Pair(assets, spams)
                     })
                     .subscribeOn(Schedulers.io())
                     .map { pair ->
@@ -79,11 +79,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withNetUpdate, true) }
-                    .flatMap { tryUpdateWithNet(
-                            withNetUpdate, AssetBalanceDb.convertFromDb(dbAssets)) }
-                    .map { netAssetDb ->
+                    .flatMap { updateWithNet(withNetUpdate, AssetBalanceDb.convertFromDb(dbAssets), dbSpamAssets) }
+                    .map { netAssetSpamPair ->
                         updateSpamSettingsAndEvent()
-                        return@map removeSpamAssets(AssetBalanceDb.convertToDb(netAssetDb), dbSpamAssets)
+                        return@map removeSpamAssets(
+                                AssetBalanceDb.convertToDb(netAssetSpamPair.first.toMutableList()),
+                                netAssetSpamPair.second.toMutableList())
                     }
                     .map { createTripleSortedLists(it) }
                     .subscribe({
@@ -180,11 +181,14 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
     }
 
-    private fun tryUpdateWithNet(withNetUpdate: Boolean, it: List<AssetBalanceResponse>): Observable<List<AssetBalanceResponse>> {
+    private fun updateWithNet( // todo check
+            withNetUpdate: Boolean,
+            assets: List<AssetBalanceResponse>,
+            spams: List<SpamAsset>): Observable<Pair<List<AssetBalanceResponse>, List<SpamAssetDb>>> {
         return if (withNetUpdate) {
-            nodeServiceManager.loadAssets(it)
+            nodeServiceManager.loadAssets(assets)
         } else {
-            Observable.just(it)
+            Observable.just(Pair(assets, spams))
         }
     }
 

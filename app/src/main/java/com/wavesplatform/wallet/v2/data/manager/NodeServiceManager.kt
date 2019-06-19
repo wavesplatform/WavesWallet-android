@@ -102,13 +102,20 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    fun loadAssets(assetsFromDb: List<AssetBalanceResponse>? = null): Observable<List<AssetBalanceResponse>> {
+    fun loadAssets(assetsFromDb: List<AssetBalanceResponse>? = null)
+            : Observable<Pair<List<AssetBalanceResponse>, List<SpamAsset>>> { // todo check
         return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
-                                return@flatMap Observable.zip(loadWavesBalance(), matcherServiceManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalanceResponse, t2: Map<String, Long>, t3: AssetBalancesResponse ->
-                                    return@Function3 Triple(t1, t2, t3)
+                                return@flatMap Observable.zip(
+                                        loadWavesBalance(),
+                                        matcherServiceManager.loadReservedBalances(),
+                                        Observable.just(assets),
+                                        Function3 { wavesBalance: AssetBalanceResponse,
+                                                    reservedBalances: Map<String, Long>,
+                                                    assetBalances: AssetBalanceResponse ->
+                                    return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
                                 })
                             }
                             .map { tripple ->
@@ -193,7 +200,10 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                 trackZeroBalances(allAssets)
 
                                 // clear wallet from unimportant assets for new imported wallets
-                                return@map ClearAssetsHelper.clearUnimportantAssets(prefsUtil, allAssets.toMutableList(), fromAPI = true)
+                                return@map Pair(
+                                        ClearAssetsHelper.clearUnimportantAssets(
+                                                prefsUtil, allAssets.toMutableList(), fromAPI = true),
+                                        spamAssets)
                             }
                             .subscribeOn(Schedulers.io())
                 }
