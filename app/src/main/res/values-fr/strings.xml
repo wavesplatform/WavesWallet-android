@@ -389,7 +389,7 @@
   <string name="new_account_avatar_error">Veuillez sélectionner un avatar</string>
   <string name="new_account_avatar_title">Choisissez l\'avatar unique de votre adresse</string>
   <string name="new_account_confirm_password_hint">Confirmer le mot de passe</string>
-  <string name="new_account_confirm_password_validation_match_error">Les mots de passe ne correspondent pas</string>
+  <string name="new_account_confirm_password_validation_match_error">Ne correspond pas</string>
   <string name="new_account_continue">Continuer</string>
   <string name="new_account_create_password_hint">Créer un mot de passe</string>
   <string name="new_account_create_password_validation_length_error">Minimum 8 caractères</string>

@@ -52,8 +52,8 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             addSubscription(Observable.zip(
                     queryAllAsSingle<AssetBalance>().toObservable(),
                     queryAllAsSingle<SpamAsset>().toObservable(),
-                    BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
-                        return@BiFunction Pair(t1, t2)
+                    BiFunction { assets: List<AssetBalance>, spams: List<SpamAsset> ->
+                        return@BiFunction Pair(assets, spams)
                     })
                     .subscribeOn(Schedulers.io())
                     .map { pair ->
@@ -75,10 +75,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
-                    .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
-                    .map { netAssetDb ->
+                    .flatMap { updateWithNet(withApiUpdate, dbAssets, dbSpamAssets) }
+                    .map { netAssetSpamPair ->
                         updateSpamSettingsAndEvent()
-                        return@map removeSpamAssets(netAssetDb.toMutableList(), dbSpamAssets)
+                        return@map removeSpamAssets(
+                                netAssetSpamPair.first.toMutableList(),
+                                netAssetSpamPair.second.toMutableList())
                     }
                     .map { createTripleSortedLists(it) }
                     .subscribe({
@@ -173,11 +175,14 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
     }
 
-    private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalance>): Observable<List<AssetBalance>> {
+    private fun updateWithNet(
+            withApiUpdate: Boolean,
+            assets: List<AssetBalance>,
+            spams: List<SpamAsset>): Observable<Pair<List<AssetBalance>, List<SpamAsset>>> {
         return if (withApiUpdate) {
-            nodeDataManager.loadAssets(it)
+            nodeDataManager.loadAssets(assets)
         } else {
-            Observable.just(it)
+            Observable.just(Pair(assets, spams))
         }
     }
 
@@ -186,7 +191,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         val searchItem = MultiItemEntity {
-             AssetsAdapter.TYPE_SEARCH
+            AssetsAdapter.TYPE_SEARCH
         }
         listToShow.add(searchItem)
 
