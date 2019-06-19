@@ -21,7 +21,7 @@ import javax.inject.Inject
 open class BaseServiceManager @Inject constructor() {
 
     var nodeService: NodeService = WavesPlatform.service().getNode()
-    var apiService: DataService = WavesPlatform.service().getDataService()
+    var dataService: DataService = WavesPlatform.service().getDataService()
     var matcherService: MatcherService = WavesPlatform.service().getMatcher()
     var githubService: GithubService = GithubServiceManager.create()
     var coinomatService: CoinomatService = CoinomatServiceManager.create()

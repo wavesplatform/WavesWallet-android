@@ -33,7 +33,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun loadAliases(): Observable<List<AliasResponse>> {
-        return apiService.aliases(getAddress())
+        return dataService.aliases(getAddress())
                 .map {
                     val aliases = it.data.mapTo(ArrayList()) {
                         it.alias.own = true
@@ -48,7 +48,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         return Observable.interval(0, 30, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
-                    apiService.loadDexPairInfo(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
+                    dataService.pairs(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
                             .map {
                                 prefsUtil.setValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, EnvironmentManager.getTime())
                                 watchMarket.pairResponse = it
@@ -64,7 +64,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         if (localAlias != null) {
             return Observable.just(localAlias.convertFromDb())
         } else {
-            return apiService.alias(alias)
+            return dataService.alias(alias)
                     .map {
                         it.alias.own = false
                         AliasDb(it.alias).save()
@@ -77,7 +77,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         if (ids.isEmpty()) {
             return Observable.just(listOf())
         } else {
-            return apiService.assetsInfoByIds(ids)
+            return dataService.assets(ids)
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
@@ -99,14 +99,14 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun loadLastTradesByPair(watchMarket: WatchMarketResponse?): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
-        return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)
+        return dataService.transactionsExchange(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)
                 .map {
                     return@map it.data.mapTo(ArrayList()) { it.transaction }
                 }
     }
 
     fun getLastTradeByPair(watchMarket: WatchMarketResponse?): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
-        return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, 1)
+        return dataService.transactionsExchange(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, 1)
                 .map {
                     return@map it.data.mapTo(ArrayList()) { it.transaction }
                 }
@@ -119,7 +119,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
             from: Long,
             to: Long
     ): Observable<List<CandlesResponse.CandleResponse>> {
-        return apiService.loadCandles(watchMarket?.market?.amountAsset,
+        return dataService.candles(watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset, "${timeFrame}m", from, to)
                 .map {
                     return@map it.candles.sortedBy { it.time }

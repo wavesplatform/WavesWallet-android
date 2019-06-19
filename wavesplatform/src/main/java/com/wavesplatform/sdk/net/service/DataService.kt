@@ -19,49 +19,49 @@ import retrofit2.http.Query
 interface DataService {
 
     /**
-     * Get a list of aliases for a given address
-     */
-    @GET("v0/aliases")
-    fun aliases(@Query("address") address: String?): Observable<AliasesResponse>
-
-    /**
      * Get address for alias
      */
     @GET("v0/aliases/{alias}")
     fun alias(@Path("alias") alias: String?): Observable<AliasDataResponse>
 
     /**
+     * Get a list of aliases for a given address
+     */
+    @GET("v0/aliases")
+    fun aliases(@Query("address") address: String?): Observable<AliasesResponse>
+
+    /**
      * Get asset info by asset ID
      */
     @GET("v0/assets")
-    fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
+    fun assets(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 
     /**
      * Get pair info by amount and price assets
      */
     @GET("v0/pairs/{amountAsset}/{priceAsset}")
-    fun loadDexPairInfo(@Path("amountAsset") amountAsset: String?,
-                        @Path("priceAsset") priceAsset: String?): Observable<PairResponse>
+    fun pairs(@Path("amountAsset") amountAsset: String?,
+              @Path("priceAsset") priceAsset: String?): Observable<PairResponse>
 
     /**
      * Get a list of exchange transactions by applying filters
      */
     @GET("v0/transactions/exchange")
-    fun loadLastTradesByPair(
-        @Query("amountAsset") amountAsset: String?,
-        @Query("priceAsset") priceAsset: String?,
-        @Query("limit") limit: Int
+    fun transactionsExchange(
+            @Query("amountAsset") amountAsset: String?,
+            @Query("priceAsset") priceAsset: String?,
+            @Query("limit") limit: Int
     ): Observable<LastTradesResponse>
 
     /**
      * Get candles by amount and price assets. Maximum amount of candles in response – 1440.
      */
     @GET("candles/{amountAsset}/{priceAsset}")
-    fun loadCandles(
-        @Path("amountAsset") amountAsset: String?,
-        @Path("priceAsset") priceAsset: String?,
-        @Query("interval") timeframe: String,
-        @Query("timeStart") from: Long,
-        @Query("timeEnd") timeEnd: Long
+    fun candles(
+            @Path("amountAsset") amountAsset: String?,
+            @Path("priceAsset") priceAsset: String?,
+            @Query("interval") interval: String,
+            @Query("timeStart") from: Long,
+            @Query("timeEnd") timeEnd: Long
     ): Observable<CandlesResponse>
 }

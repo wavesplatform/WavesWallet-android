@@ -130,7 +130,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                     GithubServiceManager.create(null))
         }
 
-        private fun loadConfiguration(apiService: DataService,
+        private fun loadConfiguration(dataService: DataService,
                                       nodeService: NodeService,
                                       githubService: GithubService) {
             instance!!.configurationDisposable =
@@ -164,7 +164,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }
-                            .flatMap { apiService.assetsInfoByIds(it) }
+                            .flatMap { dataService.assets(it) }
                             .map { info ->
                                 setDefaultAssets(info)
                                 instance!!.configurationDisposable!!.dispose()
