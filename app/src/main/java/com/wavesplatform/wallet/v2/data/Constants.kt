@@ -100,6 +100,11 @@ object Constants {
         const val TEST_NET_CODE = 'F'
     }
 
+    object GatewayType{
+        const val COINOMAT = "coinomat"
+        const val GATEWAY = "gateway"
+    }
+
     val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)

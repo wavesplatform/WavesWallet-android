@@ -9,11 +9,15 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.GatewayDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.clearBalance
 import javax.inject.Inject
 
 @InjectViewState
@@ -21,12 +25,47 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
+    @Inject
+    lateinit var gatewayDataManager: GatewayDataManager
+
     var assetBalance: AssetBalance? = null
-    var tunnel: GetTunnel? = null
     private var lang: String = "ru_RU"
     var nextStepValidation = false
 
-    fun getTunnel(assetId: String) {
+    var depositAddress: String? = null
+
+    fun initDeposit(assetId: String) {
+        val asset = EnvironmentManager.globalConfiguration.generalAssets.find { it.assetId == assetId }
+
+        when (asset?.gatewayType) {
+            Constants.GatewayType.COINOMAT -> {
+                initCoinomatDeposit(assetId)
+            }
+            Constants.GatewayType.GATEWAY -> {
+                initGatewayDeposit(assetId)
+            }
+            else -> {
+                initCoinomatDeposit(assetId)
+            }
+        }
+    }
+
+    private fun initGatewayDeposit(assetId: String) {
+        val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
+
+        addSubscription(gatewayDataManager.receiveTransaction(getWavesAddress(), assetId)
+                .compose(RxUtil.applySchedulersToObservable())
+                .subscribe({ response ->
+                    depositAddress = response.address
+                    val gatewayMin = MoneyUtil.getScaledText(response.minAmount, assetBalance).clearBalance().toBigDecimal()
+                    viewState.onSuccessInitDeposit(currencyFrom, gatewayMin)
+                }, {
+                    viewState.onGatewayError()
+                    it.printStackTrace()
+                }))
+    }
+
+    private fun initCoinomatDeposit(assetId: String) {
         val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
         if (currencyFrom.isNullOrEmpty()) {
             viewState.onShowError(App.getAppContext()
@@ -46,8 +85,8 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
                 }
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe({ tunnel ->
-                    this.tunnel = tunnel
-                    viewState.onShowTunnel(tunnel)
+                    depositAddress = tunnel.tunnel?.walletFrom
+                    viewState.onSuccessInitDeposit(currencyFrom, tunnel.tunnel?.inMin?.toBigDecimal())
                 }, {
                     viewState.onGatewayError()
                     it.printStackTrace()

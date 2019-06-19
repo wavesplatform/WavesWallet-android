@@ -72,14 +72,13 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         }
 
         button_continue.click {
-            if (presenter.tunnel != null && presenter.tunnel!!.tunnel != null) {
+            if (presenter.depositAddress != null) {
                 presenter.assetBalance?.getName()?.let { name ->
                     analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
                 }
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
-                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS,
-                            presenter.tunnel!!.tunnel!!.walletFrom ?: "")
+                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS, presenter.depositAddress ?: "")
                 }
             }
         }
@@ -109,28 +108,25 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         }
     }
 
-    override fun onShowTunnel(tunnel: GetTunnel?) {
+    override fun onSuccessInitDeposit(currencyFrom: String?, gatewayMin: BigDecimal?) {
         skeletonView?.hide()
-        if (tunnel?.tunnel == null ||
-                tunnel.tunnel?.inMin.isNullOrEmpty() ||
-                tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
+        if (currencyFrom.isNullOrEmpty() || gatewayMin == null) {
             presenter.nextStepValidation = false
             needMakeButtonEnable()
             onGatewayError()
             return
         }
 
-        val min = BigDecimal(tunnel.tunnel?.inMin).toPlainString()
         attention_title?.text = getString(R.string.receive_minimum_amount,
-                min, tunnel.tunnel?.currencyFrom)
+                gatewayMin, currencyFrom)
         attention_subtitle?.text = getString(R.string.receive_warning_will_send,
-                min,
-                tunnel.tunnel?.currencyFrom)
+                gatewayMin,
+                currencyFrom)
         if (Constants.findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
             warning_crypto_title?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
             warning_crypto_subtitle?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
         } else {
-            warning_crypto_title?.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
+            warning_crypto_title?.text = getString(R.string.receive_warning_crypto, currencyFrom)
             warning_crypto_subtitle?.text = getString(R.string.receive_will_send_other_currency)
         }
 
@@ -174,7 +170,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         needMakeButtonEnable()
 
         if (assetBalance != null) {
-            presenter.getTunnel(assetBalance.assetId)
+            presenter.initDeposit(assetBalance.assetId)
             skeletonView = Skeleton.bind(container_info)
                     .color(R.color.basic50)
                     .load(R.layout.item_skeleton_crypto_warning)
