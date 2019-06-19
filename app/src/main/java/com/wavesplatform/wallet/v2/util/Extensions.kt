@@ -730,7 +730,7 @@ fun AssetPairOrderResponse.getStatus(): OrderStatus {
         AssetPairOrderResponse.API_STATUS_ACCEPTED -> OrderStatus.Accepted
         AssetPairOrderResponse.API_STATUS_PARTIALLY_FILLED -> OrderStatus.PartiallyFilled
         AssetPairOrderResponse.API_STATUS_CANCELLED -> OrderStatus.Cancelled
-        AssetPairOrderResponse.API_STATUIS_FILLED -> OrderStatus.Filled
+        AssetPairOrderResponse.API_STATUS_FILLED -> OrderStatus.Filled
         else -> OrderStatus.Filled
     }
 }

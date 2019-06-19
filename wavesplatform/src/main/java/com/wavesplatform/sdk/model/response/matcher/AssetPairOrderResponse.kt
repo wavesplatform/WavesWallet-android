@@ -60,6 +60,6 @@ class AssetPairOrderResponse {
         const val API_STATUS_CANCELLED = "Cancelled"
         const val API_STATUS_ACCEPTED = "Accepted"
         const val API_STATUS_PARTIALLY_FILLED = "PartiallyFilled"
-        const val API_STATUIS_FILLED = "Filled"
+        const val API_STATUS_FILLED = "Filled"
     }
 }
