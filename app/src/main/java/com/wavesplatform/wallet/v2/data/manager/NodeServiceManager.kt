@@ -103,7 +103,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun loadAssets(assetsFromDb: List<AssetBalanceResponse>? = null)
-            : Observable<Pair<List<AssetBalanceResponse>, List<SpamAsset>>> { // todo check
+            : Observable<Pair<List<AssetBalanceResponse>, List<SpamAssetResponse>>> {
         return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
@@ -114,7 +114,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                         Observable.just(assets),
                                         Function3 { wavesBalance: AssetBalanceResponse,
                                                     reservedBalances: Map<String, Long>,
-                                                    assetBalances: AssetBalanceResponse ->
+                                                    assetBalances: AssetBalancesResponse ->
                                     return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
                                 })
                             }

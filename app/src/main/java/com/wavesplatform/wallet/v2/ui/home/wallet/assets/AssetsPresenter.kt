@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.WavesWallet
@@ -79,12 +80,17 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withNetUpdate, true) }
-                    .flatMap { updateWithNet(withNetUpdate, AssetBalanceDb.convertFromDb(dbAssets), dbSpamAssets) }
+                    .flatMap {
+                        updateWithNet(
+                                withNetUpdate,
+                                AssetBalanceDb.convertFromDb(dbAssets),
+                                SpamAssetDb.convertFromDb(dbSpamAssets))
+                    }
                     .map { netAssetSpamPair ->
                         updateSpamSettingsAndEvent()
                         return@map removeSpamAssets(
-                                AssetBalanceDb.convertToDb(netAssetSpamPair.first.toMutableList()),
-                                netAssetSpamPair.second.toMutableList())
+                                AssetBalanceDb.convertToDb(netAssetSpamPair.first),
+                                SpamAssetDb.convertToDb(netAssetSpamPair.second))
                     }
                     .map { createTripleSortedLists(it) }
                     .subscribe({
@@ -181,10 +187,10 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
     }
 
-    private fun updateWithNet( // todo check
+    private fun updateWithNet(
             withNetUpdate: Boolean,
             assets: List<AssetBalanceResponse>,
-            spams: List<SpamAsset>): Observable<Pair<List<AssetBalanceResponse>, List<SpamAssetDb>>> {
+            spams: List<SpamAssetResponse>): Observable<Pair<List<AssetBalanceResponse>, List<SpamAssetResponse>>> {
         return if (withNetUpdate) {
             nodeServiceManager.loadAssets(assets)
         } else {

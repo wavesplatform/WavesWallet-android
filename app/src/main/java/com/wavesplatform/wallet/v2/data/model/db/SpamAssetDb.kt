@@ -27,7 +27,7 @@ open class SpamAssetDb(
 
     companion object {
 
-        fun convertToDb(spamAssets: List<SpamAssetResponse>): List<SpamAssetDb> {
+        fun convertToDb(spamAssets: List<SpamAssetResponse>): MutableList<SpamAssetDb> {
             val list = mutableListOf<SpamAssetDb>()
             spamAssets.forEach {
                 list.add(SpamAssetDb(it))
@@ -35,7 +35,7 @@ open class SpamAssetDb(
             return list
         }
 
-        fun convertFromDb(spamAssets: List<SpamAssetDb>): List<SpamAssetResponse> {
+        fun convertFromDb(spamAssets: List<SpamAssetDb>): MutableList<SpamAssetResponse> {
             val list = mutableListOf<SpamAssetResponse>()
             spamAssets.forEach {
                 list.add(it.convertFromDb())
