@@ -10,9 +10,9 @@ import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.request.node.*
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.sdk.model.response.node.*
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
@@ -25,8 +25,8 @@ import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
-import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
@@ -115,41 +115,15 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                         Function3 { wavesBalance: AssetBalanceResponse,
                                                     reservedBalances: Map<String, Long>,
                                                     assetBalances: AssetBalancesResponse ->
-                                    return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
-                                })
+                                            return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
+                                        })
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
                                 val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
                                 if (assetsFromDb != null && assetsFromDb.isNotEmpty()) {
-                                    // merge db data and API data
-                                    tripple.third.balances.forEachIndexed { index, assetBalance ->
-                                        val dbAsset = mapDbAssets?.get(assetBalance.assetId)
-                                        dbAsset?.let {
-                                            assetBalance.issueTransaction?.name =
-                                                    it.issueTransaction?.name
-                                            assetBalance.issueTransaction?.quantity =
-                                                    it.issueTransaction?.quantity
-                                            assetBalance.issueTransaction?.decimals =
-                                                    it.issueTransaction?.decimals
-                                            assetBalance.issueTransaction?.timestamp =
-                                                    it.issueTransaction?.timestamp
-                                            assetBalance.isFiatMoney = it.isFiatMoney
-                                            assetBalance.isGateway = it.isGateway
-                                            assetBalance.isSpam = it.isSpam
-
-                                            val assetPref = savedAssetPrefs.firstOrNull {
-                                                it.assetId == assetBalance.assetId
-                                            }
-                                            assetBalance.isFavorite = assetPref?.isFavorite
-                                                    ?: it.isFavorite
-                                            assetBalance.position = assetPref?.position
-                                                    ?: it.position
-                                            assetBalance.isHidden = assetPref?.isHidden
-                                                    ?: it.isHidden
-                                        }
-                                    }
+                                    mergeNetDbData(tripple, mapDbAssets, savedAssetPrefs)
                                 }
 
                                 findElementsInDbWithZeroBalancesAndDelete(assetsFromDb, tripple)
@@ -200,13 +174,44 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                 trackZeroBalances(allAssets)
 
                                 // clear wallet from unimportant assets for new imported wallets
-                                return@map Pair(
-                                        ClearAssetsHelper.clearUnimportantAssets(
-                                                prefsUtil, allAssets.toMutableList(), fromAPI = true),
+                                return@map Pair(ClearAssetsHelper.clearUnimportantAssets(
+                                        prefsUtil, allAssets.toMutableList(), fromAPI = true),
                                         spamAssets)
                             }
                             .subscribeOn(Schedulers.io())
                 }
+    }
+
+    private fun mergeNetDbData(
+            tripple: Triple<AssetBalanceResponse, Map<String, Long>, AssetBalancesResponse>,
+            mapDbAssets: Map<String, AssetBalanceResponse>?,
+            savedAssetPrefs: List<AssetBalanceStoreDb>) {
+        tripple.third.balances.forEachIndexed { index, assetBalance ->
+            val dbAsset = mapDbAssets?.get(assetBalance.assetId)
+            dbAsset?.let {
+                assetBalance.issueTransaction?.name =
+                        it.issueTransaction?.name
+                assetBalance.issueTransaction?.quantity =
+                        it.issueTransaction?.quantity
+                assetBalance.issueTransaction?.decimals =
+                        it.issueTransaction?.decimals
+                assetBalance.issueTransaction?.timestamp =
+                        it.issueTransaction?.timestamp
+                assetBalance.isFiatMoney = it.isFiatMoney
+                assetBalance.isGateway = it.isGateway
+                assetBalance.isSpam = it.isSpam
+
+                val assetPref = savedAssetPrefs.firstOrNull {
+                    it.assetId == assetBalance.assetId
+                }
+                assetBalance.isFavorite = assetPref?.isFavorite
+                        ?: it.isFavorite
+                assetBalance.position = assetPref?.position
+                        ?: it.position
+                assetBalance.isHidden = assetPref?.isHidden
+                        ?: it.isHidden
+            }
+        }
     }
 
     private fun trackZeroBalances(balances: List<AssetBalanceResponse>) {
