@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.model.remote.request.AssetsInfoRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
@@ -130,7 +131,7 @@ class EnvironmentManager {
                         setConfiguration(environment.configuration!!)
                         globalConfiguration.generalAssets.map { it.assetId }
                     }
-                    .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
+                    .flatMap { githubDataManager.apiService.assetsInfoByIds(AssetsInfoRequest(it)) }
                     .map { info ->
                         setDefaultAssets(info)
                     }

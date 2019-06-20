@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.remote.request.AssetsInfoRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.CandlesResponse
@@ -75,7 +76,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
         if (ids.isEmpty()) {
             return Observable.just(listOf())
         } else {
-            return apiService.assetsInfoByIds(ids)
+            return apiService.assetsInfoByIds(AssetsInfoRequest(ids))
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
