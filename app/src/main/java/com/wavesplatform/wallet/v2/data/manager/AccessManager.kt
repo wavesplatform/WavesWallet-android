@@ -192,6 +192,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
     }
 
     fun resetWallet() {
+        addToRecentSavedWallets(loggedInGuid)
         clearRealmConfiguration()
         wallet = null
         loggedInGuid = ""
@@ -238,19 +239,26 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         configMap.clear()
     }
 
-    private fun deleteRealmDBForAccount(guid: String) {
-        // force delete db
-        try {
-            val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm", guid))
-            val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm.lock", guid))
-            dbFile.delete()
-            dbLockFile.delete()
-            deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm.management", guid)))
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun deleteRealmDBForAccount(guid: String, fullClear: Boolean = true) {
+        fun deleteDBWith(dbName: String) {
+            // force delete db
+            try {
+                val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
+                        String.format("%s.realm", dbName))
+                val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
+                        String.format("%s.realm.lock", dbName))
+                dbFile.delete()
+                dbLockFile.delete()
+                deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory,
+                        String.format("%s.realm.management", dbName)))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        deleteDBWith(guid)
+        if (fullClear) {
+            deleteDBWith("${guid}_userdata")
         }
     }
 
@@ -275,11 +283,12 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmAndCleanConfigs(searchWalletGuid)
+        removeFromRecentSavedWallets(searchWalletGuid)
+        deleteRealmAndCleanConfigs(searchWalletGuid, true)
     }
 
-    fun deleteRealmAndCleanConfigs(guid: String) {
-        deleteRealmDBForAccount(guid)
+    private fun deleteRealmAndCleanConfigs(guid: String, fullClear: Boolean = true) {
+        deleteRealmDBForAccount(guid, fullClear)
         clearRealmConfiguration()
     }
 
@@ -372,5 +381,50 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         val intent = Intent(context, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
+    }
+
+    fun addToRecentSavedWallets(guid: String) {
+        val recents = prefs.getGlobalValueList(
+                EnvironmentManager.name + PrefsUtil.LIST_RECENT_SAVED_WALLETS).toMutableList()
+
+        fun swapAccountIfExistOr(guid: String, notExistFunc: () -> Unit) {
+            if (recents.contains(guid)) {
+                recents.removeAt(recents.indexOf(guid))
+                recents.add(guid)
+            } else {
+                notExistFunc.invoke()
+            }
+        }
+
+        if (recents.size >= MAX_RECENT_SAVED_ACCOUNTS) {
+            swapAccountIfExistOr(guid) {
+                // delete the oldest account DB and configs and add new account to list
+                deleteRealmAndCleanConfigs(recents.first(), false)
+                recents.removeAt(0)
+                recents.add(guid)
+            }
+        } else {
+            swapAccountIfExistOr(guid) {
+                recents.add(guid)
+            }
+        }
+
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_RECENT_SAVED_WALLETS, recents.toTypedArray())
+    }
+
+    fun removeFromRecentSavedWallets(guid: String) {
+        val recents = prefs.getGlobalValueList(
+                EnvironmentManager.name + PrefsUtil.LIST_RECENT_SAVED_WALLETS).toMutableList()
+        if (recents.contains(guid)) {
+            recents.removeAt(recents.indexOf(guid))
+        }
+
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_RECENT_SAVED_WALLETS, recents.toTypedArray())
+    }
+
+    companion object {
+        const val MAX_RECENT_SAVED_ACCOUNTS = 3
     }
 }
