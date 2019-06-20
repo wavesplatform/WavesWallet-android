@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">Waves 지갑을 보다 유용하게 만들기 위해 끊임없이 노력하고 있습니다. 새로운 기능에 액세스하려면 앱을 업데이트하십시오.</string>
   <string name="search_asset_hidden_title">숨긴 토큰</string>
   <string name="my_orders_details_filled_hint">체결 완료</string>
+  <string name="wallet_sorting_hidden_section">숨긴 토큰</string>
+  <string name="wallet_sorting_favorite_empty">즐겨찾기에 토큰을 추가하지 않았습니다</string>
+  <string name="wallet_sorting_default_empty">토큰 목록이 없습니다</string>
+  <string name="wallet_sorting_hidden_empty">숨긴 목록에 토큰을 추가하지 않았습니다</string>
 </resources>
