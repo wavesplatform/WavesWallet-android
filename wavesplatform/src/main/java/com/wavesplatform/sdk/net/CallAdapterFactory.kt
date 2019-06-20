@@ -43,7 +43,7 @@ class CallAdapterFactory(private val errorListener: OnErrorListener) : CallAdapt
             }
         }
 
-        private fun handleErrorToShow(throwable: Throwable): RetrofitException {
+        private fun handleErrorToShow(throwable: Throwable): NetworkException {
             val retrofitException = asRetrofitException(throwable)
             errorListener.onError(retrofitException)
             return retrofitException
@@ -57,12 +57,12 @@ class CallAdapterFactory(private val errorListener: OnErrorListener) : CallAdapt
             }
         }
 
-        private fun asRetrofitException(throwable: Throwable): RetrofitException {
+        private fun asRetrofitException(throwable: Throwable): NetworkException {
 
             // Non-200 http error
             if (throwable is HttpException) {
                 val response = throwable.response()
-                return RetrofitException.httpError(response.raw().request()
+                return NetworkException.httpError(response.raw().request()
                         .url().toString(), response, retrofit)
             }
 
@@ -70,10 +70,10 @@ class CallAdapterFactory(private val errorListener: OnErrorListener) : CallAdapt
                     || throwable is ConnectException
                     || throwable is SocketTimeoutException
                     || throwable is UnknownHostException) {
-                return RetrofitException.networkError(IOException(throwable.message, throwable))
+                return NetworkException.networkError(IOException(throwable.message, throwable))
             }
 
-            return RetrofitException.unexpectedError(throwable)
+            return NetworkException.unexpectedError(throwable)
         }
     }
 }

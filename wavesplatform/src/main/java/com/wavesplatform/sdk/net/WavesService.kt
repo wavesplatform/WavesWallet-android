@@ -35,7 +35,7 @@ open class WavesService(private var context: Context) {
 
     init {
         adapterFactory = CallAdapterFactory(object : OnErrorListener {
-            override fun onError(exception: RetrofitException) {
+            override fun onError(exception: NetworkException) {
                 onErrorListeners.forEach { it.onError(exception) }
             }
         })

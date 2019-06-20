@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.CreateTunnelResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.LimitResponse
@@ -55,7 +55,7 @@ class CoinomatServiceManager @Inject constructor() : BaseServiceManager() {
         fun create(onErrorListener: OnErrorListener? = null): CoinomatService {
             this.onErrorListener = onErrorListener
             val adapterFactory = CallAdapterFactory(object : OnErrorListener{
-                override fun onError(exception: RetrofitException) {
+                override fun onError(exception: NetworkException) {
                     CoinomatServiceManager.onErrorListener?.onError(exception)
                 }
             })

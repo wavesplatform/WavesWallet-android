@@ -48,7 +48,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
@@ -612,7 +612,7 @@ fun getDeviceId(): String {
 }
 
 fun Throwable.errorBody(): ErrorResponse? {
-    return if (this is RetrofitException) {
+    return if (this is NetworkException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
     } else {
         null

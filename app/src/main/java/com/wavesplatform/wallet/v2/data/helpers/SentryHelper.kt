@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.helpers
 
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.model.local.NetworkType
 import com.wavesplatform.wallet.v2.util.clone
@@ -24,7 +24,7 @@ class SentryHelper {
         private const val TAG_NETWORK_TYPE = "network.type"
 
         fun logException(exception: Exception) {
-            if (exception is RetrofitException) {
+            if (exception is NetworkException) {
                 Sentry.capture(EventBuilder()
                         .withTimestamp(Date())
                         .withTag(TAG_HTTP_CODE, exception.response?.code()?.toString())
@@ -38,7 +38,7 @@ class SentryHelper {
             }
         }
 
-        private fun formatSentryMessage(retrofitException: RetrofitException): String {
+        private fun formatSentryMessage(retrofitException: NetworkException): String {
             return "Error: ${retrofitException.kind.name}\n" +
                     "Url: ${retrofitException.url}\n" +
                     "Code: ${retrofitException.response?.code()}\n" +

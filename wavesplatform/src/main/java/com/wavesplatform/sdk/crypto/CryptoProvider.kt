@@ -4,7 +4,7 @@ import org.whispersystems.curve25519.OpportunisticCurve25519Provider
 
 import java.lang.reflect.Constructor
 
-object CryptoProvider {
+internal object CryptoProvider {
 
     private var SIGNATURE_LENGTH = 64
 

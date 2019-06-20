@@ -24,6 +24,9 @@ interface KeyPair {
     val privateKey: PrivateKey
 }
 
+/**
+ * Collection of functions to work with Waves basic types and crypto primitives used by Waves
+ */
 interface WavesCrypto {
 
     /**
@@ -33,6 +36,7 @@ interface WavesCrypto {
      * @return byte array of hash values
      */
     fun blake2b(input: Bytes): Bytes
+
     /**
      * Keccak are secure hash algorithm
      *
@@ -40,6 +44,7 @@ interface WavesCrypto {
      * @return byte array of hash values
      */
     fun keccak(input: Bytes): Bytes
+
     /**
      * SHA-256 are cryptographic hash function
      *
@@ -49,50 +54,106 @@ interface WavesCrypto {
     fun sha256(input: Bytes): Bytes
 
     /**
-     * Base58 binary-to-text function used to represent large integers as alphanumeric text.
-     * Compared to Base64, the following similar-looking letters are omitted:
+     * Base58 binary-to-text encoding function used to represent large integers as alphanumeric text.
+     * Compared to Base64 like in base64encode(), the following similar-looking letters are omitted:
      * 0 (zero), O (capital o), I (capital i) and l (lower case L) as well
      * as the non-alphanumeric characters + (plus) and / (slash)
      *
-     * @param input byte array to encode
-     * @return encoded string
+     * @param input byte array containing binary data to encode
+     * @return encoded string containing Base58 characters
      */
     fun base58encode(input: Bytes): String
 
     /**
-     * Base58 text-to-binary function used to restore data encoded by Base58 @see WavesCrypto.base58encode
+     * Base58 text-to-binary function used to restore data encoded by Base58,
+     * reverse of base58encode()
      *
      * @param input encoded Base58 string
      * @return decoded byte array
      */
     fun base58decode(input: String): Bytes
+
     /**
-     * SHA-256 are cryptographic hash function
-     * @param input byte array of input data
-     * @return byte array of hash values
+     *  Base64 binary-to-text encoding function used to represent binary data in an ASCII
+     *  string format by translating it into a radix-64 representation.
+     *  The implementation uses A–Z, a–z, and 0–9 for the first 62 values and '+', '/'
+     *
+     *  @param input byte array containing binary data to encode.
+     *  @return String containing Base64 characters
      */
     fun base64encode(input: Bytes): String
+
     /**
-     * SHA-256 are cryptographic hash function
-     * @param input byte array of input data
-     * @return byte array of hash values
+     * Base64 text-to-binary function used to restore data encoded by Base64,
+     * reverse of base64encode()
+     *
+     * @param input encoded Base64 string
+     * @return decoded byte array
      */
     fun base64decode(input: String): Bytes
 
+    /**
+     * @return a public and private key-pair by seed-phrase
+     */
     fun keyPair(seed: Seed): KeyPair
+
+    /**
+     * @return a public key as String by seed-phrase
+     */
     fun publicKey(seed: Seed): PublicKey
+
+    /**
+     * @return a private key as String by seed-phrase
+     */
     fun privateKey(seed: Seed): PrivateKey
 
+    /**
+     * @return a new generated Waves address as String from the publicKey and chainId
+     */
     fun addressByPublicKey(publicKey: PublicKey, chainId: String?): Address
+
+    /**
+     * @return a new generated Waves address as String from the seed-phrase
+     */
     fun addressBySeed(seed: Seed, chainId: String?): Address
 
+    /**
+     * Random Seed-phrase generator from 2048 prepared words.
+     * It's a list of words which store all the information needed to recover a private key
+     * @return a new randomly generated BIP39 seed-phrase
+     */
     fun randomSeed(): Seed
 
+    /**
+     * @param privateKey is a key to an address that gives access
+     * to the management of the tokens on that address as String
+     * @return signature for the bytes by privateKey as byte array
+     */
     fun signBytesWithPrivateKey(bytes: Bytes, privateKey: PrivateKey): Bytes
+
+    /**
+     * @return signature for the bytes by seed-phrase as byte array
+     */
     fun signBytesWithSeed(bytes: Bytes, seed: Seed): Bytes
 
+    /**
+     * @return true if signature is a valid signature of bytes by publicKey
+     */
     fun verifySignature(publicKey: PublicKey, bytes: Bytes, signature: Bytes): Boolean
+
+    /**
+     * @return true if publicKey is a valid public key
+     */
     fun verifyPublicKey(publicKey: PublicKey): Boolean
+
+    /**
+     * Checks address for a valid by optional chainId and publicKey params
+     * If params non null it's will be checked.
+     * @param address a unique identifier of an account on the Waves blockchain
+     * @param chainId it's id of blockchain network 'W' for production and 'T' for test net
+     * @param publicKey
+     * @return true if address is a valid Waves address for optional chainId and publicKey
+     */
     fun verifyAddress(address: Address, chainId: String? = null, publicKey: PublicKey? = null): Boolean
 
     companion object : WavesCrypto {

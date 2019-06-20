@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
@@ -62,7 +62,7 @@ class GithubServiceManager @Inject constructor() : BaseServiceManager() {
         fun create(onErrorListener: OnErrorListener? = null): GithubService {
             this.onErrorListener = onErrorListener
             val adapterFactory = CallAdapterFactory(object : OnErrorListener{
-                override fun onError(exception: RetrofitException) {
+                override fun onError(exception: NetworkException) {
                     GithubServiceManager.onErrorListener?.onError(exception)
                 }
             })

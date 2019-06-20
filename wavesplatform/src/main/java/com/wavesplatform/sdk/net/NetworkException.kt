@@ -9,19 +9,19 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 
-class RetrofitException internal constructor(message: String?,
-    /** The request URL which produced the error.  */
+class NetworkException internal constructor(message: String?,
+                                            /** The request URL which produced the error.  */
     val url: String?,
-    /** Response object containing status code, headers, body, etc.  */
+                                            /** Response object containing status code, headers, body, etc.  */
     val response: Response<*>?,
-    /** The event kind which triggered this error.  */
+                                            /** The event kind which triggered this error.  */
     val kind: Kind,
-    exception: Throwable?,
-    /** The Retrofit this request was executed on  */
+                                            exception: Throwable?,
+                                            /** The Retrofit this request was executed on  */
     private val retrofit: Retrofit?
 ) : RuntimeException(message, exception) {
 
-    /** Identifies the event kind which triggered a [RetrofitException].  */
+    /** Identifies the event kind which triggered a [NetworkException].  */
     enum class Kind {
         /** An [IOException] occurred while communicating to the server.  */
         NETWORK,
@@ -41,7 +41,7 @@ class RetrofitException internal constructor(message: String?,
      * @throws IOException if unable to convert the body to the specified `type`.
      * *
      * * public void onError(Throwable throwable) {
-     * RetrofitException error = (RetrofitException) throwable;
+     * NetworkException error = (NetworkException) throwable;
      * LoginErrorResponse response = error.getBodyAs(LoginErrorResponse.class);
      * //...
      * }
@@ -56,17 +56,17 @@ class RetrofitException internal constructor(message: String?,
 
     companion object {
 
-        fun httpError(url: String, response: Response<*>, retrofit: Retrofit): RetrofitException {
+        fun httpError(url: String, response: Response<*>, retrofit: Retrofit): NetworkException {
             val message = response.code().toString() + " " + response.message()
-            return RetrofitException(message, url, response, Kind.HTTP, null, retrofit)
+            return NetworkException(message, url, response, Kind.HTTP, null, retrofit)
         }
 
-        fun networkError(exception: IOException): RetrofitException {
-            return RetrofitException(exception.message, null, null, Kind.NETWORK, exception, null)
+        fun networkError(exception: IOException): NetworkException {
+            return NetworkException(exception.message, null, null, Kind.NETWORK, exception, null)
         }
 
-        fun unexpectedError(exception: Throwable): RetrofitException {
-            return RetrofitException(exception.message, null, null, Kind.UNEXPECTED, exception, null)
+        fun unexpectedError(exception: Throwable): NetworkException {
+            return NetworkException(exception.message, null, null, Kind.UNEXPECTED, exception, null)
         }
     }
 }

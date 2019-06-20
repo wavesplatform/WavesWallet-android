@@ -30,7 +30,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.net.OnErrorListener
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -139,7 +139,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 }))
 
         onErrorListener = object : OnErrorListener {
-            override fun onError(exception: RetrofitException) {
+            override fun onError(exception: NetworkException) {
                 val retrySubject = PublishSubject.create<Events.RetryEvent>()
                 mErrorManager.handleError(exception, retrySubject)
                 SentryHelper.logException(exception)

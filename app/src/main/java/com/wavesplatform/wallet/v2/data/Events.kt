@@ -5,13 +5,13 @@
 
 package com.wavesplatform.wallet.v2.data
 
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.NetworkException
 import io.reactivex.subjects.PublishSubject
 
 
 class Events {
 
-    class ErrorEvent(val retrofitException: RetrofitException, val retrySubject: PublishSubject<Events.RetryEvent>)
+    class ErrorEvent(val retrofitException: NetworkException, val retrySubject: PublishSubject<Events.RetryEvent>)
 
     class RetryEvent
     class NeedUpdateHistoryScreen
