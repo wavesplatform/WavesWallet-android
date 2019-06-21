@@ -237,6 +237,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid"
         const val GLOBAL_SCHEME_URL = "scheme_url"
         const val LIST_WALLET_GUIDS = "list_wallet_guid"
+        const val LIST_RECENT_SAVED_WALLETS = "list_recent_saved_wallets"
         const val KEY_WALLET_NAME = "wallet_name"
         const val KEY_PUB_KEY = "wallet_public_key"
         const val KEY_ENCRYPTED_WALLET = "encrypted_wallet"
