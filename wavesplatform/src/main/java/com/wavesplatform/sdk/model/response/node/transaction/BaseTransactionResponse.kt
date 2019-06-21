@@ -1,12 +1,10 @@
 package com.wavesplatform.sdk.model.response.node.transaction
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.model.request.node.BaseTransaction
+import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.utils.WavesConstants
 
-abstract class BaseTransactionResponse {
-
-    @SerializedName("type")
-    val type: Int = BaseTransaction.CREATE_ALIAS
+abstract class BaseTransactionResponse(@SerializedName("type") val type: Int) {
     @SerializedName("id")
     var id: String? = null
     @SerializedName("sender")
@@ -16,7 +14,7 @@ abstract class BaseTransactionResponse {
     @SerializedName("timestamp")
     var timestamp: Long = 0L
     @SerializedName("fee")
-    var fee: Long = 0L
+    var fee: Long = WavesConstants.WAVES_MIN_FEE
     @SerializedName("version")
     var version: Int = 2
     @SerializedName("proofs")
@@ -24,5 +22,7 @@ abstract class BaseTransactionResponse {
     @SerializedName("signature")
     var signature: String = ""
     @SerializedName("height")
-    var height: Long = 0L
+    var height: Long? = null
+    @SerializedName("chainId")
+    val chainId: Byte? = WavesPlatform.getEnvironment().scheme
 }
