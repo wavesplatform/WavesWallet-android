@@ -145,8 +145,10 @@ class CardFragment : BaseFragment(), CardView {
         text_asset_name.text = assetBalance?.getName()
         text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
-        image_is_favourite.visiableIf {
-            assetBalance?.isFavorite!!
+        if (assetBalance?.isFavorite == true){
+            image_is_favorite.visiable()
+        }else{
+            image_is_favorite.gone()
         }
 
         text_asset.gone()

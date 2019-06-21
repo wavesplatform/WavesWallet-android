@@ -228,7 +228,9 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
-        button_start_lease.isEnabled = networkConnected
+        button_start_lease.notNull {
+            it.isEnabled = networkConnected
+        }
     }
 
     override fun afterFailedLoadLeasing() {
