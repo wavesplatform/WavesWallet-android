@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
@@ -179,7 +179,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         }
     }
 
-    private fun setExchangeItem(transaction: TransactionResponse, view: View) {
+    private fun setExchangeItem(transaction: HistoryTransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,

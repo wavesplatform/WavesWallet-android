@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
@@ -143,7 +143,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         recycle_active_leasing.isNestedScrollingEnabled = false
 
         adapterActiveAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val historyItem = adapter.getItem(position) as TransactionResponse
+            val historyItem = adapter.getItem(position) as HistoryTransactionResponse
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
@@ -214,7 +214,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         }
     }
 
-    override fun showActiveLeasingTransaction(transactions: List<TransactionResponse>) {
+    override fun showActiveLeasingTransaction(transactions: List<HistoryTransactionResponse>) {
         skeletonScreen?.hide()
         swipe_container.isRefreshing = false
         if (transactions.isEmpty()) {

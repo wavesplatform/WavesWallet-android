@@ -11,6 +11,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.request.node.BurnTransaction
+import com.wavesplatform.sdk.model.response.node.transaction.BurnTransactionResponse
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
@@ -85,7 +86,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         )
     }
 
-    override fun onShowBurnSuccess(tx: BurnTransaction?, totalBurn: Boolean) {
+    override fun onShowBurnSuccess(tx: BurnTransactionResponse?, totalBurn: Boolean) {
         completeBurnProcessing()
         relative_success.visiable()
 

@@ -93,7 +93,7 @@ object Constants {
             gatewayId = "VST",
             displayName = "Vostok") // github returns gatewayId = "Vostok"
 
-    // TransactionResponse view types non TransactionResponse block-chain type
+    // HistoryTransactionResponse view types non HistoryTransactionResponse block-chain type
     const val ID_RECEIVED_TYPE = 0
     const val ID_SENT_TYPE = 1
     const val ID_STARTED_LEASING_TYPE = 2

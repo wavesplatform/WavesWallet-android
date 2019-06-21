@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.util
 
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 
 class TransactionCommissionUtil {
@@ -15,35 +15,35 @@ class TransactionCommissionUtil {
             val type = params.transactionType!!
 
             val feeRules = when (type) {
-                TransactionResponse.ISSUE -> commission.calculateFeeRules.issue
-                TransactionResponse.REISSUE -> commission.calculateFeeRules.reissue
-                TransactionResponse.EXCHANGE -> commission.calculateFeeRules.exchange
-                TransactionResponse.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
-                TransactionResponse.DATA -> commission.calculateFeeRules.data
-                TransactionResponse.ADDRESS_SCRIPT -> commission.calculateFeeRules.script
-                TransactionResponse.SPONSORSHIP -> commission.calculateFeeRules.sponsor
-                TransactionResponse.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
+                HistoryTransactionResponse.ISSUE -> commission.calculateFeeRules.issue
+                HistoryTransactionResponse.REISSUE -> commission.calculateFeeRules.reissue
+                HistoryTransactionResponse.EXCHANGE -> commission.calculateFeeRules.exchange
+                HistoryTransactionResponse.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
+                HistoryTransactionResponse.DATA -> commission.calculateFeeRules.data
+                HistoryTransactionResponse.ADDRESS_SCRIPT -> commission.calculateFeeRules.script
+                HistoryTransactionResponse.SPONSORSHIP -> commission.calculateFeeRules.sponsor
+                HistoryTransactionResponse.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
                 else -> commission.calculateFeeRules.default
             }
 
             return when (type) {
-                TransactionResponse.ISSUE,
-                TransactionResponse.REISSUE,
-                TransactionResponse.LEASE,
-                TransactionResponse.LEASE_CANCEL,
-                TransactionResponse.CREATE_ALIAS,
-                TransactionResponse.ADDRESS_SCRIPT,
-                TransactionResponse.SPONSORSHIP,
-                TransactionResponse.ASSET_SCRIPT ->
+                HistoryTransactionResponse.ISSUE,
+                HistoryTransactionResponse.REISSUE,
+                HistoryTransactionResponse.LEASE,
+                HistoryTransactionResponse.LEASE_CANCEL,
+                HistoryTransactionResponse.CREATE_ALIAS,
+                HistoryTransactionResponse.ADDRESS_SCRIPT,
+                HistoryTransactionResponse.SPONSORSHIP,
+                HistoryTransactionResponse.ASSET_SCRIPT ->
                     getAccountCommission(feeRules, params, commission)
-                TransactionResponse.TRANSFER,
-                TransactionResponse.BURN ->
+                HistoryTransactionResponse.TRANSFER,
+                HistoryTransactionResponse.BURN ->
                     getAssetAccountCommission(feeRules, params, commission)
-                TransactionResponse.EXCHANGE ->
+                HistoryTransactionResponse.EXCHANGE ->
                     getExchangeCommission(feeRules, params, commission)
-                TransactionResponse.MASS_TRANSFER ->
+                HistoryTransactionResponse.MASS_TRANSFER ->
                     getMassTransferCommission(feeRules, params, commission)
-                TransactionResponse.DATA -> {
+                HistoryTransactionResponse.DATA -> {
                     getDataCommission(params, feeRules, commission)
                 }
                 else -> commission.calculateFeeRules.default.fee

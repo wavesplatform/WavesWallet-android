@@ -11,7 +11,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
@@ -77,7 +77,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         presenter.loadAliases()
     }
 
-    override fun afterSuccessLoadAliases(ownAliases: List<AliasResponse>) {
+    override fun afterSuccessLoadAliases(ownAliases: List<AliasTransactionResponse>) {
         if (ownAliases.isEmpty()) {
             text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
         } else {

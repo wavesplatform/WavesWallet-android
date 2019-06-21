@@ -6,19 +6,19 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 
 class HistoryItem : MultiItemEntity {
     private var itemType: Int = 0
     var header: String = ""
-    var data: TransactionResponse = TransactionResponse()
+    var data: HistoryTransactionResponse = HistoryTransactionResponse()
 
     constructor(itemType: Int, header: String) {
         this.itemType = itemType
         this.header = header
     }
 
-    constructor(itemType: Int, transaction: TransactionResponse) {
+    constructor(itemType: Int, transaction: HistoryTransactionResponse) {
         this.itemType = itemType
         this.data = transaction
     }

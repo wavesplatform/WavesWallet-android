@@ -5,9 +5,9 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface AliasView : BaseMvpView {
-    fun afterSuccessLoadAliases(ownAliases: List<AliasResponse>)
+    fun afterSuccessLoadAliases(ownAliases: List<AliasTransactionResponse>)
 }

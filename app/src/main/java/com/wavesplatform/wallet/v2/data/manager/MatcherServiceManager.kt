@@ -36,13 +36,13 @@ import javax.inject.Singleton
 
 @Singleton
 class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
-    var allMarketsList = mutableListOf<MarketResponse>()
+    private var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
-            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
+            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()), // todo check to Crypto
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }

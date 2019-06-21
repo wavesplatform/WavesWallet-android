@@ -13,7 +13,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -95,7 +95,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 }
                 .filter { it.first }
                 .map {
-                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < presenter.fee) {
+                    if (presenter.wavesBalance.getAvailableBalance() < presenter.fee) {
                         presenter.aliasValidation = false
                         makeButtonEnableIfValid()
                         til_new_alias_symbol.error = getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
@@ -140,7 +140,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         exitFromActivity()
     }
 
-    override fun successCreateAlias(alias: AliasResponse) {
+    override fun successCreateAlias(alias: AliasTransactionResponse) {
         AliasDb(alias).save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)

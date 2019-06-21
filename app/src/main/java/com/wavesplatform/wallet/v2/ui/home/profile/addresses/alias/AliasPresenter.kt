@@ -7,10 +7,10 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
@@ -26,7 +26,7 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
 
     var fee = 0L
 
-    fun loadAliases(callback: (List<AliasResponse>) -> Unit) {
+    fun loadAliases(callback: (List<AliasTransactionResponse>) -> Unit) {
         runAsync {
             addSubscription(
                     queryAllAsSingle<AliasDb>().toObservable()
@@ -53,7 +53,7 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
                     val commission = pair.first
                     val scriptInfo = pair.second
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = TransactionResponse.CREATE_ALIAS
+                    params.transactionType = HistoryTransactionResponse.CREATE_ALIAS
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionCommissionUtil.countCommission(commission, params)
                     callback.showCommissionSuccess(fee)

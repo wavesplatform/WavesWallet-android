@@ -62,7 +62,7 @@ open class PaymentResponse(
         var asset: AssetInfoResponse? = AssetInfoResponse()
 )
 
-open class TransactionResponse(
+open class HistoryTransactionResponse(
         @SerializedName("type")
         var type: Int = 0,
         @SerializedName("id")
@@ -187,7 +187,7 @@ open class TransactionResponse(
                 EXCHANGE -> "Exchange"
                 LEASE -> "LeaseResponse"
                 LEASE_CANCEL -> "LeaseResponse Cancel"
-                CREATE_ALIAS -> "Create AliasResponse"
+                CREATE_ALIAS -> "Create AliasTransactionResponse"
                 MASS_TRANSFER -> "Mass TransferResponse"
                 DATA -> "DataResponse"
                 ADDRESS_SCRIPT -> "Address Script"
@@ -198,7 +198,7 @@ open class TransactionResponse(
             }
         }
 
-        fun getInfo(transaction: TransactionResponse, address: String): String {
+        fun getInfo(transaction: HistoryTransactionResponse, address: String): String {
             val feeAssetId = if (transaction.feeAssetId == null) {
                 ""
             } else {
@@ -219,7 +219,7 @@ open class TransactionResponse(
                     attachment(transaction)
         }
 
-        private fun type(transaction: TransactionResponse, address: String) =
+        private fun type(transaction: HistoryTransactionResponse, address: String) =
                 "Type: ${transaction.type} (${getNameBy(transaction.type).toLowerCase()}" +
                         if (transaction.type == EXCHANGE) {
                             if (findMyOrder(transaction.order1!!,
@@ -234,7 +234,7 @@ open class TransactionResponse(
                             ")\n"
                         }
 
-        private fun recipient(transaction: TransactionResponse): String {
+        private fun recipient(transaction: HistoryTransactionResponse): String {
             return if (transaction.recipient.isNullOrEmpty()) {
                 ""
             } else {
@@ -242,12 +242,12 @@ open class TransactionResponse(
             }
         }
 
-        private fun fee(transaction: TransactionResponse, feeAssetId: String): String {
+        private fun fee(transaction: HistoryTransactionResponse, feeAssetId: String): String {
             return "Fee: ${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject)
                     .stripZeros()} ${transaction.feeAssetObject?.name}" + feeAssetId
         }
 
-        private fun attachment(transaction: TransactionResponse): String {
+        private fun attachment(transaction: HistoryTransactionResponse): String {
             return if (transaction.attachment.isNullOrEmpty()) {
                 ""
             } else {
@@ -255,7 +255,7 @@ open class TransactionResponse(
             }
         }
 
-        private fun amount(transaction: TransactionResponse): String {
+        private fun amount(transaction: HistoryTransactionResponse): String {
             val amountAsset = if (transaction.type == EXCHANGE) {
                 transaction.order1?.assetPair?.amountAssetObject
             } else {
@@ -270,7 +270,7 @@ open class TransactionResponse(
                     }
         }
 
-        private fun exchangePrice(transaction: TransactionResponse, address: String): String {
+        private fun exchangePrice(transaction: HistoryTransactionResponse, address: String): String {
             return if (transaction.type == EXCHANGE) {
                 val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!, address)
                 val priceAsset = myOrder.assetPair?.priceAssetObject

@@ -55,7 +55,7 @@ import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.OrderResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -765,76 +765,76 @@ fun String.getOrderType(): OrderType {
     }
 }
 
-fun getTransactionType(transaction: TransactionResponse, address: String): Int =
-        if (transaction.type == TransactionResponse.TRANSFER &&
+fun getTransactionType(transaction: HistoryTransactionResponse, address: String): Int =
+        if (transaction.type == HistoryTransactionResponse.TRANSFER &&
                 transaction.sender != address &&
                 transaction.asset?.isSpam == true) {
             Constants.ID_SPAM_RECEIVE_TYPE
-        } else if (transaction.type == TransactionResponse.TRANSFER &&
+        } else if (transaction.type == HistoryTransactionResponse.TRANSFER &&
                 transaction.sender != address &&
                 transaction.recipientAddress != address) {
             Constants.ID_RECEIVE_SPONSORSHIP_TYPE
-        } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
+        } else if (transaction.type == HistoryTransactionResponse.MASS_TRANSFER &&
                 transaction.sender != address &&
                 transaction.asset?.isSpam == true) {
             Constants.ID_MASS_SPAM_RECEIVE_TYPE
-        } else if (transaction.type == TransactionResponse.LEASE_CANCEL &&
+        } else if (transaction.type == HistoryTransactionResponse.LEASE_CANCEL &&
                 !transaction.leaseId.isNullOrEmpty()) {
             Constants.ID_CANCELED_LEASING_TYPE
-        } else if ((transaction.type == TransactionResponse.TRANSFER || transaction.type == 9) &&
+        } else if ((transaction.type == HistoryTransactionResponse.TRANSFER || transaction.type == 9) &&
                 transaction.sender != address) {
             Constants.ID_RECEIVED_TYPE
-        } else if (transaction.type == TransactionResponse.TRANSFER &&
+        } else if (transaction.type == HistoryTransactionResponse.TRANSFER &&
                 transaction.sender == transaction.recipientAddress) {
             Constants.ID_SELF_TRANSFER_TYPE
-        } else if (transaction.type == TransactionResponse.TRANSFER &&
+        } else if (transaction.type == HistoryTransactionResponse.TRANSFER &&
                 transaction.sender == address) {
             Constants.ID_SENT_TYPE
-        } else if (transaction.type == TransactionResponse.LEASE &&
+        } else if (transaction.type == HistoryTransactionResponse.LEASE &&
                 transaction.recipientAddress != address) {
             Constants.ID_STARTED_LEASING_TYPE
-        } else if (transaction.type == TransactionResponse.EXCHANGE) {
+        } else if (transaction.type == HistoryTransactionResponse.EXCHANGE) {
             Constants.ID_EXCHANGE_TYPE
-        } else if (transaction.type == TransactionResponse.ISSUE) {
+        } else if (transaction.type == HistoryTransactionResponse.ISSUE) {
             Constants.ID_TOKEN_GENERATION_TYPE
-        } else if (transaction.type == TransactionResponse.BURN) {
+        } else if (transaction.type == HistoryTransactionResponse.BURN) {
             Constants.ID_TOKEN_BURN_TYPE
-        } else if (transaction.type == TransactionResponse.REISSUE) {
+        } else if (transaction.type == HistoryTransactionResponse.REISSUE) {
             Constants.ID_TOKEN_REISSUE_TYPE
-        } else if (transaction.type == TransactionResponse.CREATE_ALIAS) {
+        } else if (transaction.type == HistoryTransactionResponse.CREATE_ALIAS) {
             Constants.ID_CREATE_ALIAS_TYPE
-        } else if (transaction.type == TransactionResponse.LEASE &&
+        } else if (transaction.type == HistoryTransactionResponse.LEASE &&
                 transaction.recipientAddress == address) {
             Constants.ID_INCOMING_LEASING_TYPE
-        } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
+        } else if (transaction.type == HistoryTransactionResponse.MASS_TRANSFER &&
                 transaction.sender == address) {
             Constants.ID_MASS_SEND_TYPE
-        } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
+        } else if (transaction.type == HistoryTransactionResponse.MASS_TRANSFER &&
                 transaction.sender != address) {
             Constants.ID_MASS_RECEIVE_TYPE
-        } else if (transaction.type == TransactionResponse.DATA) {
+        } else if (transaction.type == HistoryTransactionResponse.DATA) {
             Constants.ID_DATA_TYPE
-        } else if (transaction.type == TransactionResponse.ADDRESS_SCRIPT) {
+        } else if (transaction.type == HistoryTransactionResponse.ADDRESS_SCRIPT) {
             if (transaction.script == null) {
                 Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
             } else {
                 Constants.ID_SET_ADDRESS_SCRIPT_TYPE
             }
-        } else if (transaction.type == TransactionResponse.SPONSORSHIP) {
+        } else if (transaction.type == HistoryTransactionResponse.SPONSORSHIP) {
             if (transaction.minSponsoredAssetFee == null) {
                 Constants.ID_CANCEL_SPONSORSHIP_TYPE
             } else {
                 Constants.ID_SET_SPONSORSHIP_TYPE
             }
-        } else if (transaction.type == TransactionResponse.ASSET_SCRIPT) {
+        } else if (transaction.type == HistoryTransactionResponse.ASSET_SCRIPT) {
             Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
-        } else if (transaction.type == TransactionResponse.SCRIPT_INVOCATION) {
+        } else if (transaction.type == HistoryTransactionResponse.SCRIPT_INVOCATION) {
             Constants.ID_SCRIPT_INVOCATION_TYPE
         } else {
             Constants.ID_UNRECOGNISED_TYPE
         }
 
-fun getTransactionAmount(transaction: TransactionResponse, decimals: Int = 8, round: Boolean = true): String {
+fun getTransactionAmount(transaction: HistoryTransactionResponse, decimals: Int = 8, round: Boolean = true): String {
 
     var sign = "-"
     if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
@@ -864,11 +864,11 @@ fun getTransactionAmount(transaction: TransactionResponse, decimals: Int = 8, ro
     }
 }
 
-fun TransactionResponse.isSponsorshipTransaction(): Boolean {
+fun HistoryTransactionResponse.isSponsorshipTransaction(): Boolean {
     return transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
             transactionType() == TransactionType.CANCEL_SPONSORSHIP_TYPE
 }
 
-fun TransactionResponse.transactionType(): TransactionType {
+fun HistoryTransactionResponse.transactionType(): TransactionType {
     return TransactionType.getTypeById(this.transactionTypeId)
 }

@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -18,7 +18,7 @@ open class AliasDb(
         var own: Boolean = false
 ) : RealmModel, Parcelable {
 
-    constructor(alias: AliasResponse?) : this() {
+    constructor(alias: AliasTransactionResponse?) : this() {
         alias.notNull {
             this.alias = it.alias
             this.address = it.address
@@ -26,8 +26,8 @@ open class AliasDb(
         }
     }
 
-    fun convertFromDb(): AliasResponse {
-        return AliasResponse(
+    fun convertFromDb(): AliasTransactionResponse {
+        return AliasTransactionResponse(
                 alias = this.alias,
                 address = this.address,
                 own = this.own)
@@ -35,7 +35,7 @@ open class AliasDb(
 
     companion object {
 
-        fun convertToDb(aliases: List<AliasResponse>): MutableList<AliasDb> {
+        fun convertToDb(aliases: List<AliasTransactionResponse>): MutableList<AliasDb> {
             val list = mutableListOf<AliasDb>()
             aliases.forEach {
                 list.add(AliasDb(it))
@@ -43,8 +43,8 @@ open class AliasDb(
             return list
         }
 
-        fun convertFromDb(aliases: List<AliasDb>): MutableList<AliasResponse> {
-            val list = mutableListOf<AliasResponse>()
+        fun convertFromDb(aliases: List<AliasDb>): MutableList<AliasTransactionResponse> {
+            val list = mutableListOf<AliasTransactionResponse>()
             aliases.forEach {
                 list.add(it.convertFromDb())
             }

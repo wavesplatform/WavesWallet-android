@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.node.AddressAssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.notNull
@@ -34,7 +34,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
 
     var assetBalance: AssetBalanceResponse? = null
 
-    fun loadLastTransactionsFor(asset: AssetBalanceResponse, allTransactions: List<TransactionResponse>) {
+    fun loadLastTransactionsFor(asset: AssetBalanceResponse, allTransactions: List<HistoryTransactionResponse>) {
         runAsync {
             addSubscription(Observable.just(allTransactions)
                     .map {
@@ -68,7 +68,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         }
     }
 
-    private fun filterNodeCancelLeasing(transactions: List<TransactionResponse>): List<TransactionResponse> {
+    private fun filterNodeCancelLeasing(transactions: List<HistoryTransactionResponse>): List<HistoryTransactionResponse> {
         return transactions.filter { transaction ->
             if (transaction.transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
                 true
@@ -106,12 +106,12 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
     }
 
     companion object {
-        fun isAssetIdInExchange(transaction: TransactionResponse, assetId: String) =
+        fun isAssetIdInExchange(transaction: HistoryTransactionResponse, assetId: String) =
                 transaction.transactionType() == TransactionType.EXCHANGE_TYPE &&
                         (transaction.order1?.assetPair?.amountAssetObject?.id == assetId ||
                                 transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
 
-        private fun isNotSpam(transaction: TransactionResponse) =
+        private fun isNotSpam(transaction: HistoryTransactionResponse) =
                 transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE ||
                         transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
     }

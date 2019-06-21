@@ -9,7 +9,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.request.node.CancelLeasingTransaction
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.isSmartError
@@ -69,7 +69,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
                     val commission = triple.first
                     val scriptInfo = triple.second
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = TransactionResponse.LEASE_CANCEL
+                    params.transactionType = HistoryTransactionResponse.LEASE_CANCEL
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionCommissionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)

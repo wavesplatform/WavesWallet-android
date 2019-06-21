@@ -5,11 +5,11 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
-import com.wavesplatform.sdk.model.request.node.BurnTransaction
+import com.wavesplatform.sdk.model.response.node.transaction.BurnTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TokenBurnConfirmationView : BaseMvpView {
-    fun onShowBurnSuccess(tx: BurnTransaction?, totalBurn: Boolean)
+    fun onShowBurnSuccess(tx: BurnTransactionResponse?, totalBurn: Boolean)
     fun onShowError(errorMessageRes: String)
     fun failedTokenBurnCauseSmart()
 }

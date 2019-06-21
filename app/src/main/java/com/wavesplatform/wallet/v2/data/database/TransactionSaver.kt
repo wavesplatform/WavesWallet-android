@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
@@ -43,7 +43,7 @@ class TransactionSaver @Inject constructor() {
     private var needCheckToUpdateBalance = false
 
     fun saveTransactions(
-            sortedList: List<TransactionResponse>,
+            sortedList: List<HistoryTransactionResponse>,
             limit: Int = DEFAULT_LIMIT,
             changeListener: OnTransactionLimitChangeListener? = null
     ) {
@@ -105,7 +105,7 @@ class TransactionSaver @Inject constructor() {
         }
     }
 
-    private fun saveToDb(transactions: List<TransactionResponse>) {
+    private fun saveToDb(transactions: List<HistoryTransactionResponse>) {
 
         // grab all assetsIds
         val tempGrabbedAssets = mutableListOf<String?>()

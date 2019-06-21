@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
@@ -101,7 +101,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
     }
 
-    override fun afterSuccessLoadAliases(ownAliases: List<AliasResponse>) {
+    override fun afterSuccessLoadAliases(ownAliases: List<AliasTransactionResponse>) {
         if (ownAliases.isEmpty()) {
             text_aliases_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
         } else {

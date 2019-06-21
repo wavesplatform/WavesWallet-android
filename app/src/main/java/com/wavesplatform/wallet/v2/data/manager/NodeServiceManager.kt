@@ -10,8 +10,8 @@ import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.request.node.*
-import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.sdk.model.response.node.*
+import com.wavesplatform.sdk.model.response.node.transaction.*
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
@@ -27,6 +27,7 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
@@ -51,7 +52,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     lateinit var matcherServiceManager: MatcherServiceManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-    var transactions: List<TransactionResponse> = ArrayList()
+    var transactions: List<HistoryTransactionResponse> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAssetResponse>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
@@ -77,7 +78,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransaction> {
+    fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransactionResponse> {
         return nodeService.transactionsBroadcast(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
@@ -266,7 +267,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 })
     }
 
-    fun createAlias(request: AliasTransaction): Observable<AliasResponse> {
+    fun createAlias(request: AliasTransaction): Observable<AliasTransactionResponse> {
         request.senderPublicKey = getPublicKeyStr()
         request.timestamp = EnvironmentManager.getTime()
         request.sign(App.getAccessManager().getWallet().seedStr)
@@ -281,7 +282,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun cancelLeasing(transaction: CancelLeasingTransaction): Observable<TransactionResponse> {
+    fun cancelLeasing(transaction: CancelLeasingTransaction): Observable<CancelLeasingTransactionResponse> {
         transaction.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.transactionsBroadcast(transaction)
                 .map {
@@ -300,7 +301,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     fun startLeasing(
             createLeasingRequest: CreateLeasingTransaction,
             fee: Long
-    ): Observable<TransactionResponse> {
+    ): Observable<CreateLeasingTransactionResponse> {
         createLeasingRequest.fee = fee
         createLeasingRequest.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.transactionsBroadcast(createLeasingRequest)
@@ -309,7 +310,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<TransactionResponse>> {
+    fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<HistoryTransactionResponse>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
@@ -317,13 +318,13 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                         return@flatMap nodeService.transactionsAddress(getAddress(), currentLoadTransactionLimitPerRequest)
                                 .map { r -> r[0] }
                     } else {
-                        return@flatMap Observable.just(listOf<TransactionResponse>())
+                        return@flatMap Observable.just(listOf<HistoryTransactionResponse>())
                     }
                 }
                 .onErrorResumeNext(Observable.empty())
     }
 
-    fun loadLightTransactions(): Observable<List<TransactionResponse>> {
+    fun loadLightTransactions(): Observable<List<HistoryTransactionResponse>> {
         return nodeService.transactionsAddress(getAddress(), 100)
                 .map { r -> r[0] }
     }
@@ -341,7 +342,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 .onErrorResumeNext(Observable.empty())
     }
 
-    private fun activeLeasing(): Observable<List<TransactionResponse>> {
+    private fun activeLeasing(): Observable<List<HistoryTransactionResponse>> {
         return nodeService.leasingActive(getAddress())
                 .map {
                     return@map it.filter {
@@ -370,7 +371,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun burn(burn: BurnTransaction): Observable<BurnTransaction> {
+    fun burn(burn: BurnTransaction): Observable<BurnTransactionResponse> {
         return nodeService.transactionsBroadcast(burn)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
@@ -407,7 +408,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                     val amountAssetsDetails = it.second
                     val priceAssetsDetails = it.third
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = TransactionResponse.EXCHANGE
+                    params.transactionType = HistoryTransactionResponse.EXCHANGE
                     params.smartPriceAsset = priceAssetsDetails.scripted
                     params.smartAmountAsset = amountAssetsDetails.scripted
                     return@flatMap Observable.just(TransactionCommissionUtil.countCommission(commission, params))

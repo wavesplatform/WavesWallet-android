@@ -9,7 +9,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.data.AliasResponse
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.CandlesResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
@@ -32,7 +32,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         var DEFAULT_LAST_TRADES_LIMIT = 50
     }
 
-    fun loadAliases(): Observable<List<AliasResponse>> {
+    fun loadAliases(): Observable<List<AliasTransactionResponse>> {
         return dataService.aliases(getAddress())
                 .map {
                     val aliases = it.data.mapTo(ArrayList()) {
@@ -58,7 +58,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 .onErrorResumeNext(Observable.empty())
     }
 
-    fun loadAlias(alias: String): Observable<AliasResponse> {
+    fun loadAlias(alias: String): Observable<AliasTransactionResponse> {
         val localAlias = queryFirst<AliasDb> { equalTo("alias", alias) }
 
         if (localAlias != null) {

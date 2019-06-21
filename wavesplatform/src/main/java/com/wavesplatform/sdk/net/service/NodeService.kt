@@ -6,8 +6,9 @@
 package com.wavesplatform.sdk.net.service
 
 import com.wavesplatform.sdk.model.request.node.*
-import com.wavesplatform.sdk.model.response.data.AliasResponse
 import com.wavesplatform.sdk.model.response.node.*
+import com.wavesplatform.sdk.model.response.node.AssetBalancesResponse
+import com.wavesplatform.sdk.model.response.node.transaction.*
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -66,43 +67,7 @@ interface NodeService {
      */
     @GET("transactions/address/{address}/limit/{limit}")
     fun transactionsAddress(@Path("address") address: String?,
-                            @Path("limit") limit: Int): Observable<List<List<TransactionResponse>>>
-
-    /**
-     * Create alias - short name for address
-     * @param transaction AliasTransaction with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: AliasTransaction): Observable<AliasResponse>
-
-    /**
-     * Broadcast a signed create leasing transaction
-     * @param transaction CreateLeasingTransaction with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: CreateLeasingTransaction): Observable<TransactionResponse>
-
-    /**
-     * Broadcast a signed cancel leasing transaction
-     * @param transaction CancelLeasingTransaction with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: CancelLeasingTransaction): Observable<TransactionResponse>
-
-    /**
-     * Broadcast a signed burn transaction
-     * @param transaction BurnTransaction with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: BurnTransaction): Observable<BurnTransaction>
-
-    /**
-     * Broadcast a signed transfer transaction
-     * @param transaction TransferTransaction with signature by privateKey
-     */
-    @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: TransferTransaction): Observable<TransferTransaction>
-
+                            @Path("limit") limit: Int): Observable<List<List<HistoryTransactionResponse>>>
     /**
      * Get current Waves block-chain height
      */
@@ -114,11 +79,52 @@ interface NodeService {
      * @param address Address
      */
     @GET("leasing/active/{address}")
-    fun leasingActive(@Path("address") address: String?): Observable<List<TransactionResponse>>
+    fun leasingActive(@Path("address") address: String?): Observable<List<HistoryTransactionResponse>>
 
     /**
      * Current Node time (UTC)
      */
     @GET("/utils/time")
     fun utilsTime(): Observable<UtilsTimeResponse>
+
+
+
+
+    // Send transactions //////////////////////////////////////
+
+    /**
+     * Create alias - short name for address
+     * @param transaction AliasTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: AliasTransaction): Observable<AliasTransactionResponse>
+
+    /**
+     * Broadcast a signed create leasing transaction
+     * @param transaction CreateLeasingTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: CreateLeasingTransaction): Observable<CreateLeasingTransactionResponse>
+
+    /**
+     * Broadcast a signed cancel leasing transaction
+     * @param transaction CancelLeasingTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: CancelLeasingTransaction): Observable<CancelLeasingTransactionResponse>
+
+    /**
+     * Broadcast a signed burn transaction
+     * @param transaction BurnTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: BurnTransaction): Observable<BurnTransactionResponse>
+
+    /**
+     * Broadcast a signed transfer transaction
+     * @param transaction TransferTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: TransferTransaction): Observable<TransferTransactionResponse>
+
 }

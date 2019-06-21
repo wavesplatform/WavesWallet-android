@@ -9,7 +9,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -28,7 +28,7 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var needToUpdate: Boolean = false
     var isShow = true
     var scrollRange: Float = -1f
-    var allTransaction: List<TransactionResponse> = emptyList()
+    var allTransaction: List<HistoryTransactionResponse> = emptyList()
     private var findAssetList = listOf<AssetBalanceResponse>()
 
 

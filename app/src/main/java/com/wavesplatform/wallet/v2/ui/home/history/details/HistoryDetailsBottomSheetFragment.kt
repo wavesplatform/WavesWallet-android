@@ -22,7 +22,7 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.sdk.model.response.node.TransferResponse
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
@@ -55,13 +55,13 @@ import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 
-class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<TransactionResponse>() {
+class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<HistoryTransactionResponse>() {
 
     override fun configLayoutRes(): Int {
         return R.layout.bottom_sheet_dialog_history_details
     }
 
-    override fun setupHeader(transaction: TransactionResponse): View? {
+    override fun setupHeader(transaction: HistoryTransactionResponse): View? {
         val view = inflate(R.layout.content_history_details_layout)
 
         view.text_tag.gone()
@@ -169,7 +169,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return view
     }
 
-    override fun setupBody(transaction: TransactionResponse): View? {
+    override fun setupBody(transaction: HistoryTransactionResponse): View? {
         val historyContainer = LinearLayout(activity)
         historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         historyContainer.orientation = LinearLayout.VERTICAL
@@ -600,7 +600,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         }
     }
 
-    override fun setupInfo(transaction: TransactionResponse): View? {
+    override fun setupInfo(transaction: HistoryTransactionResponse): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
         fun showTransactionFee() {
@@ -637,7 +637,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return layout
     }
 
-    override fun setupFooter(transaction: TransactionResponse): View? {
+    override fun setupFooter(transaction: HistoryTransactionResponse): View? {
         val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, null, false)
 
         fun changeViewMargin(view: View) {
@@ -664,7 +664,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(TransactionResponse.getInfo(transaction,
+                    copyToClipboard(HistoryTransactionResponse.getInfo(transaction,
                             WavesWallet.getAddress()), view.text_copy_all_data,
                             R.string.history_details_copy_all_data)
                 })
@@ -751,7 +751,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return view
     }
 
-    private fun setExchangeItem(transaction: TransactionResponse, view: View) {
+    private fun setExchangeItem(transaction: HistoryTransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
@@ -798,7 +798,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
-    private fun nonGateway(assetBalance: AssetBalanceResponse, transaction: TransactionResponse) =
+    private fun nonGateway(assetBalance: AssetBalanceResponse, transaction: HistoryTransactionResponse) =
             !assetBalance.isGateway || (assetBalance.isGateway &&
                     !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 

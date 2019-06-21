@@ -17,7 +17,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.node.TransactionResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -202,7 +202,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    fun getAllTransactions(): List<TransactionResponse> {
+    fun getAllTransactions(): List<HistoryTransactionResponse> {
         return presenter.allTransaction
     }
 
