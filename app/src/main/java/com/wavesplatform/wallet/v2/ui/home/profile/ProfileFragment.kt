@@ -305,8 +305,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
+        App.getAccessManager().setLastLoggedInGuid("")
         finish()
         launchActivity<WelcomeActivity>(clear = true)
     }
