@@ -31,12 +31,13 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
         nodeHost = HttpUrl.parse(servers.nodeUrl)?.host()
         dataHost = HttpUrl.parse(servers.dataUrl)?.host()
         matcherHost = HttpUrl.parse(servers.matcherUrl)?.host()
+        gatewayHost = HttpUrl.parse(servers.gatewayUrl)?.host()
     }
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         var request = chain.request()
-        if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null || this.matcherHost != null) {
+        if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null || this.gatewayHost != null) {
 
             var host = chain.request().url().host()
             when (host) {

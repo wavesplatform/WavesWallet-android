@@ -90,10 +90,14 @@ inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
 }
 
 fun String.formatBaseUrl(): String {
-    return if (this.last() == '/') {
-        this
+    return if (this.isNotEmpty()) {
+        if (this.lastOrNull() == '/') {
+            this
+        } else {
+            this.plus("/")
+        }
     } else {
-        this.plus("/")
+        this
     }
 }
 

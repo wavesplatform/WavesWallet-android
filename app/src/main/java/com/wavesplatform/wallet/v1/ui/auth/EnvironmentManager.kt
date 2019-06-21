@@ -236,12 +236,32 @@ class EnvironmentManager {
             restartApp()
         }
 
+        fun getDefaultConfig(): GlobalConfiguration? {
+            return when (environmentName) {
+                KEY_ENV_MAIN_NET -> {
+                    Gson().fromJson(
+                            loadJsonFromAsset(instance!!.application!!, FILENAME_MAIN_NET),
+                            GlobalConfiguration::class.java)
+                }
+                KEY_ENV_TEST_NET -> {
+                    Gson().fromJson(
+                            loadJsonFromAsset(instance!!.application!!, FILENAME_TEST_NET),
+                            GlobalConfiguration::class.java)
+                }
+                else -> {
+                    Gson().fromJson(
+                            loadJsonFromAsset(instance!!.application!!, FILENAME_TEST_NET),
+                            GlobalConfiguration::class.java)
+                }
+            }
+        }
+
         val environmentName: String?
             get() {
                 val preferenceManager = PreferenceManager
                         .getDefaultSharedPreferences(instance!!.application)
                 return preferenceManager.getString(
-                        PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
+                        PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, KEY_ENV_MAIN_NET)
             }
 
         private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {

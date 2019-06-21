@@ -159,8 +159,12 @@ class NetworkModule {
     @Named("GatewayRetrofit")
     @Provides
     internal fun provideGatewayRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val url =
+                if (EnvironmentManager.servers.gatewayUrl.isNotEmpty()) EnvironmentManager.servers.gatewayUrl
+                else EnvironmentManager.getDefaultConfig()?.servers?.gatewayUrl ?: ""
+
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.gatewayUrl.formatBaseUrl())
+                .baseUrl(url.formatBaseUrl())
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
