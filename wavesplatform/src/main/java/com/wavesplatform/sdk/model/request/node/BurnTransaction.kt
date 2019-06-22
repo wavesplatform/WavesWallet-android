@@ -12,6 +12,9 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
+/**
+ * The burn transaction deletes amount of some asset.
+ */
 class BurnTransaction(
         @SerializedName("assetId") val assetId: String,
         @SerializedName("quantity") var quantity: Long) : BaseTransaction(BURN) {

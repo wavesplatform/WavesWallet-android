@@ -5,17 +5,44 @@ import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
-abstract class BaseTransaction(@SerializedName("type")
-                               val type: Int) {
+abstract class BaseTransaction(
+        /**
+         * ID of the transaction type. Correct values in [1; 16] see also Companion Object
+         */
+        @SerializedName("type") val type: Int) {
 
+    /**
+     * Account public key of the sender
+     */
     @SerializedName("senderPublicKey")
     var senderPublicKey: String = ""
+
+    /**
+     * Unix time of sending of transaction to blockchain
+     */
     @SerializedName("timestamp")
     var timestamp: Long = 0L
+
+    /**
+     * A transaction fee is a fee that an account owner pays to send a transaction.
+     * Transaction fee in WAVELET
+     */
     @SerializedName("fee")
     var fee: Long = 0L
+
+    /**
+     * Version number of the data structure of the transaction.
+     * The value has to be equal to 2
+     */
     @SerializedName("version")
-    var version: Int = 0
+    var version: Int = 2
+
+    /**
+     * If the array is empty, then S= 3. If the array is not empty,
+     * then S = 3 + 2 × N + (P1 + P2 + ... + Pn), where N is the number of proofs in the array,
+     * Pn is the size on N-th proof in bytes.
+     * The maximum number of proofs in the array is 8. The maximum size of each proof is 64 bytes
+     */
     @SerializedName("proofs")
     val proofs: MutableList<String> = mutableListOf()
 
@@ -30,9 +57,6 @@ abstract class BaseTransaction(@SerializedName("type")
         }
         if (fee == 0L) {
             fee = WavesConstants.WAVES_MIN_FEE
-        }
-        if (version == 0) {
-            version = WavesConstants.VERSION
         }
         proofs.add(getSignedStringWithSeed(seed))
     }

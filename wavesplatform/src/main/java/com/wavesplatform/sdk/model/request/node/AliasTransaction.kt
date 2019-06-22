@@ -14,6 +14,9 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
 
+/**
+ * The alias transaction creates readable alias for address
+ */
 class AliasTransaction(@SerializedName("aliasBytes") var alias: String = "")
     : BaseTransaction(CREATE_ALIAS) {
 
