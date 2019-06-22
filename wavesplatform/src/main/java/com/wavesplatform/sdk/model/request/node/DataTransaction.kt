@@ -15,16 +15,21 @@ class DataTransaction(
     var scheme: String = WavesPlatform.getEnvironment().scheme.toString()
 
     override fun toBytes(): ByteArray {
-        return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
-                    Base58.decode(senderPublicKey),
-                    data, // todo check data size
-                    Longs.toByteArray(timestamp),
-                    Longs.toByteArray(fee))
-        } catch (e: Exception) {
-            Log.e("Sign", "Can't create bytes for sign in Data Transaction", e)
-            ByteArray(0)
+        if (data.size < 1024 * 140) {
+            return try {
+                Bytes.concat(byteArrayOf(type.toByte()),
+                        byteArrayOf(version.toByte()),
+                        Base58.decode(senderPublicKey),
+                        data,
+                        Longs.toByteArray(timestamp),
+                        Longs.toByteArray(fee))
+            } catch (e: Exception) {
+                Log.e("Sign", "Can't create bytes for sign in Data Transaction", e)
+                ByteArray(0)
+            }
+        } else {
+            Log.e("Sign", "Can't create bytes for sign in Data Transaction, data > 140kb")
+            return ByteArray(0)
         }
     }
 }

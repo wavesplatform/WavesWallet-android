@@ -25,5 +25,4 @@ class MassTransferTransactionResponse(@SerializedName("assetId")
         @SerializedName("amount")
         var amount: Long = 0L
     }
-
 }

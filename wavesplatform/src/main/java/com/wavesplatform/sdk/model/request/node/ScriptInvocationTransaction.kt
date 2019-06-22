@@ -11,9 +11,16 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.model.response.node.transaction.ScriptInvocationTransactionResponse
 
-class ScriptInvocationTransaction(@SerializedName("assetId") var assetId: String,
-                                  @SerializedName("script") var script: String) : BaseTransaction(SCRIPT_INVOCATION) {
+class ScriptInvocationTransaction(@SerializedName("feeAssetId")
+                                  var feeAssetId: String,
+                                  @SerializedName("dApp")
+                                  var dApp: String,
+                                  @SerializedName("call")
+                                  var call: ScriptInvocationTransactionResponse.Call?,
+                                  @SerializedName("payment")
+                                  var payment: Array<ScriptInvocationTransactionResponse.Payment>) : BaseTransaction(SCRIPT_INVOCATION) {
 
     override fun toBytes(): ByteArray {
         return try {

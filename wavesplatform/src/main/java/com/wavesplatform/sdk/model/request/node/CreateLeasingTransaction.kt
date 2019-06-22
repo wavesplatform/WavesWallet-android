@@ -35,7 +35,7 @@ class CreateLeasingTransaction(
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {
-            Log.e("Sign", "Can't create bytes for sign in CreateLeasing Transaction", e)
+            Log.e("Sign", "Can't create bytes for sign in Create Leasing Transaction", e)
             ByteArray(0)
         }
     }

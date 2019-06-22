@@ -8,6 +8,7 @@ package com.wavesplatform.sdk.net.service
 import com.wavesplatform.sdk.model.request.node.*
 import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.sdk.model.response.node.AssetBalancesResponse
+import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
 import com.wavesplatform.sdk.model.response.node.transaction.*
 import io.reactivex.Observable
 import retrofit2.http.Body
@@ -88,43 +89,104 @@ interface NodeService {
     fun utilsTime(): Observable<UtilsTimeResponse>
 
 
-
-
-    // Send transactions //////////////////////////////////////
+    // Broadcast transactions //////////////////////////////////////
 
     /**
-     * Create alias - short name for address
-     * @param transaction AliasTransaction with signature by privateKey
+     * Broadcast issue-transaction (typeId = 3)
+     * @param transaction IssueTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: AliasTransaction): Observable<AliasTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: IssueTransaction): Observable<IssueTransactionResponse>
 
     /**
-     * Broadcast a signed create leasing transaction
-     * @param transaction CreateLeasingTransaction with signature by privateKey
+     * Broadcast transfer-transaction (typeId = 4)
+     * @param transaction TransferTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: CreateLeasingTransaction): Observable<CreateLeasingTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: TransferTransaction): Observable<TransferTransactionResponse>
 
     /**
-     * Broadcast a signed cancel leasing transaction
-     * @param transaction CancelLeasingTransaction with signature by privateKey
+     * Broadcast reissue-transaction (typeId = 5)
+     * @param transaction ReissueTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: CancelLeasingTransaction): Observable<CancelLeasingTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: ReissueTransaction): Observable<ReissueTransactionResponse>
 
     /**
-     * Broadcast a signed burn transaction
+     * Broadcast burn-transaction (typeId = 6)
      * @param transaction BurnTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
     fun transactionsBroadcast(@Body transaction: BurnTransaction): Observable<BurnTransactionResponse>
 
     /**
-     * Broadcast a signed transfer transaction
-     * @param transaction TransferTransaction with signature by privateKey
+     * Broadcast exchange-transaction (typeId = 7)
+     * @param transaction ExchangeTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: TransferTransaction): Observable<TransferTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: ExchangeTransaction): Observable<ExchangeTransactionResponse>
+
+    /**
+     * Broadcast create-leasing-transaction (typeId = 8)
+     * @param transaction CreateLeasingTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: CreateLeasingTransaction): Observable<CreateLeasingTransactionResponse>
+
+    /**
+     * Broadcast cancel-leasing-transaction (typeId = 9)
+     * @param transaction CancelLeasingTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: CancelLeasingTransaction): Observable<CancelLeasingTransactionResponse>
+
+    /**
+     * Create alias-transaction. Alias - short name for address  (typeId = 10)
+     * @param transaction AliasTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: AliasTransaction): Observable<AliasTransactionResponse>
+
+    /**
+     * Broadcast mass-transfer-transaction (typeId = 11)
+     * @param transaction MassTransferTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: MassTransferTransaction): Observable<MassTransferTransactionResponse>
+
+    /**
+     * Broadcast data-transaction (typeId = 12)
+     * @param transaction DataTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: DataTransaction): Observable<DataTransactionResponse>
+
+    /**
+     * Broadcast asset-script-transaction, also called address-script  (typeId = 13)
+     * @param transaction ScriptTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: ScriptTransaction): Observable<ScriptTransactionResponse>
+
+    /**
+     * Broadcast sponsorship-transaction  (typeId = 14)
+     * @param transaction SponsorshipTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: SponsorshipTransaction): Observable<SponsorshipTransactionResponse>
+
+    /**
+     * Broadcast set-asset-script-transaction (typeId = 15)
+     * @param transaction SetAssetScriptTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: SetAssetScriptTransaction): Observable<SetAssetScriptTransaction>
+
+    /**
+     * Broadcast invoke-script-transaction (typeId = 16)
+     * @param transaction ScriptInvocationTransaction with signature by privateKey
+     */
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body transaction: ScriptInvocationTransaction): Observable<ScriptInvocationTransactionResponse>
 
 }
