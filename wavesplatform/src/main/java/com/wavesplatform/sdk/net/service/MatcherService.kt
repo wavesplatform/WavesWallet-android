@@ -15,7 +15,9 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 /**
- * Matcher Service for DEX
+ * It is matcher Service for DEX, decentralized exchange of Waves.
+ * It collects and matches all orders from users by Exchange transactions
+ * and sends it to blockchain.
  * For more information: [Matcher Swagger]({https://matcher.wavesplatform.com/api-docs/index.html#/matcher)
  */
 interface MatcherService {

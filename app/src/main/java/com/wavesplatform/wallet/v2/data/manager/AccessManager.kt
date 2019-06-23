@@ -370,13 +370,6 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
     }
 
-    // todo check is need?
-    fun restartApp(context: Context) {
-        val intent = Intent(context, SplashActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
-    }
-
     fun addToRecentSavedWallets(guid: String) {
         val recents = prefs.getGlobalValueList(
                 EnvironmentManager.name + PrefsUtil.LIST_RECENT_SAVED_WALLETS).toMutableList()

@@ -20,7 +20,8 @@ class ScriptInvocationTransaction(@SerializedName("feeAssetId")
                                   @SerializedName("call")
                                   var call: ScriptInvocationTransactionResponse.Call?,
                                   @SerializedName("payment")
-                                  var payment: Array<ScriptInvocationTransactionResponse.Payment>) : BaseTransaction(SCRIPT_INVOCATION) {
+                                  var payment: Array<ScriptInvocationTransactionResponse.Payment>)
+    : BaseTransaction(SCRIPT_INVOCATION) {
 
     override fun toBytes(): ByteArray {
         return try {

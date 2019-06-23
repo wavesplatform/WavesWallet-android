@@ -41,7 +41,7 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
-        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+        App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()), // todo check to Crypto
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
