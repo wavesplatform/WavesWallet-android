@@ -46,6 +46,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.sdk.net.NetworkException
@@ -766,69 +767,69 @@ fun String.getOrderType(): OrderType {
 }
 
 fun getTransactionType(transaction: HistoryTransactionResponse, address: String): Int =
-        if (transaction.type == HistoryTransactionResponse.TRANSFER &&
+        if (transaction.type == BaseTransaction.TRANSFER &&
                 transaction.sender != address &&
                 transaction.asset?.isSpam == true) {
             Constants.ID_SPAM_RECEIVE_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.TRANSFER &&
+        } else if (transaction.type == BaseTransaction.TRANSFER &&
                 transaction.sender != address &&
                 transaction.recipientAddress != address) {
             Constants.ID_RECEIVE_SPONSORSHIP_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.MASS_TRANSFER &&
+        } else if (transaction.type == BaseTransaction.MASS_TRANSFER &&
                 transaction.sender != address &&
                 transaction.asset?.isSpam == true) {
             Constants.ID_MASS_SPAM_RECEIVE_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.LEASE_CANCEL &&
+        } else if (transaction.type == BaseTransaction.CANCEL_LEASING &&
                 !transaction.leaseId.isNullOrEmpty()) {
             Constants.ID_CANCELED_LEASING_TYPE
-        } else if ((transaction.type == HistoryTransactionResponse.TRANSFER || transaction.type == 9) &&
+        } else if ((transaction.type == BaseTransaction.TRANSFER || transaction.type == 9) &&
                 transaction.sender != address) {
             Constants.ID_RECEIVED_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.TRANSFER &&
+        } else if (transaction.type == BaseTransaction.TRANSFER &&
                 transaction.sender == transaction.recipientAddress) {
             Constants.ID_SELF_TRANSFER_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.TRANSFER &&
+        } else if (transaction.type == BaseTransaction.TRANSFER &&
                 transaction.sender == address) {
             Constants.ID_SENT_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.LEASE &&
+        } else if (transaction.type == BaseTransaction.CREATE_LEASING &&
                 transaction.recipientAddress != address) {
             Constants.ID_STARTED_LEASING_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.EXCHANGE) {
+        } else if (transaction.type == BaseTransaction.EXCHANGE) {
             Constants.ID_EXCHANGE_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.ISSUE) {
+        } else if (transaction.type == BaseTransaction.ISSUE) {
             Constants.ID_TOKEN_GENERATION_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.BURN) {
+        } else if (transaction.type == BaseTransaction.BURN) {
             Constants.ID_TOKEN_BURN_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.REISSUE) {
+        } else if (transaction.type == BaseTransaction.REISSUE) {
             Constants.ID_TOKEN_REISSUE_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.CREATE_ALIAS) {
+        } else if (transaction.type == BaseTransaction.CREATE_ALIAS) {
             Constants.ID_CREATE_ALIAS_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.LEASE &&
+        } else if (transaction.type == BaseTransaction.CREATE_LEASING &&
                 transaction.recipientAddress == address) {
             Constants.ID_INCOMING_LEASING_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.MASS_TRANSFER &&
+        } else if (transaction.type == BaseTransaction.MASS_TRANSFER &&
                 transaction.sender == address) {
             Constants.ID_MASS_SEND_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.MASS_TRANSFER &&
+        } else if (transaction.type == BaseTransaction.MASS_TRANSFER &&
                 transaction.sender != address) {
             Constants.ID_MASS_RECEIVE_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.DATA) {
+        } else if (transaction.type == BaseTransaction.DATA) {
             Constants.ID_DATA_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.ADDRESS_SCRIPT) {
+        } else if (transaction.type == BaseTransaction.ADDRESS_SCRIPT) {
             if (transaction.script == null) {
                 Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
             } else {
                 Constants.ID_SET_ADDRESS_SCRIPT_TYPE
             }
-        } else if (transaction.type == HistoryTransactionResponse.SPONSORSHIP) {
+        } else if (transaction.type == BaseTransaction.SPONSORSHIP) {
             if (transaction.minSponsoredAssetFee == null) {
                 Constants.ID_CANCEL_SPONSORSHIP_TYPE
             } else {
                 Constants.ID_SET_SPONSORSHIP_TYPE
             }
-        } else if (transaction.type == HistoryTransactionResponse.ASSET_SCRIPT) {
+        } else if (transaction.type == BaseTransaction.ASSET_SCRIPT) {
             Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
-        } else if (transaction.type == HistoryTransactionResponse.SCRIPT_INVOCATION) {
+        } else if (transaction.type == BaseTransaction.SCRIPT_INVOCATION) {
             Constants.ID_SCRIPT_INVOCATION_TYPE
         } else {
             Constants.ID_UNRECOGNISED_TYPE

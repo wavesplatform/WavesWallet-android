@@ -8,6 +8,7 @@ package com.wavesplatform.sdk.model.response.node
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.utils.*
 import java.math.BigInteger
@@ -159,45 +160,6 @@ open class HistoryTransactionResponse(
 
     companion object {
 
-        const val GENESIS = 1
-        const val PAYMENT = 2
-        const val ISSUE = 3
-        const val TRANSFER = 4
-        const val REISSUE = 5
-        const val BURN = 6
-        const val EXCHANGE = 7
-        const val LEASE = 8
-        const val LEASE_CANCEL = 9
-        const val CREATE_ALIAS = 10
-        const val MASS_TRANSFER = 11
-        const val DATA = 12
-        const val ADDRESS_SCRIPT = 13
-        const val SPONSORSHIP = 14
-        const val ASSET_SCRIPT = 15
-        const val SCRIPT_INVOCATION = 16
-
-        private fun getNameBy(type: Int): String {
-            return when (type) {
-                GENESIS -> "Genesis"
-                PAYMENT -> "PaymentResponse"
-                ISSUE -> "Issue"
-                TRANSFER -> "TransferResponse"
-                REISSUE -> "Reissue"
-                BURN -> "Burn"
-                EXCHANGE -> "Exchange"
-                LEASE -> "LeaseResponse"
-                LEASE_CANCEL -> "LeaseResponse Cancel"
-                CREATE_ALIAS -> "Create AliasTransactionResponse"
-                MASS_TRANSFER -> "Mass TransferResponse"
-                DATA -> "DataResponse"
-                ADDRESS_SCRIPT -> "Address Script"
-                SPONSORSHIP -> "SponsorShip"
-                ASSET_SCRIPT -> "Asset Script"
-                SCRIPT_INVOCATION -> "Script Invocation"
-                else -> ""
-            }
-        }
-
         fun getInfo(transaction: HistoryTransactionResponse, address: String): String {
             val feeAssetId = if (transaction.feeAssetId == null) {
                 ""
@@ -220,8 +182,8 @@ open class HistoryTransactionResponse(
         }
 
         private fun type(transaction: HistoryTransactionResponse, address: String) =
-                "Type: ${transaction.type} (${getNameBy(transaction.type).toLowerCase()}" +
-                        if (transaction.type == EXCHANGE) {
+                "Type: ${transaction.type} (${BaseTransaction.getNameBy(transaction.type).toLowerCase()}" +
+                        if (transaction.type == BaseTransaction.EXCHANGE) {
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
                                             address)
@@ -256,7 +218,7 @@ open class HistoryTransactionResponse(
         }
 
         private fun amount(transaction: HistoryTransactionResponse): String {
-            val amountAsset = if (transaction.type == EXCHANGE) {
+            val amountAsset = if (transaction.type == BaseTransaction.EXCHANGE) {
                 transaction.order1?.assetPair?.amountAssetObject
             } else {
                 transaction.asset
@@ -271,7 +233,7 @@ open class HistoryTransactionResponse(
         }
 
         private fun exchangePrice(transaction: HistoryTransactionResponse, address: String): String {
-            return if (transaction.type == EXCHANGE) {
+            return if (transaction.type == BaseTransaction.EXCHANGE) {
                 val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!, address)
                 val priceAsset = myOrder.assetPair?.priceAssetObject
                 val priceValue = MoneyUtil.getScaledText(

@@ -9,20 +9,23 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
-class CancelLeasingTransaction(@SerializedName("leaseId") var leaseId: String = "")
+/**
+ * The cancel leasing transaction reverse @see[CreateLeasingTransaction].
+ */
+class CancelLeasingTransaction(
+        /**
+         * Id of Leasing Transaction to cancel
+         */
+        @SerializedName("leaseId") var leaseId: String = "")
     : BaseTransaction(CANCEL_LEASING) {
-
-    @SerializedName("chainId")
-    var scheme: Byte = WavesPlatform.getEnvironment().scheme
 
     override fun toBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
-                    byteArrayOf(scheme),
+                    byteArrayOf(chainId.toByte()),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),

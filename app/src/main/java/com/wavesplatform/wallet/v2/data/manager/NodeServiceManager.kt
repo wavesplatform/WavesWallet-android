@@ -408,7 +408,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                     val amountAssetsDetails = it.second
                     val priceAssetsDetails = it.third
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = HistoryTransactionResponse.EXCHANGE
+                    params.transactionType = BaseTransaction.EXCHANGE
                     params.smartPriceAsset = priceAssetsDetails.scripted
                     params.smartAmountAsset = amountAssetsDetails.scripted
                     return@flatMap Observable.just(TransactionCommissionUtil.countCommission(commission, params))

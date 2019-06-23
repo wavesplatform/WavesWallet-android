@@ -13,10 +13,10 @@ import com.wavesplatform.sdk.crypto.Hash
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.utils.*
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
-import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -224,7 +224,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     val scriptInfo = triple.second
                     val assetsDetails = triple.third
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = HistoryTransactionResponse.TRANSFER
+                    params.transactionType = BaseTransaction.TRANSFER
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
                     fee = TransactionCommissionUtil.countCommission(commission, params)

@@ -9,20 +9,27 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.isAlias
 import com.wavesplatform.sdk.utils.parseAlias
 import java.nio.charset.Charset
 
+/**
+ * The transaction leases amount of Waves to miner-recipient
+ * it can be address or alias by Proof-of-Stake consensus. It will perform at non-node address.
+ * You always can reverse the any leased amount by @see[CancelLeasingTransaction]
+ */
 class CreateLeasingTransaction(
+        /**
+         * Address or alias of Waves blockchain to lease
+         */
         @SerializedName("recipient") var recipient: String,
+        /**
+         * Amount to lease of Waves in satoshi
+         */
         @SerializedName("amount") var amount: Long)
     : BaseTransaction(CREATE_LEASING) {
-
-    @SerializedName("scheme")
-    var scheme: String = WavesPlatform.getEnvironment().scheme.toString()
 
     override fun toBytes(): ByteArray {
         return try {
@@ -43,7 +50,7 @@ class CreateLeasingTransaction(
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(version.toByte()),
-                    byteArrayOf(scheme.toByte()),
+                    byteArrayOf(chainId.toByte()),
                     recipient.parseAlias().toByteArray(
                             Charset.forName("UTF-8")).arrayWithSize())
         } else {

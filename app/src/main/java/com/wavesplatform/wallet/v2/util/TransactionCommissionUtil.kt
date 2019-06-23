@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.util
 
-import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 
 class TransactionCommissionUtil {
@@ -15,35 +15,35 @@ class TransactionCommissionUtil {
             val type = params.transactionType!!
 
             val feeRules = when (type) {
-                HistoryTransactionResponse.ISSUE -> commission.calculateFeeRules.issue
-                HistoryTransactionResponse.REISSUE -> commission.calculateFeeRules.reissue
-                HistoryTransactionResponse.EXCHANGE -> commission.calculateFeeRules.exchange
-                HistoryTransactionResponse.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
-                HistoryTransactionResponse.DATA -> commission.calculateFeeRules.data
-                HistoryTransactionResponse.ADDRESS_SCRIPT -> commission.calculateFeeRules.script
-                HistoryTransactionResponse.SPONSORSHIP -> commission.calculateFeeRules.sponsor
-                HistoryTransactionResponse.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
+                BaseTransaction.ISSUE -> commission.calculateFeeRules.issue
+                BaseTransaction.REISSUE -> commission.calculateFeeRules.reissue
+                BaseTransaction.EXCHANGE -> commission.calculateFeeRules.exchange
+                BaseTransaction.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
+                BaseTransaction.DATA -> commission.calculateFeeRules.data
+                BaseTransaction.ADDRESS_SCRIPT -> commission.calculateFeeRules.script
+                BaseTransaction.SPONSORSHIP -> commission.calculateFeeRules.sponsor
+                BaseTransaction.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
                 else -> commission.calculateFeeRules.default
             }
 
             return when (type) {
-                HistoryTransactionResponse.ISSUE,
-                HistoryTransactionResponse.REISSUE,
-                HistoryTransactionResponse.LEASE,
-                HistoryTransactionResponse.LEASE_CANCEL,
-                HistoryTransactionResponse.CREATE_ALIAS,
-                HistoryTransactionResponse.ADDRESS_SCRIPT,
-                HistoryTransactionResponse.SPONSORSHIP,
-                HistoryTransactionResponse.ASSET_SCRIPT ->
+                BaseTransaction.ISSUE,
+                BaseTransaction.REISSUE,
+                BaseTransaction.CREATE_LEASING,
+                BaseTransaction.CANCEL_LEASING,
+                BaseTransaction.CREATE_ALIAS,
+                BaseTransaction.ADDRESS_SCRIPT,
+                BaseTransaction.SPONSORSHIP,
+                BaseTransaction.ASSET_SCRIPT ->
                     getAccountCommission(feeRules, params, commission)
-                HistoryTransactionResponse.TRANSFER,
-                HistoryTransactionResponse.BURN ->
+                BaseTransaction.TRANSFER,
+                BaseTransaction.BURN ->
                     getAssetAccountCommission(feeRules, params, commission)
-                HistoryTransactionResponse.EXCHANGE ->
+                BaseTransaction.EXCHANGE ->
                     getExchangeCommission(feeRules, params, commission)
-                HistoryTransactionResponse.MASS_TRANSFER ->
+                BaseTransaction.MASS_TRANSFER ->
                     getMassTransferCommission(feeRules, params, commission)
-                HistoryTransactionResponse.DATA -> {
+                BaseTransaction.DATA -> {
                     getDataCommission(params, feeRules, commission)
                 }
                 else -> commission.calculateFeeRules.default.fee

@@ -4,15 +4,11 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
 class DataTransaction(
         @SerializedName("data") var data: ByteArray)
     : BaseTransaction(CREATE_LEASING) {
-
-    @SerializedName("scheme")
-    var scheme: String = WavesPlatform.getEnvironment().scheme.toString()
 
     override fun toBytes(): ByteArray {
         if (data.size < 1024 * 140) {

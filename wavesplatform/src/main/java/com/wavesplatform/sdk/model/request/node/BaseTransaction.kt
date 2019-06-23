@@ -7,7 +7,7 @@ import com.wavesplatform.sdk.utils.WavesConstants
 
 abstract class BaseTransaction(
         /**
-         * ID of the transaction type. Correct values in [1; 16] see also Companion Object
+         * ID of the transaction type. Correct values in [1; 16] @see[BaseTransaction.Companion]
          */
         @SerializedName("type") val type: Int) {
 
@@ -46,8 +46,24 @@ abstract class BaseTransaction(
     @SerializedName("proofs")
     val proofs: MutableList<String> = mutableListOf()
 
+    /**
+     * Determines the network where the transaction will be published to.
+     * [WavesCrypto.TEST_NET_CHAIN_ID] for test network,
+     * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
+     */
+    @SerializedName("chainId")
+    var chainId: String = WavesPlatform.getEnvironment().scheme.toString()
+
+    /**
+     * @return bytes to sign of the transaction
+     */
     abstract fun toBytes(): ByteArray
 
+    /**
+     * Sign the transaction with seed-phrase with current time if null
+     * and [WavesConstants.WAVES_MIN_FEE] if it equals 0
+     * @param seed Seed-phrase
+     */
     fun sign(seed: String) {
         if (senderPublicKey == "") {
             senderPublicKey = WavesCrypto.publicKey(seed)
@@ -96,7 +112,7 @@ abstract class BaseTransaction(
         const val ASSET_SCRIPT = 15
         const val SCRIPT_INVOCATION = 16
 
-        private fun getNameBy(type: Int): String {
+        fun getNameBy(type: Int): String {
             return when (type) {
                 GENESIS -> "Genesis"
                 PAYMENT -> "Payment"

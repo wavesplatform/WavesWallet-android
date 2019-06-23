@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
-import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
@@ -55,7 +55,7 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
                     val scriptInfo = triple.second
                     val assetsDetails = triple.third
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = HistoryTransactionResponse.BURN
+                    params.transactionType = BaseTransaction.BURN
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
                     fee = TransactionCommissionUtil.countCommission(commission, params)

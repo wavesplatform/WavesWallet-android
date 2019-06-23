@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransactionResponse
 
@@ -21,9 +20,6 @@ class ExchangeTransaction(@SerializedName("order1")
                           @SerializedName("sellMatcherFee")
                           var sellMatcherFee: Long)
     : BaseTransaction(EXCHANGE) {
-
-    @SerializedName("scheme")
-    var scheme: String = WavesPlatform.getEnvironment().scheme.toString()
 
     override fun toBytes(): ByteArray {
         return try {

@@ -12,13 +12,6 @@ typealias PrivateKey = String
 typealias Seed = String
 typealias Address = String
 
-const val PUBLIC_KEY_LENGTH = 32
-const val PRIVATE_KEY_LENGTH = 32
-const val SIGNATURE_LENGTH = 64
-
-const val MAIN_NET_CHAIN_ID = 87
-const val TEST_NET_CHAIN_ID = 84
-
 interface KeyPair {
     val publicKey: PublicKey
     val privateKey: PrivateKey
@@ -157,6 +150,13 @@ interface WavesCrypto {
     fun verifyAddress(address: Address, chainId: String? = null, publicKey: PublicKey? = null): Boolean
 
     companion object : WavesCrypto {
+
+        const val PUBLIC_KEY_LENGTH = 32
+        const val PRIVATE_KEY_LENGTH = 32
+        const val SIGNATURE_LENGTH = 64
+
+        const val MAIN_NET_CHAIN_ID = 87
+        const val TEST_NET_CHAIN_ID = 84
 
         override fun blake2b(input: Bytes): Bytes {
             return Hash.blake2b(input)

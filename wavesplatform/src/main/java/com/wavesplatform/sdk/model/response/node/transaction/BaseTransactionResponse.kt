@@ -44,7 +44,8 @@ abstract class BaseTransactionResponse(
 
     /**
      * Determines the network where the transaction will be published to.
-     * 84 for test network, 87 for mainnet
+     * [WavesCrypto.TEST_NET_CHAIN_ID] for test network,
+     * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
      */
     @SerializedName("chainId")
     val chainId: Byte? = WavesPlatform.getEnvironment().scheme
