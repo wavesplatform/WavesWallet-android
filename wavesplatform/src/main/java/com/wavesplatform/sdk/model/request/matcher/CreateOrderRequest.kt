@@ -21,6 +21,9 @@ data class CreateOrderRequest(
         @SerializedName("assetPair") var assetPair: OrderBookResponse.PairResponse = OrderBookResponse.PairResponse(),
         @SerializedName("orderType") var orderType: Int = 0,
         @SerializedName("price") var price: Long = 0L,
+        /**
+         * Amount of Waves in satoshi
+         */
         @SerializedName("amount") var amount: Long = 0L,
         @SerializedName("timestamp") var timestamp: Long = WavesPlatform.getEnvironment().getTime(),
         @SerializedName("expiration") var expiration: Long = 0L,

@@ -17,7 +17,12 @@ import java.nio.charset.Charset
 /**
  * The alias transaction creates readable alias for address
  */
-class AliasTransaction(@SerializedName("aliasBytes") var alias: String = "")
+class AliasTransaction(
+        /**
+         * Alias, short name for address in Waves blockchain.
+         * Alias bytes must be in [4;30]
+         */
+        @SerializedName("aliasBytes") var alias: String = "")
     : BaseTransaction(CREATE_ALIAS) {
 
     override fun toBytes(): ByteArray {

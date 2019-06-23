@@ -19,10 +19,13 @@ class MassTransferTransactionResponse(@SerializedName("assetId")
     : BaseTransactionResponse(type = BaseTransaction.MASS_TRANSFER), Parcelable {
 
     @Parcelize
-    class Transfer : Parcelable {
-        @SerializedName("recipient")
-        var recipient: String = ""
-        @SerializedName("amount")
-        var amount: Long = 0L
-    }
+    class Transfer(
+            /**
+             * Address or alias of Waves blockchain
+             */
+            @SerializedName("recipient") var recipient: String = "",
+            /**
+             * Amount of Waves in satoshi
+             */
+            @SerializedName("amount") var amount: Long = 0L) : Parcelable
 }

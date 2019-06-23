@@ -11,25 +11,42 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
 import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.parseAlias
 import java.nio.charset.Charset
 
+/**
+ * Transfer transaction sends amount of asset on address
+ */
 class TransferTransaction(
-    @SerializedName("assetId") var assetId: String,
-    @SerializedName("recipient") var recipient: String,
-    @SerializedName("amount") var amount: Long,
-    fee: Long,
-    @SerializedName("attachment") var attachment: String?,
-    @SerializedName("feeAssetId") var feeAssetId: String = "")
+        /**
+         * Id of transferable asset in Waves blockchain, different for main and test net
+         */
+        @SerializedName("assetId") var assetId: String,
+        /**
+         * Address or alias of Waves blockchain
+         */
+        @SerializedName("recipient") var recipient: String,
+        /**
+         * Amount of Waves in satoshi
+         */
+        @SerializedName("amount") var amount: Long,
+        /**
+         * Fee for transaction in satoshi
+         */
+        fee: Long,
+        /**
+         * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string or byte array
+         */
+        @SerializedName("attachment") var attachment: String?,
+        /**
+         * Asset id instead Waves for transaction commission withdrawal
+         */
+        @SerializedName("feeAssetId") var feeAssetId: String = "")
     : BaseTransaction(TRANSFER) {
-
-    @SerializedName("sender")
-    var sender: String? = ""
-    @SerializedName("id")
-    var id: String? = ""
 
     init {
         this.fee = fee

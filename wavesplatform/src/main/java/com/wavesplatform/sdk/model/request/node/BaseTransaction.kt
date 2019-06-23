@@ -12,7 +12,7 @@ abstract class BaseTransaction(
         @SerializedName("type") val type: Int) {
 
     /**
-     * Account public key of the sender
+     * Account public key of the sender in Base58
      */
     @SerializedName("senderPublicKey")
     var senderPublicKey: String = ""
@@ -127,7 +127,7 @@ abstract class BaseTransaction(
                 MASS_TRANSFER -> "MassTransfer"
                 DATA -> "Data"
                 ADDRESS_SCRIPT -> "Address Script"
-                SPONSORSHIP -> "SponsorShip"
+                SPONSORSHIP -> "Sponsorship"
                 ASSET_SCRIPT -> "Asset Script"
                 SCRIPT_INVOCATION -> "Script Invocation"
                 else -> ""

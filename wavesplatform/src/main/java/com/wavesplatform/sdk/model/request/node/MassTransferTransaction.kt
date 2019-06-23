@@ -5,19 +5,28 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
 import com.wavesplatform.sdk.model.response.node.transaction.MassTransferTransactionResponse
 import com.wavesplatform.sdk.utils.SignUtil
 
-class MassTransferTransaction(@SerializedName("assetId")
-                              var assetId: String = "",
-                              @SerializedName("attachment")
-                              var attachment: String,
-                              @SerializedName("transferCount")
-                              var transferCount: Int,
-                              @SerializedName("totalAmount")
-                              var totalAmount: Long,
-                              @SerializedName("transfers")
-                              var transfers: Array<MassTransferTransactionResponse.Transfer>)
+/**
+ * Mass-Transfer transaction sends a lot of transactions of asset for recipients set
+ */
+class MassTransferTransaction(
+        /**
+         * Id of transferable asset in Waves blockchain, different for main and test net
+         */
+        @SerializedName("assetId") var assetId: String = "",
+        /**
+         * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string or byte array
+         */
+        @SerializedName("attachment") var attachment: String,
+        @SerializedName("transferCount") var transferCount: Int, // todo check
+        @SerializedName("totalAmount") var totalAmount: Long, // todo check
+        /**
+         * Collection of recipients with amount each
+         */
+        @SerializedName("transfers") var transfers: Array<MassTransferTransactionResponse.Transfer>)
     : BaseTransaction(MASS_TRANSFER) {
 
     override fun toBytes(): ByteArray {

@@ -11,9 +11,24 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 
+/**
+ * Reissue transaction try to change your old asset with new values of quantity and reissuable
+ */
 class ReissueTransaction(
+        /**
+         * Id of asset that should be changed
+         */
         @SerializedName("assetId") val assetId: String,
+        /**
+         * Quantity defines the total tokens supply that your asset will contain
+         */
         @SerializedName("quantity") val quantity: Long,
+        /**
+         * Reissuability allows for additional tokens creation that will be added
+         * to the total token supply of asset.
+         * A non-reissuable asset will be permanently limited to the total token supply
+         * defined during the transaction.
+         */
         @SerializedName("reissuable") val reissuable: Boolean) : BaseTransaction(REISSUE) {
 
     init {

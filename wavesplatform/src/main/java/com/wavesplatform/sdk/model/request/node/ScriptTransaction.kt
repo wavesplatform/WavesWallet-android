@@ -7,7 +7,24 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 
-class ScriptTransaction(@SerializedName("script") var script: String)
+/**
+ * Script transactions (set script to account) allow you to extend the available functionality
+ * of the standard Waves application. One of the uses of script transaction
+ * is creating a multi-signature wallet. Script can be developed
+ * with [Waves Ride IDE]({https://ide.wavesplatform.com/)
+ *
+ * You can also cancel the active script transaction. You must send transaction with null script.
+ *
+ * Before you start, please keep in mind.
+ * We do not recommend you submit script transactions unless you are an experienced user.
+ *
+ * Errors can lead to permanent loss of access to your account.
+ */
+class ScriptTransaction(
+        /**
+         * Base64 binary string with Waves Ride script, starts with "base64:"
+         */
+        @SerializedName("script") var script: String)
     : BaseTransaction(ADDRESS_SCRIPT) {
 
     override fun toBytes(): ByteArray {

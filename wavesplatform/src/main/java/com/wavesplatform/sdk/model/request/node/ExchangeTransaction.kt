@@ -7,18 +7,22 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransactionResponse
 
-class ExchangeTransaction(@SerializedName("order1")
-                          var order1: ExchangeTransactionResponse.Order,
-                          @SerializedName("order2")
-                          var order2: ExchangeTransactionResponse.Order,
-                          @SerializedName("price")
-                          var price: Long,
-                          @SerializedName("amount")
-                          var amount: Long,
-                          @SerializedName("buyMatcherFee")
-                          var buyMatcherFee: Long,
-                          @SerializedName("sellMatcherFee")
-                          var sellMatcherFee: Long)
+class ExchangeTransaction(
+        @SerializedName("order1")
+        var order1: ExchangeTransactionResponse.Order,
+        @SerializedName("order2")
+        var order2: ExchangeTransactionResponse.Order,
+        @SerializedName("price")
+        var price: Long,
+        /**
+         * Amount of Waves in satoshi
+         */
+        @SerializedName("amount")
+        var amount: Long,
+        @SerializedName("buyMatcherFee")
+        var buyMatcherFee: Long,
+        @SerializedName("sellMatcherFee")
+        var sellMatcherFee: Long)
     : BaseTransaction(EXCHANGE) {
 
     override fun toBytes(): ByteArray {
@@ -33,7 +37,6 @@ class ExchangeTransaction(@SerializedName("order1")
                     Longs.toByteArray(buyMatcherFee),
                     Longs.toByteArray(sellMatcherFee),
                     Longs.toByteArray(timestamp))
-
 
 
             /*['order1', {
