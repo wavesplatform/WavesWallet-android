@@ -12,13 +12,28 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 
+/**
+ * Cancel Order Request in DEX-matcher, decentralized exchange of Waves.
+ *
+ * It collects orders from users who created CreateOrderRequest,
+ * matches and sends it to blockchain it by Exchange transactions.
+ */
 class CancelOrderRequest(
-    @SerializedName("orderId") var orderId: String = "",
-    @SerializedName("sender") var sender: String = "",
-    @SerializedName("signature") var signature: String? = null
+        /**
+         * Order Id of order to cancel
+         */
+        @SerializedName("orderId") var orderId: String = "",
+        /**
+         * Sender address or alias
+         */
+        @SerializedName("sender") var sender: String = "",
+        /**
+         * Order signature by account private key
+         */
+        @SerializedName("signature") var signature: String? = null
 ) {
 
-    private fun toSignBytes(): ByteArray {
+    private fun toBytes(): ByteArray {
         return try {
             Bytes.concat(
                     Base58.decode(sender),
@@ -31,6 +46,6 @@ class CancelOrderRequest(
     }
 
     fun sign(privateKey: ByteArray) {
-        signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
+        signature = Base58.encode(CryptoProvider.sign(privateKey, toBytes()))
     }
 }

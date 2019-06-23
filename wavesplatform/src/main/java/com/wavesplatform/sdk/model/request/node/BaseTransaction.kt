@@ -32,10 +32,10 @@ abstract class BaseTransaction(
 
     /**
      * Version number of the data structure of the transaction.
-     * The value has to be equal to 2
+     * The value has to be equal to [WavesConstants.VERSION]
      */
     @SerializedName("version")
-    var version: Int = 2
+    var version: Int = WavesConstants.VERSION
 
     /**
      * If the array is empty, then S= 3. If the array is not empty,

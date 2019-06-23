@@ -768,7 +768,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == com.wavesplatform.sdk.utils.WavesConstants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == WavesConstants.SELL_ORDER_TYPE) { // todo check
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -781,8 +781,8 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_FILLED) {
-            com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_FILLED
+        val amountAssetTicker = if (amountAsset.name == WavesConstants.WAVES_ASSET_ID_FILLED) {
+            WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

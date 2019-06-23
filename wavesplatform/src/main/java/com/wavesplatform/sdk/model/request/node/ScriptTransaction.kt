@@ -13,6 +13,8 @@ import com.wavesplatform.sdk.crypto.Base58
  * is creating a multi-signature wallet. Script can be developed
  * with [Waves Ride IDE]({https://ide.wavesplatform.com/)
  *
+ * An account with the attached script is called a smart account.
+ *
  * You can also cancel the active script transaction. You must send transaction with null script.
  *
  * Before you start, please keep in mind.

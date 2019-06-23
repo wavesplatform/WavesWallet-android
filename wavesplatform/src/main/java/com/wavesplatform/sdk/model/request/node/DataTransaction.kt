@@ -30,7 +30,7 @@ class DataTransaction(
          * ],
          */
         @SerializedName("data") var data: ByteArray)
-    : BaseTransaction(CREATE_LEASING) {
+    : BaseTransaction(DATA) {
 
     override fun toBytes(): ByteArray {
         if (data.size < 1024 * 140) {

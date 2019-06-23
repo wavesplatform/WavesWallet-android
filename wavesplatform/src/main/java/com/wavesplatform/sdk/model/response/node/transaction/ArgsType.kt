@@ -2,7 +2,7 @@ package com.wavesplatform.sdk.model.response.node.transaction
 
 import com.google.gson.annotations.SerializedName
 
-enum class Value(val value: String) {
+enum class ArgsType(val value: String) {
     @SerializedName("boolean")
     VALUE_BOOL("boolean"),
 

@@ -13,14 +13,26 @@ import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ScriptInvocationTransactionResponse
 
-class ScriptInvocationTransaction(@SerializedName("feeAssetId")
-                                  var feeAssetId: String,
-                                  @SerializedName("dApp")
-                                  var dApp: String,
-                                  @SerializedName("call")
-                                  var call: ScriptInvocationTransactionResponse.Call?,
-                                  @SerializedName("payment")
-                                  var payment: Array<ScriptInvocationTransactionResponse.Payment>)
+/**
+ * Script invocation transaction - execution of script functions (test net only)
+ */
+class ScriptInvocationTransaction(
+        /**
+         * Asset id instead Waves for transaction commission withdrawal
+         */
+        @SerializedName("feeAssetId") var feeAssetId: String,
+        /**
+         * dApp – address of contract
+         */
+        @SerializedName("dApp") var dApp: String,
+        /**
+         * Function name in dApp with array of arguments
+         */
+        @SerializedName("call") var call: ScriptInvocationTransactionResponse.Call?,
+        /**
+         * (while 1 payment is supported)
+         */
+        @SerializedName("payment") var payment: Array<ScriptInvocationTransactionResponse.Payment>)
     : BaseTransaction(SCRIPT_INVOCATION) {
 
     override fun toBytes(): ByteArray {
@@ -30,11 +42,17 @@ class ScriptInvocationTransaction(@SerializedName("feeAssetId")
                     byteArrayOf(version.toByte()),
                     byteArrayOf(WavesPlatform.getEnvironment().scheme),
                     Base58.decode(senderPublicKey),
-                    // todo check add ['dApp', txFields.recipient[1]],
+                    Base58.decode(dApp),
                     // todo add txFields.functionCall,
                     // todo add txFields.payments,
+
+
+                    /*alias.toByteArray(
+                            Charset.forName("UTF-8")).arrayWithSize()*/
+
+
                     Longs.toByteArray(fee),
-                    // todo add ['feeAssetId', txFields.optionalAssetId[1]],
+                    Base58.decode(payment[1].assetId ?: ""), // now it works with only one
                     Longs.toByteArray(timestamp))
             // todo look https://github.com/wavesplatform/marshall/blob/master/src/schemas.ts : 320
         } catch (e: Exception) {

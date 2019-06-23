@@ -7,13 +7,13 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class ScriptInvocationTransactionResponse(@SerializedName("feeAssetId")
-                                      var feeAssetId: String?,
+                                          var feeAssetId: String?,
                                           @SerializedName("dApp")
-                                      var dApp: String,
+                                          var dApp: String,
                                           @SerializedName("call")
-                                      var call: Call?,
+                                          var call: Call?,
                                           @SerializedName("payment")
-                                      var payment: Array<Payment>)
+                                          var payment: Array<Payment>)
     : BaseTransactionResponse(type = BaseTransaction.SCRIPT_INVOCATION), Parcelable {
 
     @Parcelize
@@ -24,14 +24,25 @@ class ScriptInvocationTransactionResponse(@SerializedName("feeAssetId")
             var assetId: String?) : Parcelable
 
     @Parcelize
-    class Call(@SerializedName("function")
-               var function: String = "",
-               @SerializedName("args")
-               var args: Array<Args> = arrayOf()) : Parcelable
+    class Call(
+            /**
+             * Function name
+             */
+            @SerializedName("function") var function: String = "",
+            /**
+             * Array of arguments
+             */
+            @SerializedName("args") var args: Array<Args> = arrayOf()) : Parcelable
 
     @Parcelize
-    class Args(@SerializedName("type")
-               var type: String = "",
-               @SerializedName("value")
-               var value: Value = Value.VALUE_STRING) : Parcelable
+    class Args(
+            /**
+             * Type can be of four types - integer(0), boolean(1), binary array(2) and string(3).
+             */
+            @SerializedName("type") var type: ArgsType = ArgsType.VALUE_STRING,
+            /**
+             * Value can of four types - integer(0), boolean(1), binary array(2) and string(3).
+             * And it depends on type.
+             */
+            @SerializedName("value") var value: String = "") : Parcelable
 }

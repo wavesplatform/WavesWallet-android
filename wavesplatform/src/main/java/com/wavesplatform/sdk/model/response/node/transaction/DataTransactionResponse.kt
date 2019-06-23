@@ -17,6 +17,6 @@ class DataTransactionResponse(@SerializedName("data")
         @SerializedName("type")
         var type: String = ""
         @SerializedName("value")
-        var value: Value? = Value.VALUE_STRING
+        var value: ArgsType? = ArgsType.VALUE_STRING
     }
 }
