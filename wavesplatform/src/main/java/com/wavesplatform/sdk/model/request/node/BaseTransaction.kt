@@ -74,6 +74,7 @@ abstract class BaseTransaction(
         if (fee == 0L) {
             fee = WavesConstants.WAVES_MIN_FEE
         }
+        proofs.clear()
         proofs.add(getSignedStringWithSeed(seed))
     }
 

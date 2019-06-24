@@ -27,7 +27,9 @@ class ExchangeTransaction(
 
     override fun toBytes(): ByteArray {
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
+            Bytes.concat(
+                    byteArrayOf(0.toByte()),
+                    byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
                     Base58.decode(senderPublicKey),
 

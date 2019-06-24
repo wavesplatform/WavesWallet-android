@@ -86,7 +86,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                     makeButtonEnableIfValid()
                     return@map it.toString()
                 }
-                .filter { !it.isEmpty() }
+                .filter { it.isNotEmpty() }
                 .distinctUntilChanged()
                 .flatMap {
                     return@flatMap Observable.zip(validateObservable, Observable.just(it), BiFunction { t1: Boolean, t2: String ->

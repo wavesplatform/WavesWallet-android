@@ -268,8 +268,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun createAlias(request: AliasTransaction): Observable<AliasTransactionResponse> {
-        request.senderPublicKey = getPublicKeyStr()
-        request.timestamp = EnvironmentManager.getTime()
         request.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.transactionsBroadcast(request)
                 .map {

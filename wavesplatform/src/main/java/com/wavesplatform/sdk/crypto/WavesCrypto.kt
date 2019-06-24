@@ -119,7 +119,8 @@ interface WavesCrypto {
 
     /**
      * @param privateKey is a key to an address that gives access
-     * to the management of the tokens on that address as String
+     * to the management of the tokens on that address as String.
+     * It is string encoded by Base58 from byte array.
      * @return signature for the bytes by privateKey as byte array
      */
     fun signBytesWithPrivateKey(bytes: Bytes, privateKey: PrivateKey): Bytes
@@ -226,7 +227,7 @@ interface WavesCrypto {
         }
 
         override fun signBytesWithPrivateKey(bytes: Bytes, privateKey: PrivateKey): Bytes {
-            return CryptoProvider.sign(privateKey.toByteArray(Charsets.UTF_8), bytes)
+            return CryptoProvider.sign(base58decode(privateKey), bytes)
         }
 
         override fun signBytesWithSeed(bytes: Bytes, seed: Seed): Bytes {

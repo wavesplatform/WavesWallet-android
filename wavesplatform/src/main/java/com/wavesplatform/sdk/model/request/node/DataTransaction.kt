@@ -13,6 +13,8 @@ import com.wavesplatform.sdk.crypto.Base58
  * The maximum size of the data array is 140 kilobytes.
  * Each element of the data array is an object that has 3 fields: key, type, value.
  * The array of data cannot contain two elements with the same key field.
+ *
+ * Fee depends of data transaction length
  */
 class DataTransaction(
         /**

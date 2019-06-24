@@ -22,14 +22,14 @@ class AliasTransaction(
          * Alias, short name for address in Waves blockchain.
          * Alias bytes must be in [4;30]
          */
-        @SerializedName("aliasBytes") var alias: String = "")
+        @SerializedName("alias") var alias: String = "")
     : BaseTransaction(CREATE_ALIAS) {
 
     override fun toBytes(): ByteArray {
         return try {
             Bytes.concat(
                     byteArrayOf(type.toByte()),
-                    byteArrayOf(WavesPlatform.getEnvironment().scheme),
+                    byteArrayOf(version.toByte()),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(
                             byteArrayOf(version.toByte()),

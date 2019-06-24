@@ -10,7 +10,7 @@ import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.CryptoProvider
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.sdk.model.request.matcher.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
@@ -42,9 +42,10 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
-            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()), // todo check to Crypto
+            val bytes = Bytes.concat(WavesCrypto.base58decode(getPublicKeyStr()),
                     Longs.toByteArray(timestamp))
-            signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
+            signature = WavesCrypto.base58encode(
+                    WavesCrypto.signBytesWithPrivateKey(bytes, Base58.encode(privateKey)))
         }
         return matcherService.balanceReserved(getPublicKeyStr(), timestamp, signature)
     }
@@ -52,10 +53,11 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
     fun loadMyOrders(watchMarket: WatchMarketResponse?): Observable<List<AssetPairOrderResponse>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
-        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
-            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
+        App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
+            val bytes = Bytes.concat(WavesCrypto.base58decode(getPublicKeyStr()),
                     Longs.toByteArray(timestamp))
-            signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
+            signature = WavesCrypto.base58encode(
+                    WavesCrypto.signBytesWithPrivateKey(bytes, Base58.encode(privateKey)))
         }
         return matcherService.myOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }

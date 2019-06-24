@@ -17,7 +17,6 @@ import javax.inject.Inject
 @InjectViewState
 class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView>() {
 
-    var aliasRequest: AliasTransaction = AliasTransaction()
     var wavesBalance: AssetBalanceResponse = AssetBalanceResponse()
     var aliasValidation = false
     var fee = 0L
@@ -43,11 +42,9 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
     }
 
     fun createAlias(alias: String) {
-        aliasRequest.alias = alias
+        val aliasRequest = AliasTransaction(alias)
         aliasRequest.fee = fee
-
         viewState.showProgressBar(true)
-
         addSubscription(nodeServiceManager.createAlias(aliasRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
