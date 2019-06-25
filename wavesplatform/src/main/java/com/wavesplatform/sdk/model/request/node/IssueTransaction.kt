@@ -96,7 +96,7 @@ class IssueTransaction(
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),
                     scriptVersion,
-                    scriptBytes)
+                    scriptBytes.arrayWithSize())
 
             this.id = WavesCrypto.base58encode(WavesCrypto.blake2b(bytes))
 

@@ -419,7 +419,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
         return nodeService.addressBalance(address, assetId)
     }
 
-    fun transaction(transaction: ReissueTransaction): Observable<ReissueTransactionResponse> {
+    fun transaction(transaction: ScriptTransaction): Observable<ScriptTransactionResponse> {
         return nodeService.transactionsBroadcast(transaction)
     }
 }
