@@ -80,7 +80,7 @@ class IssueTransaction(
             val scriptBytes = if (script.isNullOrEmpty()) {
                 byteArrayOf()
             } else {
-                WavesCrypto.base64decode(script)
+                WavesCrypto.base64decode(script.replace("base64:", ""))
             }
 
             val bytes = Bytes.concat(
@@ -113,6 +113,5 @@ class IssueTransaction(
         const val MAX_ASSET_NAME_LENGTH = 16
         const val MIN_ASSET_NAME_LENGTH = 4
         const val MAX_DECIMALS = 8
-        const val SET_SCRIPT_LANG_VERSION: Byte = 1
     }
 }

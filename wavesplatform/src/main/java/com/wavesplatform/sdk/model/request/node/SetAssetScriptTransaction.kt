@@ -4,8 +4,9 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.utils.arrayWithSize
 
 /**
  * Set asset script transaction (set script to asset)
@@ -31,18 +32,41 @@ class SetAssetScriptTransaction(
 
     override fun toBytes(): ByteArray {
         return try {
+
+            val scriptVersion = if (script.isEmpty()) {
+                byteArrayOf(0)
+            } else {
+                byteArrayOf(SET_SCRIPT_LANG_VERSION)
+            }
+
+            val scriptBytes = if (script.isEmpty()) {
+                byteArrayOf()
+            } else {
+                WavesCrypto.base64decode(script.replace("base64:", ""))
+            }
+
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
-                    byteArrayOf(WavesPlatform.getEnvironment().scheme),
+                    byteArrayOf(chainId),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),
-                    Base58.decode(script))
-            // todo check https://github.com/wavesplatform/marshall/blob/master/src/schemas.ts : 492
+                    scriptVersion,
+                    scriptBytes.arrayWithSize())
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Data Transaction", e)
             ByteArray(0)
         }
+    }
+
+    override fun sign(seed: String): String {
+        version = 1
+        signature = super.sign(seed)
+        return signature ?: ""
+    }
+
+    companion object {
+        const val WAVES_SET_ASSET_SCRIPT_MIN_FEE = 100000000L
     }
 }

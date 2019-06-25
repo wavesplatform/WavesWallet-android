@@ -180,7 +180,7 @@ interface NodeService {
      * @param transaction SetAssetScriptTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: SetAssetScriptTransaction): Observable<AssetScriptTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: SetAssetScriptTransaction): Observable<SetAssetScriptTransactionResponse>
 
     /**
      * Broadcast invoke-script-transaction (typeId = 16)

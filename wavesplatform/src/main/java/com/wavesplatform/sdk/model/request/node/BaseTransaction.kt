@@ -122,6 +122,8 @@ abstract class BaseTransaction(
         const val ASSET_SCRIPT = 15
         const val SCRIPT_INVOCATION = 16
 
+        const val SET_SCRIPT_LANG_VERSION: Byte = 1
+
         fun getNameBy(type: Int): String {
             return when (type) {
                 GENESIS -> "Genesis"

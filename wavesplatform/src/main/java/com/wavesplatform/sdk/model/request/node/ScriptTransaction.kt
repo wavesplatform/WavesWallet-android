@@ -28,6 +28,7 @@ import com.wavesplatform.sdk.utils.arrayWithSize
 class ScriptTransaction(
         /**
          * Base64 binary string with Waves Ride script, starts with "base64:"
+         * Null for cancel. Watch out about commissions on set and cancel script
          */
         @SerializedName("script") var script: String? = null)
     : BaseTransaction(ADDRESS_SCRIPT) {
@@ -38,7 +39,7 @@ class ScriptTransaction(
             val scriptVersion = if (script.isNullOrEmpty()) {
                 byteArrayOf(0)
             } else {
-                byteArrayOf(IssueTransaction.SET_SCRIPT_LANG_VERSION)
+                byteArrayOf(SET_SCRIPT_LANG_VERSION)
             }
 
             val scriptBytes = if (script.isNullOrEmpty()) {
@@ -64,14 +65,12 @@ class ScriptTransaction(
 
     override fun sign(seed: String): String {
         version = 1
-        if (fee == 0L) {
-            fee = 100000000L
-        }
         signature = super.sign(seed)
         return signature ?: ""
     }
 
     companion object {
         const val WAVES_SET_SCRIPT_MIN_FEE = 1000000L
+        const val WAVES_CANCEL_SET_SCRIPT_MIN_FEE = 1400000L
     }
 }
