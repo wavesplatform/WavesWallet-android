@@ -9,6 +9,7 @@ import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MA
 import com.wavesplatform.sdk.model.response.node.transaction.MassTransferTransactionResponse
 import com.wavesplatform.sdk.utils.SignUtil
 
+
 /**
  * Mass-Transfer transaction sends a lot of transactions of asset for recipients set
  */
@@ -30,19 +31,54 @@ class MassTransferTransaction(
     : BaseTransaction(MASS_TRANSFER) {
 
     override fun toBytes(): ByteArray {
+
+
+        val transfers = listOf<Transfers>()
+
+        val byteList = arrayListOf<ByteArray>()
+        for (transfer in transfers) {
+            val recipient = TransferTransaction.getRecipientBytes(transfer.recipient)
+            byteList.add(recipient)
+            val amount = transfer.amount
+            byteList.add(Longs.toByteArray(amount))
+        }
+
+
+
+        //TransferTransaction.getRecipientBytes()
+
+
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
+
                     // todo txFields.transfers,
-                    Longs.toByteArray(fee),
+
                     Longs.toByteArray(timestamp),
+                    Longs.toByteArray(fee),
                     SignUtil.arrayWithSize(Base58.encode(attachment.toByteArray())))
-            // todo check https://github.com/wavesplatform/marshall/blob/master/src/schemas.ts : 463
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Mass Transfer Transaction", e)
             ByteArray(0)
         }
     }
+
+    override fun sign(seed: String): String {
+        version = 1
+        signature = super.sign(seed)
+        return signature ?: ""
+    }
+
+    private fun bytesTransfers(transfers: List<Transfers>) {
+        for (transfer in transfers) {
+            val recipient = TransferTransaction.getRecipientBytes(transfer.recipient)
+            val amount = transfer.amount
+        }
+    }
+
+    class Transfers(var recipient: String = "",
+                    var amount: Long = 0L
+    )
 }

@@ -39,7 +39,7 @@ class ScriptInvocationTransactionResponse(@SerializedName("feeAssetId")
             /**
              * Type can be of four types - integer(0), boolean(1), binary array(2) and string(3).
              */
-            @SerializedName("type") var type: ArgsType = ArgsType.VALUE_STRING,
+            @SerializedName("type") var type: String = "",
             /**
              * Value can of four types - integer(0), boolean(1), binary array(2) and string(3).
              * And it depends on type.

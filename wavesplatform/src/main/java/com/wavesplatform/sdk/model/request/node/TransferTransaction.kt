@@ -71,15 +71,7 @@ class TransferTransaction(
         }
     }
 
-    private fun getRecipientBytes(recipient: String): ByteArray {
-        return if (recipient.length <= 30) {
-            Bytes.concat(byteArrayOf(WavesConstants.VERSION.toByte()),
-                    byteArrayOf(WavesPlatform.getEnvironment().scheme),
-                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
-        } else {
-            Base58.decode(recipient)
-        }
-    }
+
 
     companion object {
 
@@ -96,5 +88,15 @@ class TransferTransaction(
         }
 
         const val MAX_ATTACHMENT_SIZE = 140
+
+        fun getRecipientBytes(recipient: String): ByteArray {
+            return if (recipient.length <= 30) {
+                Bytes.concat(byteArrayOf(WavesConstants.VERSION.toByte()),
+                        byteArrayOf(WavesPlatform.getEnvironment().scheme),
+                        recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+            } else {
+                Base58.decode(recipient)
+            }
+        }
     }
 }

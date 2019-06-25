@@ -6,17 +6,9 @@ import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class DataTransactionResponse(@SerializedName("data")
-                              var data: Array<Data>)
+class DataTransactionResponse
     : BaseTransactionResponse(type = BaseTransaction.DATA), Parcelable {
 
-    @Parcelize
-    class Data : Parcelable {
-        @SerializedName("key")
-        var key: String = ""
-        @SerializedName("type")
-        var type: String = ""
-        @SerializedName("value")
-        var value: ArgsType? = ArgsType.VALUE_STRING
-    }
+    @SerializedName("data")
+    var data: List<com.wavesplatform.sdk.model.request.node.DataEntity>? = null
 }
