@@ -62,17 +62,20 @@ open class WavesService(private var context: Context) {
         onErrorListeners.remove(errorListener)
     }
 
-    fun createService(baseUrl: String,
-                      adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
+    private fun createService(baseUrl: String,
+                              adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
             : Retrofit {
-        val retrofit = Retrofit.Builder()
+        return Retrofit.Builder()
                 .baseUrl(addSlash(baseUrl))
                 .client(createClient())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(adapterFactory)
                 .addConverterFactory(createGsonFactory())
                 .build()
-        return retrofit
+    }
+
+    fun createService(baseUrl: String, errorListener: OnErrorListener) : Retrofit {
+        return createService(baseUrl, CallAdapterFactory(errorListener))
     }
 
     internal fun createServices() {

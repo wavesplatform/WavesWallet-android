@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
@@ -93,7 +93,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun checkRecipientAlias(signedTransaction: TransferTransaction) {
-        signedTransaction.attachment = Base58.encode(
+        signedTransaction.attachment = WavesCrypto.base58encode(
                 (signedTransaction.attachment ?: "").toByteArray())
         if (signedTransaction.recipient.length <= 30) {
             signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()

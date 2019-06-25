@@ -4,7 +4,10 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.utils.WavesConstants
 
 /**
  * Sponsorship transaction (or is Autonomous Assets)
@@ -32,9 +35,9 @@ class SponsorshipTransaction(
          */
         @SerializedName("assetId") var assetId: String,
         /**
-         * Min sponsored asset fee. If null Sponsorship will be cancelled
+         * Min sponsored asset fee. If "0" Sponsorship will be cancelled
          */
-        @SerializedName("minSponsoredAssetFee") var minSponsoredAssetFee: Long)
+        @SerializedName("minSponsoredAssetFee") var minSponsoredAssetFee: Long?)
     : BaseTransaction(SPONSORSHIP) {
 
     override fun toBytes(): ByteArray {
@@ -43,12 +46,25 @@ class SponsorshipTransaction(
                     byteArrayOf(version.toByte()),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
-                    Longs.toByteArray(minSponsoredAssetFee),
+                    Longs.toByteArray(minSponsoredAssetFee ?: 0),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Sponsorship Transaction", e)
             ByteArray(0)
         }
+    }
+
+    override fun sign(seed: String): String {
+        version = 1
+        if (fee == 0L) {
+            fee = 100400000L
+        }
+        signature = super.sign(seed)
+        return signature ?: ""
+    }
+
+    companion object {
+        const val WAVES_SPONSORSHIP_MIN_FEE = 100000000L
     }
 }

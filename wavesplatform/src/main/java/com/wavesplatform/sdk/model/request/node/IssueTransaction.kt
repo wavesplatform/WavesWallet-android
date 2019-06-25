@@ -12,6 +12,8 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.SignUtil.arrayWithSize
+import com.wavesplatform.sdk.utils.arrayWithSize
+import java.nio.charset.Charset
 
 /**
  * Issue transaction add a new asset in blockchain.
@@ -55,11 +57,10 @@ class IssueTransaction(
     /**
      * New Id for new asset of the blockchain
      */
-    @SerializedName("id") val id: String
+    @SerializedName("id") var id: String? = ""
 
     init {
         this.fee = WAVES_ISSUE_MIN_FEE
-        this.id = WavesCrypto.base58encode(WavesCrypto.blake2b(toBytes()))
     }
 
     override fun toBytes(): ByteArray {
@@ -70,15 +71,36 @@ class IssueTransaction(
                 byteArrayOf(0)
             }
 
-            return Bytes.concat(byteArrayOf(type.toByte()),
+            val scriptVersion = if (script.isNullOrEmpty()) {
+                byteArrayOf(0)
+            } else {
+                byteArrayOf(SET_SCRIPT_LANG_VERSION)
+            }
+
+            val scriptBytes = if (script.isNullOrEmpty()) {
+                byteArrayOf()
+            } else {
+                WavesCrypto.base64decode(script)
+            }
+
+            val bytes = Bytes.concat(
+                    byteArrayOf(type.toByte()),
+                    byteArrayOf(version.toByte()),
+                    byteArrayOf(chainId),
                     Base58.decode(senderPublicKey),
-                    arrayWithSize(name),
-                    arrayWithSize(description),
+                    name.toByteArray(Charset.forName("UTF-8")).arrayWithSize(),
+                    description.toByteArray(Charset.forName("UTF-8")).arrayWithSize(),
                     Longs.toByteArray(quantity),
                     byteArrayOf(decimals),
                     reissuableBytes,
                     Longs.toByteArray(fee),
-                    Longs.toByteArray(timestamp))
+                    Longs.toByteArray(timestamp),
+                    scriptVersion,
+                    scriptBytes)
+
+            this.id = WavesCrypto.base58encode(WavesCrypto.blake2b(bytes))
+
+            return bytes
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Issue Transaction", e)
             return ByteArray(0)
@@ -86,10 +108,11 @@ class IssueTransaction(
     }
 
     companion object {
-        var WAVES_ISSUE_MIN_FEE = 100000000L
-        var MAX_DESCRIPTION_LENGTH = 1000
-        var MAX_ASSET_NAME_LENGTH = 16
-        var MIN_ASSET_NAME_LENGTH = 4
-        var MAX_DECIMALS = 8
+        const val WAVES_ISSUE_MIN_FEE = 100000000L
+        const val MAX_DESCRIPTION_LENGTH = 1000
+        const val MAX_ASSET_NAME_LENGTH = 16
+        const val MIN_ASSET_NAME_LENGTH = 4
+        const val MAX_DECIMALS = 8
+        const val SET_SCRIPT_LANG_VERSION: Byte = 1
     }
 }

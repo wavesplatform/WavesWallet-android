@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalletManager {
+class WalletManager {
     private static WalletManager instance;
 
     /**

@@ -43,7 +43,10 @@ class ReissueTransaction(
                 byteArrayOf(0)
             }
 
-            return Bytes.concat(byteArrayOf(type.toByte()),
+            return Bytes.concat(
+                    byteArrayOf(type.toByte()),
+                    byteArrayOf(version.toByte()),
+                    byteArrayOf(chainId),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
                     Longs.toByteArray(quantity),

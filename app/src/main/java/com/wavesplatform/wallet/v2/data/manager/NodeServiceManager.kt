@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
@@ -416,5 +417,9 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalanceResponse> {
         return nodeService.addressBalance(address, assetId)
+    }
+
+    fun transaction(transaction: ReissueTransaction): Observable<ReissueTransactionResponse> {
+        return nodeService.transactionsBroadcast(transaction)
     }
 }

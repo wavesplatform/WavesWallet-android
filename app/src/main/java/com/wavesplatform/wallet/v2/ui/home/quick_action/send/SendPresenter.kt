@@ -8,11 +8,10 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.Hash
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.utils.*
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.node.*
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
@@ -289,7 +288,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 return false
             }
 
-            val addressBytes = Base58.decode(address)
+            val addressBytes = WavesCrypto.base58decode(address)
 
             if (addressBytes[0] != 1.toByte() ||
                     addressBytes[1] != EnvironmentManager.netCode) {
@@ -298,7 +297,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
             val key = addressBytes.slice(IntRange(0, 21))
             val check = addressBytes.slice(IntRange(22, 25))
-            val keyHash = Hash.keccak(key.toByteArray())
+            val keyHash = WavesCrypto.keccak(key.toByteArray())
                     .toList()
                     .slice(IntRange(0, 3))
 

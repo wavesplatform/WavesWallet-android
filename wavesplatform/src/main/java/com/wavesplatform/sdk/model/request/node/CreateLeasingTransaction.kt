@@ -50,7 +50,7 @@ class CreateLeasingTransaction(
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(version.toByte()),
-                    byteArrayOf(chainId.toByte()),
+                    byteArrayOf(chainId),
                     recipient.parseAlias().toByteArray(
                             Charset.forName("UTF-8")).arrayWithSize())
         } else {

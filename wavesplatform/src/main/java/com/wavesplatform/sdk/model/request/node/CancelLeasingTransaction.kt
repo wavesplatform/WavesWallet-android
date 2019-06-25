@@ -25,7 +25,7 @@ class CancelLeasingTransaction(
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
-                    byteArrayOf(chainId.toByte()),
+                    byteArrayOf(chainId),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),

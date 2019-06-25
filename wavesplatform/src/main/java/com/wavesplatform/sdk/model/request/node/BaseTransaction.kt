@@ -38,6 +38,7 @@ abstract class BaseTransaction(
     var version: Int = WavesConstants.VERSION
 
     /**
+     * Signatures v2 string set.
      * If the array is empty, then S= 3. If the array is not empty,
      * then S = 3 + 2 × N + (P1 + P2 + ... + Pn), where N is the number of proofs in the array,
      * Pn is the size on N-th proof in bytes.
@@ -47,12 +48,18 @@ abstract class BaseTransaction(
     val proofs: MutableList<String> = mutableListOf()
 
     /**
+     * Signature v1
+     */
+    @SerializedName("signature")
+    var signature: String? = null
+
+    /**
      * Determines the network where the transaction will be published to.
      * [WavesCrypto.TEST_NET_CHAIN_ID] for test network,
      * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
      */
     @SerializedName("chainId")
-    var chainId: String = WavesPlatform.getEnvironment().scheme.toString()
+    var chainId: Byte = WavesPlatform.getEnvironment().scheme
 
     /**
      * @return bytes to sign of the transaction
@@ -64,7 +71,7 @@ abstract class BaseTransaction(
      * and [WavesConstants.WAVES_MIN_FEE] if it equals 0
      * @param seed Seed-phrase
      */
-    fun sign(seed: String) {
+    open fun sign(seed: String): String {
         if (senderPublicKey == "") {
             senderPublicKey = WavesCrypto.publicKey(seed)
         }
@@ -75,7 +82,9 @@ abstract class BaseTransaction(
             fee = WavesConstants.WAVES_MIN_FEE
         }
         proofs.clear()
-        proofs.add(getSignedStringWithSeed(seed))
+        val signature = getSignedStringWithSeed(seed)
+        proofs.add(signature)
+        return signature
     }
 
     fun getSignedBytesWithSeed(seed: String): ByteArray {

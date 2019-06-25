@@ -11,7 +11,7 @@ import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import java.io.IOException
 
-class HostSelectionInterceptor(initServers: Environment) : Interceptor {
+internal class HostSelectionInterceptor(initServers: Environment) : Interceptor {
 
     @Volatile
     private var nodeHost: String? = null

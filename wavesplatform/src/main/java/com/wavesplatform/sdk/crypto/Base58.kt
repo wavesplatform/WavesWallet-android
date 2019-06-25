@@ -1,6 +1,6 @@
 package com.wavesplatform.sdk.crypto
 
-object Base58 {
+internal object Base58 {
 
     private val ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
             .toCharArray()

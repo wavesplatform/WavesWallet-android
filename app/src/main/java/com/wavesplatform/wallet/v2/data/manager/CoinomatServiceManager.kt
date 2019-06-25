@@ -6,16 +6,15 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.wavesplatform.sdk.WavesPlatform
-import com.wavesplatform.sdk.net.CallAdapterFactory
-import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.NetworkException
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
+import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.CreateTunnelResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.LimitResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
-import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -54,12 +53,12 @@ class CoinomatServiceManager @Inject constructor() : BaseServiceManager() {
 
         fun create(onErrorListener: OnErrorListener? = null): CoinomatService {
             this.onErrorListener = onErrorListener
-            val adapterFactory = CallAdapterFactory(object : OnErrorListener{
-                override fun onError(exception: NetworkException) {
-                    CoinomatServiceManager.onErrorListener?.onError(exception)
-                }
-            })
-            return WavesPlatform.service().createService(Constants.URL_COINOMAT, adapterFactory)
+            return WavesPlatform.service().createService(Constants.URL_COINOMAT,
+                    object : OnErrorListener {
+                        override fun onError(exception: NetworkException) {
+                            CoinomatServiceManager.onErrorListener?.onError(exception)
+                        }
+                    })
                     .create(CoinomatService::class.java)
         }
 

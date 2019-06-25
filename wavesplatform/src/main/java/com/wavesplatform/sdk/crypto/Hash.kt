@@ -5,7 +5,7 @@ import com.wavesplatform.sdk.crypto.hash.Keccak256
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-object Hash {
+internal object Hash {
 
     private const val DIGEST_SIZE = 32
 

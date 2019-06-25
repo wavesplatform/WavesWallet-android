@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
-class CallAdapterFactory(private val errorListener: OnErrorListener) : CallAdapter.Factory() {
+internal class CallAdapterFactory(private val errorListener: OnErrorListener) : CallAdapter.Factory() {
 
     private val original: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
 

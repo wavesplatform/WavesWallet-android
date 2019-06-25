@@ -17,7 +17,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
@@ -182,7 +182,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
         val showCommentBlock = !transaction.attachment.isNullOrEmpty()
         if (showCommentBlock) {
             commentBlock.visiable()
-            textComment?.text = String(Base58.decode(transaction.attachment!!))
+            textComment?.text = String(WavesCrypto.base58decode(transaction.attachment!!))
         } else {
             commentBlock.gone()
         }
@@ -713,7 +713,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                                             transaction.recipientAddress)
                                     if (!transaction.attachment.isNullOrEmpty()) {
                                         putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT,
-                                                String(Base58.decode(transaction.attachment!!)))
+                                                String(WavesCrypto.base58decode(transaction.attachment!!)))
                                     } else {
                                         putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT, "")
                                     }

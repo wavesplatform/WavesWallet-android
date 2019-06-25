@@ -1,6 +1,6 @@
 package com.wavesplatform.sdk.crypto
 
-object Words {
+internal object Words {
 
     val list = mutableListOf(
             "abandon",

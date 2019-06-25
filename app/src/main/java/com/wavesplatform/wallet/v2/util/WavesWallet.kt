@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.sdk.crypto.AESUtil
-import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.PrivateKeyAccount
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.addressFromPublicKey
 import timber.log.Timber
 import java.util.*
@@ -35,12 +35,12 @@ class WavesWallet(val seed: ByteArray) {
     }
 
     @Throws(Exception::class)
-    constructor(walletData: String, password: String?) : this(Base58.decode(
+    constructor(walletData: String, password: String?) : this(WavesCrypto.base58decode(
             AESUtil.decrypt(walletData, password, DEFAULT_PBKDF2_ITERATIONS_V2)))
 
     @Throws(Exception::class)
     fun getEncryptedData(password: String?): String {
-        return AESUtil.encrypt(Base58.encode(seed), password, DEFAULT_PBKDF2_ITERATIONS_V2)
+        return AESUtil.encrypt(WavesCrypto.base58encode(seed), password, DEFAULT_PBKDF2_ITERATIONS_V2)
     }
 
     companion object {
