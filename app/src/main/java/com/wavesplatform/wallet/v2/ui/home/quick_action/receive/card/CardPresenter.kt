@@ -11,7 +11,7 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Single

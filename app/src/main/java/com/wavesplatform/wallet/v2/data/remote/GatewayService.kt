@@ -7,9 +7,9 @@ package com.wavesplatform.wallet.v2.data.remote
 
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.gateway.InitGatewayRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.InitDepositResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.InitWithdrawResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.SendTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.gateway.InitDepositResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.gateway.InitWithdrawResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.gateway.SendTransactionResponse
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST

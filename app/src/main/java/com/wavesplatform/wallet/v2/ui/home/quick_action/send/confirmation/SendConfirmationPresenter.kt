@@ -15,8 +15,8 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
-import com.wavesplatform.wallet.v2.data.manager.gateway.GatewayDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo

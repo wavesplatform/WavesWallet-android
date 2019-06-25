@@ -13,6 +13,7 @@ import com.google.gson.JsonObject
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.analytics.ProviderType
+import com.wavesplatform.wallet.v2.util.getDeviceId
 import com.wavesplatform.wallet.v2.util.toBundle
 import org.json.JSONObject
 import pers.victor.ext.app
@@ -23,6 +24,7 @@ class AmplitudeProvider(context: Context, key: String) : ProviderType {
     init {
         Amplitude.getInstance()
                 .initialize(context, key)
+                .setDeviceId(getDeviceId())
                 .enableForegroundTracking(app)
     }
 

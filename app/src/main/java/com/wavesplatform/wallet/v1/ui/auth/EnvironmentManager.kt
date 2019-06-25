@@ -264,7 +264,7 @@ class EnvironmentManager {
                         PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, KEY_ENV_MAIN_NET)
             }
 
-        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {
+        fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {
             return instance?.current?.configuration?.generalAssets?.firstOrNull { it.assetId == assetId }
         }
 

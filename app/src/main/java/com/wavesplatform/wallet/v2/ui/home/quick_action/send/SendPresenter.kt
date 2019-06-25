@@ -11,14 +11,13 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.gateway.CoinomatDataManager
-import com.wavesplatform.wallet.v2.data.manager.gateway.GatewayDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -37,6 +36,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
+    @Inject
+    lateinit var gatewayProvider: GatewayProvider
     @Inject
     lateinit var gatewayDataManager: GatewayDataManager
 
@@ -165,7 +166,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             }
             return
         }
-
+        gatewayProvider
+                .getGatewayDataManager(assetId)
+                .loadGatewayMetadata()
         if (type == Type.VOSTOK) {
             addSubscription(gatewayDataManager.prepareSendTransaction(recipient!!, assetId)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
