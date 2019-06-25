@@ -86,7 +86,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sum.makeTextHalfBold()
         }
 
-        val ticker = presenter.assetInfo?.getTicker()
+        val ticker = presenter.assetInfo?.getTokenTicker()
         if (ticker.isNullOrBlank()) {
             text_tag.text = presenter.selectedAsset!!.getName()
         } else {
