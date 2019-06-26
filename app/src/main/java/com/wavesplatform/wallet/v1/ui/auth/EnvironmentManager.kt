@@ -38,7 +38,7 @@ class EnvironmentManager {
     private var versionDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
-    class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
+    class Environment internal constructor(val name: String, val url: String, val rawUrl: String, jsonFileName: String) {
         var configuration: GlobalConfiguration? = null
 
         init {
@@ -54,8 +54,8 @@ class EnvironmentManager {
         companion object {
 
             internal var environments: MutableList<Environment> = mutableListOf()
-            var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
-            var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
+            var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, URL_RAW_CONFIG_MAIN_NET, FILENAME_TEST_NET)
+            var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, URL_RAW_CONFIG_TEST_NET, FILENAME_MAIN_NET)
 
             init {
                 environments.add(TEST_NET)
@@ -64,7 +64,11 @@ class EnvironmentManager {
         }
     }
 
+
     companion object {
+        private const val BASE_PROXY_CONFIG_URL = "https://github-proxy.wvservices.com/"
+        private const val BASE_RAW_CONFIG_URL = "https://raw.githubusercontent.com/"
+
         private const val BRANCH = "mobile/v2.3"
 
         const val KEY_ENV_TEST_NET = "env_testnet"
@@ -73,11 +77,18 @@ class EnvironmentManager {
         const val FILENAME_TEST_NET = "environment_testnet.json"
         const val FILENAME_MAIN_NET = "environment_mainnet.json"
 
-        const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
+        const val URL_CONFIG_MAIN_NET = BASE_PROXY_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
-        const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
+        const val URL_CONFIG_TEST_NET = BASE_PROXY_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
-        const val URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
+        const val URL_COMMISSION_MAIN_NET = BASE_PROXY_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/fee.json"
+
+        const val URL_RAW_CONFIG_MAIN_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
+        const val URL_RAW_CONFIG_TEST_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
+        const val URL_RAW_COMMISSION_MAIN_NET = BASE_RAW_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/fee.json"
 
         private var instance: EnvironmentManager? = null
@@ -122,13 +133,10 @@ class EnvironmentManager {
             }
 
             instance!!.configurationDisposable = githubDataManager.globalConfiguration(environment.url)
+                    .onErrorResumeNext(githubDataManager.globalConfiguration(environment.rawUrl)
+                            .onErrorReturnItem(environment.configuration))
                     .map { globalConfiguration ->
                         setConfiguration(globalConfiguration)
-                        globalConfiguration.generalAssets.map { it.assetId }
-                    }
-                    .onErrorReturn {
-                        Timber.e(it, "EnvironmentManager: Can't download global configuration!")
-                        setConfiguration(environment.configuration!!)
                         globalConfiguration.generalAssets.map { it.assetId }
                     }
                     .flatMap { githubDataManager.apiService.assetsInfoByIds(AssetsInfoRequest(it)) }
