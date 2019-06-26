@@ -71,6 +71,6 @@ class ScriptTransaction(
 
     companion object {
         const val WAVES_SET_SCRIPT_MIN_FEE = 1000000L
-        const val WAVES_CANCEL_SET_SCRIPT_MIN_FEE = 1400000L
+        const val WAVES_CANCEL_SET_SCRIPT_MIN_FEE = 1000000L
     }
 }

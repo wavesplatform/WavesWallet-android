@@ -12,8 +12,11 @@ import com.wavesplatform.sdk.utils.SignUtil
 
 /**
  * Mass-Transfer transaction sends a lot of transactions of asset for recipients set
+ *
+ * Fee depends of mass transactions count
+ * 0.001 + 0.0005 × N, N is the number of transfers inside of a transaction
  */
-class MassTransferTransaction(
+internal class MassTransferTransaction(
         /**
          * Id of transferable asset in Waves blockchain, different for main and test net
          */

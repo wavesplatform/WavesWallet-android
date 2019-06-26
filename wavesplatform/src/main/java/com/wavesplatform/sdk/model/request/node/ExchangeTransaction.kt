@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransactionResponse
 
-class ExchangeTransaction(
+internal class ExchangeTransaction(
         @SerializedName("order1")
         var order1: ExchangeTransactionResponse.Order,
         @SerializedName("order2")

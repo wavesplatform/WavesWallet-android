@@ -18,7 +18,7 @@ import java.nio.charset.Charset
 /**
  * Issue transaction add a new asset in blockchain.
  */
-class IssueTransaction(
+internal class IssueTransaction(
         /**
          * Name of your new asset byte length must be in [[MIN_ASSET_NAME_LENGTH],[MAX_ASSET_NAME_LENGTH]]
          */
@@ -109,6 +109,7 @@ class IssueTransaction(
 
     companion object {
         const val WAVES_ISSUE_MIN_FEE = 100000000L
+        const val WAVES_ISSUE_NON_FUNGIBLE_MIN_FEE = 100000L
         const val MAX_DESCRIPTION_LENGTH = 1000
         const val MAX_ASSET_NAME_LENGTH = 16
         const val MIN_ASSET_NAME_LENGTH = 4
