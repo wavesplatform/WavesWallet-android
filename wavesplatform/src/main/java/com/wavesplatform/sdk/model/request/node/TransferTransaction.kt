@@ -19,7 +19,9 @@ import com.wavesplatform.sdk.utils.parseAlias
 import java.nio.charset.Charset
 
 /**
- * Transfer transaction sends amount of asset on address
+ * Transfer transaction sends amount of asset on address.
+ * It is used to transfer a specific amount of an asset (WAVES by default)
+ * to the recipient (by address or alias).
  */
 class TransferTransaction(
         /**

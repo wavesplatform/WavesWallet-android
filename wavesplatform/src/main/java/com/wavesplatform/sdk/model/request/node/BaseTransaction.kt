@@ -5,6 +5,9 @@ import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
+/**
+ * Base transacton.
+ */
 abstract class BaseTransaction(
         /**
          * ID of the transaction type. Correct values in [1; 16] @see[BaseTransaction.Companion]
@@ -39,6 +42,8 @@ abstract class BaseTransaction(
 
     /**
      * Signatures v2 string set.
+     * A transaction signature is a digital signature
+     * with which the sender confirms the ownership of the outgoing transaction.
      * If the array is empty, then S= 3. If the array is not empty,
      * then S = 3 + 2 × N + (P1 + P2 + ... + Pn), where N is the number of proofs in the array,
      * Pn is the size on N-th proof in bytes.
@@ -48,7 +53,7 @@ abstract class BaseTransaction(
     val proofs: MutableList<String> = mutableListOf()
 
     /**
-     * Signature v1
+     * Signature v1. See also [proofs]
      */
     @SerializedName("signature")
     var signature: String? = null

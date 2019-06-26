@@ -12,9 +12,11 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 
 /**
- * The cancel leasing transaction reverse @see[CreateLeasingTransaction].
+ * The cancel leasing transaction reverse [LeaseTransaction].
+ * Lease cancel transaction is used to to cancel
+ * and discontinue the WAVES leasing process to a Waves node.
  */
-class CancelLeasingTransaction(
+class LeaseCancelTransaction(
         /**
          * Id of Leasing Transaction to cancel
          */

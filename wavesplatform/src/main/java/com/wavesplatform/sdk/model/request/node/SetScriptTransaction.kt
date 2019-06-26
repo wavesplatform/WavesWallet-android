@@ -23,9 +23,18 @@ import com.wavesplatform.sdk.utils.arrayWithSize
  * Before you start, please keep in mind.
  * We do not recommend you submit script transactions unless you are an experienced user.
  *
- * Errors can lead to permanent loss of access to your account.
+ * !!! Errors can lead to permanent loss of access to your account.
+ *
+ * Set script transaction is used to setup an smart account,
+ * The account needs to issue Set script transaction which contains the predicate.
+ * Upon success, every outgoing transaction will be validated not by the default mechanism
+ * of signature validation, but according to the predicate logic.
+ *
+ * Account script can be changed or cleared if the script installed allows
+ * the new set script transaction to process. The set script transaction can be changed
+ * by another set script transaction call unless it’s prohibited by a previous set script.
  */
-class ScriptTransaction(
+class SetScriptTransaction(
         /**
          * Base64 binary string with Waves Ride script, starts with "base64:"
          * Null for cancel. Watch out about commissions on set and cancel script

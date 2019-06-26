@@ -16,11 +16,11 @@ import com.wavesplatform.sdk.utils.parseAlias
 import java.nio.charset.Charset
 
 /**
- * The transaction leases amount of Waves to miner-recipient
+ * The transaction leases amount of Waves to node operator.
  * it can be address or alias by Proof-of-Stake consensus. It will perform at non-node address.
- * You always can reverse the any leased amount by @see[CancelLeasingTransaction]
+ * You always can reverse the any leased amount by [LeaseCancelTransaction]
  */
-class CreateLeasingTransaction(
+class LeaseTransaction(
         /**
          * Address or alias of Waves blockchain to lease
          */

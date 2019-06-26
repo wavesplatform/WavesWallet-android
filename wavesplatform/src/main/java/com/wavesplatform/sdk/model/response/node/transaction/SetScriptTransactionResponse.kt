@@ -6,6 +6,6 @@ import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class ScriptTransactionResponse(@SerializedName("script")
+class SetScriptTransactionResponse(@SerializedName("script")
                                 var script: String?)
     : BaseTransactionResponse(type = BaseTransaction.ADDRESS_SCRIPT), Parcelable

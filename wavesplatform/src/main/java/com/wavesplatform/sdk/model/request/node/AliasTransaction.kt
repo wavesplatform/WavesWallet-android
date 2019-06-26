@@ -21,6 +21,7 @@ class AliasTransaction(
         /**
          * Alias, short name for address in Waves blockchain.
          * Alias bytes must be in [4;30]
+         * Alphabet: -.0123456789@_abcdefghijklmnopqrstuvwxyz
          */
         @SerializedName("alias") var alias: String = "")
     : BaseTransaction(CREATE_ALIAS) {

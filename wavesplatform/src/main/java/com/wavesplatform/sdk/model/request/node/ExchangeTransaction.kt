@@ -7,6 +7,17 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransactionResponse
 
+/**
+ * Not available now
+ *
+ * Exchange transaction is a transaction type that creates a sell or buy order
+ * for exchange by specifying the following:
+ *
+ * The asset.
+ * The price of asset to sell or buy.
+ * The amount which the user is offering.
+ * The asset and the amount which the user requests in return.
+ */
 internal class ExchangeTransaction(
         @SerializedName("order1")
         var order1: ExchangeTransactionResponse.Order,

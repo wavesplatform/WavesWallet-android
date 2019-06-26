@@ -6,13 +6,13 @@ import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class ScriptInvocationTransactionResponse(@SerializedName("feeAssetId")
+class InvokeScriptTransactionResponse(@SerializedName("feeAssetId")
                                           var feeAssetId: String?,
-                                          @SerializedName("dApp")
+                                      @SerializedName("dApp")
                                           var dApp: String,
-                                          @SerializedName("call")
+                                      @SerializedName("call")
                                           var call: Call?,
-                                          @SerializedName("payment")
+                                      @SerializedName("payment")
                                           var payment: Array<Payment>)
     : BaseTransactionResponse(type = BaseTransaction.SCRIPT_INVOCATION), Parcelable {
 

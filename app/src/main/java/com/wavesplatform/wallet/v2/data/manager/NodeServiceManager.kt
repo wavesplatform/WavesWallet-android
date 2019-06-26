@@ -28,7 +28,6 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
-import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
@@ -281,7 +280,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun cancelLeasing(transaction: CancelLeasingTransaction): Observable<CancelLeasingTransactionResponse> {
+    fun cancelLeasing(transaction: LeaseCancelTransaction): Observable<LeaseCancelTransactionResponse> {
         transaction.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.transactionsBroadcast(transaction)
                 .map {
@@ -298,9 +297,9 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun startLeasing(
-            createLeasingRequest: CreateLeasingTransaction,
+            createLeasingRequest: LeaseTransaction,
             fee: Long
-    ): Observable<CreateLeasingTransactionResponse> {
+    ): Observable<LeaseTransactionResponse> {
         createLeasingRequest.fee = fee
         createLeasingRequest.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.transactionsBroadcast(createLeasingRequest)

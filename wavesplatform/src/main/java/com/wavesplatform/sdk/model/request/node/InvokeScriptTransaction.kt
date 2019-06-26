@@ -11,12 +11,14 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.response.node.transaction.ScriptInvocationTransactionResponse
+import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransactionResponse
 
 /**
- * Script invocation transaction - execution of script functions (test net only)
+ * Not available now
+ *
+ * Invoke script transaction is a transaction that invokes functions of the dApp script.
  */
-class ScriptInvocationTransaction(
+class InvokeScriptTransaction(
         /**
          * Asset id instead Waves for transaction commission withdrawal
          */
@@ -28,11 +30,11 @@ class ScriptInvocationTransaction(
         /**
          * Function name in dApp with array of arguments
          */
-        @SerializedName("call") var call: ScriptInvocationTransactionResponse.Call?,
+        @SerializedName("call") var call: InvokeScriptTransactionResponse.Call?,
         /**
          * (while 1 payment is supported)
          */
-        @SerializedName("payment") var payment: Array<ScriptInvocationTransactionResponse.Payment>)
+        @SerializedName("payment") var payment: Array<InvokeScriptTransactionResponse.Payment>)
     : BaseTransaction(SCRIPT_INVOCATION) {
 
     override fun toBytes(): ByteArray {

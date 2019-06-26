@@ -6,7 +6,7 @@ import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class MassTransferTransactionResponse(@SerializedName("assetId")
+internal class MassTransferTransactionResponse(@SerializedName("assetId")
                                       var assetId: String?,
                                       @SerializedName("attachment")
                                       var attachment: String,

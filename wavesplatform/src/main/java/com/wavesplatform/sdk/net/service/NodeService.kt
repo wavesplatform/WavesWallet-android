@@ -19,6 +19,7 @@ import retrofit2.http.Path
 /**
  * Service for working with nodes.
  * For more information: [Nodes Swagger]({https://nodes.wavesnodes.com/api-docs/index.html#!/assets/balances)
+ * Any transactions you can check at [Waves Explorer]({https://wavesexplorer.com/)
  */
 interface NodeService {
 
@@ -122,23 +123,23 @@ interface NodeService {
     /**
      * Broadcast exchange-transaction (typeId = 7)
      * @param transaction ExchangeTransaction with signature by privateKey
-     */
+     *//*
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: ExchangeTransaction): Observable<ExchangeTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: ExchangeTransaction): Observable<ExchangeTransactionResponse>*/
 
     /**
-     * Broadcast create-leasing-transaction (typeId = 8)
-     * @param transaction CreateLeasingTransaction with signature by privateKey
+     * Broadcast lease-transaction (typeId = 8)
+     * @param transaction LeaseTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: CreateLeasingTransaction): Observable<CreateLeasingTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: LeaseTransaction): Observable<LeaseTransactionResponse>
 
     /**
-     * Broadcast cancel-leasing-transaction (typeId = 9)
-     * @param transaction CancelLeasingTransaction with signature by privateKey
+     * Broadcast lease-cancel-transaction (typeId = 9)
+     * @param transaction LeaseCancelTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: CancelLeasingTransaction): Observable<CancelLeasingTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: LeaseCancelTransaction): Observable<LeaseCancelTransactionResponse>
 
     /**
      * Create alias-transaction. Alias - short name for address  (typeId = 10)
@@ -150,9 +151,9 @@ interface NodeService {
     /**
      * Broadcast mass-transfer-transaction (typeId = 11)
      * @param transaction MassTransferTransaction with signature by privateKey
-     */
+     *//*
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: MassTransferTransaction): Observable<MassTransferTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: MassTransferTransaction): Observable<MassTransferTransactionResponse>*/
 
     /**
      * Broadcast data-transaction (typeId = 12)
@@ -162,11 +163,11 @@ interface NodeService {
     fun transactionsBroadcast(@Body transaction: DataTransaction): Observable<DataTransactionResponse>
 
     /**
-     * Broadcast asset-script-transaction, also called address-script  (typeId = 13)
-     * @param transaction ScriptTransaction with signature by privateKey
+     * Broadcast set-script-transaction, also called address-script  (typeId = 13)
+     * @param transaction SetScriptTransaction with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: ScriptTransaction): Observable<ScriptTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: SetScriptTransaction): Observable<SetScriptTransactionResponse>
 
     /**
      * Broadcast sponsorship-transaction  (typeId = 14)
@@ -184,9 +185,9 @@ interface NodeService {
 
     /**
      * Broadcast invoke-script-transaction (typeId = 16)
-     * @param transaction ScriptInvocationTransaction with signature by privateKey
-     */
+     * @param transaction InvokeScriptTransaction with signature by privateKey
+     *//*
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: ScriptInvocationTransaction): Observable<ScriptInvocationTransactionResponse>
+    fun transactionsBroadcast(@Body transaction: InvokeScriptTransaction): Observable<InvokeScriptTransactionResponse>*/
 
 }

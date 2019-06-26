@@ -12,6 +12,7 @@ import java.nio.charset.Charset
 
 /**
  * The data transaction stores data in account data storage of the blockchain.
+ *
  * The storage contains data recorded using a data transaction or an invoke script transaction.
  * The maximum length of the data array is 100 elements.
  * The maximum size of the data array is 140 kilobytes.

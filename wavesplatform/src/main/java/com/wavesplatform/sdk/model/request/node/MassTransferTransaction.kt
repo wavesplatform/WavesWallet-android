@@ -11,7 +11,17 @@ import com.wavesplatform.sdk.utils.SignUtil
 
 
 /**
+ * Not available now
+ *
  * Mass-Transfer transaction sends a lot of transactions of asset for recipients set
+ *
+ * Transfer transaction is used to combine several ordinary transfer transactions
+ * that share single sender and asset ID (it has a list of recipients,
+ * and an amount to be transferred to each recipient).
+ * The maximum number of recipients in a single transaction is 100.
+ *
+ * The transfers to self are allowed, as well as zero valued transfers.
+ * In the recipients list, a recipient can occur several times, this is not considered an error.
  *
  * Fee depends of mass transactions count
  * 0.001 + 0.0005 × N, N is the number of transfers inside of a transaction

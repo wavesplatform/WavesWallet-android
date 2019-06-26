@@ -6,7 +6,7 @@ import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class ExchangeTransactionResponse(@SerializedName("order1")
+internal class ExchangeTransactionResponse(@SerializedName("order1")
                                   var order1: Order,
                                   @SerializedName("order2")
                                   var order2: Order,

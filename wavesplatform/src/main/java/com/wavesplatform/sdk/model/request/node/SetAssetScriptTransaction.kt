@@ -18,6 +18,8 @@ import com.wavesplatform.sdk.utils.arrayWithSize
  * Smart assets are unique virtual currency tokens that may represent a tangible real-world asset,
  * or a non-tangible ownership that can be purchased, sold, or exchanged as defined
  * by the rules of a script on the Waves blockchain network.
+ *
+ * Only the issuer of that asset can change the asset's script.
  */
 class SetAssetScriptTransaction(
         /**

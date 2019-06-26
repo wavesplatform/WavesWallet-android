@@ -6,14 +6,14 @@ import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class CreateLeasingTransactionResponse(@SerializedName("assetId")
+class LeaseTransactionResponse(@SerializedName("assetId")
                                        var assetId: String = "",
-                                       @SerializedName("recipient")
+                               @SerializedName("recipient")
                                        var recipient: String = "",
-                                       @SerializedName("amount")
+                               @SerializedName("amount")
                                        var amount: Long = 0L,
-                                       @SerializedName("attachment")
+                               @SerializedName("attachment")
                                        var attachment: String = "",
-                                       @SerializedName("feeAssetId")
+                               @SerializedName("feeAssetId")
                                        var feeAssetId: String = "")
     : BaseTransactionResponse(type = BaseTransaction.CREATE_LEASING), Parcelable
