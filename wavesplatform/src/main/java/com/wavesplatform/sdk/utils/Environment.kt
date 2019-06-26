@@ -2,6 +2,10 @@ package com.wavesplatform.sdk.utils
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Settings for work of SDK with nodes and other Waves net-services.
+ * It contains urls and time correction
+ */
 class Environment(
         @SerializedName("server") var server: Server,
         @SerializedName("timestampServerDiff") var timestampServerDiff: Long) {

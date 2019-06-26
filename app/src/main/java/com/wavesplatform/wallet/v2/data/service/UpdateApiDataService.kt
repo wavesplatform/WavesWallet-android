@@ -49,7 +49,7 @@ class UpdateApiDataService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationId = (System.currentTimeMillis() % 10000).toInt()
             val channelId = "update_wavesplatform_history_data_service"
-            val channel = NotificationChannel(channelId, "WavesPlatform Channel",
+            val channel = NotificationChannel(channelId, "WavesSdk Channel",
                     NotificationManager.IMPORTANCE_MIN)
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                     .createNotificationChannel(channel)

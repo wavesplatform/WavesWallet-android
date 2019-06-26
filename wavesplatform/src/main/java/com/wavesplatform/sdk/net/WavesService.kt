@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.net.service.DataService
 import com.wavesplatform.sdk.net.service.MatcherService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -24,7 +24,11 @@ import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-open class WavesService(private var context: Context) {
+/**
+ * Net-services for sending transactions and getting data from blockchain
+ * and other Waves services
+ */
+class WavesService(private var context: Context) {
 
     private lateinit var nodeService: NodeService
     private lateinit var dataService: DataService
@@ -42,24 +46,46 @@ open class WavesService(private var context: Context) {
         createServices()
     }
 
+    /**
+     * Main Waves blockchain service, it helps to sends transactions in blockchain
+     * and also takes some data for address
+     */
     fun getNode(): NodeService {
         return nodeService
     }
 
+    /**
+     * Matcher Service for DEX, decentralized exchange of Waves.
+     * It collects and matches all orders from users by Exchange transactions
+     * and sends it to blockchain
+     */
     fun getMatcher(): MatcherService {
         return matcherService
     }
 
+    /**
+     * Special Waves-service for simple and convenient way to get data from Waves blockchain
+     */
     fun getDataService(): DataService {
         return dataService
     }
 
+    /**
+     * Add Error Listener to retrofit. Add it if you need know about net errors
+     */
     fun addOnErrorListener(errorListener: OnErrorListener) {
         onErrorListeners.add(errorListener)
     }
 
+    /**
+     * Remove all Retrofit listeners
+     */
     fun removeOnErrorListener(errorListener: OnErrorListener) {
         onErrorListeners.remove(errorListener)
+    }
+
+    fun createService(baseUrl: String, errorListener: OnErrorListener) : Retrofit {
+        return createService(baseUrl, CallAdapterFactory(errorListener))
     }
 
     private fun createService(baseUrl: String,
@@ -74,18 +100,14 @@ open class WavesService(private var context: Context) {
                 .build()
     }
 
-    fun createService(baseUrl: String, errorListener: OnErrorListener) : Retrofit {
-        return createService(baseUrl, CallAdapterFactory(errorListener))
-    }
-
     internal fun createServices() {
-        nodeService = createService(addSlash(WavesPlatform.getEnvironment().nodeUrl), adapterFactory)
+        nodeService = createService(addSlash(WavesSdk.getEnvironment().nodeUrl), adapterFactory)
                 .create(NodeService::class.java)
 
-        dataService = createService(addSlash(WavesPlatform.getEnvironment().dataUrl), adapterFactory)
+        dataService = createService(addSlash(WavesSdk.getEnvironment().dataUrl), adapterFactory)
                 .create(DataService::class.java)
 
-        matcherService = createService(addSlash(WavesPlatform.getEnvironment().matcherUrl), adapterFactory)
+        matcherService = createService(addSlash(WavesSdk.getEnvironment().matcherUrl), adapterFactory)
                 .create(MatcherService::class.java)
     }
 
@@ -147,7 +169,7 @@ open class WavesService(private var context: Context) {
     }
 
     private fun createHostInterceptor(): HostSelectionInterceptor {
-        return HostSelectionInterceptor(WavesPlatform.getEnvironment())
+        return HostSelectionInterceptor(WavesSdk.getEnvironment())
     }
 
     private fun createCache(): Cache {

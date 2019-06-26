@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.wallet.v2.data.Constants
@@ -53,7 +53,7 @@ class CoinomatServiceManager @Inject constructor() : BaseServiceManager() {
 
         fun create(onErrorListener: OnErrorListener? = null): CoinomatService {
             this.onErrorListener = onErrorListener
-            return WavesPlatform.service().createService(Constants.URL_COINOMAT,
+            return WavesSdk.service().createService(Constants.URL_COINOMAT,
                     object : OnErrorListener {
                         override fun onError(exception: NetworkException) {
                             CoinomatServiceManager.onErrorListener?.onError(exception)

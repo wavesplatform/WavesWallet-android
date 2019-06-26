@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager.base
 
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -20,9 +20,9 @@ import javax.inject.Inject
 
 open class BaseServiceManager @Inject constructor() {
 
-    var nodeService: NodeService = WavesPlatform.service().getNode()
-    var dataService: DataService = WavesPlatform.service().getDataService()
-    var matcherService: MatcherService = WavesPlatform.service().getMatcher()
+    var nodeService: NodeService = WavesSdk.service().getNode()
+    var dataService: DataService = WavesSdk.service().getDataService()
+    var matcherService: MatcherService = WavesSdk.service().getMatcher()
     var githubService: GithubService = GithubServiceManager.create()
     var coinomatService: CoinomatService = CoinomatServiceManager.create()
     var preferencesHelper: PreferencesHelper = PreferencesHelper(App.getAppContext())

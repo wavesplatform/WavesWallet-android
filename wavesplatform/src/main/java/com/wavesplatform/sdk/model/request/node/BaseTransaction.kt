@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.model.request.node
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
@@ -64,7 +64,7 @@ abstract class BaseTransaction(
      * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
      */
     @SerializedName("chainId")
-    var chainId: Byte = WavesPlatform.getEnvironment().scheme
+    var chainId: Byte = WavesSdk.getEnvironment().scheme
 
     /**
      * @return bytes to sign of the transaction
@@ -81,7 +81,7 @@ abstract class BaseTransaction(
             senderPublicKey = WavesCrypto.publicKey(seed)
         }
         if (timestamp == 0L) {
-            timestamp = WavesPlatform.getEnvironment().getTime()
+            timestamp = WavesSdk.getEnvironment().getTime()
         }
         if (fee == 0L) {
             fee = WavesConstants.WAVES_MIN_FEE

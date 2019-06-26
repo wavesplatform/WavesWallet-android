@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.wallet.v2.data.Constants
@@ -60,7 +60,7 @@ class GithubServiceManager @Inject constructor() : BaseServiceManager() {
 
         fun create(onErrorListener: OnErrorListener? = null): GithubService {
             this.onErrorListener = onErrorListener
-            return WavesPlatform.service().createService(Constants.URL_GITHUB_CONFIG,
+            return WavesSdk.service().createService(Constants.URL_GITHUB_CONFIG,
                     object : OnErrorListener {
                         override fun onError(exception: NetworkException) {
                             GithubServiceManager.onErrorListener?.onError(exception)

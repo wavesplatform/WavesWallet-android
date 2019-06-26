@@ -3,7 +3,8 @@ package com.wavesplatform.sdk.utils
 import android.util.Patterns
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.crypto.AESUtil
+import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.OrderResponse
 import org.spongycastle.util.encoders.Hex
@@ -123,4 +124,16 @@ fun randomString(): String {
     val random = SecureRandom()
     random.nextBytes(bytes)
     return String(Hex.encode(bytes), charset("UTF-8"))
+}
+
+fun aesEncrypt(cleartext: String?,
+               password: String?,
+               iterations: Int = AESUtil.DEFAULT_PBKDF2_ITERATIONS_V2): String {
+    return AESUtil.encrypt(cleartext, password, iterations)
+}
+
+fun aesDecrypt(cipherText: String?,
+               password: String?,
+               iterations: Int = AESUtil.DEFAULT_PBKDF2_ITERATIONS_V2): String {
+    return AESUtil.decrypt(cipherText, password, iterations)
 }

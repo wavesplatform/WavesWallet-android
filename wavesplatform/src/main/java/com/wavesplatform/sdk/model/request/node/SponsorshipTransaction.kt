@@ -4,10 +4,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.utils.WavesConstants
 
 /**
  * Sponsorship transaction (or is Autonomous Assets)

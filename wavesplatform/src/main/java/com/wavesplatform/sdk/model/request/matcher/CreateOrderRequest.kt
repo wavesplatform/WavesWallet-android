@@ -13,7 +13,7 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 
 /**
  * Create Order Request to DEX-matcher, decentralized exchange of Waves.
@@ -48,7 +48,7 @@ data class CreateOrderRequest(
         /**
          * Unix time of sending of transaction to blockchain
          */
-        @SerializedName("timestamp") var timestamp: Long = WavesPlatform.getEnvironment().getTime(),
+        @SerializedName("timestamp") var timestamp: Long = WavesSdk.getEnvironment().getTime(),
         /**
          * Unix time of expiration of transaction
          */

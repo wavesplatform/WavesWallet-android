@@ -24,7 +24,7 @@ public class AESUtil {
 
 //    private static Logger mLogger = LoggerFactory.getLogger(AESUtil.class);
 
-    public static final int PIN_PBKDF2_ITERATIONS = 5000;
+    public static final int DEFAULT_PBKDF2_ITERATIONS_V2 = 5000;
     public static final int QR_CODE_PBKDF_2ITERATIONS = 10;
 
     public static final int MODE_CBC = 0;

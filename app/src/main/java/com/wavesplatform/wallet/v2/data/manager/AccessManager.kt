@@ -9,11 +9,8 @@ import android.content.Intent
 import android.text.TextUtils
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.wallet.v2.util.WavesWallet
-import com.wavesplatform.sdk.crypto.AESUtil
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.sdk.utils.addressFromPublicKey
-import com.wavesplatform.sdk.utils.randomString
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
@@ -54,8 +51,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
                     try {
                         val encryptedPassword = prefs.getValue(
                                 guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "")
-                        AESUtil.decrypt(
-                                encryptedPassword, seed, AESUtil.PIN_PBKDF2_ITERATIONS)
+                        aesDecrypt(encryptedPassword, seed)
                     } catch (e: Exception) {
                         throw Exceptions.propagate(Throwable("Decrypt wallet failed"))
                     }
@@ -72,8 +68,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
                 val keyPassword = randomString()
                 pinStore.writePassword(guid, passCode, keyPassword)
                         .subscribe({
-                            val encryptedPassword = AESUtil.encrypt(
-                                    password, keyPassword, AESUtil.PIN_PBKDF2_ITERATIONS)
+                            val encryptedPassword = aesEncrypt(password, keyPassword)
                             prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword)
                             if (!subscriber.isDisposed) {
                                 subscriber.onComplete()

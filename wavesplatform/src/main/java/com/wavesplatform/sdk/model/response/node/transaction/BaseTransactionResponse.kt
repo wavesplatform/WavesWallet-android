@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.model.response.node.transaction
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.utils.WavesConstants
 
 abstract class BaseTransactionResponse(
@@ -48,7 +48,7 @@ abstract class BaseTransactionResponse(
      * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
      */
     @SerializedName("chainId")
-    val chainId: Byte? = WavesPlatform.getEnvironment().scheme
+    val chainId: Byte? = WavesSdk.getEnvironment().scheme
 
     /**
      * Version number of the data structure of the transaction.

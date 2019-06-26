@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransactionResponse
 
@@ -42,7 +42,7 @@ class InvokeScriptTransaction(
             Bytes.concat(
                     byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
-                    byteArrayOf(WavesPlatform.getEnvironment().scheme),
+                    byteArrayOf(WavesSdk.getEnvironment().scheme),
                     Base58.decode(senderPublicKey),
                     Base58.decode(dApp),
                     // todo add txFields.functionCall,

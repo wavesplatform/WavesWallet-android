@@ -89,7 +89,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object ProfileRateAppEvent : AnalyticEvents("Profile Rate App")
     // Нажата кнопка "Feedback" на экране Profile
     object ProfileFeedbackEvent : AnalyticEvents("Profile Feedback")
-    // Нажата кнопка "Support WavesPlatform" на экране Profile
+    // Нажата кнопка "Support WavesSdk" на экране Profile
     object ProfileSupportEvent : AnalyticEvents("Profile Support")
     // Нажата кнопка "Delete" на алерте после "Delete account from device" на экране Profile
     object ProfileDeleteAccountEvent : AnalyticEvents("Profile Delete Account")
@@ -105,7 +105,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object WavesMenuWhitepaperEvent : AnalyticEvents("Waves Menu Whitepaper")
     // Нажата ссылка "Terms and conditions" на экране Menu
     object WavesMenuTermsAndConditionsEvent : AnalyticEvents("Waves Menu Terms And Conditions")
-    // Нажата ссылка "Support WavesPlatform" на экране Menu
+    // Нажата ссылка "Support WavesSdk" на экране Menu
     object WavesMenuSupportEvent : AnalyticEvents("Waves Menu Support")
     // Нажата ссылка "Github" на экране Menu
     object WavesMenuGithubEvent : AnalyticEvents("Waves Menu Github")

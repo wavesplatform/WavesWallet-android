@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesPlatform
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
 import com.wavesplatform.sdk.utils.SignUtil
@@ -94,7 +94,7 @@ class TransferTransaction(
         fun getRecipientBytes(recipient: String): ByteArray {
             return if (recipient.length <= 30) {
                 Bytes.concat(byteArrayOf(WavesConstants.VERSION.toByte()),
-                        byteArrayOf(WavesPlatform.getEnvironment().scheme),
+                        byteArrayOf(WavesSdk.getEnvironment().scheme),
                         recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
             } else {
                 Base58.decode(recipient)

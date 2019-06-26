@@ -5,10 +5,11 @@
 
 package com.wavesplatform.wallet.v2.util
 
-import com.wavesplatform.sdk.crypto.AESUtil
 import com.wavesplatform.sdk.crypto.PrivateKeyAccount
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.addressFromPublicKey
+import com.wavesplatform.sdk.utils.aesDecrypt
+import com.wavesplatform.sdk.utils.aesEncrypt
 import timber.log.Timber
 import java.util.*
 
@@ -36,16 +37,15 @@ class WavesWallet(val seed: ByteArray) {
 
     @Throws(Exception::class)
     constructor(walletData: String, password: String?) : this(WavesCrypto.base58decode(
-            AESUtil.decrypt(walletData, password, DEFAULT_PBKDF2_ITERATIONS_V2)))
+            aesDecrypt(walletData, password)))
 
     @Throws(Exception::class)
     fun getEncryptedData(password: String?): String {
-        return AESUtil.encrypt(WavesCrypto.base58encode(seed), password, DEFAULT_PBKDF2_ITERATIONS_V2)
+        return aesEncrypt(WavesCrypto.base58encode(seed), password)
     }
 
     companion object {
 
-        const val DEFAULT_PBKDF2_ITERATIONS_V2 = 5000
         private var instance: WavesWallet? = null
 
         /**
@@ -60,7 +60,7 @@ class WavesWallet(val seed: ByteArray) {
                 instance!!.guid = guid
                 guid
             } catch (e: Exception) {
-                Timber.e(e, "WavesWallet: Error create WavesPlatform wallet from seed")
+                Timber.e(e, "WavesWallet: Error create WavesSdk wallet from seed")
                 e.printStackTrace()
                 ""
             }
@@ -82,7 +82,7 @@ class WavesWallet(val seed: ByteArray) {
                 instance!!.guid = guid
                 guid
             } catch (e: Exception) {
-                Timber.e(e, "WavesWallet: Error create WavesPlatform wallet from encrypted data")
+                Timber.e(e, "WavesWallet: Error create WavesSdk wallet from encrypted data")
                 e.printStackTrace()
                 ""
             }
