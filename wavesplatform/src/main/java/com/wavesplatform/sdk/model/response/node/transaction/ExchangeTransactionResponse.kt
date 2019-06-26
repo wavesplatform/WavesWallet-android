@@ -54,8 +54,8 @@ internal class ExchangeTransactionResponse(@SerializedName("order1")
     @Parcelize
     class AssetPair(
             @SerializedName("amountAsset")
-            var amountAsset: String?,
+            var amountAsset: String,
             @SerializedName("priceAsset")
-            var priceAsset: String?
+            var priceAsset: String
     ) : Parcelable
 }

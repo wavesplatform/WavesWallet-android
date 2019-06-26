@@ -6,6 +6,7 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransactionResponse
+import com.wavesplatform.sdk.utils.arrayWithSize
 
 /**
  * Not available now
@@ -14,24 +15,39 @@ import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransaction
  * for exchange by specifying the following:
  *
  * The asset.
- * The price of asset to sell or buy.
+ * The price of asset to sell(1) or buy(0).
  * The amount which the user is offering.
  * The asset and the amount which the user requests in return.
  */
 internal class ExchangeTransaction(
+        /**
+         * 1st order
+         */
         @SerializedName("order1")
         var order1: ExchangeTransactionResponse.Order,
+        /**
+         * 2nd order
+         */
         @SerializedName("order2")
         var order2: ExchangeTransactionResponse.Order,
+        /**
+         * Price for amount
+         */
         @SerializedName("price")
         var price: Long,
         /**
-         * Amount of Waves in satoshi
+         * Amount of asset in satoshi
          */
         @SerializedName("amount")
         var amount: Long,
+        /**
+         * Fee from buyer order to mutcher
+         */
         @SerializedName("buyMatcherFee")
         var buyMatcherFee: Long,
+        /**
+         * Fee from seller order to mutcher
+         */
         @SerializedName("sellMatcherFee")
         var sellMatcherFee: Long)
     : BaseTransaction(EXCHANGE) {
@@ -43,31 +59,49 @@ internal class ExchangeTransaction(
                     byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
                     Base58.decode(senderPublicKey),
-
+                    orderArray(order1),
+                    orderArray(order2),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(price),
                     Longs.toByteArray(amount),
                     Longs.toByteArray(buyMatcherFee),
                     Longs.toByteArray(sellMatcherFee),
                     Longs.toByteArray(timestamp))
-
-
-            /*['order1', {
-                fromBytes: () => ({value: undefined, shift: 4}),
-                toBytes: (order: any) => INT(serializerFromSchema(orderSchemaV0WithSignature)(order).length)
-            }],
-            ['order2', {
-                fromBytes: () => ({value: undefined, shift: 4}),
-                toBytes: (order: any) => INT(serializerFromSchema(orderSchemaV0WithSignature)(order).length)
-            }],
-            ['order1', orderSchemaV0WithSignature],
-            ['order2', orderSchemaV0WithSignature],*/
-
-            // todo check https://github.com/wavesplatform/marshall/blob/master/src/schemas.ts : 414
-
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Exchange Transaction", e)
             ByteArray(0)
         }
+    }
+
+    private fun orderArray(order: ExchangeTransactionResponse.Order): ByteArray {
+        val schema1 = Bytes.concat(
+                Base58.decode(order.senderPublicKey),
+                Base58.decode(order.matcherPublicKey),
+                Base58.decode(order.assetPair.amountAsset),
+                Base58.decode(order.assetPair.priceAsset),
+                byteArrayOf(order.orderType[0].toByte()),
+                Longs.toByteArray(order.price),
+                Longs.toByteArray(order.amount),
+                Longs.toByteArray(order.timestamp),
+                Longs.toByteArray(order.expiration),
+                Longs.toByteArray(order.matcherFee))
+
+        return Bytes.concat(
+                byteArrayOf(1),
+                Bytes.concat(
+                        byteArrayOf(1),
+                        schema1,
+                        Base58.decode(order.proofs[0]))
+                        .arrayWithSize(),
+                byteArrayOf(2),
+                Bytes.concat(
+                        byteArrayOf(version.toByte()),
+                        schema1,
+                        byteArrayOf(1),
+                        Base58.decode(order.proofs[0]))
+                        .arrayWithSize(),
+                byteArrayOf(version.toByte()),
+                byteArrayOf(4)
+        )
     }
 }

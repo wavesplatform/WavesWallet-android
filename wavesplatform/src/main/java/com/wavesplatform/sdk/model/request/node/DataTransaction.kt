@@ -111,30 +111,6 @@ class DataTransaction(
         return allDataArray
     }
 
-    private fun integerValue(type: Byte, int64Value: Long): ByteArray {
-        return Bytes.concat(byteArrayOf(type), Longs.toByteArray(int64Value))
-    }
-
-    private fun stringValue(type: Byte, stringValue: String): ByteArray {
-        return Bytes.concat(byteArrayOf(type),
-                stringValue.toByteArray(Charset.forName("UTF-8"))
-                        .arrayWithSize())
-    }
-
-    private fun binaryValue(type: Byte, binaryValue: String): ByteArray {
-        return Bytes.concat(byteArrayOf(type),
-                WavesCrypto.base64decode(binaryValue).arrayWithSize())
-    }
-
-    private fun booleanValue(type: Byte, booleanValue: Boolean): ByteArray {
-        val bytes = if (booleanValue) {
-            byteArrayOf(1)
-        } else {
-            byteArrayOf(0)
-        }
-        return Bytes.concat(byteArrayOf(type), bytes)
-    }
-
     companion object {
         const val INTEGER_DATA_TYPE: Byte = 0
         const val BOOLEAN_DATA_TYPE: Byte = 1
@@ -143,5 +119,29 @@ class DataTransaction(
 
         private const val DATA_TX_SIZE_WITHOUT_ENTRIES = 52
         const val DATA_ENTRIES_BYTE_LIMIT = 140 * 1024 - DATA_TX_SIZE_WITHOUT_ENTRIES
+
+        fun integerValue(type: Byte, int64Value: Long): ByteArray {
+            return Bytes.concat(byteArrayOf(type), Longs.toByteArray(int64Value))
+        }
+
+        fun stringValue(type: Byte, stringValue: String): ByteArray {
+            return Bytes.concat(byteArrayOf(type),
+                    stringValue.toByteArray(Charset.forName("UTF-8"))
+                            .arrayWithSize())
+        }
+
+        fun binaryValue(type: Byte, binaryValue: String): ByteArray {
+            return Bytes.concat(byteArrayOf(type),
+                    WavesCrypto.base64decode(binaryValue).arrayWithSize())
+        }
+
+        fun booleanValue(type: Byte, booleanValue: Boolean): ByteArray {
+            val bytes = if (booleanValue) {
+                byteArrayOf(1)
+            } else {
+                byteArrayOf(0)
+            }
+            return Bytes.concat(byteArrayOf(type), bytes)
+        }
     }
 }

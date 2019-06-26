@@ -3,6 +3,7 @@ package com.wavesplatform.sdk.model.request.node
 import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
+import com.google.common.primitives.Shorts
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
@@ -43,32 +44,19 @@ internal class MassTransferTransaction(
         @SerializedName("transfers") var transfers: Array<MassTransferTransactionResponse.Transfer>)
     : BaseTransaction(MASS_TRANSFER) {
 
+    override fun sign(seed: String): String {
+        version = 1
+        signature = super.sign(seed)
+        return signature ?: ""
+    }
+
     override fun toBytes(): ByteArray {
-
-
-        val transfers = listOf<Transfers>()
-
-        val byteList = arrayListOf<ByteArray>()
-        for (transfer in transfers) {
-            val recipient = TransferTransaction.getRecipientBytes(transfer.recipient)
-            byteList.add(recipient)
-            val amount = transfer.amount
-            byteList.add(Longs.toByteArray(amount))
-        }
-
-
-
-        //TransferTransaction.getRecipientBytes()
-
-
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
-
-                    // todo txFields.transfers,
-
+                    transfersArray(),
                     Longs.toByteArray(timestamp),
                     Longs.toByteArray(fee),
                     SignUtil.arrayWithSize(Base58.encode(attachment.toByteArray())))
@@ -78,20 +66,14 @@ internal class MassTransferTransaction(
         }
     }
 
-    override fun sign(seed: String): String {
-        version = 1
-        signature = super.sign(seed)
-        return signature ?: ""
-    }
-
-    private fun bytesTransfers(transfers: List<Transfers>) {
+    private fun transfersArray(): ByteArray {
+        var recipientAmountChainArray = byteArrayOf()
         for (transfer in transfers) {
             val recipient = TransferTransaction.getRecipientBytes(transfer.recipient)
-            val amount = transfer.amount
+            val amount = Longs.toByteArray(transfer.amount)
+            recipientAmountChainArray = Bytes.concat(recipient, amount)
         }
+        val lengthBytes = Shorts.toByteArray(transfers.size.toShort())
+        return Bytes.concat(lengthBytes, recipientAmountChainArray)
     }
-
-    class Transfers(var recipient: String = "",
-                    var amount: Long = 0L
-    )
 }
