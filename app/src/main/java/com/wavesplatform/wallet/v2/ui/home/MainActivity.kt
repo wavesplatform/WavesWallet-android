@@ -306,6 +306,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = EnvironmentManager.getTime()
             if (now > lastTime + MIN_15) {
+                analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup)
+
                 implementSwipeToDismiss()
 
                 linear_warning_container.click {
