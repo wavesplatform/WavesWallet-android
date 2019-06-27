@@ -68,6 +68,8 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="4dp"
                         tools:text="WAVES" />
@@ -307,7 +309,7 @@
                     app:fontFamily="@font/roboto_medium" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_leasing_result_value"
+                    android:id="@+id/text_transaction_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

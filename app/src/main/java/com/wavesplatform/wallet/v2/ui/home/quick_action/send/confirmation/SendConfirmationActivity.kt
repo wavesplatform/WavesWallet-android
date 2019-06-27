@@ -75,7 +75,6 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
                     .toPlainString()
                     .stripZeros()}"
-            text_sum.makeTextHalfBold()
             text_gateway_fee_value.text = "${presenter.gatewayCommission.toPlainString().stripZeros()}" +
                     " ${presenter.selectedAsset!!.getName()}"
             gateway_commission_layout.visiable()
@@ -83,15 +82,20 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sum.text = "-${(presenter.amount)
                     .toPlainString()
                     .stripZeros()}"
-            text_sum.makeTextHalfBold()
         }
 
-        val ticker = presenter.assetInfo?.getTicker()
-        if (ticker.isNullOrBlank()) {
-            text_tag.text = presenter.selectedAsset!!.getName()
+        if (isShowTicker(presenter.selectedAsset?.assetId)) {
+            val ticker = presenter.assetInfo?.getTokenTicker()
+            if (!ticker.isNullOrBlank()) {
+                text_tag.text = ticker
+                text_tag.visiable()
+            }
         } else {
-            text_tag.text = ticker
+            text_sum.text = "${text_sum.text} ${presenter.selectedAsset?.getName()}"
         }
+
+        text_sum.makeTextHalfBold()
+
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset.getDecimals())} " +
@@ -134,10 +138,10 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
         completeTransactionProcessing()
-        text_leasing_result_value.text = getString(
+        text_transaction_result.text = getString(
                 R.string.send_success_you_have_sent_sum,
                 MoneyUtil.getScaledText(signed.amount, presenter.selectedAsset),
-                presenter.getTicker())
+                presenter.assetInfo?.name)
         button_okay.click {
             launchActivity<MainActivity>(clear = true)
         }
