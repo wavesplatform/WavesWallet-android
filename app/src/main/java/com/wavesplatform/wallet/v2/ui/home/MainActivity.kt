@@ -182,7 +182,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
         when (tab?.position) {
             QUICK_ACTION_SCREEN -> {
-                showQuickActionDialog()
+                presenter.sendTx()
+                //showQuickActionDialog()
             }
         }
     }
@@ -201,7 +202,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
             QUICK_ACTION_SCREEN -> {
-                showQuickActionDialog()
+                presenter.sendTx()
+                //showQuickActionDialog()
             }
             HISTORY_SCREEN -> {
                 showNewTabFragment(fragments[HISTORY_SCREEN])

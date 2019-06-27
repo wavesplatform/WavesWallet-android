@@ -9,8 +9,10 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
@@ -110,5 +112,43 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                 .subscribe {
                     viewState.showNews(it)
                 })
+    }
+
+    fun sendTx() {
+
+
+        val args = mutableListOf(
+                InvokeScriptTransaction.Arg("string", "Some string!"),
+                InvokeScriptTransaction.Arg("integer", 128L),
+                InvokeScriptTransaction.Arg("integer", -127L),
+                InvokeScriptTransaction.Arg("boolean", true),
+                InvokeScriptTransaction.Arg("boolean", false),
+                InvokeScriptTransaction.Arg("binary", "base64:VGVzdA=="))
+
+        val call = InvokeScriptTransaction.Call(
+                function = "testarg",
+                args = args
+        )
+
+        val payment = mutableListOf(
+                InvokeScriptTransaction.Payment(
+                        assetId = "",
+                        amount = 5L))
+
+        val tx = InvokeScriptTransaction(
+                dApp = "3Mv9XDntij4ZRE1XiNZed6J74rncBpiYNDV",
+                call = call,
+                payment = payment)
+
+        tx.fee = 500000L
+        tx.sign(App.getAccessManager().getWallet().seedStr)
+
+        addSubscription(nodeServiceManager.transaction(tx)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe ({
+                    viewState.showNetworkError()
+                }, {
+                    viewState.showNetworkError()
+                }))
     }
 }

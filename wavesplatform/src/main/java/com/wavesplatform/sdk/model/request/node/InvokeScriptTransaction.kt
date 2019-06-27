@@ -1,8 +1,3 @@
-/*
- * Created by Eduard Zaydel on 1/4/2019
- * Copyright © 2019 Waves Platform. All rights reserved.
- */
-
 package com.wavesplatform.sdk.model.request.node
 
 import android.os.Parcel
@@ -54,7 +49,7 @@ class InvokeScriptTransaction(
                     Base58.decode(senderPublicKey),
                     TransferTransaction.getRecipientBytes(dApp),
                     functionCallArray(),
-                    paymentsArray(),// now it works with only one
+                    paymentsArray(), // now it works with only one
                     Longs.toByteArray(fee),
                     SignUtil.arrayOption(feeAssetId ?: ""),
                     Longs.toByteArray(timestamp))
@@ -75,7 +70,8 @@ class InvokeScriptTransaction(
             byteArrayOf(0)
         } else {
             val optionalCall: Byte = 1
-            val functionUseArray = Bytes.concat(byteArrayOf(optionalCall, 9, 1))  // special bytes to indicate function call. Used in Serde serializer
+            // Special bytes 9 and 1 to indicate function call. Used in Serde serializer
+            val functionUseArray = Bytes.concat(byteArrayOf(optionalCall, 9, 1))
             Bytes.concat(functionUseArray, functionArray(), argsArray())
         }
     }
@@ -88,31 +84,13 @@ class InvokeScriptTransaction(
 
     private fun argsArray(): ByteArray {
         var array = byteArrayOf()
-        for (arg in call!!.args) { //
+        for (arg in call!!.args) {
             array = when (arg.type) {
-                "integer" -> {
-                    val longValue: Long = if (arg.value is Int) {
-                        (arg.value as Int).toLong()
-                    } else {
-                        arg.value as Long
-                    }
-                    Bytes.concat(array, DataTransaction.integerValue(0, longValue))
-                }
-                "binary" ->
-                    Bytes.concat(
-                            array,
-                            DataTransaction.binaryValue(1, (arg.value as String)
-                                    .replace("base64:", ""), true))
-                "string" ->
-                    Bytes.concat(array, DataTransaction.stringValue(2, arg.value as String, true))
-                "boolean" -> {
-                    val value = arg.value as Boolean
-                    val byte: Byte = if (value) 6 else 7
-                    Bytes.concat(array, byteArrayOf(byte))
-                }
-                else -> {
-                    array
-                }
+                "integer" -> getIntegerBytes(arg, array)
+                "binary" -> getBinaryBytes(arg, array)
+                "string" -> getStringBytes(arg, array)
+                "boolean" -> getBooleanBytes(arg, array)
+                else -> array
             }
         }
 
@@ -120,11 +98,40 @@ class InvokeScriptTransaction(
         return Bytes.concat(lengthBytes, array)
     }
 
+    private fun getBooleanBytes(arg: Arg, array: ByteArray): ByteArray {
+        val value = arg.value as Boolean
+        val byte: Byte = if (value) 6 else 7
+        return Bytes.concat(array, byteArrayOf(byte))
+    }
+
+    private fun getStringBytes(arg: Arg, array: ByteArray) =
+            Bytes.concat(array, DataTransaction.stringValue(2, arg.value as String, true))
+
+    private fun getBinaryBytes(arg: Arg, array: ByteArray): ByteArray {
+        return Bytes.concat(
+                array,
+                DataTransaction.binaryValue(1, (arg.value as String)
+                        .replace("base64:", ""), true))
+    }
+
+    private fun getIntegerBytes(arg: Arg, array: ByteArray): ByteArray {
+        val longValue: Long = if (arg.value is Int) {
+            (arg.value as Int).toLong()
+        } else {
+            arg.value as Long
+        }
+        return Bytes.concat(array, DataTransaction.integerValue(0, longValue))
+    }
+
     private fun paymentsArray(): ByteArray {
         var array = byteArrayOf()
         for (paymentItem in payment) {
             val amount = Longs.toByteArray(paymentItem.amount)
-            val assetId = SignUtil.arrayOption(paymentItem.assetId ?: "")
+            val assetId = if (paymentItem.assetId.isNullOrEmpty()) {
+                byteArrayOf(1)
+            } else {
+                SignUtil.arrayOption(paymentItem.assetId!!)
+            }
             array = Bytes.concat(array, Bytes.concat(amount, assetId))
         }
         val lengthBytes = Shorts.toByteArray(payment.size.toShort())
