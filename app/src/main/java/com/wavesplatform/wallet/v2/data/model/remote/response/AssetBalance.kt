@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
+import com.wavesplatform.wallet.v2.util.isWavesId
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
@@ -55,6 +56,12 @@ open class AssetBalance(
         }
     }
 
+    fun updateInfo(asset: AssetBalance?) {
+        asset?.let {
+            this.issueTransaction = asset.issueTransaction
+        }
+    }
+
     fun isSponsored(): Boolean {
         return minSponsoredAssetFee ?: 0 > 0
     }
@@ -69,7 +76,7 @@ open class AssetBalance(
 
     fun getDecimals(): Int {
         return if (issueTransaction != null) {
-            issueTransaction!!.decimals ?: 8
+            issueTransaction?.decimals ?: 8
         } else {
             8
         }
@@ -133,25 +140,15 @@ open class AssetBalance(
     companion object {
 
         fun isFiat(assetId: String): Boolean {
-            for (fiat in Constants.defaultFiat()) {
-                if (assetId == fiat) {
-                    return true
-                }
-            }
-            return false
+            return Constants.defaultFiat().any { it == assetId }
         }
 
         fun isGateway(assetId: String): Boolean {
-            if (assetId == "") {
-                return false
+            return when {
+                assetId.isWavesId() -> false
+                Constants.defaultCrypto().any { it == assetId } -> true
+                else -> false
             }
-
-            for (fiat in Constants.defaultCrypto()) {
-                if (assetId == fiat) {
-                    return true
-                }
-            }
-            return false
         }
     }
 }
