@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.model.request.node
 
+import android.os.Parcelable
 import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
@@ -7,8 +8,8 @@ import com.google.common.primitives.Shorts
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
-import com.wavesplatform.sdk.model.response.node.transaction.MassTransferTransactionResponse
 import com.wavesplatform.sdk.utils.SignUtil
+import kotlinx.android.parcel.Parcelize
 
 
 /**
@@ -27,7 +28,7 @@ import com.wavesplatform.sdk.utils.SignUtil
  * Fee depends of mass transactions count
  * 0.001 + 0.0005 × N, N is the number of transfers inside of a transaction
  */
-internal class MassTransferTransaction(
+class MassTransferTransaction(
         /**
          * Id of transferable asset in Waves blockchain, different for main and test net
          */
@@ -36,12 +37,18 @@ internal class MassTransferTransaction(
          * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string or byte array
          */
         @SerializedName("attachment") var attachment: String,
-        @SerializedName("transferCount") var transferCount: Int, // todo check
-        @SerializedName("totalAmount") var totalAmount: Long, // todo check
+        /**
+         * Total count of transfers, optional
+         */
+        @SerializedName("transferCount") var transferCount: Int = 0,
+        /**
+         * Total amount of transfers, optional
+         */
+        @SerializedName("totalAmount") var totalAmount: Long? = null,
         /**
          * Collection of recipients with amount each
          */
-        @SerializedName("transfers") var transfers: Array<MassTransferTransactionResponse.Transfer>)
+        @SerializedName("transfers") var transfers: Array<Transfer>)
     : BaseTransaction(MASS_TRANSFER) {
 
     override fun sign(seed: String): String {
@@ -76,4 +83,15 @@ internal class MassTransferTransaction(
         val lengthBytes = Shorts.toByteArray(transfers.size.toShort())
         return Bytes.concat(lengthBytes, recipientAmountChainArray)
     }
+
+    @Parcelize
+     class Transfer(
+            /**
+             * Address or alias of Waves blockchain
+             */
+            @SerializedName("recipient") var recipient: String = "",
+            /**
+             * Amount of asset in satoshi
+             */
+            @SerializedName("amount") var amount: Long = 0L) : Parcelable
 }

@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.model.request.node
 
+import android.os.Parcelable
 import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
@@ -7,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.model.response.node.transaction.ExchangeTransactionResponse
 import com.wavesplatform.sdk.utils.arrayWithSize
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Not available now
@@ -24,12 +26,12 @@ internal class ExchangeTransaction(
          * 1st order
          */
         @SerializedName("order1")
-        var order1: ExchangeTransactionResponse.Order,
+        var order1: Order,
         /**
          * 2nd order
          */
         @SerializedName("order2")
-        var order2: ExchangeTransactionResponse.Order,
+        var order2: Order,
         /**
          * Price for amount
          */
@@ -73,7 +75,7 @@ internal class ExchangeTransaction(
         }
     }
 
-    private fun orderArray(order: ExchangeTransactionResponse.Order): ByteArray {
+    private fun orderArray(order: Order): ByteArray {
         val schema1 = Bytes.concat(
                 Base58.decode(order.senderPublicKey),
                 Base58.decode(order.matcherPublicKey),
@@ -104,4 +106,88 @@ internal class ExchangeTransaction(
                 byteArrayOf(4)
         )
     }
+
+    @Parcelize
+    class Order(
+            /**
+             * Id of order, hash of data, returns after send Exchange transaction
+             */
+            @SerializedName("id")
+            var id: String,
+            /**
+             * Address of sender, returns after send Exchange transaction
+             */
+            @SerializedName("sender")
+            var sender: String,
+            /**
+             * Account public key of the sender
+             */
+            @SerializedName("senderPublicKey")
+            var senderPublicKey: String,
+            /**
+             * Matcher Public Key, available in MatcherService.matcherPublicKey() for DEX
+             */
+            @SerializedName("matcherPublicKey")
+            var matcherPublicKey: String,
+            /**
+             * Exchangeable pair. We sell or buy always amount asset and we always give price asset
+             */
+            @SerializedName("assetPair")
+            var assetPair: AssetPair,
+            /**
+             * Order type buy(0) or sell(1)
+             */
+            @SerializedName("orderType")
+            var orderType: String,
+            /**
+             * Price for amount
+             */
+            @SerializedName("price")
+            var price: Long,
+            /**
+             * Amount of asset in satoshi
+             */
+            @SerializedName("amount")
+            var amount: Long,
+            /**
+             * Unix time of creation
+             */
+            @SerializedName("timestamp")
+            var timestamp: Long = 0L,
+            @SerializedName("expiration")
+            /**
+             * Unix time of order expiration. Until the time order will be work.
+             */
+            var expiration: Long,
+            @SerializedName("matcherFee")
+            /**
+             * Amount matcher fee of Waves in satoshi
+             */
+            var matcherFee: Long,
+            /**
+             * Signature v1. See also [proofs]
+             */
+            @SerializedName("signature")
+            var signature: String?,
+            /**
+             * Signatures v2 string set.
+             * A transaction signature is a digital signature
+             * with which the sender confirms the ownership of the outgoing transaction.
+             * If the array is empty, then S= 3. If the array is not empty,
+             * then S = 3 + 2 × N + (P1 + P2 + ... + Pn), where N is the number of proofs in the array,
+             * Pn is the size on N-th proof in bytes.
+             * The maximum number of proofs in the array is 8. The maximum size of each proof is 64 bytes
+             */
+            @SerializedName("proofs")
+            val proofs: MutableList<String> = mutableListOf()
+    ) : Parcelable
+
+
+    @Parcelize
+    class AssetPair(
+            @SerializedName("amountAsset")
+            var amountAsset: String,
+            @SerializedName("priceAsset")
+            var priceAsset: String
+    ) : Parcelable
 }

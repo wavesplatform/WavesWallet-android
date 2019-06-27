@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 
+/**
+ * See [com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction]
+ */
 class InvokeScriptTransactionResponse(@SerializedName("feeAssetId")
                                           var feeAssetId: String?,
                                       @SerializedName("dApp")

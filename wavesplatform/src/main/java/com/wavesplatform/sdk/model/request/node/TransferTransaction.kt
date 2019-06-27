@@ -74,7 +74,6 @@ class TransferTransaction(
     }
 
 
-
     companion object {
 
         fun getAttachmentSize(attachment: String?): Int {

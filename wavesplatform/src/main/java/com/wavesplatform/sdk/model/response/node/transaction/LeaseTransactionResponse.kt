@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import kotlinx.android.parcel.Parcelize
 
+/**
+ * See [com.wavesplatform.sdk.model.request.node.LeaseTransaction]
+ */
 @Parcelize
 class LeaseTransactionResponse(@SerializedName("assetId")
                                        var assetId: String = "",

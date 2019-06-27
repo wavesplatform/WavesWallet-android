@@ -21,7 +21,7 @@ abstract class BaseTransaction(
     var senderPublicKey: String = ""
 
     /**
-     * Unix time of sending of transaction to blockchain
+     * Unix time of sending of transaction to blockchain, must be in current time +/- half of hour
      */
     @SerializedName("timestamp")
     var timestamp: Long = 0L

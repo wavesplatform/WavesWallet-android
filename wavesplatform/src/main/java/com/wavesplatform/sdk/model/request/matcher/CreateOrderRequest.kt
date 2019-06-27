@@ -22,7 +22,7 @@ import com.wavesplatform.sdk.WavesSdk
  */
 data class CreateOrderRequest(
         /**
-         * Matcher Public Key, available in MatcherService.matcherPublicKey()
+         * Matcher Public Key, available in MatcherService.matcherPublicKey() for DEX
          */
         @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
         /**
