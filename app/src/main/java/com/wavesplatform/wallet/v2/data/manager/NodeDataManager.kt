@@ -47,7 +47,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var matcherDataManager: MatcherDataManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-    var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
