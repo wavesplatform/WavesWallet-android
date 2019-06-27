@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
@@ -48,7 +49,8 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
-        return githubService.globalCommission()
+        return githubService.globalCommission(EnvironmentManager.URL_COMMISSION_MAIN_NET)
+                .onErrorResumeNext(githubService.globalCommission(EnvironmentManager.URL_RAW_COMMISSION_MAIN_NET))
     }
 
     fun loadLastAppVersion(): Observable<LastAppVersion> {
