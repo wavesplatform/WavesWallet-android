@@ -7,6 +7,7 @@ import com.google.common.primitives.Shorts
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.utils.arrayWithIntSize
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
 
@@ -124,15 +125,24 @@ class DataTransaction(
             return Bytes.concat(byteArrayOf(type), Longs.toByteArray(int64Value))
         }
 
-        fun stringValue(type: Byte, stringValue: String): ByteArray {
-            return Bytes.concat(byteArrayOf(type),
-                    stringValue.toByteArray(Charset.forName("UTF-8"))
-                            .arrayWithSize())
+        fun stringValue(type: Byte, stringValue: String, useInt: Boolean = false): ByteArray {
+            val array = stringValue.toByteArray(Charset.forName("UTF-8"))
+            val withSize = if (useInt) {
+                array.arrayWithIntSize()
+            } else {
+                array.arrayWithSize()
+            }
+            return Bytes.concat(byteArrayOf(type), withSize)
         }
 
-        fun binaryValue(type: Byte, binaryValue: String): ByteArray {
-            return Bytes.concat(byteArrayOf(type),
-                    WavesCrypto.base64decode(binaryValue).arrayWithSize())
+        fun binaryValue(type: Byte, binaryValue: String, useInt: Boolean = false): ByteArray {
+            val array = WavesCrypto.base64decode(binaryValue)
+            val withSize = if (useInt) {
+                array.arrayWithIntSize()
+            } else {
+                array.arrayWithSize()
+            }
+            return Bytes.concat(byteArrayOf(type), withSize)
         }
 
         fun booleanValue(type: Byte, booleanValue: Boolean): ByteArray {

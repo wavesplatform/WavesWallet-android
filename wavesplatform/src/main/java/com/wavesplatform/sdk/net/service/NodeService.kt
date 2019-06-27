@@ -186,8 +186,8 @@ interface NodeService {
     /**
      * Broadcast invoke-script-transaction (typeId = 16)
      * @param transaction InvokeScriptTransaction with signature by privateKey
-     *//*
+     */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: InvokeScriptTransaction): Observable<InvokeScriptTransactionResponse>*/
+    fun transactionsBroadcast(@Body transaction: InvokeScriptTransaction): Observable<InvokeScriptTransactionResponse>
 
 }

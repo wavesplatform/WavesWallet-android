@@ -2,6 +2,7 @@ package com.wavesplatform.sdk.utils
 
 import android.util.Patterns
 import com.google.common.primitives.Bytes
+import com.google.common.primitives.Ints
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.crypto.AESUtil
 import com.wavesplatform.sdk.model.response.ErrorResponse
@@ -36,6 +37,10 @@ fun String.isWavesId(): Boolean {
 
 fun ByteArray.arrayWithSize(): ByteArray {
     return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
+}
+
+fun ByteArray.arrayWithIntSize(): ByteArray {
+    return Bytes.concat(Ints.toByteArray(size), this)
 }
 
 fun String.clearBalance(): String {
