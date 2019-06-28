@@ -141,7 +141,6 @@ class InvokeScriptTransaction(
     /**
      * Payment for function of dApp. Now it works with only one payment.
      */
-    @Parcelize
     class Payment(
             /**
              * Amount in satoshi
@@ -150,7 +149,28 @@ class InvokeScriptTransaction(
             /**
              * Asset Id in Waves blockchain
              */
-            @SerializedName("assetId") var assetId: String? = null) : Parcelable
+            @SerializedName("assetId") var assetId: String? = null) : Parcelable {
+
+        private constructor(parcel: Parcel) : this(
+                amount = parcel.readLong(),
+                assetId = parcel.readString()
+        )
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeLong(amount)
+            parcel.writeString(assetId)
+        }
+
+        override fun describeContents() = 0
+
+        companion object {
+            @JvmField
+            val CREATOR = object : Parcelable.Creator<Payment> {
+                override fun createFromParcel(parcel: Parcel) = Payment(parcel)
+                override fun newArray(size: Int) = arrayOfNulls<Payment>(size)
+            }
+        }
+    }
 
     /**
      * Call the function from dApp (address or alias) with typed arguments

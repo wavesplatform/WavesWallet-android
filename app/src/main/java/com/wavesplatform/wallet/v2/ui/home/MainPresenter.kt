@@ -10,16 +10,16 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.getTransactionType
 import io.reactivex.Observable
@@ -115,6 +115,8 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
     }
 
     fun sendTx() {
+
+        // todo check remove
 
 
         val args = mutableListOf(
