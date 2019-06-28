@@ -768,7 +768,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == WavesConstants.SELL_ORDER_TYPE) { // todo check
+        if (myOrder.orderType == WavesConstants.SELL_ORDER_TYPE) { // todo check orderType
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {

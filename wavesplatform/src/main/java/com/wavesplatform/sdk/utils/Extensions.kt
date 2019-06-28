@@ -6,12 +6,12 @@ import com.google.common.primitives.Ints
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.crypto.AESUtil
 import com.wavesplatform.sdk.model.response.ErrorResponse
-import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.OrderResponse
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.security.SecureRandom
+import kotlin.math.abs
 
 
 fun String.isWaves(): Boolean {
@@ -94,17 +94,8 @@ fun ErrorResponse.isSmartError(): Boolean {
     return this.error in 305..308
 }
 
-fun AssetInfoResponse.getTicker(): String {
-
-    if (this.id.isWavesId()) {
-        return WavesConstants.WAVES_ASSET_INFO.name
-    }
-
-    return this.ticker ?: this.name
-}
-
 fun getScaledAmount(amount: Long, decimals: Int): String {
-    val absAmount = Math.abs(amount)
+    val absAmount = abs(amount)
     val value = BigDecimal.valueOf(absAmount, decimals)
     if (amount == 0L) {
         return "0"

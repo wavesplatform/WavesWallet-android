@@ -8,6 +8,7 @@ package com.wavesplatform.sdk.model.response.data
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.isWavesId
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -41,10 +42,9 @@ open class AssetInfoResponse(
         return minSponsoredFee > 0
     }
 
-    // todo check
     fun getTokenTicker(): String {
         return when {
-            id.isWavesId() -> Constants.WAVES_ASSET_ID_FILLED
+            id.isWavesId() -> WavesConstants.WAVES_ASSET_ID_FILLED
             ticker.isNullOrEmpty() -> name
             else -> ticker ?: name
         }

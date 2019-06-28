@@ -14,11 +14,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.getScaledAmount
-import com.wavesplatform.sdk.utils.getTicker
 import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
