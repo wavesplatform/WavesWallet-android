@@ -15,10 +15,10 @@ import com.wavesplatform.sdk.utils.arrayWithSize
 import kotlinx.android.parcel.Parcelize
 import java.nio.charset.Charset
 
-/**
- * Not available now
- *
+/***
  * Invoke script transaction is a transaction that invokes functions of the dApp script.
+ * dApp contains compiled functions  developed with [Waves Ride IDE]({https://ide.wavesplatform.com/)
+ * You can invoke one of them by name with some arguments.
  */
 class InvokeScriptTransaction(
         /**
@@ -26,7 +26,7 @@ class InvokeScriptTransaction(
          */
         @SerializedName("feeAssetId") var feeAssetId: String? = null,
         /**
-         * dApp – address of contract
+         * dApp – address or alias of contract with function on RIDE language
          */
         @SerializedName("dApp") var dApp: String,
         /**
@@ -34,7 +34,7 @@ class InvokeScriptTransaction(
          */
         @SerializedName("call") var call: Call?,
         /**
-         * (while 1 payment is supported)
+         * Payment for function of dApp. Now it works with only one payment.
          */
         @SerializedName("payment") var payment: List<Payment> = mutableListOf())
     : BaseTransaction(SCRIPT_INVOCATION) {
@@ -138,22 +138,37 @@ class InvokeScriptTransaction(
         return Bytes.concat(lengthBytes, array.arrayWithSize())
     }
 
+    /**
+     * Payment for function of dApp. Now it works with only one payment.
+     */
     @Parcelize
     class Payment(
+            /**
+             * Amount in satoshi
+             */
             @SerializedName("amount") var amount: Long,
+            /**
+             * Asset Id in Waves blockchain
+             */
             @SerializedName("assetId") var assetId: String? = null) : Parcelable
 
+    /**
+     * Call the function from dApp (address or alias) with typed arguments
+     */
     @Parcelize
     class Call(
             /**
-             * Function name
+             * Function unique name
              */
             @SerializedName("function") var function: String,
             /**
-             * Array of arguments
+             * List of arguments
              */
             @SerializedName("args") var args: List<Arg> = mutableListOf()) : Parcelable
 
+    /**
+     * Argumens for the [Call.function] in [Call]
+     */
     class Arg(
             /**
              * Type can be of four types - integer(0), boolean(1), binary array(2) and string(3).

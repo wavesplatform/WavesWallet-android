@@ -14,5 +14,5 @@ class DataTransactionResponse
     : BaseTransactionResponse(type = BaseTransaction.DATA), Parcelable {
 
     @SerializedName("data")
-    var data: List<DataTransaction.DataEntity>? = null
+    var data: List<DataTransaction.Data>? = null
 }

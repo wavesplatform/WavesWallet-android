@@ -6,7 +6,7 @@ import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.WavesConstants
 
 /**
- * Base transacton.
+ * Base transaction
  */
 abstract class BaseTransaction(
         /**

@@ -10,7 +10,7 @@ import com.wavesplatform.sdk.model.request.node.MassTransferTransaction.Transfer
  * See [com.wavesplatform.sdk.model.request.node.MassTransferTransaction]
  */
 @Parcelize
-internal class MassTransferTransactionResponse(@SerializedName("assetId")
+class MassTransferTransactionResponse(@SerializedName("assetId")
                                       var assetId: String?,
                                       @SerializedName("attachment")
                                       var attachment: String,

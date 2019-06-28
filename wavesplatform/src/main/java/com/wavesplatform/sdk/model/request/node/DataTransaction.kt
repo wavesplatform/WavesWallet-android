@@ -37,7 +37,7 @@ class DataTransaction(
          *      {"key": "My poem", "type": "string", "value": "Oh waves!"}
          * ],
          */
-        @SerializedName("data") var data: List<DataEntity> = mutableListOf())
+        @SerializedName("data") var data: List<Data> = mutableListOf())
     : BaseTransaction(DATA) {
 
     override fun sign(seed: String): String {
@@ -158,7 +158,7 @@ class DataTransaction(
     /**
      * Data transaction a entity type.
      */
-    class DataEntity(key: String, type: String, value: Any) {
+    class Data(key: String, type: String, value: Any) {
 
         /**
          * Data transaction key

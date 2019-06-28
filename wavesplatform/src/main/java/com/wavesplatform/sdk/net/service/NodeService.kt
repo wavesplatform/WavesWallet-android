@@ -151,9 +151,9 @@ interface NodeService {
     /**
      * Broadcast mass-transfer-transaction (typeId = 11)
      * @param transaction MassTransferTransaction with signature by privateKey
-     *//*
+     */
     @POST("transactions/broadcast")
-    fun transactionsBroadcast(@Body transaction: MassTransferTransaction): Observable<MassTransferTransactionResponse>*/
+    fun transactionsBroadcast(@Body transaction: MassTransferTransaction): Observable<MassTransferTransactionResponse>
 
     /**
      * Broadcast data-transaction (typeId = 12)
