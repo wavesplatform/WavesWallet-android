@@ -41,11 +41,12 @@ open class AssetInfoResponse(
         return minSponsoredFee > 0
     }
 
-    fun getTokenTicker(): String? {
-        return if (name == WavesConstants.WAVES_ASSET_ID_FILLED) {
-            WavesConstants.WAVES_ASSET_ID_FILLED
-        } else {
-            ticker
+    // todo check
+    fun getTokenTicker(): String {
+        return when {
+            id.isWavesId() -> Constants.WAVES_ASSET_ID_FILLED
+            ticker.isNullOrEmpty() -> name
+            else -> ticker ?: name
         }
     }
 }

@@ -69,6 +69,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun afterSuccessGetAddress(list: ArrayList<AddressBookUserDb>) {
+        analytics.trackEvent(AnalyticEvents.StartAccountCounter(list.size))
+
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
     }

@@ -154,7 +154,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 // nothing
             } else {
                 if (isShowTicker(transaction.assetId)) {
-                    val ticker = transaction.asset?.getTicker()
+                    val ticker = transaction.asset?.getTokenTicker()
                     if (!ticker.isNullOrBlank()) {
                         view.text_tag.text = ticker
                         view.text_tag.visiable()
@@ -389,7 +389,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                     } else {
                         if (isShowTicker(transaction.assetId)) {
                             textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
-                            val ticker = transaction.asset?.getTicker()
+                            val ticker = transaction.asset?.getTokenTicker()
                             if (!ticker.isNullOrBlank()) {
                                 textSendAmountTag?.text = ticker
                                 textSendAmountTag?.visiable()
@@ -456,7 +456,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                                 } else {
                                     if (isShowTicker(transaction.assetId)) {
                                         textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
-                                        val ticker = transaction.asset?.getTicker()
+                                        val ticker = transaction.asset?.getTokenTicker()
                                         if (!ticker.isNullOrBlank()) {
                                             textSendAmountTag?.text = ticker
                                             textSendAmountTag?.visiable()
@@ -515,7 +515,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                         view.relative_payment.visiable()
                         if (isShowTicker(payment.assetId)) {
                             view.text_payment_value?.text = MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()
-                            val ticker = transaction.asset?.getTicker()
+                            val ticker = transaction.asset?.getTokenTicker()
                             if (!ticker.isNullOrBlank()) {
                                 view.text_payment_tag?.text = ticker
                                 view.text_payment_tag?.visiable()
@@ -590,7 +590,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
 
     private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfoResponse?) {
         if (isShowTicker(assetInfo?.id)) {
-            val ticker = assetInfo?.getTicker()
+            val ticker = assetInfo?.getTokenTicker()
             if (!ticker.isNullOrBlank()) {
                 tickerView.text = ticker
                 tickerView.visiable()
@@ -781,21 +781,16 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == WavesConstants.WAVES_ASSET_ID_FILLED) {
-            WavesConstants.WAVES_ASSET_ID_FILLED
+        if (isShowTicker(amountAsset.id)) {
+            val ticker = amountAsset.getTokenTicker()
+            if (!ticker.isNullOrBlank()) {
+                view.text_tag.text = ticker
+                view.text_tag.visiable()
+            }
+            view.text_transaction_value.text = directionSign + amountValue
         } else {
-            amountAsset.ticker
+            view.text_transaction_value.text = directionSign + amountValue + " ${amountAsset.name}"
         }
-
-        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
-            " ${amountAsset.name}"
-        } else {
-            view.text_tag.visiable()
-            view.text_tag.text = amountAssetTicker
-            ""
-        }
-
-        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
     private fun nonGateway(assetBalance: AssetBalanceResponse, transaction: HistoryTransactionResponse) =

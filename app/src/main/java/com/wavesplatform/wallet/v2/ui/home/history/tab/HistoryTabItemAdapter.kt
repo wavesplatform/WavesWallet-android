@@ -156,7 +156,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             view.text_tag_spam.visiable()
                         } else {
                             if (isShowTicker(item.data.assetId)) {
-                                val ticker = item.data.asset?.getTicker()
+                                val ticker = item.data.asset?.getTokenTicker()
                                 if (!ticker.isNullOrBlank()) {
                                     view.text_tag.text = ticker
                                     view.text_tag.visiable()
@@ -209,20 +209,15 @@ class HistoryTabItemAdapter @Inject constructor() :
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == WavesConstants.WAVES_ASSET_ID_FILLED) {
-            WavesConstants.WAVES_ASSET_ID_FILLED
+        if (isShowTicker(amountAsset.id)) {
+            val ticker = amountAsset.getTokenTicker()
+            if (!ticker.isNullOrBlank()) {
+                view.text_tag.text = ticker
+                view.text_tag.visiable()
+            }
+            view.text_transaction_value.text = directionSign + amountValue
         } else {
-            amountAsset.ticker
+            view.text_transaction_value.text = directionSign + amountValue + " ${amountAsset.name}"
         }
-
-        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
-            " ${amountAsset.name}"
-        } else {
-            view.text_tag.visiable()
-            view.text_tag.text = amountAssetTicker
-            ""
-        }
-
-        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 }
