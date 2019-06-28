@@ -130,10 +130,13 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
                             market.priceAssetLongName = it.first[market.priceAsset]?.displayName
                                     ?: market.priceAssetName
 
-                            market.amountAssetShortName = it.first[market.amountAsset]?.gatewayId
-                                    ?: market.amountAssetName
-                            market.priceAssetShortName = it.first[market.priceAsset]?.gatewayId
-                                    ?: market.priceAssetName
+                            market.amountAssetShortName =
+                                    if (!it.first[market.amountAsset]?.gatewayId.isNullOrEmpty()) it.first[market.amountAsset]?.gatewayId
+                                    else market.amountAssetName
+
+                            market.priceAssetShortName =
+                                    if (!it.first[market.priceAsset]?.gatewayId.isNullOrEmpty()) it.first[market.priceAsset]?.gatewayId
+                                    else market.priceAssetName
 
                             market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
 
