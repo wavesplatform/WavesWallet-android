@@ -9,6 +9,6 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 
 data class InitGatewayRequest(
-        @SerializedName("userAddress") val userAddress: String,
-        @SerializedName("assetId") val assetId: String
+        @SerializedName("userAddress") val userAddress: String?,
+        @SerializedName("assetId") val assetId: String?
 )

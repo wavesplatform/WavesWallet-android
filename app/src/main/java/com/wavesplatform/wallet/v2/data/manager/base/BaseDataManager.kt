@@ -40,4 +40,8 @@ open class BaseDataManager @Inject constructor() {
     fun getPublicKeyStr(): String? {
         return App.getAccessManager().getWallet()?.publicKeyStr
     }
+
+    fun getPrivateKey(): ByteArray {
+        return App.getAccessManager().getWallet()?.privateKey ?: byteArrayOf()
+    }
 }

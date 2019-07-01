@@ -8,9 +8,9 @@ package com.wavesplatform.wallet.v2.data.model.remote.response.gateway
 import java.math.BigDecimal
 
 data class GatewayMetadata(
-        var gatewayMin: BigDecimal = BigDecimal.ZERO,
-        var gatewayMax: BigDecimal = BigDecimal.ZERO,
-        var gatewayFee: BigDecimal = BigDecimal.ZERO,
+        var minLimit: BigDecimal = BigDecimal.ZERO,
+        var maxLimit: BigDecimal = BigDecimal.ZERO,
+        var fee: BigDecimal = BigDecimal.ZERO,
         var gatewayProcessId: String? = null,
         var gatewayRecipientAddress: String? = null
 )

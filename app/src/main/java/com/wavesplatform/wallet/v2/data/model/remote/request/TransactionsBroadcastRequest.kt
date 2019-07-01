@@ -15,18 +15,20 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
+import com.wavesplatform.wallet.v2.util.makeAsAlias
 import com.wavesplatform.wallet.v2.util.parseAlias
 import java.nio.charset.Charset
 
 class TransactionsBroadcastRequest(
-    @SerializedName("assetId") var assetId: String,
-    @SerializedName("senderPublicKey") var senderPublicKey: String,
-    @SerializedName("recipient") var recipient: String,
-    @SerializedName("amount") var amount: Long,
-    @SerializedName("timestamp") var timestamp: Long,
-    @SerializedName("fee") var fee: Long,
-    @SerializedName("attachment") var attachment: String?,
-    @SerializedName("feeAssetId") var feeAssetId: String? = ""
+        @SerializedName("assetId") var assetId: String,
+        @SerializedName("senderPublicKey") var senderPublicKey: String,
+        @SerializedName("recipient") var recipient: String,
+        @SerializedName("amount") var amount: Long,
+        @SerializedName("timestamp") var timestamp: Long,
+        @SerializedName("fee") var fee: Long,
+        @SerializedName("attachment") var attachment: String?,
+        @SerializedName("feeAssetId") var feeAssetId: String? = "",
+        @SerializedName("sender") var sender: String? = ""
 ) {
 
     @SerializedName("type")
@@ -37,10 +39,15 @@ class TransactionsBroadcastRequest(
     var proofs = arrayOf("")
     @SerializedName("signature")
     var signature: String = ""
-    @SerializedName("sender")
-    var sender: String? = ""
     @SerializedName("id")
     var id: String? = ""
+
+    private fun checkAliasAndAttachment() {
+        attachment = Base58.encode((attachment ?: "").toByteArray())
+        if (recipient.length <= 30) {
+            recipient = recipient.makeAsAlias()
+        }
+    }
 
     private fun toSignBytes(): ByteArray {
         recipient = recipient.parseAlias()
@@ -72,6 +79,7 @@ class TransactionsBroadcastRequest(
     }
 
     fun sign(privateKey: ByteArray) {
+        checkAliasAndAttachment()
         signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
         proofs[0] = signature
     }

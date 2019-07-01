@@ -131,7 +131,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             analytics.trackEvent(AnalyticEvents.WalletAssetsSendConfirmEvent(name))
         }
         showTransactionProcessing()
-        presenter.confirmSend()
+        presenter.confirmWithdrawTransaction()
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {

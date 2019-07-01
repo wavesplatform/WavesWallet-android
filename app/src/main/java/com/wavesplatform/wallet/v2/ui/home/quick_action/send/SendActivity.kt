@@ -29,6 +29,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -344,23 +345,20 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    override fun showXRate(ticker: String) {
+    override fun onLoadMetadataSuccess(metadata: GatewayMetadata, gatewayTicket: String?) {
         xRateSkeletonView?.hide()
 
-        val fee = presenter.gatewayCommission.toString()
-        val inMin = presenter.gatewayMin.toString()
-        val inMax = presenter.gatewayMax.toString()
-
         gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
-                fee, ticker)
+                metadata.fee.toString(), gatewayTicket)
         gateway_limits?.text = getString(R.string.send_gateway_info_gateway_limits,
-                ticker, inMin, inMax)
+                gatewayTicket, metadata.minLimit, metadata.maxLimit)
         gateway_warning?.text = getString(R.string.send_gateway_info_gateway_warning,
-                ticker)
+                gatewayTicket)
+
         setRecipientValid(presenter.isRecipientValid())
     }
 
-    override fun showXRateError() {
+    override fun onLoadMetadataError() {
         xRateSkeletonView!!.hide()
         gateway_fee.text = getString(R.string.send_gateway_error_title)
         gateway_limits.text = getString(R.string.send_gateway_error_subtitle)
@@ -666,7 +664,7 @@ class SendActivity : BaseActivity(), SendView {
             } else {
                 xRateSkeletonView!!.show()
             }
-            presenter.loadXRate(assetId)
+            presenter.loadGatewayMetadata(assetId)
         } else {
             relative_gateway_fee.gone()
         }

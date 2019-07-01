@@ -17,21 +17,23 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayWithdrawArgs
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.parseAlias
-import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
-import com.wavesplatform.wallet.v2.util.makeAsAlias
+import com.wavesplatform.wallet.v2.util.*
 import java.math.BigDecimal
 import javax.inject.Inject
 
 @InjectViewState
 class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfirmationView>() {
+
+    @Inject
+    lateinit var gatewayProvider: GatewayProvider
 
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
@@ -53,11 +55,48 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     var success = false
 
-    fun confirmSend() {
-        val singed = signTransaction()
-        if (singed != null) {
-            submitPayment(singed)
+    fun confirmWithdrawTransaction() {
+        val transaction = getTxRequest()
+        when (type) {
+            SendPresenter.Type.GATEWAY -> makeWithdrawViaGateway(transaction)
+//            SendPresenter.Type.VOSTOK -> signAndSendGatewayTransaction()
+            else -> {
+                makeWithdrawViaWavesBlockchain(transaction)
+            }
         }
+    }
+
+    private fun makeWithdrawViaWavesBlockchain(transaction: TransactionsBroadcastRequest) {
+        addSubscription(nodeDataManager.transactionsBroadcast(transaction)
+                .executeInBackground()
+                .subscribe({ tx ->
+                    tx.recipient = tx.recipient.parseAlias()
+                    saveLastSentAddress(tx.recipient)
+                    success = true
+                    viewState.onShowTransactionSuccess(tx)
+                }, {
+                    if (it.errorBody()?.isSmartError() == true) {
+                        viewState.failedSendCauseSmart()
+                    } else {
+                        viewState.onShowError(R.string.transaction_failed)
+                    }
+                }))
+    }
+
+    private fun makeWithdrawViaGateway(transaction: TransactionsBroadcastRequest) {
+        addSubscription(gatewayProvider.getGatewayDataManager(transaction.assetId)
+                .makeWithdraw(GatewayWithdrawArgs(transaction, selectedAsset, moneroPaymentId))
+                .executeInBackground()
+                .subscribe({ tx ->
+                    success = true
+                    viewState.onShowTransactionSuccess(tx)
+                }, {
+                    if (it.errorBody()?.isSmartError() == true) {
+                        viewState.failedSendCauseSmart()
+                    } else {
+                        viewState.onShowError(R.string.transaction_failed)
+                    }
+                }))
     }
 
     fun getTicker(): String {
@@ -140,17 +179,23 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun getTxRequest(): TransactionsBroadcastRequest {
+        var recipientAddress =
+                when {
+                    type == SendPresenter.Type.GATEWAY -> {
+
+                    }
+                    else -> recipient
+                }
         if (recipient == null || recipient!!.length < 4) {
             recipient = ""
         } else if (recipient!!.length <= 30) {
             recipient = recipient!!.makeAsAlias()
         }
 
-        val totalAmount = if (type == SendPresenter.Type.GATEWAY || type == SendPresenter.Type.VOSTOK) {
-            amount + gatewayCommission
-        } else {
-            amount
-        }
+        val totalAmount =
+                if (type == SendPresenter.Type.GATEWAY) amount + gatewayCommission
+                else amount
+
 
         val request = TransactionsBroadcastRequest(
                 selectedAsset!!.assetId,

@@ -15,6 +15,7 @@ import javax.inject.Singleton
 
 @Singleton
 class GatewayProvider @Inject constructor() {
+
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
     @Inject

@@ -18,29 +18,32 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
-import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
 import javax.inject.Inject
 
 @InjectViewState
 class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
+    // new
+    @Inject
+    lateinit var gatewayProvider: GatewayProvider
+    lateinit var gatewayMetadata: GatewayMetadata
+
+    // old
     @Inject
     lateinit var coinomatManager: CoinomatDataManager
     @Inject
-    lateinit var gatewayProvider: GatewayProvider
-    @Inject
     lateinit var gatewayDataManager: GatewayDataManager
-
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
@@ -157,59 +160,18 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    fun loadXRate(assetId: String) {
-        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
-        if (currencyTo.isNullOrEmpty()) {
-            type = Type.UNKNOWN
-            runOnUiThread {
-                viewState.showXRateError()
-            }
-            return
-        }
-        gatewayProvider
+    fun loadGatewayMetadata(assetId: String) {
+        addSubscription(gatewayProvider
                 .getGatewayDataManager(assetId)
-                .loadGatewayMetadata()
-        if (type == Type.VOSTOK) {
-            addSubscription(gatewayDataManager.prepareSendTransaction(recipient!!, assetId)
-                    .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe({ response ->
-                        gatewayProcessId = response.processId
-                        gatewayRecipientAddress = response.recipientAddress
-
-                        gatewayCommission = MoneyUtil.getScaledText(response.fee, selectedAsset).clearBalance().toBigDecimal()
-                        gatewayMin = MoneyUtil.getScaledText(response.minAmount, selectedAsset).clearBalance().toBigDecimal()
-                        gatewayMax = MoneyUtil.getScaledText(response.maxAmount, selectedAsset).clearBalance().toBigDecimal()
-
-                        viewState.showXRate(currencyTo)
-                    }, {
-                        type = Type.UNKNOWN
-                        viewState.showXRateError()
-                    }))
-            return
-        }
-
-        val currencyFrom = "W$currencyTo"
-        runAsync {
-            addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
-                    .subscribe({ xRate ->
-                        type = Type.GATEWAY
-                        gatewayCommission = BigDecimal(xRate.feeOut ?: "0")
-                        gatewayMin = BigDecimal(xRate.inMin ?: "0")
-                        gatewayMax = BigDecimal(xRate.inMax ?: "0")
-                        runOnUiThread {
-                            if (xRate == null) {
-                                viewState.showXRateError()
-                            } else {
-                                viewState.showXRate(currencyTo)
-                            }
-                        }
-                    }, {
-                        type = Type.UNKNOWN
-                        runOnUiThread {
-                            viewState.showXRateError()
-                        }
-                    }))
-        }
+                .loadGatewayMetadata(GatewayMetadataArgs(selectedAsset, recipient))
+                .subscribe({ metadata ->
+                    val gatewayTicket = Constants.coinomatCryptoCurrencies()[assetId]
+                    gatewayMetadata = metadata
+                    viewState.onLoadMetadataSuccess(metadata, gatewayTicket)
+                }, {
+                    type = Type.UNKNOWN
+                    viewState.onLoadMetadataError()
+                }))
     }
 
     fun isRecipientValid(): Boolean? {
