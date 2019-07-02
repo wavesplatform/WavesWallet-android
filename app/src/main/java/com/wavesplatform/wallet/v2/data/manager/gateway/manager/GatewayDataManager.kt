@@ -29,7 +29,7 @@ class GatewayDataManager @Inject constructor() : BaseDataManager(), BaseGateway 
                     args.transaction.attachment = metadata.gatewayProcessId
                     args.transaction.recipient = metadata.gatewayRecipientAddress ?: args.transaction.recipient
 
-                    args.transaction.sign(getPrivateKey())
+                    args.transaction.sign(getPrivateKey(), false)
 
                     return@flatMap gatewayService.sendWithdrawTransaction(args.transaction)
                             .map {

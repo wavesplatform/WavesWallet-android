@@ -15,8 +15,6 @@ import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
-import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
@@ -27,35 +25,24 @@ import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import pyxis.uzuki.live.richutilskt.utils.isEmpty
 import java.math.BigDecimal
 import javax.inject.Inject
 
 @InjectViewState
 class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
-    // new
     @Inject
     lateinit var gatewayProvider: GatewayProvider
-    lateinit var gatewayMetadata: GatewayMetadata
+    var gatewayMetadata: GatewayMetadata = GatewayMetadata()
 
-    // old
-    @Inject
-    lateinit var coinomatManager: CoinomatDataManager
-    @Inject
-    lateinit var gatewayDataManager: GatewayDataManager
+    var type: Type = Type.UNKNOWN
     var selectedAsset: AssetBalance? = null
+
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
     var moneroPaymentId: String? = null
-    var gatewayProcessId: String? = null
-    var gatewayRecipientAddress: String? = null
     var recipientAssetId: String? = null
-    var type: Type? = null
-    var gatewayCommission: BigDecimal = BigDecimal.ZERO
-    var gatewayMin: BigDecimal = BigDecimal.ZERO
-    var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
     var feeAsset: AssetBalance? = null
@@ -128,13 +115,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun isGatewayAmountError(): Boolean {
-        if ((type == Type.VOSTOK || type == Type.GATEWAY) && selectedAsset != null && gatewayMax.toFloat() > 0) {
-            val totalAmount = amount + gatewayCommission
+        if ((type == Type.VOSTOK || type == Type.GATEWAY) && selectedAsset != null && gatewayMetadata.maxLimit.toFloat() > 0) {
+            val totalAmount = amount + gatewayMetadata.fee
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
                     selectedAsset!!.getDecimals())
             return !(balance >= totalAmount &&
-                    totalAmount >= gatewayMin &&
-                    totalAmount <= gatewayMax)
+                    totalAmount >= gatewayMetadata.minLimit &&
+                    totalAmount <= gatewayMetadata.maxLimit)
         }
         return false
     }
@@ -164,7 +151,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         addSubscription(gatewayProvider
                 .getGatewayDataManager(assetId)
                 .loadGatewayMetadata(GatewayMetadataArgs(selectedAsset, recipient))
+                .executeInBackground()
                 .subscribe({ metadata ->
+                    type = Type.GATEWAY
                     val gatewayTicket = Constants.coinomatCryptoCurrencies()[assetId]
                     gatewayMetadata = metadata
                     viewState.onLoadMetadataSuccess(metadata, gatewayTicket)
@@ -266,15 +255,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     companion object {
-        const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
             val configAsset = EnvironmentManager.globalConfiguration.generalAssets
                     .firstOrNull { it.assetId == assetBalance?.assetId }
 
-            return if (recipient?.matches("${configAsset?.addressRegEx}$".toRegex()) == true
-                    || configAsset?.addressRegEx?.isEmpty() == true) {
+            return if (recipient?.matches("${configAsset?.addressRegEx}$".toRegex()) == true) {
                 configAsset?.assetId
             } else {
                 null
