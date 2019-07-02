@@ -33,12 +33,12 @@ open class BaseDataManager @Inject constructor() {
     @Inject
     lateinit var rxEventBus: RxEventBus
 
-    fun getAddress(): String? {
-        return App.getAccessManager().getWallet()?.address
+    fun getAddress(): String {
+        return App.getAccessManager().getWallet()?.address ?: ""
     }
 
-    fun getPublicKeyStr(): String? {
-        return App.getAccessManager().getWallet()?.publicKeyStr
+    fun getPublicKeyStr(): String {
+        return App.getAccessManager().getWallet()?.publicKeyStr ?: ""
     }
 
     fun getPrivateKey(): ByteArray {

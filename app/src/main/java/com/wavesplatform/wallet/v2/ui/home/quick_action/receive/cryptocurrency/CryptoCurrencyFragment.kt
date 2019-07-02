@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayDeposit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
@@ -43,22 +44,6 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
     fun providePresenter(): CryptoCurrencyPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.fragment_cryptocurrency
-
-    companion object {
-
-        var REQUEST_SELECT_ASSET = 10001
-
-        fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
-            val fragment = CryptoCurrencyFragment()
-            if (assetBalance == null) {
-                return fragment
-            }
-            val args = Bundle()
-            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         if (arguments == null) {
@@ -93,7 +78,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
             presenter.assetBalance.notNull {
-                skeletonView!!.show()
+                skeletonView?.show()
                 setAssetBalance(it)
             }
         }
@@ -107,9 +92,9 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         }
     }
 
-    override fun onSuccessInitDeposit(currencyFrom: String?, gatewayMin: BigDecimal?) {
+    override fun onSuccessInitDeposit(response: GatewayDeposit) {
         skeletonView?.hide()
-        if (currencyFrom.isNullOrEmpty() || gatewayMin == null) {
+        if (response.currencyFrom.isNullOrEmpty()) {
             presenter.nextStepValidation = false
             needMakeButtonEnable()
             onGatewayError()
@@ -117,15 +102,15 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         }
 
         attention_title?.text = getString(R.string.receive_minimum_amount,
-                gatewayMin, currencyFrom)
+                response.minLimit, response.currencyFrom)
         attention_subtitle?.text = getString(R.string.receive_warning_will_send,
-                gatewayMin,
-                currencyFrom)
+                response.minLimit,
+                response.currencyFrom)
         if (Constants.findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
             warning_crypto_title?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
             warning_crypto_subtitle?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
         } else {
-            warning_crypto_title?.text = getString(R.string.receive_warning_crypto, currencyFrom)
+            warning_crypto_title?.text = getString(R.string.receive_warning_crypto, response.currencyFrom)
             warning_crypto_subtitle?.text = getString(R.string.receive_will_send_other_currency)
         }
 
@@ -135,6 +120,10 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         warning_layout?.visiable()
         container_info?.visiable()
         button_continue.isEnabled = true
+    }
+
+    override fun onSuccessInitDeposit(currencyFrom: String?, gatewayMin: BigDecimal?) {
+
     }
 
     override fun onShowError(message: String) {
@@ -215,5 +204,22 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = presenter.nextStepValidation && networkConnected
+    }
+
+
+    companion object {
+
+        var REQUEST_SELECT_ASSET = 10001
+
+        fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
+            val fragment = CryptoCurrencyFragment()
+            if (assetBalance == null) {
+                return fragment
+            }
+            val args = Bundle()
+            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

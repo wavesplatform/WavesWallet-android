@@ -10,9 +10,11 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayDepositArgs
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayWithdrawArgs
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayDeposit
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.CreateTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.GetTunnel
@@ -29,6 +31,48 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
 
     @Inject
     lateinit var nodeDataManager: NodeDataManager
+
+    override fun loadGatewayMetadata(args: GatewayMetadataArgs): Observable<GatewayMetadata> {
+        val currencyTo = Constants.coinomatCryptoCurrencies()[args.asset?.assetId]
+        val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
+
+        if (currencyTo.isNullOrEmpty()) {
+            return Observable.error(Throwable("Empty or null 'currencyTo' field"))
+        }
+
+        return coinomatService.getXRate(currencyFrom, currencyTo, LANG)
+                .map { rate ->
+                    val metadata = GatewayMetadata(
+                            rate.inMin?.toBigDecimal() ?: BigDecimal.ZERO,
+                            rate.inMax?.toBigDecimal() ?: BigDecimal.ZERO,
+                            rate.feeOut?.toBigDecimal() ?: BigDecimal.ZERO)
+
+                    return@map metadata
+                }
+    }
+
+    override fun makeDeposit(args: GatewayDepositArgs): Observable<GatewayDeposit> {
+        val currencyFrom = Constants.coinomatCryptoCurrencies()[args.asset?.assetId]
+        val currencyTo = "${EnvironmentManager.netCode.toChar()}$currencyFrom"
+
+        if (currencyFrom.isNullOrEmpty()) {
+            return Observable.error(Throwable("Empty or null 'currencyFrom' field"))
+        }
+
+        return coinomatService.createTunnel(currencyFrom, currencyTo, getAddress(), null)
+                .flatMap { createTunnel ->
+                    coinomatService.getTunnel(
+                            createTunnel.tunnelId,
+                            createTunnel.k1,
+                            createTunnel.k2,
+                            LANG)
+                }.map { tunnel ->
+                    val address = tunnel.tunnel?.walletFrom ?: ""
+                    val min = tunnel.tunnel?.inMin?.toBigDecimal() ?: BigDecimal.ZERO
+
+                    return@map GatewayDeposit(min, address, currencyFrom)
+                }
+    }
 
     override fun makeWithdraw(args: GatewayWithdrawArgs): Observable<TransactionsBroadcastRequest> {
         val currencyTo = Constants.coinomatCryptoCurrencies()[args.transaction.assetId]
@@ -58,25 +102,6 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
                     tx.recipient = tx.recipient.parseAlias()
                     saveLastSentAddress(tx.recipient)
                     return@map tx
-                }
-    }
-
-    override fun loadGatewayMetadata(args: GatewayMetadataArgs): Observable<GatewayMetadata> {
-        val currencyTo = Constants.coinomatCryptoCurrencies()[args.asset?.assetId]
-        val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
-
-        if (currencyTo.isNullOrEmpty()) {
-            return Observable.error(Throwable("Empty or null 'currencyTo' field"))
-        }
-
-        return coinomatService.getXRate(currencyFrom, currencyTo, LANG)
-                .map { rate ->
-                    val metadata = GatewayMetadata(
-                            rate.inMin?.toBigDecimal() ?: BigDecimal.ZERO,
-                            rate.inMax?.toBigDecimal() ?: BigDecimal.ZERO,
-                            rate.feeOut?.toBigDecimal() ?: BigDecimal.ZERO)
-
-                    return@map metadata
                 }
     }
 

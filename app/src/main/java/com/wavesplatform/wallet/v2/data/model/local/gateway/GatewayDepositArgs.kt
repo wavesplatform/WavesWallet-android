@@ -5,5 +5,6 @@
 
 package com.wavesplatform.wallet.v2.data.model.local.gateway
 
-data class GatewayDepositArgs(var assetId: String,
-                              var address: String)
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+
+data class GatewayDepositArgs(var asset: AssetBalance?)

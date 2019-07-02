@@ -14,78 +14,31 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayDepositArgs
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.clearBalance
+import com.wavesplatform.wallet.v2.util.executeInBackground
 import javax.inject.Inject
 
 @InjectViewState
 class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurrencyView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatDataManager
-    @Inject
-    lateinit var gatewayDataManager: GatewayDataManager
+    lateinit var gatewayProvider: GatewayProvider
 
     var assetBalance: AssetBalance? = null
-    private var lang: String = "ru_RU"
     var nextStepValidation = false
-
     var depositAddress: String? = null
 
     fun initDeposit(assetId: String) {
-        val asset = EnvironmentManager.globalConfiguration.generalAssets.find { it.assetId == assetId }
-
-        when (asset?.gatewayType) {
-            Constants.GatewayType.COINOMAT -> {
-                initCoinomatDeposit(assetId)
-            }
-            Constants.GatewayType.GATEWAY -> {
-                initGatewayDeposit(assetId)
-            }
-            else -> {
-                initCoinomatDeposit(assetId)
-            }
-        }
-    }
-
-    private fun initGatewayDeposit(assetId: String) {
-        val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
-
-        addSubscription(gatewayDataManager.receiveTransaction(getWavesAddress(), assetId)
-                .compose(RxUtil.applySchedulersToObservable())
+        addSubscription(gatewayProvider.getGatewayDataManager(assetId)
+                .makeDeposit(GatewayDepositArgs(assetBalance))
+                .executeInBackground()
                 .subscribe({ response ->
-                    depositAddress = response.address
-                    val gatewayMin = MoneyUtil.getScaledText(response.minAmount, assetBalance).clearBalance().toBigDecimal()
-                    viewState.onSuccessInitDeposit(currencyFrom, gatewayMin)
-                }, {
-                    viewState.onGatewayError()
-                    it.printStackTrace()
-                }))
-    }
-
-    private fun initCoinomatDeposit(assetId: String) {
-        val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
-        if (currencyFrom.isNullOrEmpty()) {
-            viewState.onShowError(App.getAppContext()
-                    .getString(R.string.receive_error_network))
-            return
-        }
-
-        val currencyTo = "W$currencyFrom"
-
-        addSubscription(coinomatManager.createTunnel(currencyFrom, currencyTo, getWavesAddress(), null)
-                .flatMap { createTunnel ->
-                    coinomatManager.getTunnel(
-                            createTunnel.tunnelId,
-                            createTunnel.k1,
-                            createTunnel.k2,
-                            lang)
-                }
-                .compose(RxUtil.applySchedulersToObservable())
-                .subscribe({ tunnel ->
-                    depositAddress = tunnel.tunnel?.walletFrom
-                    viewState.onSuccessInitDeposit(currencyFrom, tunnel.tunnel?.inMin?.toBigDecimal())
+                    depositAddress = response.depositAddress
+                    viewState.onSuccessInitDeposit(response)
                 }, {
                     viewState.onGatewayError()
                     it.printStackTrace()
