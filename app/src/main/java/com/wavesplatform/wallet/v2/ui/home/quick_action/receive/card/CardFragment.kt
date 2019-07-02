@@ -24,7 +24,7 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_card.*
 import kotlinx.android.synthetic.main.content_asset_card.*
@@ -52,9 +52,9 @@ class CardFragment : BaseFragment(), CardView {
         button_continue.click {
             if (presenter.isValid()) {
                 analytics.trackEvent(AnalyticEvents.WalletAssetsCardReceiveTapEvent)
-                launchActivity<SuccessActivity> {
-                    putExtra(SuccessActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
-                    putExtra(SuccessActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))
+                launchActivity<SuccessRedirectionActivity> {
+                    putExtra(SuccessRedirectionActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
+                    putExtra(SuccessRedirectionActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))
                 }
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(presenter.createLink()))
                 startActivity(browserIntent)
