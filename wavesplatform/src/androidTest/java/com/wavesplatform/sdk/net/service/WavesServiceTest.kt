@@ -265,7 +265,7 @@ class WavesServiceTest {
         val transferTransaction = MassTransferTransaction(
             "BHar7QeZLmHkGqQnvBRWjyHaNKJUstYBaDrPQ64cjJL9",
             transfers = transfers,
-            attachment = "SGVsbG8h") // todo check
+            attachment = WavesCrypto.base58encode("Hello!".toByteArray()))
 
         transferTransaction.fee = 200000
 
