@@ -4,12 +4,15 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.arrayWithSize
+import com.wavesplatform.sdk.utils.scriptBytes
 
 /**
  * Set asset script transaction (set script to asset)
+ *
+ * You can only update script of asset, that was issued before by [IssueTransaction]
+ *
  * An asset script is a script that is attached to an asset with a set asset script transaction.
  * An asset with the attached script is called a smart asset.
  * You can attach a script to an asset only during the creation of the asset.
@@ -22,40 +25,31 @@ import com.wavesplatform.sdk.utils.arrayWithSize
  * Only the issuer of that asset can change the asset's script.
  */
 class SetAssetScriptTransaction(
-        /**
-         * Selected for script asset Id
-         */
-        @SerializedName("assetId") var assetId: String,
-        /**
-         * Base64 binary string with Waves Ride script, starts with "base64:"
-         */
-        @SerializedName("script") var script: String)
-    : BaseTransaction(ASSET_SCRIPT) {
+    /**
+     * Selected your asset Id for script
+     */
+    @SerializedName("assetId") var assetId: String,
+    /**
+     * Base64 binary string with Waves Ride script
+     * You can use "base64:compiledScriptStringInBase64" and just "compiledScriptStringInBase64".
+     * Can't be empty string
+     * You can set asset script only on your asset
+     */
+    @SerializedName("script") var script: String
+) : BaseTransaction(ASSET_SCRIPT) {
 
     override fun toBytes(): ByteArray {
         return try {
-
-            val scriptVersion = if (script.isEmpty()) {
-                byteArrayOf(0)
-            } else {
-                byteArrayOf(SET_SCRIPT_LANG_VERSION)
-            }
-
-            val scriptBytes = if (script.isEmpty()) {
-                byteArrayOf()
-            } else {
-                WavesCrypto.base64decode(script.replace("base64:", ""))
-            }
-
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
-                    byteArrayOf(chainId),
-                    Base58.decode(senderPublicKey),
-                    Base58.decode(assetId),
-                    Longs.toByteArray(fee),
-                    Longs.toByteArray(timestamp),
-                    scriptVersion,
-                    scriptBytes.arrayWithSize())
+            Bytes.concat(
+                byteArrayOf(type.toByte()),
+                byteArrayOf(version.toByte()),
+                byteArrayOf(chainId),
+                WavesCrypto.base58decode(senderPublicKey),
+                WavesCrypto.base58decode(assetId),
+                Longs.toByteArray(fee),
+                Longs.toByteArray(timestamp),
+                scriptBytes(script)
+            )
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Data Transaction", e)
             ByteArray(0)

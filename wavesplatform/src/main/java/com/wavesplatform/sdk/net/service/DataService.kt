@@ -31,7 +31,7 @@ interface DataService {
     fun aliases(@Query("address") address: String?): Observable<AliasesResponse>
 
     /**
-     * Get asset info by asset ID
+     * Get a list of assets info from a list of IDs
      */
     @GET("v0/assets")
     fun assets(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>

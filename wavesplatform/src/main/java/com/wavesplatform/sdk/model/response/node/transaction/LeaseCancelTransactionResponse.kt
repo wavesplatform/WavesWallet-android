@@ -9,8 +9,7 @@ import kotlinx.android.parcel.Parcelize
  * See [com.wavesplatform.sdk.model.request.node.LeaseCancelTransaction]
  */
 @Parcelize
-class LeaseCancelTransactionResponse(@SerializedName("leaseId")
-                                       var leaseId: String = "",
-                                     @SerializedName("lease")
-                                       var lease: Unit? = null)
-    : BaseTransactionResponse(type = BaseTransaction.CANCEL_LEASING), Parcelable
+class LeaseCancelTransactionResponse(
+    @SerializedName("leaseId")
+    var leaseId: String = ""
+) : BaseTransactionResponse(type = BaseTransaction.CANCEL_LEASING), Parcelable

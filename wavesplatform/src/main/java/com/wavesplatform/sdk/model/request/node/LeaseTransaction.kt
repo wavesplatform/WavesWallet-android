@@ -5,6 +5,7 @@
 
 package com.wavesplatform.sdk.model.request.node
 
+import android.os.Parcelable
 import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
@@ -13,13 +14,15 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.isAlias
 import com.wavesplatform.sdk.utils.parseAlias
+import kotlinx.android.parcel.Parcelize
 import java.nio.charset.Charset
 
 /**
- * The transaction leases amount of Waves to node operator.
+ * The Leasing transaction leases amount of Waves to node operator.
  * it can be address or alias by Proof-of-Stake consensus. It will perform at non-node address.
  * You always can reverse the any leased amount by [LeaseCancelTransaction]
  */
+@Parcelize
 class LeaseTransaction(
         /**
          * Address or alias of Waves blockchain to lease
@@ -29,7 +32,7 @@ class LeaseTransaction(
          * Amount to lease of Waves in satoshi
          */
         @SerializedName("amount") var amount: Long)
-    : BaseTransaction(CREATE_LEASING) {
+    : BaseTransaction(CREATE_LEASING), Parcelable {
 
     override fun toBytes(): ByteArray {
         return try {

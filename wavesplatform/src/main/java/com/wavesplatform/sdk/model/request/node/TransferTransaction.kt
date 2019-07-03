@@ -11,6 +11,7 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
 import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.WavesConstants
@@ -24,31 +25,31 @@ import java.nio.charset.Charset
  * to the recipient (by address or alias).
  */
 class TransferTransaction(
-        /**
-         * Id of transferable asset in Waves blockchain, different for main and test net
-         */
-        @SerializedName("assetId") var assetId: String,
-        /**
-         * Address or alias of Waves blockchain
-         */
-        @SerializedName("recipient") var recipient: String,
-        /**
-         * Amount of Waves in satoshi
-         */
-        @SerializedName("amount") var amount: Long,
-        /**
-         * Fee for transaction in satoshi
-         */
-        fee: Long,
-        /**
-         * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string or byte array
-         */
-        @SerializedName("attachment") var attachment: String?,
-        /**
-         * Asset id instead Waves for transaction commission withdrawal
-         */
-        @SerializedName("feeAssetId") var feeAssetId: String = "")
-    : BaseTransaction(TRANSFER) {
+    /**
+     * Id of transferable asset in Waves blockchain, different for main and test net
+     */
+    @SerializedName("assetId") var assetId: String,
+    /**
+     * Address or alias of Waves blockchain
+     */
+    @SerializedName("recipient") var recipient: String,
+    /**
+     * Amount of asset in satoshi
+     */
+    @SerializedName("amount") var amount: Long,
+    /**
+     * Fee for transaction in satoshi
+     */
+    fee: Long,
+    /**
+     * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string encoded in Base58
+     */
+    @SerializedName("attachment") var attachment: String?,
+    /**
+     * Asset id instead Waves for transaction commission withdrawal
+     */
+    @SerializedName("feeAssetId") var feeAssetId: String = ""
+) : BaseTransaction(TRANSFER) {
 
     init {
         this.fee = fee
@@ -57,16 +58,18 @@ class TransferTransaction(
     override fun toBytes(): ByteArray {
         recipient = recipient.parseAlias()
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
-                    Base58.decode(senderPublicKey),
-                    SignUtil.arrayOption(assetId),
-                    SignUtil.arrayOption(feeAssetId),
-                    Longs.toByteArray(timestamp),
-                    Longs.toByteArray(amount),
-                    Longs.toByteArray(fee),
-                    getRecipientBytes(recipient),
-                    SignUtil.arrayWithSize(Base58.encode((attachment ?: "").toByteArray())))
+            Bytes.concat(
+                byteArrayOf(type.toByte()),
+                byteArrayOf(version.toByte()),
+                Base58.decode(senderPublicKey),
+                SignUtil.arrayOption(assetId),
+                SignUtil.arrayOption(feeAssetId),
+                Longs.toByteArray(timestamp),
+                Longs.toByteArray(amount),
+                Longs.toByteArray(fee),
+                getRecipientBytes(recipient),
+                WavesCrypto.base58decode(attachment ?: "").arrayWithSize()
+            )
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Transfer Transaction", e)
             ByteArray(0)
@@ -92,9 +95,11 @@ class TransferTransaction(
 
         fun getRecipientBytes(recipient: String): ByteArray {
             return if (recipient.length <= 30) {
-                Bytes.concat(byteArrayOf(WavesConstants.VERSION.toByte()),
-                        byteArrayOf(WavesSdk.getEnvironment().scheme),
-                        recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+                Bytes.concat(
+                    byteArrayOf(WavesConstants.VERSION.toByte()),
+                    byteArrayOf(WavesSdk.getEnvironment().chainId),
+                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize()
+                )
             } else {
                 Base58.decode(recipient)
             }

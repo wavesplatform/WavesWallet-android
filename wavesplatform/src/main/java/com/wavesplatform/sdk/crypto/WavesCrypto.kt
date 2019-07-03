@@ -208,13 +208,10 @@ interface WavesCrypto {
         }
 
         override fun addressByPublicKey(publicKey: PublicKey, chainId: String?): Address {
-            return when {
-                chainId == null ->
-                    addressFromPublicKey(Base58.decode(publicKey))
-                chainId.length == 1 ->
-                    addressFromPublicKey(Base58.decode(publicKey), chainId[0].toByte())
-                else ->
-                    "Unknown address"
+            return if (chainId.isNullOrEmpty()) {
+                addressFromPublicKey(Base58.decode(publicKey))
+            } else {
+                addressFromPublicKey(Base58.decode(publicKey), chainId.toByte())
             }
         }
 
@@ -251,12 +248,12 @@ interface WavesCrypto {
 
             val bytes = Base58.decode(address)
 
-            if (chainId != null) {
-                if (chainId.length == 1) {
-                    if (chainId[0].toByte() != bytes[1]) {
+            if (!chainId.isNullOrEmpty()) {
+                try {
+                    if (chainId.toByte().toChar() != bytes[1].toChar()) {
                         return false
                     }
-                } else {
+                } catch (error: NumberFormatException) {
                     return false
                 }
             }

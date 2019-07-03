@@ -9,23 +9,38 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 
-class NetworkException internal constructor(message: String?,
-                                            /** The request URL which produced the error.  */
+class NetworkException internal constructor(
+    message: String?,
+    /**
+     * The request URL which produced the error.
+     */
     val url: String?,
-                                            /** Response object containing status code, headers, body, etc.  */
+    /**
+     * Response object containing status code, headers, body, etc.
+     */
     val response: Response<*>?,
-                                            /** The event kind which triggered this error.  */
+    /**
+     * The event kind which triggered this error.
+     */
     val kind: Kind,
-                                            exception: Throwable?,
-                                            /** The Retrofit this request was executed on  */
+    exception: Throwable?,
+    /**
+     * The Retrofit this request was executed on
+     */
     private val retrofit: Retrofit?
 ) : RuntimeException(message, exception) {
 
-    /** Identifies the event kind which triggered a [NetworkException].  */
+    /**
+     * Identifies the event kind which triggered a [NetworkException].
+     */
     enum class Kind {
-        /** An [IOException] occurred while communicating to the server.  */
+        /**
+         * An [IOException] occurred while communicating to the server.
+         */
         NETWORK,
-        /** A non-200 HTTP status code was received from the server.  */
+        /**
+         * A non-200 HTTP status code was received from the server.
+         */
         HTTP,
         /**
          * An internal error occurred while attempting to execute a request. It is best practice to
@@ -37,7 +52,7 @@ class NetworkException internal constructor(message: String?,
     /**
      * HTTP response body converted to specified `type`. `null` if there is no
      * response.
-
+     *
      * @throws IOException if unable to convert the body to the specified `type`.
      * *
      * * public void onError(Throwable throwable) {

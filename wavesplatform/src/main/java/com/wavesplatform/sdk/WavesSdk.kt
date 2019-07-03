@@ -1,5 +1,10 @@
+package com.wavesplatform.sdk
+
+import android.content.Context
+import com.wavesplatform.sdk.net.WavesService
+import com.wavesplatform.sdk.utils.Environment
+
 /**
- *
  * ██╗    ██╗ █████╗ ██╗   ██╗███████╗███████╗
  * ██║    ██║██╔══██╗██║   ██║██╔════╝██╔════╝
  * ██║ █╗ ██║███████║██║   ██║█████╗  ███████╗
@@ -14,15 +19,8 @@
  * ██║     ███████╗██║  ██║   ██║   ██║     ╚██████╔╝██║  ██║██║ ╚═╝ ██║
  * ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝
  *
- */
-
-package com.wavesplatform.sdk
-
-import android.app.Application
-import com.wavesplatform.sdk.net.WavesService
-import com.wavesplatform.sdk.utils.Environment
-
-/**
+ *
+ *
  * WavesSDK is library for easy and simple co-working Waves blockchain platform and app based on Rx.
  *
  * Library contains 3 parts:
@@ -48,23 +46,23 @@ class WavesSdk {
 
         /**
          * Initialisation WavesSdk method must be call first.
-         * @param application Application context ot the app
+         * @param context context of the app
          */
         @JvmStatic
-        fun init(application: Application) {
-            init(application, Environment.DEFAULT)
+        fun init(context: Context) {
+            init(context, Environment.DEFAULT)
         }
 
         /**
          * Initialisation WavesSdk method must be call first.
-         * @param application application-context ot the app
+         * @param context context-context ot the app
          * @param environment base urls and current time
          */
         @JvmStatic
-        fun init(application: Application, environment: Environment) {
+        fun init(context: Context, environment: Environment) {
             instance = WavesSdk()
             instance!!.environment = environment
-            instance!!.service = WavesService(application)
+            instance!!.service = WavesService(context)
         }
 
         /**

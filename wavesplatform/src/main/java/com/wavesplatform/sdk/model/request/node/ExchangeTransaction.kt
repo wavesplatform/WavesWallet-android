@@ -13,7 +13,7 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Not available now!
  *
- * Exchange transaction is a transaction type that creates a sell or buy order
+ * Exchange transaction matches a sell and buy orders
  * for exchange by specifying the following:
  *
  * The asset.

@@ -10,7 +10,5 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class WavesBalanceResponse : Parcelable {
-    @SerializedName("address") var address: String? = null
-    @SerializedName("balance") var balance: Long = 0
-}
+class WavesBalanceResponse(@SerializedName("address") var address: String? = null,
+                           @SerializedName("balance") var balance: Long = 0) : Parcelable

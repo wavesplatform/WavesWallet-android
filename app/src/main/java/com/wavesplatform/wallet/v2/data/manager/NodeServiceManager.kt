@@ -245,7 +245,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     fun loadWavesBalance(): Observable<AssetBalanceResponse> {
         return Observable.zip(
                 // load total balance
-                nodeService.wavesBalance(getAddress()).map {
+                nodeService.addressesBalance(getAddress()).map {
                     return@map it.balance
                 },
                 // load leased balance
@@ -415,7 +415,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalanceResponse> {
-        return nodeService.addressBalance(address, assetId)
+        return nodeService.assetsBalance(address, assetId)
     }
 
     fun transaction(transaction: InvokeScriptTransaction): Observable<InvokeScriptTransactionResponse> {

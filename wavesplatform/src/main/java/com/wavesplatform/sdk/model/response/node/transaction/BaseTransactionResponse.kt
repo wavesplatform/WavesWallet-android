@@ -48,7 +48,7 @@ abstract class BaseTransactionResponse(
      * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
      */
     @SerializedName("chainId")
-    val chainId: Byte? = WavesSdk.getEnvironment().scheme
+    val chainId: Byte? = WavesSdk.getEnvironment().chainId
 
     /**
      * Version number of the data structure of the transaction.

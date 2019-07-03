@@ -29,6 +29,7 @@ abstract class BaseTransaction(
     /**
      * A transaction fee is a fee that an account owner pays to send a transaction.
      * Transaction fee in WAVELET
+     * [Wiki about Fee](https://docs.wavesplatform.com/en/blockchain/transaction-fee.html)
      */
     @SerializedName("fee")
     var fee: Long = 0L
@@ -64,10 +65,10 @@ abstract class BaseTransaction(
      * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
      */
     @SerializedName("chainId")
-    var chainId: Byte = WavesSdk.getEnvironment().scheme
+    var chainId: Byte = WavesSdk.getEnvironment().chainId
 
     /**
-     * @return bytes to sign of the transaction
+     * Gets bytes array to sign of the transaction
      */
     abstract fun toBytes(): ByteArray
 

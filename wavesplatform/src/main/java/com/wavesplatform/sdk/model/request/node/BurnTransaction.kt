@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
 
 /**
- * The burn transaction irreversible deletes amount of some asset
+ * The Burn transaction irreversible deletes amount of some asset
  * It's impossible to burn WAVES with the burn transaction.
  */
 class BurnTransaction(

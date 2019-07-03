@@ -17,6 +17,7 @@ Keep up with the latest news and articles, and find out all about events happeni
 * [Waves Wiki](https://docs.wavesplatform.com/)
 * [Waves Blog](https://blog.wavesplatform.com/)
 * [Support](https://support.wavesplatform.com/)
+* [Android Waves SDK](https://github.com/wavesplatform/WavesSDK-android)
 
 ##
 

@@ -33,13 +33,13 @@ interface MatcherService {
     ): Observable<Map<String, Long>>
 
     /**
-     * Get the open trading markets along with trading pairs meta data
+     * Get the all open trading markets along with trading pairs meta data
      */
     @GET("matcher/orderbook")
     fun orderBook(): Observable<MarketsResponse>
 
     /**
-     * Get OrderResponse Book for a given Asset Pair
+     * Get orderbook for a given Asset Pair
      */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}")
     fun orderBook(

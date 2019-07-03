@@ -113,44 +113,4 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                     viewState.showNews(it)
                 })
     }
-
-    fun sendTx() {
-
-        // todo check remove
-
-
-        val args = mutableListOf(
-                InvokeScriptTransaction.Arg("string", "Some string!"),
-                InvokeScriptTransaction.Arg("integer", 128L),
-                InvokeScriptTransaction.Arg("integer", -127L),
-                InvokeScriptTransaction.Arg("boolean", true),
-                InvokeScriptTransaction.Arg("boolean", false),
-                InvokeScriptTransaction.Arg("binary", "base64:VGVzdA=="))
-
-        val call = InvokeScriptTransaction.Call(
-                function = "testarg",
-                args = args
-        )
-
-        val payment = mutableListOf(
-                InvokeScriptTransaction.Payment(
-                        assetId = "",
-                        amount = 5L))
-
-        val tx = InvokeScriptTransaction(
-                dApp = "3Mv9XDntij4ZRE1XiNZed6J74rncBpiYNDV",
-                call = call,
-                payment = payment)
-
-        tx.fee = 500000L
-        tx.sign(App.getAccessManager().getWallet().seedStr)
-
-        addSubscription(nodeServiceManager.transaction(tx)
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe ({
-                    viewState.showNetworkError()
-                }, {
-                    viewState.showNetworkError()
-                }))
-    }
 }

@@ -5,8 +5,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.utils.arrayWithSize
+import com.wavesplatform.sdk.utils.scriptBytes
 
 /**
  * Script transactions (set script to account) allow you to extend the available functionality
@@ -33,36 +32,26 @@ import com.wavesplatform.sdk.utils.arrayWithSize
  * by another set script transaction call unless it’s prohibited by a previous set script.
  */
 class SetScriptTransaction(
-        /**
-         * Base64 binary string with Waves Ride script, starts with "base64:"
-         * Null for cancel. Watch out about commissions on set and cancel script
-         */
-        @SerializedName("script") var script: String? = null)
-    : BaseTransaction(ADDRESS_SCRIPT) {
+    /**
+     * Base64 binary string with Waves Ride script
+     * Null for cancel script. Watch out about commissions on set and cancel script
+     * You can use "base64:compiledScriptStringInBase64" and just "compiledScriptStringInBase64".
+     * Can't be empty string
+     */
+    @SerializedName("script") var script: String? = null
+) : BaseTransaction(ADDRESS_SCRIPT) {
 
     override fun toBytes(): ByteArray {
         return try {
-
-            val scriptVersion = if (script.isNullOrEmpty()) {
-                byteArrayOf(0)
-            } else {
-                byteArrayOf(SET_SCRIPT_LANG_VERSION)
-            }
-
-            val scriptBytes = if (script.isNullOrEmpty()) {
-                byteArrayOf()
-            } else {
-                WavesCrypto.base64decode(script!!.replace("base64:", ""))
-            }
-
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
-                    byteArrayOf(chainId),
-                    Base58.decode(senderPublicKey),
-                    scriptVersion,
-                    scriptBytes.arrayWithSize(),
-                    Longs.toByteArray(fee),
-                    Longs.toByteArray(timestamp))
+            Bytes.concat(
+                byteArrayOf(type.toByte()),
+                byteArrayOf(version.toByte()),
+                byteArrayOf(chainId),
+                Base58.decode(senderPublicKey),
+                scriptBytes(script),
+                Longs.toByteArray(fee),
+                Longs.toByteArray(timestamp)
+            )
 
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in SetScript Transaction", e)

@@ -28,10 +28,10 @@ interface NodeService {
      * @param address Address
      */
     @GET("addresses/balance/{address}")
-    fun wavesBalance(@Path("address") address: String?): Observable<WavesBalanceResponse>
+    fun addressesBalance(@Path("address") address: String?): Observable<WavesBalanceResponse>
 
     /**
-     * Account's script
+     * Account's script additional info
      * @param address Address
      */
     @GET("addresses/scriptInfo/{address}")
@@ -50,7 +50,7 @@ interface NodeService {
      * @param assetId AssetId
      */
     @GET("assets/balance/{address}/{assetId}")
-    fun addressBalance(
+    fun assetsBalance(
             @Path("address") address: String?,
             @Path("assetId") assetId: String?
     ): Observable<AddressAssetBalanceResponse>

@@ -10,9 +10,6 @@ import kotlinx.android.parcel.Parcelize
  * See [com.wavesplatform.sdk.model.request.node.DataTransaction]
  */
 @Parcelize
-class DataTransactionResponse
-    : BaseTransactionResponse(type = BaseTransaction.DATA), Parcelable {
-
-    @SerializedName("data")
-    var data: List<DataTransaction.Data>? = null
-}
+class DataTransactionResponse(@SerializedName("data")
+                              var data: List<DataTransaction.Data>? = null)
+    : BaseTransactionResponse(type = BaseTransaction.DATA), Parcelable

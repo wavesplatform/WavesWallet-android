@@ -5,6 +5,8 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Ints
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.crypto.AESUtil
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.response.node.OrderResponse
 import org.spongycastle.util.encoders.Hex
@@ -132,4 +134,15 @@ fun aesDecrypt(cipherText: String?,
                password: String?,
                iterations: Int = AESUtil.DEFAULT_PBKDF2_ITERATIONS_V2): String {
     return AESUtil.decrypt(cipherText, password, iterations)
+}
+
+fun scriptBytes(script: String?): ByteArray {
+    return when {
+        script == null -> byteArrayOf(0)
+        script.isEmpty() -> throw java.lang.Exception("Script can't be empty string")
+        else -> Bytes.concat(
+            byteArrayOf(BaseTransaction.SET_SCRIPT_LANG_VERSION),
+            WavesCrypto.base64decode(script.replace("base64:", "")).arrayWithSize()
+        )
+    }
 }

@@ -45,7 +45,7 @@ import com.wavesplatform.sdk.crypto.Base58
  */
 class SponsorshipTransaction(
         /**
-         * Selected asset Id
+         * Selected your asset Id for sponsorship
          */
         @SerializedName("assetId") var assetId: String,
         /**
