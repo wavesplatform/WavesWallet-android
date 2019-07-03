@@ -108,7 +108,11 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 ?: 0).minus(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0)), RoundingMode.HALF_UP).unscaledValue().toLong()
 
-        orderRequest.orderType = orderType
+        orderRequest.orderType = if (orderType == 0) {
+            WavesConstants.BUY_ORDER_TYPE
+        } else {
+            WavesConstants.SELL_ORDER_TYPE
+        }
         orderRequest.assetPair = createPair()
         orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer

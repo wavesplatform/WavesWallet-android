@@ -9,11 +9,11 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
-import com.wavesplatform.sdk.WavesSdk
+import com.wavesplatform.sdk.utils.WavesConstants
 
 /**
  * Create Order Request to DEX-matcher, decentralized exchange of Waves.
@@ -34,9 +34,9 @@ data class CreateOrderRequest(
          */
         @SerializedName("assetPair") var assetPair: OrderBookResponse.PairResponse = OrderBookResponse.PairResponse(),
         /**
-         * Order type buy(0) or sell(1)
+         * Order type "buy" or "sell"
          */
-        @SerializedName("orderType") var orderType: Int = 0,
+        @SerializedName("orderType") var orderType: String = "buy",
         /**
          * Price for amount
          */
@@ -73,12 +73,17 @@ data class CreateOrderRequest(
 
     private fun toBytes(): ByteArray {
         return try {
+            val orderTypeByte: Byte = if (orderType == WavesConstants.BUY_ORDER_TYPE) {
+                0
+            } else {
+                1
+            }
             Bytes.concat(
                     byteArrayOf(WavesConstants.VERSION.toByte()),
                     Base58.decode(senderPublicKey),
                     Base58.decode(matcherPublicKey),
                     assetPair.toBytes(),
-                    byteArrayOf(orderType.toByte()),
+                    byteArrayOf(orderTypeByte),
                     Longs.toByteArray(price),
                     Longs.toByteArray(amount),
                     Longs.toByteArray(timestamp),
