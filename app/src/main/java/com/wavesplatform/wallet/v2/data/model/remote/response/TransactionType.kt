@@ -69,23 +69,23 @@ enum class TransactionType(
     companion object {
 
         fun getTypeById(id: Int): TransactionType {
-            TransactionType.values().forEach {
+            values().forEach {
                 if (it.id == id) return it
             }
-            return TransactionType.UNRECOGNISED_TYPE
+            return UNRECOGNISED_TYPE
         }
 
         fun isZeroTransferOrExchange(type: TransactionType): Boolean {
-            return (type == TransactionType.CREATE_ALIAS_TYPE ||
-                    type == TransactionType.DATA_TYPE ||
-                    type == TransactionType.SET_ADDRESS_SCRIPT_TYPE ||
-                    type == TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE ||
-                    type == TransactionType.SET_SPONSORSHIP_TYPE ||
-                    type == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
-                    type == TransactionType.CANCEL_SPONSORSHIP_TYPE ||
-                    type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE ||
-                    type == TransactionType.SCRIPT_INVOCATION_TYPE ||
-                    type == TransactionType.EXCHANGE_TYPE)
+            return (type == CREATE_ALIAS_TYPE ||
+                    type == DATA_TYPE ||
+                    type == SET_ADDRESS_SCRIPT_TYPE ||
+                    type == CANCEL_ADDRESS_SCRIPT_TYPE ||
+                    type == SET_SPONSORSHIP_TYPE ||
+                    type == RECEIVE_SPONSORSHIP_TYPE ||
+                    type == CANCEL_SPONSORSHIP_TYPE ||
+                    type == UPDATE_ASSET_SCRIPT_TYPE ||
+                    type == SCRIPT_INVOCATION_TYPE ||
+                    type == EXCHANGE_TYPE)
         }
     }
 }

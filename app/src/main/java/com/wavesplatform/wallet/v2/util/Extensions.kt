@@ -63,6 +63,7 @@ import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import kotlin.math.abs
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -697,17 +698,8 @@ fun ErrorResponse.isSmartError(): Boolean {
     return this.error in 305..308
 }
 
-fun AssetInfo.getTicker(): String {
-
-    if (this.id.isWavesId()) {
-        return Constants.wavesAssetInfo.name
-    }
-
-    return this.ticker ?: this.name
-}
-
 fun getScaledAmount(amount: Long, decimals: Int): String {
-    val absAmount = Math.abs(amount)
+    val absAmount = abs(amount)
     val value = BigDecimal.valueOf(absAmount, decimals)
     if (amount == 0L) {
         return "0"
