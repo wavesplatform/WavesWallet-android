@@ -51,29 +51,6 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
                 }
     }
 
-    override fun makeDeposit(args: GatewayDepositArgs): Observable<GatewayDeposit> {
-        val currencyFrom = Constants.coinomatCryptoCurrencies()[args.asset?.assetId]
-        val currencyTo = "${EnvironmentManager.netCode.toChar()}$currencyFrom"
-
-        if (currencyFrom.isNullOrEmpty()) {
-            return Observable.error(Throwable("Empty or null 'currencyFrom' field"))
-        }
-
-        return coinomatService.createTunnel(currencyFrom, currencyTo, getAddress(), null)
-                .flatMap { createTunnel ->
-                    coinomatService.getTunnel(
-                            createTunnel.tunnelId,
-                            createTunnel.k1,
-                            createTunnel.k2,
-                            LANG)
-                }.map { tunnel ->
-                    val address = tunnel.tunnel?.walletFrom ?: ""
-                    val min = tunnel.tunnel?.inMin?.toBigDecimal() ?: BigDecimal.ZERO
-
-                    return@map GatewayDeposit(min, address, currencyFrom)
-                }
-    }
-
     override fun makeWithdraw(args: GatewayWithdrawArgs): Observable<TransactionsBroadcastRequest> {
         val currencyTo = Constants.coinomatCryptoCurrencies()[args.transaction.assetId]
         val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
@@ -105,29 +82,35 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
                 }
     }
 
+    override fun makeDeposit(args: GatewayDepositArgs): Observable<GatewayDeposit> {
+        val currencyFrom = Constants.coinomatCryptoCurrencies()[args.asset?.assetId]
+        val currencyTo = "${EnvironmentManager.netCode.toChar()}$currencyFrom"
+
+        if (currencyFrom.isNullOrEmpty()) {
+            return Observable.error(Throwable("Empty or null 'currencyFrom' field"))
+        }
+
+        return coinomatService.createTunnel(currencyFrom, currencyTo, getAddress(), null)
+                .flatMap { createTunnel ->
+                    coinomatService.getTunnel(
+                            createTunnel.tunnelId,
+                            createTunnel.k1,
+                            createTunnel.k2,
+                            LANG)
+                }.map { tunnel ->
+                    val address = tunnel.tunnel?.walletFrom ?: ""
+                    val min = tunnel.tunnel?.inMin?.toBigDecimal() ?: BigDecimal.ZERO
+
+                    return@map GatewayDeposit(min, address, currencyFrom)
+                }
+    }
+
     fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
         return coinomatService.rate(crypto, address, fiat, amount)
     }
 
     fun loadLimits(crypto: String?, address: String?, fiat: String?): Observable<Limit> {
         return coinomatService.limits(crypto, address, fiat)
-    }
-
-    fun createTunnel(
-            currencyFrom: String?,
-            currencyTo: String?,
-            address: String?,
-            moneroPaymentId: String?
-    ): Observable<CreateTunnel> {
-        return coinomatService.createTunnel(currencyFrom, currencyTo, address, moneroPaymentId)
-    }
-
-    fun getTunnel(xtId: String?, k1: String?, k2: String?, lang: String): Observable<GetTunnel> {
-        return coinomatService.getTunnel(xtId, k1, k2, lang)
-    }
-
-    fun getXRate(from: String?, to: String?, lang: String): Observable<XRate> {
-        return coinomatService.getXRate(from, to, lang)
     }
 
     private fun saveLastSentAddress(newAddress: String) {

@@ -13,8 +13,5 @@ import javax.inject.Inject
 
 @InjectViewState
 class InvoicePresenter @Inject constructor() : BasePresenter<InvoiceView>() {
-
-    @Inject
-    lateinit var coinomatManager: CoinomatDataManager
     var assetBalance: AssetBalance? = null
 }
