@@ -68,7 +68,7 @@ class TransferTransaction(
                 Longs.toByteArray(amount),
                 Longs.toByteArray(fee),
                 getRecipientBytes(recipient),
-                WavesCrypto.base58decode(attachment ?: "").arrayWithSize()
+                SignUtil.arrayWithSize(Base58.encode((attachment ?: "").toByteArray()))
             )
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Transfer Transaction", e)
