@@ -46,22 +46,6 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_invoice
 
-    companion object {
-        const val REQUEST_SELECT_ASSET = 10001
-        const val INVOICE_SCREEN = "invoice"
-
-        fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
-            val fragment = InvoiceFragment()
-            if (assetBalance == null) {
-                return fragment
-            }
-            val args = Bundle()
-            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         if (arguments == null) {
             assetChangeEnable(true)
@@ -75,7 +59,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         button_continue.click {
             safeLet(App.getAccessManager().getWallet()?.address, presenter.assetBalance?.getName()) { address, name ->
                 analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
-                launchActivity<ReceiveAddressViewActivity> {
+                launchActivity<ReceiveAddressViewActivity>(REQUEST_CODE_ADDRESS_SCREEN) {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                     putExtra(YourAssetsActivity.BUNDLE_ADDRESS, address)
                     putExtra(INVOICE_SCREEN, true)
@@ -97,6 +81,8 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
+        } else if (requestCode == REQUEST_CODE_ADDRESS_SCREEN && resultCode == Activity.RESULT_OK) {
+            onBackPressed()
         }
     }
 
@@ -181,5 +167,22 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = presenter.assetBalance != null && networkConnected
+    }
+
+    companion object {
+        const val REQUEST_CODE_ADDRESS_SCREEN = 101
+        const val REQUEST_SELECT_ASSET = 10001
+        const val INVOICE_SCREEN = "invoice"
+
+        fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
+            val fragment = InvoiceFragment()
+            if (assetBalance == null) {
+                return fragment
+            }
+            val args = Bundle()
+            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

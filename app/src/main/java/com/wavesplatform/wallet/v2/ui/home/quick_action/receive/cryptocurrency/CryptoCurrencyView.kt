@@ -15,6 +15,5 @@ import java.math.BigDecimal
 interface CryptoCurrencyView : BaseMvpView {
     fun onShowError(message: String)
     fun onGatewayError()
-    fun onSuccessInitDeposit(currencyFrom: String?, gatewayMin: BigDecimal?)
     fun onSuccessInitDeposit(response: GatewayDeposit)
 }

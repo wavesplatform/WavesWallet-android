@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.animation.AnimationUtils
@@ -56,7 +57,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 R.drawable.ic_toolbar_back_white)
 
         if (intent == null || intent.extras == null) {
-            finish()
+            onBackPressed()
         }
 
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
@@ -139,7 +140,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 MoneyUtil.getScaledText(signed.amount, presenter.selectedAsset),
                 presenter.getTicker())
         button_okay.click {
-            launchActivity<MainActivity>(clear = true)
+            onBackPressed()
         }
         setSaveAddress(signed)
     }
@@ -208,11 +209,16 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            setResult(Activity.RESULT_OK)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun needToShowNetworkMessage(): Boolean = true

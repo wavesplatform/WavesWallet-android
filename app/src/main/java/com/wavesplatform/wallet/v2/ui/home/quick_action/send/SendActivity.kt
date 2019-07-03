@@ -387,16 +387,18 @@ class SendActivity : BaseActivity(), SendView {
                 recipient.isValidVostokAddress() -> {
                     presenter.recipientAssetId = EnvironmentManager.globalConfiguration.generalAssets
                             .firstOrNull { it.assetId == presenter.selectedAsset?.assetId }?.assetId
-                    presenter.type = SendPresenter.Type.VOSTOK
-                    setRecipientValid(true)
-                    loadGatewayXRate(presenter.recipientAssetId!!)
+                    if (presenter.recipientAssetId.isNullOrEmpty()) {
+                        onNotValidAssetForAddress()
+                    } else {
+                        presenter.type = SendPresenter.Type.VOSTOK
+                        setRecipientValid(true)
+                        loadGatewayXRate(presenter.recipientAssetId!!)
+                    }
                 }
                 else -> {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
-                        presenter.type = SendPresenter.Type.UNKNOWN
-                        setRecipientValid(false)
-                        monero_layout.gone()
+                        onNotValidAssetForAddress()
                     } else {
                         if (presenter.recipientAssetId == presenter.selectedAsset?.assetId) {
                             setRecipientValid(true)
@@ -422,6 +424,12 @@ class SendActivity : BaseActivity(), SendView {
             amount_card.visiable()
             button_continue.isEnabled = true
         }
+    }
+
+    private fun onNotValidAssetForAddress() {
+        presenter.type = SendPresenter.Type.UNKNOWN
+        setRecipientValid(false)
+        monero_layout.gone()
     }
 
     private fun checkMonero(assetId: String?) {
@@ -525,6 +533,9 @@ class SendActivity : BaseActivity(), SendView {
                 when (resultCode) {
                     Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()
+                    }
+                    Activity.RESULT_OK -> {
+                        onBackPressed()
                     }
                 }
             }
@@ -648,7 +659,7 @@ class SendActivity : BaseActivity(), SendView {
                     asset.getDecimals(),
                     Double.MAX_VALUE))
 
-            clearAddressField()
+//            clearAddressField()
         }
     }
 

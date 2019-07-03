@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayDeposit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -60,7 +61,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
                 presenter.assetBalance?.getName()?.let { name ->
                     analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
                 }
-                launchActivity<ReceiveAddressViewActivity> {
+                launchActivity<ReceiveAddressViewActivity>(REQUEST_CODE_ADDRESS_SCREEN) {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                     putExtra(YourAssetsActivity.BUNDLE_ADDRESS, presenter.depositAddress ?: "")
                 }
@@ -89,6 +90,8 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
+        } else if (requestCode == InvoiceFragment.REQUEST_CODE_ADDRESS_SCREEN && resultCode == Activity.RESULT_OK) {
+            onBackPressed()
         }
     }
 
@@ -120,10 +123,6 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         warning_layout?.visiable()
         container_info?.visiable()
         button_continue.isEnabled = true
-    }
-
-    override fun onSuccessInitDeposit(currencyFrom: String?, gatewayMin: BigDecimal?) {
-
     }
 
     override fun onShowError(message: String) {
@@ -208,8 +207,8 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
 
     companion object {
-
-        var REQUEST_SELECT_ASSET = 10001
+        const val REQUEST_CODE_ADDRESS_SCREEN = 101
+        const val REQUEST_SELECT_ASSET = 10001
 
         fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
             val fragment = CryptoCurrencyFragment()

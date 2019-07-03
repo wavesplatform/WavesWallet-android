@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -51,10 +52,10 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         image_asset_icon.setAsset(assetBalance)
 
         image_close.click {
-            launchActivity<MainActivity>(clear = true)
+            onBackPressed()
         }
         button_close.click {
-            launchActivity<MainActivity>(clear = true)
+            onBackPressed()
         }
         frame_share.click {
             val sharingIntent = Intent(Intent.ACTION_SEND)
@@ -124,6 +125,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
     }
 
     override fun onBackPressed() {
+        setResult(Activity.RESULT_OK)
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
