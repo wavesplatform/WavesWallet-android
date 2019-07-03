@@ -8,12 +8,9 @@ package com.wavesplatform.wallet.v2.data.helpers
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.util.WavesWallet
-import com.wavesplatform.wallet.v2.util.isGateway
+import com.wavesplatform.wallet.v2.util.*
 
 class ClearAssetsHelper {
     companion object {
@@ -43,12 +40,15 @@ class ClearAssetsHelper {
 
             // filter unimportant assets
             val allUnimportantAssets = assets.filter { asset ->
-                !asset.isWaves() && !AssetBalance.isFiat(asset.assetId) && !AssetBalance.isGateway(asset.assetId) && !asset.isFavorite && !asset.isMyWavesToken()
+                !asset.isWaves()
+                        && !isFiat(asset.assetId)
+                        && !isGateway(asset.assetId)
+                        && !asset.isFavorite
+                        && !asset.isMyWavesToken(WavesWallet.getAddress())
             }
-            // todo check
             // filter general assets with zero balance
             val generalAssetsWithZeroBalance = assets.filter { asset ->
-                (AssetBalance.isFiat(asset.assetId) || AssetBalance.isGateway(asset.assetId))
+                (isFiat(asset.assetId) || isGateway(asset.assetId))
                         && !asset.isWaves() && !asset.isFavorite && asset.balance == 0L
             }
 

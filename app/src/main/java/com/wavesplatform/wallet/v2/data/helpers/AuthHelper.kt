@@ -63,7 +63,6 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
             if (dbAsset == null) {
                 AssetBalanceDb(asset).save()
             } else {
-                // todo check
                 dbAsset.updateInfo(asset)
                 dbAsset.save()
             }

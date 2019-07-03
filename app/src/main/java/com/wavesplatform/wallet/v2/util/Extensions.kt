@@ -578,7 +578,7 @@ fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
 }
 
 fun loadDbWavesBalance(): AssetBalanceResponse {
-    return find(com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_EMPTY)!!
+    return find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun find(assetId: String): AssetBalanceResponse? {
@@ -609,10 +609,6 @@ fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
             .split(".")[0].length
 }
 
-// todo check
-fun loadDbWavesBalance(): AssetBalance {
-    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
-}
 
 fun getDeviceId(): String {
     return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
@@ -711,25 +707,15 @@ fun isShowTicker(assetId: String?): Boolean {
 }
 
 fun isFiat(assetId: String): Boolean {
-    for (fiat in Constants.defaultFiat()) {
-        if (assetId == fiat) {
-            return true
-        }
-    }
-    return false
+    return Constants.defaultFiat().any { it == assetId }
 }
 
 fun isGateway(assetId: String): Boolean {
-    if (assetId == "") {
-        return false
+    return when {
+        assetId.isWavesId() -> false
+        Constants.defaultCrypto().any { it == assetId } -> true
+        else -> false
     }
-
-    for (fiat in Constants.defaultCrypto()) {
-        if (assetId == fiat) {
-            return true
-        }
-    }
-    return false
 }
 
 fun AssetPairOrderResponse.getStatus(): OrderStatus {

@@ -261,7 +261,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
-                    // todo check
                     AssetBalanceDb(currentWaves).save()
                     return@Function3 currentWaves
                 })

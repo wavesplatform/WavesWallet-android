@@ -77,6 +77,12 @@ open class AssetBalanceDb(
                 isSpam = this.isSpam)
     }
 
+    fun updateInfo(asset: AssetBalanceResponse?) {
+        asset?.let {
+            this.issueTransaction = IssueTransactionDb(asset.issueTransaction)
+        }
+    }
+
     companion object {
 
         fun convertToDb(assetBalances: List<AssetBalanceResponse>): MutableList<AssetBalanceDb> {
