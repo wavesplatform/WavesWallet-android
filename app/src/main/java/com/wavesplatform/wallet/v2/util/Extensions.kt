@@ -609,6 +609,11 @@ fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
             .split(".")[0].length
 }
 
+// todo check
+fun loadDbWavesBalance(): AssetBalance {
+    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
 fun getDeviceId(): String {
     return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
 }

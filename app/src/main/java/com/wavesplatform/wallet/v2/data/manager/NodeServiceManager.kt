@@ -52,7 +52,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     lateinit var matcherServiceManager: MatcherServiceManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-    var transactions: List<HistoryTransactionResponse> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAssetResponse>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
@@ -262,6 +261,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
+                    // todo check
                     AssetBalanceDb(currentWaves).save()
                     return@Function3 currentWaves
                 })

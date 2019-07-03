@@ -104,10 +104,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 return R.string.insufficient_funds
             } else if (isGatewayAmountError()) {
                 return R.string.insufficient_gateway_funds_error
-            } else if (findByGatewayId("XMR")!!.assetId == recipientAssetId &&
+            } else if (findByGatewayId("XMR")?.assetId == recipientAssetId &&
                     moneroPaymentId != null &&
-                    (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH ||
-                            moneroPaymentId!!.contains(" ".toRegex()))) {
+                    (moneroPaymentId?.length != MONERO_PAYMENT_ID_LENGTH ||
+                            moneroPaymentId?.contains(" ".toRegex()) == true)) {
                 return R.string.invalid_monero_payment_id
             }
         }

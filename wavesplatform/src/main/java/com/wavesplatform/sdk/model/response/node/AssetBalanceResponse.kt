@@ -37,6 +37,13 @@ open class AssetBalanceResponse(
         var isSpam: Boolean = false
 ) : Parcelable {
 
+    // todo check
+    fun updateInfo(asset: AssetBalance?) {
+        asset?.let {
+            this.issueTransaction = asset.issueTransaction
+        }
+    }
+
     fun isSponsored(): Boolean {
         return minSponsoredAssetFee ?: 0 > 0
     }
@@ -51,7 +58,7 @@ open class AssetBalanceResponse(
 
     fun getDecimals(): Int {
         return if (issueTransaction != null) {
-            issueTransaction!!.decimals ?: 8
+            issueTransaction?.decimals ?: 8
         } else {
             8
         }
@@ -110,6 +117,22 @@ open class AssetBalanceResponse(
 
     fun isWaves(): Boolean {
         return assetId.isNullOrEmpty()
+    }
+
+
+    companion object {
+        // todo check
+        fun isFiat(assetId: String): Boolean {
+            return Constants.defaultFiat().any { it == assetId }
+        }
+
+        fun isGateway(assetId: String): Boolean {
+            return when {
+                assetId.isWavesId() -> false
+                Constants.defaultCrypto().any { it == assetId } -> true
+                else -> false
+            }
+        }
     }
 }
 

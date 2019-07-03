@@ -70,6 +70,7 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     private fun setupUI() {
+        viewpager_wallet.offscreenPageLimit = 2
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
 
