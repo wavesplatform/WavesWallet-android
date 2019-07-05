@@ -1,0 +1,20 @@
+<!--
+  ~ Created by Eduard Zaydel on 23/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="14dp"
+    android:height="14dp"
+    android:viewportWidth="14"
+    android:viewportHeight="14">
+  <path
+      android:pathData="M0,0h14v14H0z"
+      android:fillColor="#D8D8D8"
+      android:fillAlpha="0"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M7,14A7,7 0,1 0,7 0a7,7 0,0 0,0 14zM7.873,7l2.034,2.034a0.618,0.618 0,0 1,-0.873 0.873L7,7.873 4.966,9.907a0.618,0.618 0,0 1,-0.873 -0.873L6.127,7 4.093,4.966a0.618,0.618 0,0 1,0.873 -0.873L7,6.127l2.034,-2.034a0.618,0.618 0,0 1,0.873 0.873L7.873,7z"
+      android:fillColor="#C5D0DE"
+      android:fillType="evenOdd"/>
+</vector>

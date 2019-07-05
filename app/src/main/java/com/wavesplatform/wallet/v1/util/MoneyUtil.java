@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.util;
 
 import com.wavesplatform.wallet.v1.payload.AssetBalance;
@@ -119,13 +124,17 @@ public class MoneyUtil {
     }
 
     public static long getUnscaledValue(String amount, int decimals) {
+        return getUnscaledValue(amount, decimals, RoundingMode.HALF_EVEN);
+    }
+
+    public static long getUnscaledValue(String amount, int decimals, RoundingMode roundingMod) {
         if (amount == null)
             return 0L;
         try {
             Number value = get().getFormatter(decimals).parse(amount);
             if (value instanceof BigDecimal) {
                 return ((BigDecimal) value).setScale(decimals,
-                        RoundingMode.HALF_EVEN).unscaledValue().longValue();
+                        roundingMod).unscaledValue().longValue();
             } else {
                 return 0L;
             }

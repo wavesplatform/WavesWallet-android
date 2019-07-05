@@ -1,5 +1,11 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -27,12 +33,13 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnAct
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_asset_details_content.*
+import kotlinx.android.synthetic.main.fragment_asset_details_layout.*
 import pers.victor.ext.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
@@ -47,7 +54,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
     private var skeletonScreen: ViewSkeletonScreen? = null
 
-    override fun configLayoutRes() = R.layout.fragment_asset_details_content
+    override fun configLayoutRes() = R.layout.fragment_asset_details_layout
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
@@ -101,7 +108,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
                 .subscribe {
-                    presenter.reloadAssetAddressBalance()
+                    presenter.reloadAssetDetails()
                 })
     }
 
@@ -122,15 +129,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             card_transaction.click {
                 launchActivity<HistoryActivity> {
                     val bundle = Bundle().apply {
-                        val tabs = arrayListOf(
-                                HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
-                                HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
-                                HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
-                                HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
-                                HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
-                                HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
                         putParcelable(HistoryFragment.BUNDLE_ASSET, presenter.assetBalance)
-                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, configureTabsAccordingTo(presenter.assetBalance))
                     }
                     putExtras(bundle)
                 }
@@ -147,6 +147,22 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             text_last_transaction_title.text = getString(R.string.asset_details_last_transactions_empty)
             card_transaction.click {}
         }
+    }
+
+    private fun configureTabsAccordingTo(assetBalance: AssetBalance?): ArrayList<HistoryTab> {
+        val tabs = arrayListOf<HistoryTab>()
+        assetBalance?.let { asset ->
+            tabs.add(HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)))
+            tabs.add(HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)))
+            tabs.add(HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)))
+            tabs.add(HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)))
+            if (asset.isWaves()) {
+                tabs.add(HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)))
+            } else {
+                tabs.add(HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
+            }
+        }
+        return tabs
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {
@@ -190,7 +206,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 else assetBalance.issueTransaction?.decimals.toString()
 
         text_view_total_amount_value.text = getString(R.string.common_dash)
-        assetBalance?.issueTransaction?.quantity.notNull {
+        assetBalance?.quantity.notNull {
             text_view_total_amount_value.text = MoneyUtil.getScaledText(it, assetBalance).stripZeros()
         }
 
@@ -216,7 +232,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     private fun setBurnButton(cardBurnContainer: View) {
         cardBurnContainer.click {
             analytics.trackEvent(AnalyticEvents.BurnTokenTapEvent)
-            launchActivity<TokenBurnActivity> {
+            launchActivity<TokenBurnActivity>(requestCode = TokenBurnActivity.REQUEST_BURN_CONFIRM) {
                 putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
             }
         }
@@ -246,12 +262,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     private fun enableView(view: View) {
         view.isClickable = true
-        view.alpha = Constants.ENABLE_VIEW
+        view.alpha = Constants.View.ENABLE_VIEW
     }
 
     private fun disableView(view: View) {
         view.isClickable = false
-        view.alpha = Constants.DISABLE_VIEW
+        view.alpha = Constants.View.DISABLE_VIEW
     }
 
     override fun onDestroyView() {
@@ -264,5 +280,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     companion object {
         var BUNDLE_ASSET = "asset"
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Constants.RESULT_OK) {
+            if (requestCode == TokenBurnActivity.REQUEST_BURN_CONFIRM) {
+                presenter.reloadAssetDetails(3000)
+            }
+        }
     }
 }

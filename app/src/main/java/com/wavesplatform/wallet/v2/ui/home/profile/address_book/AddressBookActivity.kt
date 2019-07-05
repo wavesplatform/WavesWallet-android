@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book
 
 import android.app.Activity
@@ -17,6 +22,8 @@ import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
@@ -26,7 +33,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSnackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_address_book.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -92,6 +99,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AddressBookUser
             if (this.adapter.screenType == AddressBookScreenType.EDIT.type) {
+                analytics.trackEvent(AnalyticEvents.ProfileAddressBookEditEvent)
                 launchActivity<EditAddressActivity>(REQUEST_EDIT_ADDRESS) {
                     putExtra(BUNDLE_ADDRESS_ITEM, item)
                     putExtra(BUNDLE_POSITION, position)
@@ -167,6 +175,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add_address -> {
+                analytics.trackEvent(AnalyticEvents.ProfileAddressBookAddEvent)
                 launchActivity<AddAddressActivity>(REQUEST_ADD_ADDRESS) {
                     putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
                 }
@@ -194,7 +203,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     }
 
     private fun getEmptyView(): View {
-        val view = LayoutInflater.from(this).inflate(R.layout.address_book_empty_state, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.content_address_book_empty_state, null)
         view.text_empty.text = getString(R.string.address_book_empty_state)
         return view
     }

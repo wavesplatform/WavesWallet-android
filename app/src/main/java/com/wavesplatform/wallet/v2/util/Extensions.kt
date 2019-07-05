@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.util
 
 import android.app.Activity
@@ -5,6 +10,7 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -31,10 +37,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.util.Patterns
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -75,9 +78,30 @@ val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
     null
 }
 
-/**
- * Created by anonymous on 13.09.17.
- */
+inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (measuredWidth > 0 && measuredHeight > 0) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                f()
+            }
+        }
+    })
+}
+
+fun View.animateVisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_VISIBILITY)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
+
+fun View.animateInvisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_GONE)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
 
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
@@ -349,7 +373,7 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
     }
 }
 
-fun String.isWebUrl() : Boolean{
+fun String.isWebUrl(): Boolean {
     return Patterns.WEB_URL.matcher(this.trim()).matches()
 }
 
@@ -539,7 +563,6 @@ inline fun <reified T : Any> Fragment.launchActivity(
     }
     if (withoutAnimation) {
         activity?.overridePendingTransition(0, 0)
-        // todo activity?.overridePendingTransition(R.anim.start_new_show,  R.anim.start_current_hide)
     }
 }
 
@@ -557,11 +580,7 @@ inline fun <reified T : Any> Context.launchActivity(
     }
 
     intent.init()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        startActivity(intent, options)
-    } else {
-        startActivity(intent)
-    }
+    startActivity(intent, options)
 }
 
 fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
@@ -592,28 +611,26 @@ fun View.setMargins(
             left ?: lp.leftMargin,
             top ?: lp.topMargin,
             right ?: lp.rightMargin,
-            bottom ?: lp.rightMargin
+            bottom ?: lp.bottomMargin
     )
 
     layoutParams = lp
 }
 
-fun TextView.makeTextHalfBold() {
-    val textBefore = this.text.toString().substringBefore(" ")
-    val textAfter = if (text.indexOf(" ") != -1) {
+fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
+    val value = this.text.toString().substringBefore(" ")
+    val tokenName = if (text.indexOf(" ") != -1) {
         this.text.toString().substringAfter(" ")
     } else {
         ""
     }
-    val str = SpannableStringBuilder(textBefore)
-    if (textBefore.indexOf(".") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else if (textBefore.indexOf(" ") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    val str = SpannableStringBuilder(value)
+    when {
+        value.indexOf(".") != -1 && !boldWholeValue -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        value.indexOf(" ") != -1 -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        else -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
-    this.text = str.append(" $textAfter")
+    this.text = str.append(" $tokenName")
 }
 
 fun findMyOrder(first: Order, second: Order, address: String?): Order {
@@ -643,8 +660,7 @@ fun AssetBalance.getMaxDigitsBeforeZero(): Int {
 }
 
 fun loadDbWavesBalance(): AssetBalance {
-    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
-            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun getDeviceId(): String {
@@ -660,7 +676,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ResponseBody.clone(): ResponseBody {
-    var bufferClone = this.source().buffer()?.clone()
+    val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
 }
 
@@ -722,8 +738,12 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && isSpam(assetId))
+}
+
+fun isSpam(assetId: String?): Boolean {
     return (App.getAccessManager().getWallet() != null
-            && prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
             && (null != queryFirst<SpamAsset> { equalTo("assetId", assetId) }))
 }
 
@@ -733,4 +753,28 @@ fun isShowTicker(assetId: String?): Boolean {
             .any {
                 it.assetId == assetId
             }
+}
+
+fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
+    val configuration = Configuration(resources.configuration)
+    configuration.setLocale(desiredLocale)
+    val localizedContext = createConfigurationContext(configuration)
+    return localizedContext.resources.getString(id)
+}
+
+fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBalance> {
+    return if (TextUtils.isEmpty(query)) {
+        list.filter { !it.isSpam }
+    } else {
+        val queryLower = query!!.toLowerCase()
+        list.filter { !it.isSpam }
+                .filter {
+                    it.assetId.toLowerCase().contains(queryLower)
+                            || it.getName().toLowerCase().contains(queryLower)
+                            || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.assetId == Constants.findByGatewayId(query.toUpperCase())?.assetId
+                            || it.assetId == Constants.findInConstantsGeneralAssets(query.toUpperCase())?.assetId
+                }
+    }
 }

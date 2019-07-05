@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
 import android.app.Activity
@@ -26,7 +31,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -203,6 +208,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
         presenter.wavesAssetBalance.notNull {
             text_asset_value.text = MoneyUtil.getScaledText(it, Constants.wavesAssetInfo)
+            image_asset_icon.setAsset(Constants.wavesAssetInfo)
 
             presenter.loadCommission(it)
         }
@@ -302,7 +308,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     override fun showCommissionError() {
         text_fee_transaction.text = "-"
-        showError(R.string.common_error_commission_receiving, R.id.root)
+        showError(R.string.common_error_commission_receiving, R.id.root_view)
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()

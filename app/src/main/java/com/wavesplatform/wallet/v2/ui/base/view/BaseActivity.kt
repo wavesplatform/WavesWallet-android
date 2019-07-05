@@ -1,9 +1,12 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.base.view
 
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.os.Build
@@ -20,7 +23,6 @@ import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -46,9 +48,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
+import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
-import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import timber.log.Timber
 import java.util.*
@@ -116,7 +117,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         Timber.tag(javaClass.simpleName)
         onViewReady(savedInstanceState)
 
-        noInternetLayout = layoutInflater.inflate(R.layout.no_internet_bottom_message_layout, null)
+        noInternetLayout = layoutInflater.inflate(R.layout.content_no_internet_bottom_message_layout, null)
 
         eventSubscriptions.add(ReactiveNetwork
                 .observeInternetConnectivity()
@@ -129,29 +130,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 }, {
                     it.printStackTrace()
                 }))
-    }
-
-    protected fun checkInternet() {
-        if (!isNetworkConnection()) {
-            val dialog = Dialog(this, R.style.AppThemeV2_NoActionBar_Translucent_DarkStatusBar)
-            dialog.setContentView(R.layout.dialog_no_internet)
-            dialog.setCancelable(false)
-            dialog.findViewById<Button>(R.id.button_retry).click {
-                if (isNetworkConnection()) {
-                    launchActivity<SplashActivity>(clear = true)
-                } else {
-                    showMessage(getString(R.string.no_internet_title), dialog.findViewById<Button>(R.id.root))
-                }
-            }
-            dialog.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
-                if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-                    exit()
-                    return@OnKeyListener true
-                }
-                false
-            })
-            dialog.show()
-        }
     }
 
     protected fun exit() {

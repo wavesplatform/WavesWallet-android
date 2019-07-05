@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.util
 
 import android.content.Context
@@ -253,5 +258,8 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction"
         const val KEY_ASSETS_ZERO = "assets_zero"
         const val KEY_ASSETS_ALL = "assets_all"
+        const val KEY_IS_CLEARED_ASSETS = "is_cleared_assets"
+        const val KEY_IS_CLEARED_ALERT_ALREADY_SHOWN = "is_cleared_alert_already_shown"
+        const val KEY_IS_NEED_TO_SHOW_CLEARED_ALERT = "is_need_to_show_cleared_alert"
     }
 }

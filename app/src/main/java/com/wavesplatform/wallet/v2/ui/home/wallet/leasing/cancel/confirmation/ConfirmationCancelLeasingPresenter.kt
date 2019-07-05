@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import com.arellomobile.mvp.InjectViewState
@@ -23,12 +28,15 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
     var transactionId: String = ""
     var fee = 0L
 
+    var success = false
+
     fun cancelLeasing() {
         cancelLeasingRequest.leaseId = transactionId
         cancelLeasingRequest.fee = fee
         addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
+                    success = true
                     viewState.successCancelLeasing()
                     viewState.showProgressBar(false)
                 }, {

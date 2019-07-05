@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
 import android.app.Activity
@@ -8,6 +13,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
@@ -19,6 +25,8 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
@@ -37,20 +45,21 @@ import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_script_invocation_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
-import kotlinx.android.synthetic.main.history_details_layout.view.*
+import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 
 class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Transaction>() {
 
     override fun configLayoutRes(): Int {
-        return R.layout.history_details_bottom_sheet_dialog
+        return R.layout.bottom_sheet_dialog_history_details
     }
 
     override fun setupHeader(transaction: Transaction): View? {
-        val view = inflate(R.layout.history_details_layout)
+        val view = inflate(R.layout.content_history_details_layout)
 
         view.text_tag.gone()
         view.text_transaction_value.setTypeface(null, Typeface.NORMAL)
@@ -117,6 +126,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 TransactionType.DATA_TYPE,
                 TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                 TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                TransactionType.SCRIPT_INVOCATION_TYPE,
                 TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                     view.text_transaction_name.text = getString(R.string.history_data_type_title)
                     view.text_transaction_value.text = getString(transaction.transactionType().title)
@@ -162,7 +172,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         historyContainer.orientation = LinearLayout.VERTICAL
 
         /**Comment block views**/
-        val commentBlock = inflate(R.layout.history_detailed_transcation_comment_block_layout)
+        val commentBlock = inflate(R.layout.content_history_detailed_transcation_comment_block_layout)
 
         val textComment = commentBlock?.findViewById<TextView>(R.id.text_comment)
 
@@ -361,7 +371,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
 
                 transfers.forEachIndexed { index, transfer ->
-                    val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                    val addressView = inflater?.inflate(R.layout.content_address_layout, null, false)
                     val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
                     val textSentAddress = addressView?.findViewById<TextView>(R.id.text_sent_address)
                     val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
@@ -411,7 +421,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                             showMoreAddress.gone()
 
                             for (i in 3 until transfers.size) {
-                                val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                                val addressView = inflater?.inflate(R.layout.content_address_layout, null, false)
                                 val imageCopy = addressView?.findViewById<AppCompatImageView>(R.id.image_copy)
                                 val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
                                 val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
@@ -489,6 +499,40 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                         })
 
                 historyContainer?.addView(sponsorView)
+            }
+            TransactionType.SCRIPT_INVOCATION_TYPE -> {
+                val view = inflater?.inflate(R.layout.fragment_bottom_sheet_script_invocation_layout, historyContainer, false)
+
+                view?.let {
+                    view.text_script_address_value?.text = transaction.dApp
+
+                    val payment = transaction.payment.firstOrNull()
+
+                    if (payment != null) {
+                        view.relative_payment.visiable()
+                        if (isShowTicker(payment.assetId)) {
+                            view.text_payment_value?.text = MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()
+                            val ticker = transaction.asset?.getTicker()
+                            if (!ticker.isNullOrBlank()) {
+                                view.text_payment_tag?.text = ticker
+                                view.text_payment_tag?.visiable()
+                            }
+                        } else {
+                            view.text_payment_value?.text = "${MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()} ${payment.asset?.name}"
+                        }
+                    } else {
+                        view.relative_payment.gone()
+                    }
+
+                    eventSubscriptions.add(RxView.clicks(view.image_copy)
+                            .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                view.image_copy.copyToClipboard(view.text_script_address_value.text.toString())
+                            })
+                }
+
+                historyContainer.addView(view)
             }
             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_asset_script_layout, historyContainer, false)
@@ -763,6 +807,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.text = getString(R.string.history_details_add_address)
 
             textAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressSaveEvent)
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
@@ -778,6 +823,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.text = getString(R.string.history_details_edit_address)
 
             textAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressEditEvent)
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
@@ -814,6 +860,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.setImageResource(R.drawable.ic_add_address_submit_300)
 
             imageAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressSaveEvent)
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
@@ -828,6 +875,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
 
             imageAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressEditEvent)
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))

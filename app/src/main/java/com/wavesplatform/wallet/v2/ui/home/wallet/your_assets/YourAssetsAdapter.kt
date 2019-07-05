@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
 import android.view.View
@@ -6,10 +11,10 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.your_assets_item.view.*
+import kotlinx.android.synthetic.main.item_your_assets.view.*
 import javax.inject.Inject
 
-class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.your_assets_item, null) {
+class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.item_your_assets, null) {
 
     var allData: MutableList<AssetBalance> = arrayListOf()
     var currentAssetId: String? = null

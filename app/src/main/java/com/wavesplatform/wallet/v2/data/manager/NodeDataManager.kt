@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.arch.lifecycle.Lifecycle
@@ -10,6 +15,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
+import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
@@ -41,7 +47,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var matcherDataManager: MatcherDataManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-    var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
@@ -92,20 +97,27 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
+    fun loadAssets(assetsFromDb: List<AssetBalance>? = null)
+            : Observable<Pair<List<AssetBalance>, List<SpamAsset>>> {
         return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
-                                return@flatMap Observable.zip(loadWavesBalance(), matcherDataManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalance, t2: Map<String, Long>, t3: AssetBalances ->
-                                    return@Function3 Triple(t1, t2, t3)
+                                return@flatMap Observable.zip(
+                                        loadWavesBalance(),
+                                        matcherDataManager.loadReservedBalances(),
+                                        Observable.just(assets),
+                                        Function3 { wavesBalance: AssetBalance,
+                                                    reservedBalances: Map<String, Long>,
+                                                    assetBalances: AssetBalances ->
+                                    return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
                                 })
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
                                 val savedAssetPrefs = queryAll<AssetBalanceStore>()
 
-                                if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
+                                if (assetsFromDb != null && assetsFromDb.isNotEmpty()) {
                                     // merge db data and API data
                                     tripple.third.balances.forEachIndexed { index, assetBalance ->
                                         val dbAsset = mapDbAssets?.get(assetBalance.assetId)
@@ -181,7 +193,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 val allAssets = queryAll<AssetBalance>()
                                 trackZeroBalances(allAssets)
 
-                                return@map allAssets
+                                // clear wallet from unimportant assets for new imported wallets
+                                return@map Pair(
+                                        ClearAssetsHelper.clearUnimportantAssets(
+                                                prefsUtil, allAssets.toMutableList(), fromAPI = true),
+                                        spamAssets)
                             }
                             .subscribeOn(Schedulers.io())
                 }
@@ -201,11 +217,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             offsetAsset?.forEach { id ->
                 if (id.isNotEmpty()) {
                     val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
-                    if (assetBalance?.isGateway == false) {
-                        assetBalance.delete { equalTo("assetId", id) }
-                    } else {
-                        assetBalance?.balance = 0
-                        assetBalance?.save()
+                    assetBalance.notNull {
+                        if (AssetBalance.isGateway(it.assetId) || AssetBalance.isFiat(it.assetId)) {
+                            it.balance = 0
+                            it.save()
+                        } else {
+                            it.delete { equalTo("assetId", id) }
+                        }
                     }
                 }
             }

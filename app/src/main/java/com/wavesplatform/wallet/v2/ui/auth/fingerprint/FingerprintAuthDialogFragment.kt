@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
 import android.app.Dialog
@@ -22,8 +27,8 @@ import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import de.adorsys.android.securestoragelibrary.SecureStorageException
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fingerprint_dialog.*
-import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_fingerprin.*
+import kotlinx.android.synthetic.main.dialog_fingerprin.view.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import timber.log.Timber
@@ -54,7 +59,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fingerprint_dialog, container, false)
+        val view = inflater.inflate(R.layout.dialog_fingerprin, container, false)
         view.text_cancel.click { cancelDialog() }
         mode = arguments?.getInt(KEY_INTENT_MODE, ENCRYPT)
         return view
@@ -148,8 +153,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
             handler.postDelayed({
                 context.notNull {
                     fingerPrintDialogListener?.onSuccessRecognizedFingerprint(decryptedMessage)
+                    dismissAllowingStateLoss()
                 }
-                dismissAllowingStateLoss()
             }, DELAY_TO_CHANGE_STATE)
         } catch (throwable: SecureStorageException) {
             onErrorGetKey(throwable, "decrypt")

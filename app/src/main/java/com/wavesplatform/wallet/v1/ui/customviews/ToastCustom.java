@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.ui.customviews;
 
 import android.content.Context;
@@ -36,7 +41,7 @@ public class ToastCustom {
         Toast toast = Toast.makeText(context, text, duration);
 
         LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflate.inflate(R.layout.transient_notification, null);
+        View v = inflate.inflate(R.layout.content_transient_notification, null);
         TextView tv = (TextView) v.findViewById(R.id.message);
         tv.setText(text);
 

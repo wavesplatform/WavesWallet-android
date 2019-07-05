@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
 import android.os.Bundle
@@ -95,8 +100,12 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     }
 
     override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        if (presenter.success) {
+            launchActivity<MainActivity>(clear = true)
+        } else {
+            finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        }
     }
 
     override fun onShowError(errorMessageRes: String) {

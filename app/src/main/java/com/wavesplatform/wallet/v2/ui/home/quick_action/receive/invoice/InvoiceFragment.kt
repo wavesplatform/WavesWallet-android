@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 
 import android.app.Activity
@@ -23,7 +28,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.safeLet
 import kotlinx.android.synthetic.main.fragment_invoice.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
+import kotlinx.android.synthetic.main.content_asset_card.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -106,10 +111,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         text_asset_name.text = assetBalance.getName()
         text_asset_value.text = assetBalance.getDisplayAvailableBalance()
 
-        image_is_favourite.visibility = if (assetBalance.isFavorite) {
-            View.VISIBLE
-        } else {
-            View.GONE
+        if (assetBalance.isFavorite){
+            image_is_favorite.visiable()
+        }else{
+            image_is_favorite.gone()
         }
 
         edit_amount.applyFilterStartWithDot()

@@ -1,15 +1,20 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import kotlinx.android.synthetic.main.address_book_item.view.*
+import kotlinx.android.synthetic.main.item_address_book.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.address_book_item, null) {
+class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.item_address_book, null) {
 
     var allData: MutableList<AddressBookUser> = arrayListOf()
     var screenType: Int = AddressBookActivity.AddressBookScreenType.EDIT.type

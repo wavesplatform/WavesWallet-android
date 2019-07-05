@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 
 import android.graphics.Color
@@ -19,6 +24,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.github.mikephil.charting.utils.ObjectPool
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
@@ -32,8 +38,8 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
-import kotlinx.android.synthetic.main.global_server_error_layout.*
-import kotlinx.android.synthetic.main.layout_empty_data.*
+import kotlinx.android.synthetic.main.content_global_server_error_layout.*
+import kotlinx.android.synthetic.main.content_empty_data.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import pers.victor.ext.gone
@@ -80,7 +86,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             linear_charts.gone()
             progress_bar.show()
 
-            presenter.loadCandles(Date().time, true)
+            presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
         }
 
@@ -88,7 +94,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             error_layout.gone()
             progress_bar.show()
 
-            presenter.loadCandles(Date().time, true)
+            presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
         }
 
@@ -121,7 +127,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             linear_charts.gone()
             progress_bar.show()
 
-            presenter.loadCandles(Date().time, true)
+            presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
 
             rxEventBus.post(Events.UpdateMarketAfterChangeChartTimeFrame(presenter.watchMarket?.market?.id, presenter.timeFrameList[presenter.selectedTimeFrame].timeServer))

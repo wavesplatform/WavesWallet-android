@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import android.os.Bundle
@@ -24,8 +29,8 @@ import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.safeLet
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
-import kotlinx.android.synthetic.main.global_server_error_layout.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_global_server_error_layout.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.*
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -247,7 +252,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.orderbook_empty)
         return view
     }

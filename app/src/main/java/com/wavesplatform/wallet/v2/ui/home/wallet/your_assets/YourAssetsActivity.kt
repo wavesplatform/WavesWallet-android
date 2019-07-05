@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
 import android.app.Activity
@@ -18,7 +23,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
@@ -149,7 +154,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.your_assets_empty_state)
         return view
     }

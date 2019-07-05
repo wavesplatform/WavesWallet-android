@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 
 import android.os.Bundle
@@ -15,8 +20,8 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
-import kotlinx.android.synthetic.main.global_server_error_layout.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_global_server_error_layout.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
@@ -102,7 +107,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.last_trades_empty)
         return view
     }

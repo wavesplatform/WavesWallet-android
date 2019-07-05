@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.ui.auth
 
 import android.app.Application
@@ -11,6 +16,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
@@ -27,6 +33,7 @@ class EnvironmentManager {
     private var application: Application? = null
     private var configurationDisposable: Disposable? = null
     private var timeDisposable: Disposable? = null
+    private var versionDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
     class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
@@ -112,61 +119,25 @@ class EnvironmentManager {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
 
-            instance!!.configurationDisposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
+            instance!!.configurationDisposable = githubDataManager.globalConfiguration(environment.url)
                     .map { globalConfiguration ->
-                        instance!!.interceptor!!.setHosts(globalConfiguration.servers)
-                        PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
-                                .edit()
-                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(globalConfiguration))
-                                .apply()
-                        instance!!.current!!.setConfiguration(globalConfiguration)
-
+                        setConfiguration(globalConfiguration)
+                        globalConfiguration.generalAssets.map { it.assetId }
+                    }
+                    .onErrorReturn {
+                        Timber.e(it, "EnvironmentManager: Can't download global configuration!")
+                        setConfiguration(environment.configuration!!)
                         globalConfiguration.generalAssets.map { it.assetId }
                     }
                     .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
                     .map { info ->
-                        defaultAssets.clear()
-                        for (assetInfo in info.data) {
-                            val assetBalance = AssetBalance(
-                                    assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
-                                        Constants.WAVES_ASSET_ID_EMPTY
-                                    } else {
-                                        assetInfo.assetInfo.id
-                                    },
-                                    quantity = assetInfo.assetInfo.quantity,
-                                    isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
-                                    issueTransaction = IssueTransaction(
-                                            id = assetInfo.assetInfo.id,
-                                            assetId = assetInfo.assetInfo.id,
-                                            name = findAssetIdByAssetId(
-                                                    assetInfo.assetInfo.id)?.displayName
-                                                    ?: assetInfo.assetInfo.name,
-                                            decimals = assetInfo.assetInfo.precision,
-                                            quantity = assetInfo.assetInfo.quantity,
-                                            description = assetInfo.assetInfo.description,
-                                            sender = assetInfo.assetInfo.sender,
-                                            timestamp = assetInfo.assetInfo.timestamp.time),
-                                    isGateway = findAssetIdByAssetId(
-                                            assetInfo.assetInfo.id)?.isGateway ?: false,
-                                    isFiatMoney = findAssetIdByAssetId(
-                                            assetInfo.assetInfo.id)?.isFiat ?: false)
-                            defaultAssets.add(assetBalance)
-                        }
+                        setDefaultAssets(info)
                     }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
-                        error.printStackTrace()
-                        PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
-                                .edit()
-                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(EnvironmentManager.Environment.MAIN_NET.configuration))
-                                .apply()
+                        Timber.e(error, "EnvironmentManager: Can't download global configuration & set default assets!")
                         instance!!.configurationDisposable!!.dispose()
                     })
 
@@ -188,6 +159,57 @@ class EnvironmentManager {
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })
+
+            instance!!.versionDisposable = githubDataManager.loadLastAppVersion()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({ version ->
+                        githubDataManager.preferencesHelper.lastAppVersion = version.lastVersion
+                        instance!!.versionDisposable!!.dispose()
+                    }, { error ->
+                        error.printStackTrace()
+                        instance!!.timeDisposable!!.dispose()
+                    })
+        }
+
+        private fun setDefaultAssets(info: AssetsInfoResponse) {
+            defaultAssets.clear()
+            for (assetInfo in info.data) {
+                val assetBalance = AssetBalance(
+                        assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
+                            Constants.WAVES_ASSET_ID_EMPTY
+                        } else {
+                            assetInfo.assetInfo.id
+                        },
+                        quantity = assetInfo.assetInfo.quantity,
+                        isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
+                        issueTransaction = IssueTransaction(
+                                id = assetInfo.assetInfo.id,
+                                assetId = assetInfo.assetInfo.id,
+                                name = findAssetIdByAssetId(
+                                        assetInfo.assetInfo.id)?.displayName
+                                        ?: assetInfo.assetInfo.name,
+                                decimals = assetInfo.assetInfo.precision,
+                                quantity = assetInfo.assetInfo.quantity,
+                                description = assetInfo.assetInfo.description,
+                                sender = assetInfo.assetInfo.sender,
+                                timestamp = assetInfo.assetInfo.timestamp.time),
+                        isGateway = findAssetIdByAssetId(
+                                assetInfo.assetInfo.id)?.isGateway ?: false,
+                        isFiatMoney = findAssetIdByAssetId(
+                                assetInfo.assetInfo.id)?.isFiat ?: false)
+                defaultAssets.add(assetBalance)
+            }
+        }
+
+        private fun setConfiguration(globalConfiguration: GlobalConfiguration) {
+            instance!!.interceptor!!.setHosts(globalConfiguration.servers)
+            PreferenceManager
+                    .getDefaultSharedPreferences(App.getAppContext())
+                    .edit()
+                    .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                            Gson().toJson(globalConfiguration))
+                    .apply()
+            instance!!.current!!.setConfiguration(globalConfiguration)
         }
 
         @JvmStatic

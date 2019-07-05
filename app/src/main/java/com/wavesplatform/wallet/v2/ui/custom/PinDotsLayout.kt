@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.custom
 
 import android.annotation.TargetApi
@@ -10,7 +15,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 
 import com.wavesplatform.wallet.R
-import kotlinx.android.synthetic.main.pass_code_dots_layout.view.*
+import kotlinx.android.synthetic.main.content_pass_code_dots_layout.view.*
 import pers.victor.ext.children
 
 class PinDotsLayout : LinearLayout {
@@ -37,7 +42,7 @@ class PinDotsLayout : LinearLayout {
         gravity = Gravity.BOTTOM
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.pass_code_dots_layout, this, true)
+        inflater.inflate(R.layout.content_pass_code_dots_layout, this, true)
     }
 
     fun fillDot(position: Int) {

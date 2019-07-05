@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex
 
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -9,7 +14,7 @@ import pers.victor.ext.findDrawable
 import java.math.BigDecimal
 import javax.inject.Inject
 
-class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarket, BaseViewHolder>(R.layout.dex_layout_item, null) {
+class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarket, BaseViewHolder>(R.layout.item_dex_layout, null) {
 
     override fun convert(helper: BaseViewHolder, item: WatchMarket) {
         if (item.pairResponse?.data != null) {

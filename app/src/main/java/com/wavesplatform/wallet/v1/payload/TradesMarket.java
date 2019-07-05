@@ -1,13 +1,14 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.payload;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
-
-/**
- * Created by anonymous on 26.06.17.
- */
 
 public class TradesMarket implements Parcelable{
     public String timestamp = String.valueOf(new Date().getTime());

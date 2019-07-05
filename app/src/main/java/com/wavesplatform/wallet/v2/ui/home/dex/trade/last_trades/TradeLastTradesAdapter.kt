@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -13,7 +18,7 @@ import java.math.BigDecimal
 import java.text.ParsePosition
 import javax.inject.Inject
 
-class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTradesResponse.Data.ExchangeTransaction, BaseViewHolder>(R.layout.recycle_item_last_trades, null) {
+class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTradesResponse.Data.ExchangeTransaction, BaseViewHolder>(R.layout.item_last_trades, null) {
     var market: MarketResponse = MarketResponse()
 
     override fun convert(helper: BaseViewHolder, item: LastTradesResponse.Data.ExchangeTransaction) {

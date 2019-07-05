@@ -1,6 +1,12 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 
 import com.arellomobile.mvp.InjectViewState
+import com.crashlytics.android.Crashlytics
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
@@ -13,6 +19,7 @@ import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -38,7 +45,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
             watchMarket?.market?.currentTimeFrame = value
             watchMarket?.market?.save()
         }
-    var prevToDate: Long = 0
+    private var prevToDate: Long = 0
     private var timer: Timer? = null
 
     internal var valueFormatter = IAxisValueFormatter { value, axis ->
@@ -59,7 +66,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         else
             30
 
-        loadCandles(Date().time, true)
+        loadCandles(EnvironmentManager.getTime(), true)
         getTradesByPair()
 
         startTimer()
@@ -117,12 +124,13 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                     viewState.onShowCandlesSuccess(entries, barEntries, firstRequest)
                 }, {
                     it.printStackTrace()
+                    Crashlytics.logException(Exception("TradeChartPresenter loadCandles() error", it))
                     viewState.afterFailedLoadCandles(firstRequest)
                 }))
     }
 
     fun refreshCandles() {
-        val to = Date().time
+        val to = EnvironmentManager.getTime()
         addSubscription(apiDataManager.loadCandles(
                 watchMarket,
                 currentTimeFrame, prevToDate, to)

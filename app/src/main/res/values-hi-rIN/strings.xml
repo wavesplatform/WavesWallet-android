@@ -20,7 +20,7 @@
   <string name="address_book_search">खोज</string>
   <string name="address_book_success_deleted">पता मिटा दिया</string>
   <string name="address_book_toolbar_title">पता पुस्तिक</string>
-  <string name="addresses">संपत्ति</string>
+  <string name="addresses">टोकन</string>
   <string name="addresses_and_keys_aliases">उपनाम</string>
   <string name="addresses_and_keys_private_key">प्राइवेट क</string>
   <string name="addresses_and_keys_public_key">पब्लिक की</string>
@@ -42,7 +42,7 @@
   <string name="asset_details_cryptocurrency">क्रिप्टोकरेन्सी</string>
   <string name="asset_details_decimal">डेसीमल पॉइंट्स</string>
   <string name="asset_details_description">विवरण</string>
-  <string name="asset_details_error_perfom_transaction">आप इस संपत्ति के साथ लेनदेन नहीं कर सकते हैं</string>
+  <string name="asset_details_error_perfom_transaction">आप इस टोकन के साथ लेनदेन नहीं कर सकते</string>
   <string name="asset_details_fiat_money">फिएट पैसे</string>
   <string name="asset_details_id">आईडी</string>
   <string name="asset_details_in_order">क्रम में</string>
@@ -200,9 +200,9 @@
   <string name="dex_last_update_value">आखिरी अपडेट: %s</string>
   <string name="dex_market_empty">यहां कुछ नहीं…</string>
   <string name="dex_market_toolbar_title">बाजार</string>
-  <string name="dex_markets_info_dialog_amount_asset">राशि संपत्ति — %s</string>
+  <string name="dex_markets_info_dialog_amount_asset">राशि टोकन — %s</string>
   <string name="dex_markets_info_dialog_popular">लोकप्रिय</string>
-  <string name="dex_markets_info_dialog_price_asset">मूल्य संपत्ति — %s</string>
+  <string name="dex_markets_info_dialog_price_asset">मूल्य टोकन — %s</string>
   <string name="dex_markets_list_search">खोज</string>
   <string name="dex_markets_list_toolbar_title">बाजार</string>
   <string name="dex_sorting_empty">यहां कुछ भी नहीं…</string>
@@ -260,7 +260,7 @@
   <string name="history_details_active_now">एक्टिव नाउ</string>
   <string name="history_details_add_address">पता सेव करना</string>
   <string name="history_details_amount_per_transaction">प्रति लेनदेन राशि</string>
-  <string name="history_details_asset">एसेट</string>
+  <string name="history_details_asset">टोकन</string>
   <string name="history_details_block">ब्लॉक</string>
   <string name="history_details_cancel_leasing">लीजिंग रद्द करें</string>
   <string name="history_details_completed">पूरा कर लिया है</string>
@@ -271,7 +271,7 @@
   <string name="history_details_edit_address">नाम बदलना</string>
   <string name="history_details_exchange_price">मूल्य</string>
   <string name="history_details_fee">फ़ीस</string>
-  <string name="history_details_id">एसेट आईडी</string>
+  <string name="history_details_id">टोकन आईडी</string>
   <string name="history_details_leasing_from">लीजिंग से</string>
   <string name="history_details_leasing_to">लीजिंग टु</string>
   <string name="history_details_node_address">नोड का पता</string>
@@ -465,7 +465,7 @@
   <string name="receive_address_your_qr_code">आपका क्यूआर कोड</string>
   <string name="receive_amount">रकम</string>
   <string name="receive_amount_title">अमाउंट इन %1$s</string>
-  <string name="receive_asset">एसेट</string>
+  <string name="receive_asset">टोकन</string>
   <string name="receive_card">कार्ड</string>
   <string name="receive_contact_msg">सत्यापन या भुगतान प्रसंस्करण के साथ समस्याओं के मामले में, कृपया कोइनोमाट समर्थन टीम - support@coinomat.com से संपर्क करें</string>
   <string name="receive_contact_msg_key">support@coinomat.com</string>
@@ -489,7 +489,7 @@
   <string name="receive_minimum_amount">जमा की न्यूनतम राशि %1$s %2$s है</string>
   <string name="receive_not_verified">आपका खाता सत्यापित नहीं है</string>
   <string name="receive_payment_method">भुगतान का तरीका</string>
-  <string name="receive_sellect_asset">अपनी संपत्ति या सूची से चुनें</string>
+  <string name="receive_sellect_asset">अपनी टोकन या सूची से चुनें</string>
   <string name="receive_step_1">चरण 1</string>
   <string name="receive_step_1_msg">एसईपीए ट्रांसफर के माध्यम से सीधे अपने बैंक खाते से यूरो जमा करने के लिए आपको हमारे साथी IDNow.eu द्वारा सत्यापित होना चाहिए</string>
   <string name="receive_step_1_msg_link">IDNow.eu</string>
@@ -503,8 +503,8 @@
   <string name="receive_warning_will_send">यदि आप %1$s %2$s से कम भेजेंगे, तो आप वह पैसा खो देंगे।</string>
   <string name="receive_will_send_other_currency">इस पते पर किसी अन्य मुद्रा को भेजने से आपके जमा की हानि हो सकती है।</string>
   <string name="scripted_account_error_dialog_btn_txt">ठीक है</string>
-  <string name="scripted_account_error_dialog_description">स्क्रिप्टेड अकाउंट / एसेट के साथ काम करने के लिए वेव्स क्लाइंट का इस्तेमाल करें</string>
-  <string name="scripted_account_error_dialog_title">आपके खाते या परिसंपत्ति पर एक स्क्रिप्ट स्थापित है</string>
+  <string name="scripted_account_error_dialog_description">स्क्रिप्टेड अकाउंट / टोकन के साथ काम करने के लिए वेव्स क्लाइंट का इस्तेमाल करें</string>
+  <string name="scripted_account_error_dialog_title">आपके खाते या टोकन पर एक स्क्रिप्ट स्थापित है</string>
   <string name="secret_phrase_back_up_now">बैकअप बना देना इस वक़्त</string>
   <string name="secret_phrase_do_it_later">इसे बाद में करें</string>
   <string name="secret_phrase_no_backup_no_money">कोई बैकअप नहीं, पैसा नहीं</string>
@@ -512,7 +512,7 @@
   <string name="sell_btn_txt">%s बेचें</string>
   <string name="send_amount">रकम</string>
   <string name="send_amount_error_insufficient_funds">अपर्याप्त फंड्स</string>
-  <string name="send_asset">एसेट</string>
+  <string name="send_asset">टोकन</string>
   <string name="send_choose_from_address_book">पता पुस्तिक से चुनें</string>
   <string name="send_confirmation_confirm">की पुष्टि करें</string>
   <string name="send_confirmation_description">विवरण</string>
@@ -540,10 +540,10 @@
   <string name="send_progress_sending">भेजा जा रहा है …</string>
   <string name="send_recipient">प्राप्त करने वाला</string>
   <string name="send_recipient_address_hint">प्राप्तकर्ता का पता…</string>
-  <string name="send_recipient_asset_is_not_valid">संपत्ति मान्य नहीं है</string>
+  <string name="send_recipient_asset_is_not_valid">टोकन मान्य नहीं है</string>
   <string name="send_recipient_the_address_is_not_valid">पता मान्य नहीं है</string>
   <string name="send_select_your_asset">अपनी संपत्ति का चुनाव करें</string>
-  <string name="send_spam_error">संदेहजनक एसेट में फंड भेजना संभव नहीं है</string>
+  <string name="send_spam_error">संदेहजनक टोकन में फंड भेजना संभव नहीं है</string>
   <string name="send_success_do_you_want_to_save_this_address">क्या आप इस पते को सेव करना चाहते हैं?</string>
   <string name="send_success_okay">ठीक है</string>
   <string name="send_success_you_have_sent_sum">तुमने %1$s %2$s भेज दिया</string>
@@ -595,10 +595,10 @@
   <string name="use_fingerprint_submit_txt">फिंगरप्रिंट का प्रयोग करें</string>
   <string name="use_fingerprint_subtitle">अपने खाते में तेज़ी से, आसान पहुंच के लिए अपने फिंगरप्रिंट का उपयोग करें</string>
   <string name="use_fingerprint_title">साइन इन करने के लिए फिंगरप्रिंट का प्रयोग करें?</string>
-  <string name="wallet_assets">संपत्ति</string>
-  <string name="wallet_assets_hidden_category">छिपी संपत्तियां (%1$s)</string>
-  <string name="wallet_assets_my_asset">/ मेरी संपत्ति</string>
-  <string name="wallet_assets_spam_category">संदेहजनक संपत्तियां (%1$s)</string>
+  <string name="wallet_assets">टोकन</string>
+  <string name="wallet_assets_hidden_category">छिपी टोकन (%1$s)</string>
+  <string name="wallet_assets_my_asset">/ मेरी टोकन</string>
+  <string name="wallet_assets_spam_category">संदेहजनक टोकन (%1$s)</string>
   <string name="wallet_assets_spam_tag">संदेहजनक</string>
   <string name="wallet_leasing">लीजिंग</string>
   <string name="wallet_leasing_active_now">एक्टिव नाउ (%1$s)</string>
@@ -615,7 +615,7 @@
   <string name="wallet_sorting_toolbar_title">सॉर्टिंग</string>
   <string name="wallet_sorting_toolbar_visibility_action">विसिबिलिटी</string>
   <string name="wallet_toolbar_title">वॉलेट</string>
-  <string name="welcome_blockchain_description">क्रिप्टो दुनिया के तेजी से बढ़ते क्षेत्र का हिस्सा बनें। आप एकमात्र ऐसे व्यक्ति हैं जो आपकी क्रिप्टो संपत्तियों तक पहुंच सकते हैं।</string>
+  <string name="welcome_blockchain_description">क्रिप्टो दुनिया के तेजी से बढ़ते क्षेत्र का हिस्सा बनें। आप एकमात्र ऐसे व्यक्ति हैं जो आपकी क्रिप्टो टोकन तक पहुंच सकते हैं।</string>
   <string name="welcome_blockchain_title">गेट स्टार्टेड विथ ब्लॉकचैन</string>
   <string name="welcome_create_import_description">पैरिंग कोड या मैन्युअल के माध्यम से</string>
   <string name="welcome_create_import_title">खाता आयात करें</string>
@@ -626,7 +626,7 @@
   <string name="welcome_dex_title">डेसेंट्रलीसेड एक्सचेंज</string>
   <string name="welcome_token_description">अपने खुद के टोकन जारी करें। इन्हें न केवल एक इंटरनल करेंसी के रूप में बल्कि डेसेंट्रलीसेड वोटिंग के रूप में, एक रेटिंग सिस्टम, या लॉयल्टी प्रोग्राम के रूप में आपके व्यापार में एकीकृत किया जा सकता है।</string>
   <string name="welcome_token_title">टोकन लॉन्चर</string>
-  <string name="welcome_wallet_description">आसानी से और सुरक्षित रूप से अपनी डिजिटल एसेट्स बैलेंस पर ब्याज, प्रबंधन और स्टोर करें।</string>
+  <string name="welcome_wallet_description">आसानी से और सुरक्षित रूप से अपनी डिजिटल टोकन बैलेंस पर ब्याज, प्रबंधन और स्टोर करें।</string>
   <string name="welcome_wallet_title">वॉलेट</string>
   <string name="whats_new_next">अगला</string>
   <string name="whats_new_okay">ठीक है</string>
@@ -634,8 +634,8 @@
   <string name="your_address_your_qr_code">आपका क्यूआर कोड</string>
   <string name="your_asset_activity_all">सब</string>
   <string name="your_asset_activity_greater_zero">बैलेंस के साथ</string>
-  <string name="your_assets_empty_state">यहां कुछ नहीं…\nआपके पास धन के साथ संपत्ति नहीं है</string>
-  <string name="your_assets_toolbar_title">आपकी संपत्ति</string>
+  <string name="your_assets_empty_state">यहां कुछ नहीं…\nआपके पास धन के साथ टोकन नहीं है</string>
+  <string name="your_assets_toolbar_title">आपकी टोकन</string>
   <string name="confirm_card_tutorial_submit">शुरू</string>
   <string name="confirm_card_tutorial_title">पुष्टि करें और शुरू करें</string>
   <string name="confirm_card_tutorial_terms_and_conditions">नियम और शर्तें</string>
@@ -654,13 +654,20 @@
   <string name="my_orders_details_amount_hint">रकम</string>
   <string name="my_orders_details_price_hint">मूल्य</string>
   <string name="my_orders_details_total_hint">संपूर्ण</string>
+  <string name="clean_banner_title">और कोई गड़बड़ नहीं!</string>
+  <string name="clean_banner_description">हमने आपको अपने बटुए को साफ सुथरा रखने के लिए टोकन के प्रदर्शन को फिर से डिज़ाइन किया है। आप चाहे तो अपनी टोकन सूची को अनुकूलित कर सकते हैं!</string>
   <string name="search_asset_hint">खोज</string>
   <string name="search_asset_cancel">रद्द करना</string>
-  <string name="search_asset_empty">आपके पास ऐसी संपत्ति नहीं है</string>
+  <string name="search_asset_empty">आपके पास ऐसी टोकन नहीं है</string>
   <string name="history_type_script_invocation">स्क्रिप्ट आमंत्रण</string>
   <string name="history_details_script_invocation_payment">भुगतान</string>
   <string name="history_details_script_invocation_script_address">स्क्रिप्ट का पता</string>
   <string name="need_update_alert_title">यह आपके ऐप को अपडेट करने का समय है!</string>
   <string name="need_update_alert_description">हम लगातार वेव्स वॉलेट को बेहतर और अधिक उपयोगी बनाने के लिए काम कर रहे हैं। नई सुविधाओं तक पहुँच प्राप्त करने के लिए कृपया अपने ऐप को अपडेट करें।</string>
-  <string name="search_asset_hidden_title">छिपी संपत्तियां</string>
+  <string name="search_asset_hidden_title">छिपी टोकन</string>
+  <string name="my_orders_details_filled_hint">भर ग्या</string>
+  <string name="wallet_sorting_hidden_section">छिपी टोकन</string>
+  <string name="wallet_sorting_favorite_empty">आपने पसंदीदा में टोकन नहीं जोड़े</string>
+  <string name="wallet_sorting_default_empty">टोकन की सूची खाली है</string>
+  <string name="wallet_sorting_hidden_empty">आपने छिपे में टोकन नहीं जोड़े</string>
 </resources>

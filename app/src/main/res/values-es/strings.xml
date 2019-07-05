@@ -20,7 +20,7 @@
   <string name="address_book_search">Buscar</string>
   <string name="address_book_success_deleted">Dirección borrada</string>
   <string name="address_book_toolbar_title">Directorio</string>
-  <string name="addresses">Activos</string>
+  <string name="addresses">Tokens</string>
   <string name="addresses_and_keys_aliases">Alias</string>
   <string name="addresses_and_keys_private_key">Llave privada</string>
   <string name="addresses_and_keys_public_key">Llave pública</string>
@@ -42,7 +42,7 @@
   <string name="asset_details_cryptocurrency">Criptomoneda</string>
   <string name="asset_details_decimal">Decimales</string>
   <string name="asset_details_description">Descripción</string>
-  <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este activo</string>
+  <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este token</string>
   <string name="asset_details_fiat_money">Dinero Fiat</string>
   <string name="asset_details_id">ID</string>
   <string name="asset_details_in_order">En orden</string>
@@ -200,9 +200,9 @@
   <string name="dex_last_update_value">Última actualización: %s</string>
   <string name="dex_market_empty">No hay nada por aquí…</string>
   <string name="dex_market_toolbar_title">Mercados</string>
-  <string name="dex_markets_info_dialog_amount_asset">Cantidad de Activo — %s</string>
+  <string name="dex_markets_info_dialog_amount_asset">Cantidad de Token — %s</string>
   <string name="dex_markets_info_dialog_popular">Popular</string>
-  <string name="dex_markets_info_dialog_price_asset">Precio Activo — %s</string>
+  <string name="dex_markets_info_dialog_price_asset">Precio del token — %s</string>
   <string name="dex_markets_list_search">Buscar</string>
   <string name="dex_markets_list_toolbar_title">Mercados</string>
   <string name="dex_sorting_empty">No hay nada por aquí…</string>
@@ -260,7 +260,7 @@
   <string name="history_details_active_now">ACTIVO AHORA</string>
   <string name="history_details_add_address">Guardar su dirección</string>
   <string name="history_details_amount_per_transaction">Cantidad por transacción</string>
-  <string name="history_details_asset">Activo</string>
+  <string name="history_details_asset">Token</string>
   <string name="history_details_block">Bloque</string>
   <string name="history_details_cancel_leasing">Cancelar leasing</string>
   <string name="history_details_completed">COMPLETADO</string>
@@ -271,7 +271,7 @@
   <string name="history_details_edit_address">Editar su nombre</string>
   <string name="history_details_exchange_price">Precio</string>
   <string name="history_details_fee">Comisión </string>
-  <string name="history_details_id">Activo ID</string>
+  <string name="history_details_id">Token ID</string>
   <string name="history_details_leasing_from">Arrendamiento de</string>
   <string name="history_details_leasing_to">Arrendamiento a</string>
   <string name="history_details_node_address">Dirección del nodo</string>
@@ -465,7 +465,7 @@
   <string name="receive_address_your_qr_code">Su código QR</string>
   <string name="receive_amount">Cantidad</string>
   <string name="receive_amount_title">Cantidad en %1$s</string>
-  <string name="receive_asset">Activo</string>
+  <string name="receive_asset">Token</string>
   <string name="receive_card">Tarjeta</string>
   <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat — support@coinomat.com</string>
   <string name="receive_contact_msg_key">support@coinomat.com</string>
@@ -489,7 +489,7 @@
   <string name="receive_minimum_amount">La cantidad mínima de depósito es %1$s %2$s</string>
   <string name="receive_not_verified">Su cuenta no está verificada</string>
   <string name="receive_payment_method">Método de pago</string>
-  <string name="receive_sellect_asset">Seleccione su activo de la lista</string>
+  <string name="receive_sellect_asset">Seleccione su token de la lista</string>
   <string name="receive_step_1">Paso 1</string>
   <string name="receive_step_1_msg">Para poder depositar euros directamente desde su cuenta bancaria a través de una transferencia SEPA, debe ser verificado por nuestro socio IDNow.eu</string>
   <string name="receive_step_1_msg_link">IDNow.eu</string>
@@ -503,8 +503,8 @@
   <string name="receive_warning_will_send">Si envía menos de %1$s %2$s, perderá este dinero.</string>
   <string name="receive_will_send_other_currency">El envío de cualquier otra moneda a esta dirección puede ocasionar la pérdida de su depósito.</string>
   <string name="scripted_account_error_dialog_btn_txt">Ok</string>
-  <string name="scripted_account_error_dialog_description">Para trabajar con una cuenta/activo con script, use el Cliente de Waves</string>
-  <string name="scripted_account_error_dialog_title">Un script está instalado en su cuenta o activo</string>
+  <string name="scripted_account_error_dialog_description">Para trabajar con una cuenta/token con un script, utilice el Cliente Waves</string>
+  <string name="scripted_account_error_dialog_title">Un script está instalado en su cuenta o token</string>
   <string name="secret_phrase_back_up_now">Backup ahora</string>
   <string name="secret_phrase_do_it_later">Hazlo después</string>
   <string name="secret_phrase_no_backup_no_money">Sin backup, no hay dinero</string>
@@ -512,7 +512,7 @@
   <string name="sell_btn_txt">Vender %s</string>
   <string name="send_amount">Cantidad</string>
   <string name="send_amount_error_insufficient_funds">Fondos insuficientes</string>
-  <string name="send_asset">Activo</string>
+  <string name="send_asset">Token</string>
   <string name="send_choose_from_address_book">Elija desde el directorio</string>
   <string name="send_confirmation_confirm">Confirmar</string>
   <string name="send_confirmation_description">Descripción</string>
@@ -540,10 +540,10 @@
   <string name="send_progress_sending">Enviando…</string>
   <string name="send_recipient">Destinatario</string>
   <string name="send_recipient_address_hint">Dirección del destinatario…</string>
-  <string name="send_recipient_asset_is_not_valid">El activo no es válido</string>
+  <string name="send_recipient_asset_is_not_valid">El token no es válido</string>
   <string name="send_recipient_the_address_is_not_valid">La direccion no es válida</string>
   <string name="send_select_your_asset">Seleccione su activo</string>
-  <string name="send_spam_error">No se puede enviar sus fondos a los activos sospechosos</string>
+  <string name="send_spam_error">No se puede enviar sus fondos a los tokens sospechosos</string>
   <string name="send_success_do_you_want_to_save_this_address">¿Quieres guardar esta dirección?</string>
   <string name="send_success_okay">Ok</string>
   <string name="send_success_you_have_sent_sum">Has enviado %1$s %2$s</string>
@@ -564,7 +564,7 @@
   <string name="start_leasing_use_total_balance">Usar el saldo total</string>
   <string name="start_leasing_validation_address_is_invalid_error">La direccion no es válida</string>
   <string name="start_leasing_validation_amount_insufficient_error">Fondos insuficientes</string>
-  <string name="start_leasing_validation_is_required_error">No rellenado </string>
+  <string name="start_leasing_validation_is_required_error">No rellenado</string>
   <string name="token_burn_asset_hint">Activo</string>
   <string name="token_burn_confirmation_burn">Quemar</string>
   <string name="token_burn_confirmation_burning">Quemando…</string>
@@ -581,7 +581,7 @@
   <string name="token_burn_quantity_of_tokens_to_be_burned_hint">Cantidad de token a quemar</string>
   <string name="token_burn_toolbar_title">Quemar Token</string>
   <string name="token_burn_validation_amount_insufficient_error">Fondos insuficientes</string>
-  <string name="token_burn_validation_is_required_error">No rellenado </string>
+  <string name="token_burn_validation_is_required_error">No rellenado</string>
   <string name="transaction_failed">Transacción fallida</string>
   <string name="transfer">Transferir</string>
   <string name="tutorial_card_1_description">Por favor tome tiempo para entender algunas cosas importantes para su propia seguridad. \n\nNo puede recuperar sus fondos ni congelar su cuenta si visita un sitio de phishing o perder su frase backup (aka SEED phrase). \n\nSi continúa usando nuestra plataforma, acepta todos los riesgos asociados con la pérdida de su SEED, que incluye pero no se limita a la incapacidad de obtener sus fondos y disponer de ellos. En caso de que  pierda su SEED, acepta y reconoce que la plataforma de Waves no sería responsable de las consecuencias negativas de ésto.</string>
@@ -595,10 +595,10 @@
   <string name="use_fingerprint_submit_txt">Usar huella dactilar</string>
   <string name="use_fingerprint_subtitle">Use su huella digital para un acceso más rápido y fácil a su cuenta</string>
   <string name="use_fingerprint_title">¿Usar huella digital para iniciar sesión?</string>
-  <string name="wallet_assets">Activos</string>
-  <string name="wallet_assets_hidden_category">Activos ocultos (%1$s)</string>
-  <string name="wallet_assets_my_asset">/ Mi activo</string>
-  <string name="wallet_assets_spam_category">Activos sospechosos (%1$s)</string>
+  <string name="wallet_assets">Tokens</string>
+  <string name="wallet_assets_hidden_category">Tokens ocultos (%1$s)</string>
+  <string name="wallet_assets_my_asset">/ Mi token</string>
+  <string name="wallet_assets_spam_category">Tokens sospechosos (%1$s)</string>
   <string name="wallet_assets_spam_tag">Sospechoso</string>
   <string name="wallet_leasing">Leasing</string>
   <string name="wallet_leasing_active_now">Activo ahora (%1$s)</string>
@@ -615,7 +615,7 @@
   <string name="wallet_sorting_toolbar_title">Clasificación</string>
   <string name="wallet_sorting_toolbar_visibility_action">Visibilidad</string>
   <string name="wallet_toolbar_title">Cartera </string>
-  <string name="welcome_blockchain_description">Conviértase en parte de un área de rápido crecimiento del mundo criptográfico. Es la única persona que puede acceder a sus criptomonedas.</string>
+  <string name="welcome_blockchain_description">Conviértase en parte de un área de rápido crecimiento del mundo criptográfico. Es la única persona que puede acceder a sus tokens de cripto.</string>
   <string name="welcome_blockchain_title">Empieza con el Blockchain</string>
   <string name="welcome_create_import_description">A través del código de emparejamiento o manualmente</string>
   <string name="welcome_create_import_title">Importar cuenta</string>
@@ -626,7 +626,7 @@
   <string name="welcome_dex_title">Exchange Descentralizado</string>
   <string name="welcome_token_description">Emita sus propios tokens. Pueden integrarse en su negocio no sólo como moneda interna, sino también como un token para la votación descentralizada, un sistema de calificación o programa de lealtad.</string>
   <string name="welcome_token_title">Lanzador de Token </string>
-  <string name="welcome_wallet_description">Almacene, administre y reciba intereses sobre el saldo de sus activos digitales de forma fácil y segura.</string>
+  <string name="welcome_wallet_description">Almacene, administre y reciba intereses sobre el saldo de sus tokens digitales de forma fácil y segura.</string>
   <string name="welcome_wallet_title">Cartera</string>
   <string name="whats_new_next">Siguiente</string>
   <string name="whats_new_okay">Ok</string>
@@ -634,8 +634,8 @@
   <string name="your_address_your_qr_code">Su código QR</string>
   <string name="your_asset_activity_all">Todos</string>
   <string name="your_asset_activity_greater_zero">Con balance</string>
-  <string name="your_assets_empty_state">No hay nada por aquí…\nNo tiene activos con fondos</string>
-  <string name="your_assets_toolbar_title">Sus activos</string>
+  <string name="your_assets_empty_state">No hay nada por aquí…\nNo tiene tokens con fondos</string>
+  <string name="your_assets_toolbar_title">Sus tokens</string>
   <string name="confirm_card_tutorial_submit">Empezar</string>
   <string name="confirm_card_tutorial_title">Confirmar y comenzar</string>
   <string name="confirm_card_tutorial_terms_and_conditions">Términos y Condiciones</string>
@@ -654,13 +654,20 @@
   <string name="my_orders_details_amount_hint">Cantidad</string>
   <string name="my_orders_details_price_hint">Precio</string>
   <string name="my_orders_details_total_hint">Total</string>
+  <string name="clean_banner_title">¡No más lío!</string>
+  <string name="clean_banner_description">Hemos rediseñado la pantalla de los tokens para permitirle mantener su billetera limpia y ordenada. ¡Puedes personalizar su lista de los tokens como quiera!</string>
   <string name="search_asset_hint">Buscar</string>
   <string name="search_asset_cancel">Anular</string>
-  <string name="search_asset_empty">No tiene activos</string>
+  <string name="search_asset_empty">No tiene estos tokens</string>
   <string name="history_type_script_invocation">Invocación de script</string>
   <string name="history_details_script_invocation_payment">Pago</string>
   <string name="history_details_script_invocation_script_address">Dirección de script</string>
   <string name="need_update_alert_title">¡Es el momento de actualizar su aplicación!</string>
   <string name="need_update_alert_description">Trabajamos constantemente para hacer que Waves Wallet sea mejor y más útil. Actualiza tu aplicación para obtener acceso a nuevas funciones.</string>
-  <string name="search_asset_hidden_title">Activos ocultos</string>
+  <string name="search_asset_hidden_title">Tokens ocultos</string>
+  <string name="my_orders_details_filled_hint">Lleno</string>
+  <string name="wallet_sorting_hidden_section">Tokens ocultos</string>
+  <string name="wallet_sorting_favorite_empty">No ha añadido los tokens a favoritos</string>
+  <string name="wallet_sorting_default_empty">La lista de tokens está vacía</string>
+  <string name="wallet_sorting_hidden_empty">No ha añadido los tokens en oculto</string>
 </resources>

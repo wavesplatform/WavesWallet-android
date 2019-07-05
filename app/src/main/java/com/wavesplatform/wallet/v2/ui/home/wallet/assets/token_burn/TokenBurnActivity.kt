@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import android.content.Intent
@@ -15,7 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.isNetworkConnected
@@ -162,6 +167,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             REQUEST_BURN_CONFIRM -> {
                 when (resultCode) {
                     Constants.RESULT_OK -> {
+                        setResult(Constants.RESULT_OK)
                         finish()
                     }
                     Constants.RESULT_SMART_ERROR -> {

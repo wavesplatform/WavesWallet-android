@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Eduard Zaydel on 15/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_root_alert"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_top_info_alert"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="14dp"
+    android:paddingTop="14dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="14dp">
+
+    <FrameLayout
+        android:id="@+id/frame_icon_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_alert_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/userimg_rocket_48"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_alert_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/image_alert_action"
+        android:layout_toEndOf="@+id/frame_icon_wrapper"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:fontFamily="@font/roboto_bold"
+        tools:text="@string/need_update_alert_title" />
+
+    <TextView
+        android:id="@+id/text_alert_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_alert_title"
+        android:layout_marginTop="6dp"
+        android:layout_toStartOf="@+id/image_alert_action"
+        android:layout_toEndOf="@+id/frame_icon_wrapper"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        tools:text="@string/need_update_alert_description" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_alert_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:padding="4dp"
+        app:srcCompat="@drawable/ic_arrowright_14_basic_200" />
+
+</RelativeLayout>

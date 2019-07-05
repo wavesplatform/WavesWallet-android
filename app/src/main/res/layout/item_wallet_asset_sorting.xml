@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_asset"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="2dp"
+    android:clickable="true"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/asset_item_radius"
+    app:cardElevation="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="6dp"
+        android:paddingTop="10dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_favorite_14_disabled_400" />
+
+        <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
+            android:id="@+id/image_asset_icon"
+            android:layout_width="28dp"
+            android:layout_toEndOf="@id/image_favorite"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            app:avatar_text_size="16sp"
+            android:src="@drawable/asset_gray_icon"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_asset_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/image_asset_icon"
+            android:textColor="@color/disabled500"
+            android:textSize="14sp"
+            tools:text="Waves" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_my_asset"
+            android:textColor="@color/info500"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/image_drag"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/text_asset_name"
+            android:text="@string/wallet_assets_my_asset"
+            />
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_drag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="3dp"
+            app:srcCompat="@drawable/ic_dragelem_22_disabled_400" />
+
+
+        <Switch
+            android:id="@+id/switch_visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

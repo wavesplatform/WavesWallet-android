@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import com.google.gson.annotations.SerializedName
@@ -25,6 +30,7 @@ class News {
 
     companion object {
         const val URL = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.2/notifications_android.json"
+        const val URL_TEST = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.3/notifications_test_android.json"
         private const val DEFAULT_LANG_CODE = "en"
 
         fun getTitle(langCode: String, notification: Notification): String {

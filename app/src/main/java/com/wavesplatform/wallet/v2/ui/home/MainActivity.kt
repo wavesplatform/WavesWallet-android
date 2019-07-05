@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home
 
 import android.os.Bundle
@@ -22,6 +27,8 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.News
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
@@ -34,8 +41,8 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFr
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.activity_main_v2.*
-import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -56,7 +63,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
 
-    override fun configLayoutRes() = R.layout.activity_main_v2
+    override fun configLayoutRes() = R.layout.activity_main
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -87,6 +94,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun logFirstOpen() {
         if (prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)) {
             prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
+            prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
+        } else {
+            if (!prefsUtil.getValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, false)) {
+                prefsUtil.setValue(PrefsUtil.KEY_IS_NEED_TO_SHOW_CLEARED_ALERT, true)
+            }
         }
     }
 
@@ -151,7 +163,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        walletFragment.setOnElevationChangeListener(elevationListener)
         dexFragment.setOnElevationChangeListener(elevationListener)
         historyFragment.setOnElevationChangeListener(elevationListener)
         profileFragment.setOnElevationChangeListener(elevationListener)
@@ -209,6 +220,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun showQuickActionDialog() {
         if (isNetworkConnected()) {
+            analytics.trackEvent(AnalyticEvents.WavesActionPanelEvent)
             val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
             val ft = supportFragmentManager.beginTransaction()
             ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
@@ -267,7 +279,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun getCustomView(tabIcon: Int): View? {
         val customTab = LayoutInflater.from(this)
-                .inflate(R.layout.home_navigation_tab, null)
+                .inflate(R.layout.content_home_navigation_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)
@@ -280,7 +292,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun getCenterTabLayout(tabIcon: Int): View? {
         val customTab = LayoutInflater.from(this)
-                .inflate(R.layout.home_navigation_center_tab, null)
+                .inflate(R.layout.content_home_navigation_center_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)
@@ -334,10 +346,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
             // enable quick action tab
-            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.ENABLE_VIEW
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.View.ENABLE_VIEW
         } else {
             // disable quick action tab
-            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.DISABLE_VIEW
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.View.DISABLE_VIEW
         }
     }
 

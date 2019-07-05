@@ -1,5 +1,11 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.database
 
+import android.util.Log
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
@@ -15,6 +21,7 @@ import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import timber.log.Timber
 import javax.inject.Inject
 
 @Deprecated("Temp class for saving transactions, should refactor")
@@ -106,6 +113,11 @@ class TransactionSaver @Inject constructor() {
                 tempGrabbedAssets.add(assetPair.amountAsset)
                 tempGrabbedAssets.add(assetPair.priceAsset)
             }
+            if (!transition.payment.isNullOrEmpty()){
+                transition.payment.first()?.notNull { payment ->
+                    tempGrabbedAssets.add(payment.assetId)
+                }
+            }
             tempGrabbedAssets.add(transition.assetId)
             tempGrabbedAssets.add(transition.feeAssetId)
         }
@@ -118,7 +130,7 @@ class TransactionSaver @Inject constructor() {
 
         subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
+                .subscribe ({
                     mergeAndSaveAllAssets(ArrayList(it)) { assetsInfo ->
                         transactions.forEach { trans ->
                             if (trans.assetId.isNullOrEmpty()) {
@@ -131,6 +143,16 @@ class TransactionSaver @Inject constructor() {
                                 trans.feeAssetObject = Constants.wavesAssetInfo
                             } else {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
+                            }
+
+                            if (!trans.payment.isNullOrEmpty()) {
+                                trans.payment.first()?.let { payment ->
+                                    if (payment.assetId.isNullOrEmpty()) {
+                                        payment.asset = Constants.wavesAssetInfo
+                                    } else {
+                                        payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
+                                    }
+                                }
                             }
 
                             when {
@@ -224,16 +246,20 @@ class TransactionSaver @Inject constructor() {
                             rxEventBus.post(Events.NeedUpdateHistoryScreen())
                         }
                     }
-                })
+                }, {
+                    it.printStackTrace()
+                }))
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
-        alias.notNull {
-            subscriptions.add(apiDataManager.loadAlias(it)
-                    .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe {
-                        listener.invoke(it.address)
-                    })
+        if (App.getAccessManager().getWallet() != null) {
+            alias.notNull {
+                subscriptions.add(apiDataManager.loadAlias(it)
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe {
+                            listener.invoke(it.address)
+                        })
+            }
         }
     }
 

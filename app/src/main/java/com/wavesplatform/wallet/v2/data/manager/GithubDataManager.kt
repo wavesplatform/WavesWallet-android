@@ -1,10 +1,12 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.News
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -33,7 +35,12 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadNews(): Observable<News> {
-        return githubService.news(News.URL)
+        val newsUrl = if (preferencesHelper.useTestNews) {
+            News.URL_TEST
+        } else {
+            News.URL
+        }
+        return githubService.news(newsUrl)
     }
 
     fun globalConfiguration(url: String): Observable<GlobalConfiguration> {
@@ -42,5 +49,9 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
 
     fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
         return githubService.globalCommission()
+    }
+
+    fun loadLastAppVersion(): Observable<LastAppVersion> {
+        return githubService.loadLastAppVersion()
     }
 }

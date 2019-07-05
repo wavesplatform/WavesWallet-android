@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
 import android.content.Intent
@@ -12,6 +17,8 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
@@ -22,7 +29,7 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
 import kotlinx.android.synthetic.main.activity_choose_account.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
 
@@ -66,7 +73,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.choose_account_empty_state)
         return view
     }
@@ -81,6 +88,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onEditClicked(position: Int) {
+        analytics.trackEvent(AnalyticEvents.StartAccountEditEvent)
+
         val item = adapter.getItem(position) as AddressBookUser
         launchActivity<EditAccountNameActivity>(REQUEST_EDIT_ACCOUNT_NAME) {
             putExtra(KEY_INTENT_ITEM_ADDRESS, item)
@@ -89,6 +98,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onDeleteClicked(position: Int) {
+        analytics.trackEvent(AnalyticEvents.StartAccountDeleteEvent)
+
         val item = adapter.getItem(position) as AddressBookUser
         val guid = App.getAccessManager().findGuidBy(item.address)
 
@@ -96,7 +107,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         alertDialog.setTitle(getString(R.string.choose_account_delete_title))
         alertDialog.setMessage(getString(R.string.choose_account_delete_msg))
         if (prefsUtil.getGuidValue(guid, PrefsUtil.KEY_SKIP_BACKUP, true)) {
-            alertDialog.setView(inflate(R.layout.delete_account_warning_layout, null))
+            alertDialog.setView(inflate(R.layout.content_delete_account_warning_layout, null))
         }
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getString(R.string.choose_account_yes)) { dialog, which ->

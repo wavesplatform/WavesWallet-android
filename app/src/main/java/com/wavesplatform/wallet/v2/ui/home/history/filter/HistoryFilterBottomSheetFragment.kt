@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.history.filter
 
 import android.os.Bundle
@@ -29,7 +34,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.inflater = inflater
 
-        rooView = inflater.inflate(R.layout.history_filter_bottom_sheet_dialog, container, false)
+        rooView = inflater.inflate(R.layout.content_history_filter_bottom_sheet_dialog, container, false)
 
         closeBtn = rooView?.findViewById(R.id.button_close)
         filterBtn = rooView?.findViewById(R.id.button_filter)

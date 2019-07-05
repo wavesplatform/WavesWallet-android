@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -5,11 +10,11 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.util.makeBackgroundWithRippleEffect
-import kotlinx.android.synthetic.main.recycle_item_sponsored_fee.view.*
+import kotlinx.android.synthetic.main.item_sponsored_fee.view.*
 import pers.victor.ext.findColor
 import javax.inject.Inject
 
-class SponsoredFeeAdapter @Inject constructor() : BaseQuickAdapter<SponsoredAssetItem, BaseViewHolder>(R.layout.recycle_item_sponsored_fee, null) {
+class SponsoredFeeAdapter @Inject constructor() : BaseQuickAdapter<SponsoredAssetItem, BaseViewHolder>(R.layout.item_sponsored_fee, null) {
 
     var currentAssetId: String? = null
 

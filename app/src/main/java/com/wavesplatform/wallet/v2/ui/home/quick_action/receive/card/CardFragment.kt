@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
 import android.content.Intent
@@ -22,7 +27,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_card.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
+import kotlinx.android.synthetic.main.content_asset_card.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -139,8 +144,10 @@ class CardFragment : BaseFragment(), CardView {
         text_asset_name.text = assetBalance?.getName()
         text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
-        image_is_favourite.visiableIf {
-            assetBalance?.isFavorite!!
+        if (assetBalance?.isFavorite == true){
+            image_is_favorite.visiable()
+        }else{
+            image_is_favorite.gone()
         }
 
         text_asset.gone()
@@ -154,7 +161,7 @@ class CardFragment : BaseFragment(), CardView {
         val alertDialog = AlertDialog.Builder(baseActivity).create()
         alertDialog.setTitle(getString(R.string.receive_fiat_choose_dialog_title))
         val view = LayoutInflater.from(baseActivity)
-                .inflate(R.layout.receive_fiat_choose_dialog, null)
+                .inflate(R.layout.dialog_receive_fiat_choose, null)
         val usdButton = view.findViewById<RadioButton>(R.id.radioButton_usd)
         val euroButton = view.findViewById<RadioButton>(R.id.radioButton_eur)
         var currency = presenter.fiat

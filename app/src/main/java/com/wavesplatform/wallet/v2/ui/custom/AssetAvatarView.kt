@@ -1,9 +1,15 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.annotation.NonNull
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.AppCompatImageView
 import android.text.TextPaint
@@ -16,7 +22,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import pers.victor.ext.findColor
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
@@ -92,42 +97,32 @@ class AssetAvatarView : AppCompatImageView {
     }
 
     /*
-   * Set asset info object to get initials for drawable
-   * */
+    * Set asset info object to get initials for drawable
+    * */
     fun setAsset(asset: AssetInfo) {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
     /*
-    * Set asset info object to get initials for drawable
+    * Get initials for asset drawable
     * */
-    private fun getInitialsFromAssetName(text: String?): String {
-        if (text.isNullOrEmpty()) {
-            return context.getString(R.string.common_persist)
-        }
-
-        val letter = text.trim().substring(0, 1)
-        val letterColor = Constants.alphabetColor[letter.toLowerCase()]
-
-        return if (letterColor != null) {
-            letter.toUpperCase()
-        } else {
+    private fun getInitial(text: String?): String {
+        return if (text.isNullOrEmpty()) {
             context.getString(R.string.common_persist)
+        } else {
+            text.trim().substring(0, 1).toUpperCase()
         }
     }
 
-    private fun getPlaceholderColorFromAssetName(text: String?): Int {
-        if (TextUtils.isEmpty(text?.trim())) {
-            return findColor(R.color.persist)
+    private fun getColorBackgroundBy(assetId: String): Int {
+        if (TextUtils.isEmpty(assetId)) {
+            return Constants.alphabetColor[0]
         }
-
-        val letterColor = Constants.alphabetColor[text!!.trim().substring(0, 1).toLowerCase()]
-
-        return if (letterColor != null) {
-            findColor(letterColor)
-        } else {
-            findColor(R.color.persist)
-        }
+        val sum = assetId.split("")
+                .filter { it != "" }
+                .map { char -> char.codePointAt(0) }
+                .reduce { acc, code -> acc + code }
+        return Constants.alphabetColor[sum % Constants.alphabetColor.size]
     }
 
     /*
@@ -139,9 +134,8 @@ class AssetAvatarView : AppCompatImageView {
             else -> Constants.defaultAssetsAvatar()[assetId]
         }
 
-        val color = getPlaceholderColorFromAssetName(name)
-        paint.color = color
-        text = getInitialsFromAssetName(name)
+        paint.color = getColorBackgroundBy(assetId)
+        text = getInitial(name)
 
         setDrawable(isSponsoredAsset, isScriptAsset)
 

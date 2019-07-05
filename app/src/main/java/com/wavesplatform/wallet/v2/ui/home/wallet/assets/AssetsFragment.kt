@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.content.Intent
@@ -21,20 +26,22 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
-import kotlinx.android.synthetic.main.wallet_header_item.view.*
+import kotlinx.android.synthetic.main.item_wallet_header.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
@@ -54,9 +61,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var adapter: AssetsAdapter
 
+    var elevationAppBarChangeListener : MainActivity.OnElevationAppBarChangeListener? = null
+
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var headerItemDecoration: PinnedHeaderItemDecoration? = null
-    var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
@@ -67,7 +75,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 .subscribe {
                     if (it.position == MainActivity.WALLET_SCREEN) {
                         recycle_assets.scrollToPosition(0)
-                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
                 })
 
@@ -159,24 +166,30 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position) as AssetBalance
-            val positionWithoutSection = when {
-                // minus hidden section header and all clear assets
-                item.isHidden -> position - 1 - adapter.data.count {
-                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+            if (position == 0) {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSearchEvent)
+                launchActivity<SearchAssetActivity>(withoutAnimation = true)
+                activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            } else {
+                val item = this.adapter.getItem(position) as AssetBalance
+                val positionWithoutSection = when {
+                    // minus hidden section header and all clear assets
+                    item.isHidden -> position - 1 - adapter.data.count {
+                        (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                    }
+                    // minus hidden and spam sections header and all clear and hidden assets
+                    item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
+                        (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                    } -
+                            adapter.data.count {
+                                (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
+                            }
+                    else -> position // no changes
                 }
-                // minus hidden and spam sections header and all clear and hidden assets
-                item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
-                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
-                } -
-                        adapter.data.count {
-                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
-                        }
-                else -> position // no changes
-            }
-            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
+                launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection - 1)
+                }
             }
         }
 
@@ -187,6 +200,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 }
             }
         }
+
+        elevationAppBarChangeListener?.onChange(false)
     }
 
     private fun getCorrectionIndex(): Int {
@@ -207,8 +222,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun startServiceToLoadData() {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(activity, UpdateApiDataService::class.java)
                 activity?.let {
+                    val intent = Intent(activity, UpdateApiDataService::class.java)
                     ContextCompat.startForegroundService(it, intent)
                 }
             }
@@ -219,7 +234,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
         if (withApiUpdate) {
             if (fromDB) {
                 swipe_container?.isRefreshing = true
-                skeletonScreen.notNull { it.hide() }
+                skeletonScreen.notNull {
+                    it.hide()
+                    setElevationListener()
+                }
             } else {
                 swipe_container?.isRefreshing = false
             }
@@ -228,6 +246,16 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.setNewData(assets)
+    }
+
+    private fun setElevationListener() {
+        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                presenter.enableElevation = recyclerView.computeVerticalScrollOffset() > 4
+                elevationAppBarChangeListener?.onChange(presenter.enableElevation)
+            }
+        })
     }
 
     override fun afterFailedLoadAssets() {
@@ -258,9 +286,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_sorting -> {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSortingPageEvent)
                 launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
             }
             R.id.action_your_address -> {
+                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()
             }
         }

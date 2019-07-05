@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.content.Intent
@@ -11,11 +16,13 @@ import android.view.ViewGroup
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
-import kotlinx.android.synthetic.main.menu_left_drawer.view.*
+import kotlinx.android.synthetic.main.content_menu_left_drawer.view.*
 import pers.victor.ext.*
 
 abstract class BaseDrawerActivity : BaseActivity() {
@@ -35,6 +42,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .addDragStateListener(object : DragStateListener {
                     override fun onDragEnd(isMenuOpened: Boolean) {
                         if (isMenuOpened) {
+                            analytics.trackEvent(AnalyticEvents.WavesMenuPageEvent)
                             view?.visiable()
                         } else {
                             view?.gone()
@@ -58,7 +66,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 }
                 .withMenuOpened(false)
                 .withSavedState(savedInstanceState)
-                .withMenuLayout(R.layout.menu_left_drawer)
+                .withMenuLayout(R.layout.content_menu_left_drawer)
                 .inject()
 
         toolbar.navigationIcon = drawerIcon
@@ -67,15 +75,42 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
         slidingRootNav.layout.text_site.paintFlags = slidingRootNav.layout.text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_FORUM) }
-        slidingRootNav.layout.text_whitepaper.click { openUrlWithIntent(Constants.URL_WHITEPAPER) }
-        slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
-        slidingRootNav.layout.text_support.click { openUrlWithChromeTab(Constants.SUPPORT_SITE) }
-        slidingRootNav.layout.image_discord.click { openDiscord(Constants.URL_DISCORD) }
-        slidingRootNav.layout.image_reddit.click { openReddit(Constants.URL_REDDIT) }
-        slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
-        slidingRootNav.layout.image_telegram.click { openTelegram(Constants.ACC_TELEGRAM) }
-        slidingRootNav.layout.image_twitter.click { openTwitter(Constants.ACC_TWITTER) }
+        slidingRootNav.layout.text_site.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuForumEvent)
+            openUrlWithChromeTab(Constants.URL_WAVES_FORUM)
+        }
+        slidingRootNav.layout.text_whitepaper.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuWhitepaperEvent)
+            openUrlWithIntent(Constants.URL_WHITEPAPER)
+        }
+        slidingRootNav.layout.text_terms.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuTermsAndConditionsEvent)
+            openUrlWithIntent(Constants.URL_TERMS)
+        }
+        slidingRootNav.layout.text_support.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuSupportEvent)
+            openUrlWithChromeTab(Constants.SUPPORT_SITE)
+        }
+        slidingRootNav.layout.image_discord.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuDiscordEvent)
+            openDiscord(Constants.URL_DISCORD)
+        }
+        slidingRootNav.layout.image_reddit.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuRedditEvent)
+            openReddit(Constants.URL_REDDIT)
+        }
+        slidingRootNav.layout.image_github.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuGithubEvent)
+            openUrlWithChromeTab(Constants.URL_GITHUB)
+        }
+        slidingRootNav.layout.image_telegram.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuTelegramEvent)
+            openTelegram(Constants.ACC_TELEGRAM)
+        }
+        slidingRootNav.layout.image_twitter.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuTwitterEvent)
+            openTwitter(Constants.ACC_TWITTER)
+        }
     }
 
     private fun createCloseView() {

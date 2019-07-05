@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
@@ -8,10 +13,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
-
-/**
- * Created by anonymous on 22.03.17.
- */
 
 class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPreferencesHelper: PreferencesHelper) {
     private lateinit var mActivity: BaseActivity

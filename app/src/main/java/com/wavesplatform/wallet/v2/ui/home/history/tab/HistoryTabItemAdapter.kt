@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.annotation.SuppressLint
@@ -18,7 +23,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
-import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import kotlinx.android.synthetic.main.item_history.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -31,9 +36,9 @@ class HistoryTabItemAdapter @Inject constructor() :
     lateinit var prefsUtil: PrefsUtil
 
     init {
-        addItemType(HistoryItem.TYPE_HEADER, R.layout.asset_header)
-        addItemType(HistoryItem.TYPE_DATA, R.layout.recycle_item_history)
-        addItemType(HistoryItem.TYPE_EMPTY, R.layout.layout_history_tab_header_space)
+        addItemType(HistoryItem.TYPE_HEADER, R.layout.content_asset_header)
+        addItemType(HistoryItem.TYPE_DATA, R.layout.item_history)
+        addItemType(HistoryItem.TYPE_EMPTY, R.layout.content_history_tab_header_space)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -127,6 +132,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.DATA_TYPE,
                             TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                             TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                            TransactionType.SCRIPT_INVOCATION_TYPE,
                             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text =
                                         mContext.getString(R.string.history_data_type_title)
@@ -147,7 +153,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                     }
 
                     if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
-                        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                        if (isSpam(item.data.assetId)) {
                             view.text_tag_spam.visiable()
                         } else {
                             if (isShowTicker(item.data.assetId)) {

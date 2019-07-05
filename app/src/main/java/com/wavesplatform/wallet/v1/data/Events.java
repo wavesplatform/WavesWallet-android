@@ -1,8 +1,9 @@
-package com.wavesplatform.wallet.v1.data;
-
-/**
- * Created by anonymous on 13.07.17.
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
  */
+
+package com.wavesplatform.wallet.v1.data;
 
 public class Events {
     public static class NeedUpdateDataAfterPlaceOrder {

@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.util
 
 import com.vicpin.krealmextensions.saveAll
@@ -17,7 +22,7 @@ class MigrationUtil @Inject constructor() {
 
     companion object {
 
-        const val VER_DB_WITHOUT_USER_DATA = 4L
+        const val VER_DB_WITHOUT_USER_DATA = 6L
         private const val VER_DB_NEW = -1L
         private const val KEY_AB_NAMES = "address_book_names"
         private const val KEY_AB_ADDRESSES = "address_book_addresses"

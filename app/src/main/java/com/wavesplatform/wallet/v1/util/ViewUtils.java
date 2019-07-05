@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.util;
 
 import android.app.Activity;
@@ -19,10 +24,6 @@ import java.lang.annotation.RetentionPolicy;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-
-/**
- * Created by adambennett on 29/07/2016.
- */
 
 public class ViewUtils {
 

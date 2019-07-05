@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import android.app.Activity
@@ -23,7 +28,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
+import kotlinx.android.synthetic.main.content_asset_card.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -158,8 +163,10 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         text_asset_name.text = assetBalance?.getName()
         text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
-        image_is_favourite.visiableIf {
-            assetBalance?.isFavorite!!
+        if (assetBalance?.isFavorite == true){
+            image_is_favorite.visiable()
+        }else{
+            image_is_favorite.gone()
         }
 
         text_asset.gone()

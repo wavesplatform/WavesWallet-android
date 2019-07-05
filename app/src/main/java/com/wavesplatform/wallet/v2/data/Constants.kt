@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data
 
 import com.vicpin.krealmextensions.queryFirst
@@ -11,6 +16,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguratio
 object Constants {
 
     // Production
+    const val URL_VERSION = "https://github-proxy.wvservices.com/" +
+            "wavesplatform/waves-client-config/master/version_android.json"
     const val URL_COINOMAT = "https://coinomat.com/api/"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Privacy%20Policy_SW.pdf"
@@ -66,6 +73,7 @@ object Constants {
     const val ID_SET_SPONSORSHIP_TYPE = 21
     const val ID_CANCEL_SPONSORSHIP_TYPE = 22
     const val ID_UPDATE_ASSET_SCRIPT_TYPE = 23
+    const val ID_SCRIPT_INVOCATION_TYPE = 24
 
     // Custom Result code
     const val RESULT_CANCELED = 404
@@ -76,45 +84,27 @@ object Constants {
     const val VERSION = 2
     const val WAVES_ASSET_ID_EMPTY = ""
     const val WAVES_ASSET_ID_FILLED = "WAVES"
-    const val ENABLE_VIEW = 1f
-    const val DISABLE_VIEW = 0.3f
 
-    val alphabetColor = hashMapOf(
-            Pair("a", R.color.a),
-            Pair("b", R.color.b),
-            Pair("c", R.color.c),
-            Pair("d", R.color.d),
-            Pair("e", R.color.e),
-            Pair("f", R.color.f),
-            Pair("g", R.color.g),
-            Pair("h", R.color.h),
-            Pair("i", R.color.i),
-            Pair("j", R.color.j),
-            Pair("k", R.color.k),
-            Pair("l", R.color.l),
-            Pair("m", R.color.m),
-            Pair("n", R.color.n),
-            Pair("o", R.color.o),
-            Pair("p", R.color.p),
-            Pair("q", R.color.q),
-            Pair("r", R.color.r),
-            Pair("s", R.color.s),
-            Pair("t", R.color.t),
-            Pair("u", R.color.u),
-            Pair("v", R.color.v),
-            Pair("w", R.color.w),
-            Pair("x", R.color.x),
-            Pair("y", R.color.y),
-            Pair("z", R.color.z),
-            Pair("persist", R.color.persist))
+    object View {
+        const val ENABLE_VIEW = 1f
+        const val DISABLE_VIEW = 0.3f
+        const val DEFAULT_ANIMATION_DURATION = 300L
+        const val FULL_VISIBILITY = 1f
+        const val FULL_GONE = 0f
+    }
+
+    val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
-    var MRTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+    var MrtGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
             gatewayId = "MRT", displayName = "MinersReward")
 
-    var WCTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+    var WctGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
+
+    var VstGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
+            gatewayId = "VST", displayName = "Vostok") // github returns gatewayId = "Vostok"
 
     fun find(assetId: String): AssetBalance? {
         return if (App.getAccessManager().getWallet() == null) {
@@ -124,9 +114,18 @@ object Constants {
         }
     }
 
+    fun findInConstantsGeneralAssets(ticker: String): AssetBalance? {
+        for (asset in listOf(MrtGeneralAsset, WctGeneralAsset, VstGeneralAsset)) {
+            if (asset.gatewayId.contains(ticker)) {
+                return find(asset.assetId)
+            }
+        }
+        return null
+    }
+
     fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
         for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
-            if (asset.gatewayId == gatewayId) {
+            if (asset.gatewayId.contains(gatewayId)) {
                 return find(asset.assetId)
             }
         }

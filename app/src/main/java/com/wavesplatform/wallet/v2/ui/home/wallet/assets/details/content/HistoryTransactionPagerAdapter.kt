@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 import android.graphics.Typeface
@@ -15,7 +20,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
-import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
+import kotlinx.android.synthetic.main.item_assets_detailed_history.view.*
 import pers.victor.ext.*
 
 class HistoryTransactionPagerAdapter constructor(
@@ -26,7 +31,7 @@ class HistoryTransactionPagerAdapter constructor(
     var items: List<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val layout = inflate(R.layout.assets_detailed_history_item, collection, false)
+        val layout = inflate(R.layout.item_assets_detailed_history, collection, false)
         val item = items[position]
 
         layout.card_transaction.click {
@@ -99,6 +104,7 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.DATA_TYPE,
                 TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                 TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                TransactionType.SCRIPT_INVOCATION_TYPE,
                 TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                     layout.text_transaction_value.setTypeface(null, Typeface.BOLD)
                     layout.text_transaction_value.text = layout.text_transaction_name.context

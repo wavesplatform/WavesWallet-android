@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import android.app.Activity
@@ -45,8 +50,8 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_asset_card.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
@@ -77,6 +82,7 @@ class SendActivity : BaseActivity(), SendView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
                 R.drawable.ic_toolbar_back_black)
+        presenter.feeAsset = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
@@ -175,13 +181,13 @@ class SendActivity : BaseActivity(), SendView {
         image_arrows.visiable()
         commission_card.click {
             val dialog = SponsoredFeeBottomSheetFragment()
-            dialog.configureData(presenter.feeAsset.assetId, presenter.feeWaves)
+            dialog.configureData(presenter.feeAsset?.assetId ?: "", presenter.feeWaves)
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
                 override fun onSelected(asset: AssetBalance, fee: Long) {
                     presenter.feeAsset = asset
                     presenter.fee = fee
 
-                    if (presenter.feeAsset.assetId.isWaves()) {
+                    if (presenter.feeAsset?.assetId?.isWaves() != false) {
                         text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
                         commission_asset_name_text.visiable()
                     } else {
@@ -216,7 +222,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setRecipientSuggestions() {
         val addressBook = layoutInflater
-                .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+                .inflate(R.layout.content_text_tag, null) as AppCompatTextView
         addressBook.text = getText(R.string.send_choose_from_address_book)
         addressBook.click {
             launchActivity<AddressBookActivity>(
@@ -239,7 +245,7 @@ class SendActivity : BaseActivity(), SendView {
         parametersForAddress.marginStart = ViewUtils.convertDpToPixel(4F, this).toInt()
         for (address in addresses) {
             val lastRecipient = layoutInflater
-                    .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+                    .inflate(R.layout.content_text_tag, null) as AppCompatTextView
             val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address) }
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
@@ -298,7 +304,8 @@ class SendActivity : BaseActivity(), SendView {
                 horizontal_amount_suggestion.gone()
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
-                        "${getScaledAmount(presenter.fee, presenter.feeAsset.getDecimals())} ${presenter.feeAsset.getName()}",
+                        "${getScaledAmount(
+                                presenter.fee, presenter.feeAsset?.getDecimals() ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
@@ -627,8 +634,10 @@ class SendActivity : BaseActivity(), SendView {
             text_asset_name.text = asset.getName()
             text_asset_value.text = asset.getDisplayAvailableBalance()
 
-            image_is_favourite.visiableIf {
-                asset.isFavorite
+            if (asset.isFavorite){
+                image_is_favorite.visiable()
+            }else{
+                image_is_favorite.gone()
             }
 
             container_asset.visiable()

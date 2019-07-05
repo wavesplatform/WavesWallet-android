@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import android.support.annotation.DrawableRes
@@ -56,6 +61,8 @@ enum class TransactionType(
             R.string.history_type_cancel_address_script),
     UPDATE_ASSET_SCRIPT_TYPE(Constants.ID_UPDATE_ASSET_SCRIPT_TYPE, R.drawable.ic_t_setassetscript_48,
             R.string.history_type_update_asset_script),
+    SCRIPT_INVOCATION_TYPE(Constants.ID_SCRIPT_INVOCATION_TYPE, R.drawable.ic_t_invocationscript_48,
+            R.string.history_type_script_invocation),
     UNRECOGNISED_TYPE(Constants.ID_UNRECOGNISED_TYPE, R.drawable.ic_t_undefined_48,
             R.string.history_type_unrecognised);
 
@@ -77,6 +84,7 @@ enum class TransactionType(
                     type == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
                     type == TransactionType.CANCEL_SPONSORSHIP_TYPE ||
                     type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE ||
+                    type == TransactionType.SCRIPT_INVOCATION_TYPE ||
                     type == TransactionType.EXCHANGE_TYPE)
         }
     }

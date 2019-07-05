@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
@@ -11,7 +16,7 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import kotlinx.android.synthetic.main.pass_code_entry_keyboard_layout.view.*
+import kotlinx.android.synthetic.main.content_pass_code_entry_keyboard_layout.view.*
 import pers.victor.ext.invisiable
 import pers.victor.ext.vibrator
 import pers.victor.ext.visiable
@@ -46,7 +51,7 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         gravity = Gravity.BOTTOM
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.pass_code_entry_keyboard_layout, this, true)
+        inflater.inflate(R.layout.content_pass_code_entry_keyboard_layout, this, true)
 
         button_fingerprint.visiableIf { isFingerprintAvailable }
 
@@ -147,12 +152,12 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         if (isEnable) {
             allButtons.forEach { button ->
                 button.isClickable = true
-                button.alpha = Constants.ENABLE_VIEW
+                button.alpha = Constants.View.ENABLE_VIEW
             }
         } else {
             allButtons.forEach { button ->
                 button.isClickable = false
-                button.alpha = Constants.DISABLE_VIEW
+                button.alpha = Constants.View.DISABLE_VIEW
             }
         }
     }

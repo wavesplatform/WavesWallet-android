@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -9,10 +14,10 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.util.icon
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.transactionType
-import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import kotlinx.android.synthetic.main.item_history.view.*
 import javax.inject.Inject
 
-class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<Transaction, BaseViewHolder>(R.layout.recycle_item_history, null) {
+class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<Transaction, BaseViewHolder>(R.layout.item_history, null) {
 
     override fun convert(helper: BaseViewHolder, item: Transaction) {
         helper.setGone(R.id.text_tag, true)

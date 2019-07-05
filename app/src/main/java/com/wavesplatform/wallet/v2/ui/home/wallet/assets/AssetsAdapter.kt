@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.support.v7.widget.RecyclerView
@@ -13,8 +18,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins
-import kotlinx.android.synthetic.main.wallet_asset_item.view.*
-import kotlinx.android.synthetic.main.wallet_header_item.view.*
+import kotlinx.android.synthetic.main.item_wallet_asset.view.*
+import kotlinx.android.synthetic.main.item_wallet_header.view.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import javax.inject.Inject
@@ -25,17 +30,19 @@ class AssetsAdapter @Inject constructor() :
     var scrollToHeaderListener: ScrollToHeaderListener? = null
 
     companion object {
-        val TYPE_HEADER = 0
-        val TYPE_ASSET = 1
-        val TYPE_HIDDEN_ASSET = 2
-        val TYPE_SPAM_ASSET = 3
+        const val TYPE_HEADER = 0
+        const val TYPE_ASSET = 1
+        const val TYPE_HIDDEN_ASSET = 2
+        const val TYPE_SPAM_ASSET = 3
+        const val TYPE_SEARCH = 4
     }
 
     init {
-        addItemType(TYPE_HEADER, R.layout.wallet_header_item)
-        addItemType(TYPE_ASSET, R.layout.wallet_asset_item)
-        addItemType(TYPE_HIDDEN_ASSET, R.layout.wallet_asset_item)
-        addItemType(TYPE_SPAM_ASSET, R.layout.wallet_asset_item)
+        addItemType(TYPE_HEADER, R.layout.item_wallet_header)
+        addItemType(TYPE_ASSET, R.layout.item_wallet_asset)
+        addItemType(TYPE_HIDDEN_ASSET, R.layout.item_wallet_asset)
+        addItemType(TYPE_SPAM_ASSET, R.layout.item_wallet_asset)
+        addItemType(TYPE_SEARCH, R.layout.item_wallet_asset_search)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -90,9 +97,7 @@ class AssetsAdapter @Inject constructor() :
                                 == App.getAccessManager().getWallet()?.address)
                         .setGone(R.id.text_tag_spam, item.isSpam)
 
-//                helper.itemView.image_asset_icon.isOval = true
                 helper.itemView.image_asset_icon.setAsset(item)
-
                 helper.itemView.text_asset_value.makeTextHalfBold()
             }
         }

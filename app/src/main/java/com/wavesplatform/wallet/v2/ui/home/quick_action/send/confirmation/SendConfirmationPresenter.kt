@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
@@ -41,6 +46,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var blockchainCommission = 0L
     var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
+    var success = false
+
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
@@ -80,6 +87,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                     .subscribe({ tx ->
                         tx.recipient = tx.recipient.parseAlias()
                         saveLastSentAddress(tx.recipient)
+                        success = true
                         viewState.onShowTransactionSuccess(tx)
                     }, {
                         if (it.errorBody()?.isSmartError() == true) {

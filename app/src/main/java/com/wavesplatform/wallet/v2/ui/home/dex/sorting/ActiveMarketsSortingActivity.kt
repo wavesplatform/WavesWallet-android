@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
 import android.content.Intent
@@ -21,8 +26,8 @@ import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
-import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.item_dex_active_markets_sorting.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
@@ -132,7 +137,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.dex_sorting_empty)
         return view
     }

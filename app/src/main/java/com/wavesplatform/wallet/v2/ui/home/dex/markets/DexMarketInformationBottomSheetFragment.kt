@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import android.os.Bundle
@@ -10,7 +15,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.dex_markets_info_bottom_sheet_dialog_layout.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_dialog_dex_markets_info_layout.view.*
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 
@@ -23,7 +28,7 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val rootView = inflater.inflate(R.layout.dex_markets_info_bottom_sheet_dialog_layout, container, false)
+        val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_dex_markets_info_layout, container, false)
 
         rootView.text_name.text = "${market?.amountAssetShortName} / ${market?.priceAssetShortName}"
 

@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 
 import android.os.Bundle
@@ -11,6 +16,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.SeedRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
@@ -112,6 +119,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         button_continue.click {
             if (presenter.simpleValidationAlertShown || isSimpleValidationPassed()) {
+                analytics.trackEvent(AnalyticEvents.StartImportManuallyEvent)
+
                 launchActivity<ProtectAccountActivity> {
                     putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                     putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())

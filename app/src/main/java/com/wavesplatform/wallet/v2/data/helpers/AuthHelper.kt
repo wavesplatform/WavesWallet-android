@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.RealmConfigStore
@@ -51,10 +56,13 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
     }
 
     private fun saveDefaultAssets() {
-        EnvironmentManager.defaultAssets.forEach {
-            val asset = queryFirst<AssetBalance> { equalTo("assetId", it.assetId) }
-            if (asset == null) {
-                it.save()
+        EnvironmentManager.defaultAssets.forEach { asset ->
+            val dbAsset = queryFirst<AssetBalance> { equalTo("assetId", asset.assetId) }
+            if (dbAsset == null) {
+                asset.save()
+            } else {
+                dbAsset.updateInfo(asset)
+                dbAsset.save()
             }
         }
         prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)

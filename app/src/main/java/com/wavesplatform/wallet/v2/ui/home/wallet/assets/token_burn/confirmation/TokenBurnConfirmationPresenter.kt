@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
 import com.arellomobile.mvp.InjectViewState
@@ -17,6 +22,8 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
     var amount: Double = 0.0
     var fee = 0L
 
+    var success = false
+
     fun burn() {
         val decimals = assetBalance!!.getDecimals()
         val quantity = if (amount == 0.0) {
@@ -34,6 +41,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
 
         addSubscription(nodeDataManager.burn(request)
                 .compose(RxUtil.applySchedulersToObservable()).subscribe({
+                    success = true
                     viewState.onShowBurnSuccess(it, quantity >= assetBalance?.balance ?: 0)
                 }, {
                     it.errorBody()?.let { error ->

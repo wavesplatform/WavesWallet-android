@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.history.filter.adapter
 
 import android.widget.ImageView
@@ -10,7 +15,7 @@ import com.wavesplatform.wallet.v2.util.setMargins
 import pers.victor.ext.dp2px
 import javax.inject.Inject
 
-class TransferAdapter @Inject constructor() : BaseQuickAdapter<TransferModel, BaseViewHolder>(R.layout.history_transfer_item, null) {
+class TransferAdapter @Inject constructor() : BaseQuickAdapter<TransferModel, BaseViewHolder>(R.layout.item_history_transfer, null) {
 
     override fun convert(helper: BaseViewHolder, item: TransferModel) {
 
