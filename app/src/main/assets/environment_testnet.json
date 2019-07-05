@@ -4,7 +4,8 @@
         "nodeUrl": "https://pool.testnet.wavesnodes.com",
         "dataUrl": "https://api.testnet.wavesplatform.com",
         "spamUrl": "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv",
-        "matcherUrl": "https://matcher.testnet.wavesnodes.com"
+        "matcherUrl": "https://matcher.testnet.wavesnodes.com",
+        "gatewayUrl": "https://gateways-dev.wvservices.com/api"
     },
     "scheme": "T",
     "generalAssets": [
@@ -12,100 +13,111 @@
             "assetId": "WAVES",
             "displayName": "Waves",
             "isFiat": false,
-            "isGateway" : false,
-            "wavesId" : "WAVES",
+            "isGateway": false,
+            "wavesId": "WAVES",
             "gatewayId": "WAVES",
-            "addressRegEx" : ""
+            "gatewayType": "",
+            "addressRegEx": ""
         },
         {
             "assetId": "DWgwcZTMhSvnyYCoWLRUXXSH1RSkzThXLJhww9gwkqdn",
             "displayName": "Bitcoin",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WBTC",
+            "isGateway": true,
+            "wavesId": "WBTC",
             "gatewayId": "BTC",
-            "addressRegEx" : "^[13][a-km-zA-HJ-NP-Z1-9]{33}"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^[13][a-km-zA-HJ-NP-Z1-9]{33}"
         },
         {
             "assetId": "BrmjyAWT5jjr3Wpsiyivyvg5vDuzoX2s93WgiexXetB3",
             "displayName": "Ethereum",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WETH",
+            "isGateway": true,
+            "wavesId": "WETH",
             "gatewayId": "ETH",
-            "addressRegEx" : "^0x[a-fA-F0-9]{40}$"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^0x[a-fA-F0-9]{40}$"
         },
         {
             "assetId": "D6N2rAqWN6ZCWnCeNFWLGqqjS6nJLeK4m19XiuhdDenr",
             "displayName": "US Dollar",
             "isFiat": true,
-            "isGateway" : true,
-            "wavesId" : "WUSD",
+            "isGateway": true,
+            "wavesId": "WUSD",
             "gatewayId": "USD",
+            "gatewayType": "coinomat",
             "addressRegEx": ""
         },
         {
             "assetId": "AsuWyM9MUUsMmWkK7jS48L3ky6gA1pxx7QtEYPbfLjAJ",
             "displayName": "Euro",
             "isFiat": true,
-            "isGateway" : true,
-            "wavesId" : "WEUR",
+            "isGateway": true,
+            "wavesId": "WEUR",
             "gatewayId": "EUR",
-            "addressRegEx" : ""
+            "gatewayType": "coinomat",
+            "addressRegEx": ""
         },
         {
             "assetId": "BNdAstuFogzSyN2rY3beJbnBYwYcu7RzTHFjW88g8roK",
             "displayName": "Litecoin",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WLTC",
+            "isGateway": true,
+            "wavesId": "WLTC",
             "gatewayId": "LTC",
-            "addressRegEx" : "^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$"
         },
         {
             "assetId": "CFg2KQfkUgUVM2jFCMC5Xh8T8zrebvPc4HjHPfAugU1S",
             "displayName": "Zcash",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WZEC",
+            "isGateway": true,
+            "wavesId": "WZEC",
             "gatewayId": "ZEC",
-            "addressRegEx" : "^t1[a-zA-Z0-9]{33}"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^t1[a-zA-Z0-9]{33}"
         },
         {
             "assetId": "8HT8tXwrXAYqwm8XrZ2hywWWTUAXxobHB5DakVC1y6jn",
             "displayName": "Bitcoin Cash",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WBCH",
+            "isGateway": true,
+            "wavesId": "WBCH",
             "gatewayId": "BCH",
-            "addressRegEx" : "^[13][a-km-zA-HJ-NP-Z1-9]{33}"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^[13][a-km-zA-HJ-NP-Z1-9]{33}"
         },
         {
             "assetId": "7itsmgdmomeTXvZzaaxqF3346h4FhciRoWceEw9asNV3",
             "displayName": "TRY",
             "isFiat": true,
-            "isGateway" : true,
-            "wavesId" : "WTRY",
+            "isGateway": true,
+            "wavesId": "WTRY",
             "gatewayId": "TRY",
-            "addressRegEx" : ""
+            "gatewayType": "coinomat",
+            "addressRegEx": ""
         },
         {
             "assetId": "DGgBtwVoXKAKKvV2ayUpSoPzTJxt7jo9KiXMJRzTH2ET",
             "displayName": "DASH",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WDASH",
+            "isGateway": true,
+            "wavesId": "WDASH",
             "gatewayId": "DASH",
-            "addressRegEx" : "^X[1-9A-HJ-NP-Za-km-z]{33}"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^X[1-9A-HJ-NP-Za-km-z]{33}"
         },
         {
             "assetId": "8oPbSCKFHkXBy1hCGSg9pJkSARE7zhTQTLpc8KZwdtr7",
             "displayName": "Monero",
             "isFiat": false,
-            "isGateway" : true,
-            "wavesId" : "WXMR",
+            "isGateway": true,
+            "wavesId": "WXMR",
             "gatewayId": "XMR",
-            "addressRegEx" : "^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}"
+            "gatewayType": "coinomat",
+            "addressRegEx": "^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}"
         }
     ]
 }

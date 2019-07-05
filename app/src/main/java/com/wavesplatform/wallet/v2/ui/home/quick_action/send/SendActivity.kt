@@ -21,6 +21,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -29,7 +30,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -198,7 +199,7 @@ class SendActivity : BaseActivity(), SendView {
                     text_amount_fee_error.text = getString(
                             R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
                             "${getScaledAmount(presenter.fee, asset.getDecimals())} ${asset.getName()}",
-                            presenter.gatewayCommission.toPlainString(),
+                            presenter.gatewayMetadata.fee.toPlainString(),
                             presenter.selectedAsset?.getName() ?: "")
                 }
             }
@@ -268,7 +269,7 @@ class SendActivity : BaseActivity(), SendView {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
             putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount.toPlainString())
-            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayCommission.toPlainString())
+            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayMetadata.fee.toPlainString())
             if (!presenter.attachment.isNullOrEmpty()) {
                 putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
             }
@@ -291,10 +292,10 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalance) {
-        if (presenter.type == SendPresenter.Type.GATEWAY) {
+        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
             val total = BigDecimal.valueOf(amount,
                     assetBalance.getDecimals())
-                    .minus(presenter.gatewayCommission)
+                    .minus(presenter.gatewayMetadata.fee)
             if (total.toFloat() > 0) {
                 edit_amount.setText(total.toString().stripZeros())
                 linear_fees_error.gone()
@@ -305,9 +306,10 @@ class SendActivity : BaseActivity(), SendView {
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
                         "${getScaledAmount(
-                                presenter.fee, presenter.feeAsset?.getDecimals() ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
-                        presenter.gatewayCommission.toPlainString(),
-                        assetBalance.getName() ?: "")
+                                presenter.fee, presenter.feeAsset?.getDecimals()
+                                ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
+                        presenter.gatewayMetadata.fee.toPlainString(),
+                        assetBalance.getName())
                 presenter.amount = BigDecimal.ZERO
             }
         } else if (presenter.type == SendPresenter.Type.WAVES &&
@@ -340,37 +342,20 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    override fun showXRate(xRate: XRate, ticker: String) {
+    override fun onLoadMetadataSuccess(metadata: GatewayMetadata, gatewayTicket: String?) {
         xRateSkeletonView?.hide()
 
-        val fee = if (xRate.feeOut == null) {
-            "-"
-        } else {
-            BigDecimal(xRate.feeOut).toString()
-        }
-
-        val inMin = if (xRate.inMin == null) {
-            "-"
-        } else {
-            BigDecimal(xRate.inMin).toString()
-        }
-
-        val inMax = if (xRate.inMax == null) {
-            "-"
-        } else {
-            BigDecimal(xRate.inMax).toString()
-        }
-
         gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
-                fee, ticker)
+                metadata.fee.toString(), gatewayTicket)
         gateway_limits?.text = getString(R.string.send_gateway_info_gateway_limits,
-                ticker, inMin, inMax)
+                gatewayTicket, metadata.minLimit, metadata.maxLimit)
         gateway_warning?.text = getString(R.string.send_gateway_info_gateway_warning,
-                ticker)
+                gatewayTicket)
+
         setRecipientValid(presenter.isRecipientValid())
     }
 
-    override fun showXRateError() {
+    override fun onLoadMetadataError() {
         xRateSkeletonView!!.hide()
         gateway_fee.text = getString(R.string.send_gateway_error_title)
         gateway_limits.text = getString(R.string.send_gateway_error_subtitle)
@@ -393,18 +378,27 @@ class SendActivity : BaseActivity(), SendView {
                     presenter.checkAlias(recipient)
                     relative_gateway_fee.gone()
                 }
-                SendPresenter.isWavesAddress(recipient) -> {
+                recipient.isValidWavesAddress() -> {
                     presenter.recipientAssetId = ""
                     presenter.type = SendPresenter.Type.WAVES
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
                 }
+                recipient.isValidVostokAddress() -> {
+                    presenter.recipientAssetId = EnvironmentManager.globalConfiguration.generalAssets
+                            .firstOrNull { it.assetId == presenter.selectedAsset?.assetId }?.assetId
+                    if (presenter.recipientAssetId.isNullOrEmpty()) {
+                        onNotValidAssetForAddress()
+                    } else {
+                        presenter.type = SendPresenter.Type.VOSTOK
+                        setRecipientValid(true)
+                        loadGatewayXRate(presenter.recipientAssetId!!)
+                    }
+                }
                 else -> {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
-                        presenter.type = SendPresenter.Type.UNKNOWN
-                        setRecipientValid(false)
-                        monero_layout.gone()
+                        onNotValidAssetForAddress()
                     } else {
                         if (presenter.recipientAssetId == presenter.selectedAsset?.assetId) {
                             setRecipientValid(true)
@@ -430,6 +424,12 @@ class SendActivity : BaseActivity(), SendView {
             amount_card.visiable()
             button_continue.isEnabled = true
         }
+    }
+
+    private fun onNotValidAssetForAddress() {
+        presenter.type = SendPresenter.Type.UNKNOWN
+        setRecipientValid(false)
+        monero_layout.gone()
     }
 
     private fun checkMonero(assetId: String?) {
@@ -533,6 +533,9 @@ class SendActivity : BaseActivity(), SendView {
                 when (resultCode) {
                     Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()
+                    }
+                    Activity.RESULT_OK -> {
+                        onBackPressed()
                     }
                 }
             }
@@ -655,7 +658,15 @@ class SendActivity : BaseActivity(), SendView {
                     asset.getMaxDigitsBeforeZero(),
                     asset.getDecimals(),
                     Double.MAX_VALUE))
+
+//            clearAddressField()
         }
+    }
+
+    private fun clearAddressField() {
+        edit_address.setText("")
+        presenter.recipient = ""
+        presenter.recipientAssetId = ""
     }
 
     private fun loadGatewayXRate(assetId: String) {
@@ -670,7 +681,7 @@ class SendActivity : BaseActivity(), SendView {
             } else {
                 xRateSkeletonView!!.show()
             }
-            presenter.loadXRate(assetId)
+            presenter.loadGatewayMetadata(assetId)
         } else {
             relative_gateway_fee.gone()
         }

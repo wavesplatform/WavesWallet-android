@@ -74,6 +74,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun transactionsBroadcast(tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest> {
+        tx.sign(getPrivateKey())
         return nodeService.transactionsBroadcast(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
