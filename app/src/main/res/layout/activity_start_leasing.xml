@@ -172,7 +172,7 @@
                             android:background="@color/accent100" />
 
                         <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/image_view_recipient_action"
+                            android:id="@+id/image_view_generator_action"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="?attr/selectableItemBackgroundBorderless"
