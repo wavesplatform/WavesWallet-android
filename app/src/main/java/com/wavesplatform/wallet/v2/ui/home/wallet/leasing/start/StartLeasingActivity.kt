@@ -66,7 +66,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         image_view_recipient_action.click {
-            IntentIntegrator(this).setRequestCode(REQUEST_SCAN_QR_CODE)
+            IntentIntegrator(this)
+                    .setRequestCode(REQUEST_SCAN_QR_CODE)
                     .setOrientationLocked(true)
                     .setBeepEnabled(false)
                     .setCaptureActivity(QrCodeScannerActivity::class.java)
@@ -245,7 +246,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_LEASING_CONFIRMATION -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        finish()
+                        onBackPressed()
                     }
                     Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()

@@ -23,6 +23,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
     var fee = 0L
 
     var success = false
+    var totalBurn = false
 
     fun burn() {
         val decimals = assetBalance!!.getDecimals()
@@ -42,7 +43,8 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
         addSubscription(nodeDataManager.burn(request)
                 .compose(RxUtil.applySchedulersToObservable()).subscribe({
                     success = true
-                    viewState.onShowBurnSuccess(it, quantity >= assetBalance?.balance ?: 0)
+                    totalBurn = quantity >= assetBalance?.balance ?: 0
+                    viewState.onShowBurnSuccess(it, totalBurn)
                 }, {
                     it.errorBody()?.let { error ->
                         if (error.isSmartError()) {

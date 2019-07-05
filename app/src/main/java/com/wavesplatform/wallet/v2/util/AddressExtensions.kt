@@ -33,6 +33,24 @@ fun String?.isValidWavesAddress(): Boolean {
     }
 }
 
+fun String?.isValidVostokAddress(): Boolean {
+    if (this.isNullOrEmpty()) return false
+    return try {
+        val bytes = Base58.decode(this)
+        if (bytes.size == AddressLength &&
+                bytes[0] == AddressVersion &&
+                bytes[1] == EnvironmentManager.vostokNetCode) {
+            val checkSum = Arrays.copyOfRange(bytes, bytes.size - ChecksumLength, bytes.size)
+            val checkSumGenerated = calcCheckSum(Arrays.copyOf(bytes, bytes.size - ChecksumLength))
+            Arrays.equals(checkSum, checkSumGenerated)
+        } else {
+            false
+        }
+    } catch (e: Exception) {
+        false
+    }
+}
+
 fun String.isAlias(): Boolean {
     return this.contains("alias")
 }

@@ -15,32 +15,41 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
+import com.wavesplatform.wallet.v2.util.makeAsAlias
 import com.wavesplatform.wallet.v2.util.parseAlias
 import java.nio.charset.Charset
 
 class TransactionsBroadcastRequest(
-    @SerializedName("assetId") var assetId: String,
-    @SerializedName("senderPublicKey") var senderPublicKey: String,
-    @SerializedName("recipient") var recipient: String,
-    @SerializedName("amount") var amount: Long,
-    @SerializedName("timestamp") var timestamp: Long,
-    @SerializedName("fee") var fee: Long,
-    @SerializedName("attachment") var attachment: String?,
-    @SerializedName("feeAssetId") var feeAssetId: String? = ""
+        @SerializedName("assetId") var assetId: String,
+        @SerializedName("senderPublicKey") var senderPublicKey: String,
+        @SerializedName("recipient") var recipient: String,
+        @SerializedName("amount") var amount: Long,
+        @SerializedName("timestamp") var timestamp: Long,
+        @SerializedName("fee") var fee: Long,
+        @SerializedName("attachment") var attachment: String?,
+        @SerializedName("feeAssetId") var feeAssetId: String? = "",
+        @SerializedName("sender") var sender: String? = ""
 ) {
 
     @SerializedName("type")
     val type: Int = 4
     @SerializedName("version")
-    val version: Int = Constants.VERSION
+    var version: Int = Constants.VERSION
+    @Transient
+    var scheme: Byte = EnvironmentManager.netCode
     @SerializedName("proofs")
     var proofs = arrayOf("")
     @SerializedName("signature")
-    var signature: String = ""
-    @SerializedName("sender")
-    var sender: String? = ""
+    var signature: String? = null
     @SerializedName("id")
-    var id: String? = ""
+    var id: String? = null
+
+    private fun checkAliasAndAttachment() {
+        attachment = Base58.encode((attachment ?: "").toByteArray())
+        if (recipient.length <= 30) {
+            recipient = recipient.makeAsAlias()
+        }
+    }
 
     private fun toSignBytes(): ByteArray {
         recipient = recipient.parseAlias()
@@ -54,7 +63,7 @@ class TransactionsBroadcastRequest(
                     Longs.toByteArray(amount),
                     Longs.toByteArray(fee),
                     getRecipientBytes(recipient),
-                    SignUtil.arrayWithSize(Base58.encode((attachment ?: "").toByteArray())))
+                    SignUtil.arrayWithSize(attachment))
         } catch (e: Exception) {
             Log.e("Wallet", "Couldn't create transaction sign", e)
             ByteArray(0)
@@ -63,17 +72,20 @@ class TransactionsBroadcastRequest(
 
     private fun getRecipientBytes(recipient: String): ByteArray {
         return if (recipient.length <= 30) {
-            Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(EnvironmentManager.netCode),
-                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+            Bytes.concat(byteArrayOf(version.toByte()),
+                    byteArrayOf(scheme),
+                    recipient.toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)
         }
     }
 
     fun sign(privateKey: ByteArray) {
-        signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
-        proofs[0] = signature
+        checkAliasAndAttachment()
+
+        val signedBytes = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
+        proofs[0] = signedBytes
+        signature = signedBytes
     }
 
     companion object {

@@ -22,6 +22,8 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.fragment_wallet.info_alert
+import kotlinx.android.synthetic.main.fragment_wallet.view.*
 import javax.inject.Inject
 
 
@@ -70,7 +72,7 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     private fun setupUI() {
-        viewpager_wallet.offscreenPageLimit = 2
+        viewpager_wallet.offscreenPageLimit = 3
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
 
