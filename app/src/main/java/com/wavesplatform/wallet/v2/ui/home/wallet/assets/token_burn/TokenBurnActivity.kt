@@ -63,7 +63,10 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             edit_amount.setText(presenter.assetBalance.getDisplayAvailableBalance().clearBalance())
         }
 
-        edit_amount.applyFilterStartWithDot()
+        edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                presenter.assetBalance.getMaxDigitsBeforeZero(),
+                presenter.assetBalance.getDecimals(),
+                Double.MAX_VALUE))
 
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()

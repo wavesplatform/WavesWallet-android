@@ -84,7 +84,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
         }
 
-        edit_amount.applyFilterStartWithDot()
+        edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                Constants.wavesAssetInfo.getMaxDigitsBeforeZero(),
+                Constants.wavesAssetInfo.precision,
+                Double.MAX_VALUE))
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .skipInitialValue()
