@@ -1,6 +1,7 @@
 package com.wavesplatform.sdk.utils
 
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.crypto.WavesCrypto
 
 /**
  * Settings for work of SDK with nodes and other Waves net-services.
@@ -17,18 +18,18 @@ class Environment(
     @SerializedName("matcherUrl")
     var matcherUrl: String = ""
     @SerializedName("scheme")
-    var chainId: Byte = 'W'.toByte()
+    var chainId: Byte = WavesCrypto.MAIN_NET_CHAIN_ID
 
     init {
         when (server) {
             Server.MainNet -> {
-                this.chainId = 'W'.toByte()
+                this.chainId = WavesCrypto.MAIN_NET_CHAIN_ID
                 this.dataUrl = WavesConstants.URL_DATA
                 this.nodeUrl = WavesConstants.URL_NODE
                 this.matcherUrl = WavesConstants.URL_MATCHER
             }
             Server.TestNet -> {
-                this.chainId = 'T'.toByte()
+                this.chainId = WavesCrypto.TEST_NET_CHAIN_ID
                 this.dataUrl = WavesConstants.URL_DATA_TEST
                 this.nodeUrl = WavesConstants.URL_NODE_TEST
                 this.matcherUrl = WavesConstants.URL_MATCHER_TEST

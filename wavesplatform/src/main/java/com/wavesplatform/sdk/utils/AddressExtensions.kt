@@ -42,10 +42,6 @@ fun String.parseAlias(): String {
     return this.substringAfterLast(":")
 }
 
-fun String.clearAlias(): String {
-    return this.substringAfterLast(":")
-}
-
 fun calcCheckSum(bytes: ByteArray): ByteArray {
     return Arrays.copyOfRange(Hash.keccak(bytes), 0, CHECK_SUM_LENGTH)
 }

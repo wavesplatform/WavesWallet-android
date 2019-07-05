@@ -9,15 +9,9 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
 import com.wavesplatform.sdk.utils.SignUtil
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.parseAlias
-import java.nio.charset.Charset
 
 /**
  * Transfer transaction sends amount of asset on address.
@@ -42,9 +36,9 @@ class TransferTransaction(
      */
     fee: Long,
     /**
-     * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string encoded in Base58
+     * Additional info [0,140] bytes of string encoded in Base58
      */
-    @SerializedName("attachment") var attachment: String?,
+    @SerializedName("attachment") var attachment: String,
     /**
      * Asset id instead Waves for transaction commission withdrawal
      */
@@ -57,6 +51,7 @@ class TransferTransaction(
 
     override fun toBytes(): ByteArray {
         recipient = recipient.parseAlias()
+
         return try {
             Bytes.concat(
                 byteArrayOf(type.toByte()),
@@ -67,8 +62,8 @@ class TransferTransaction(
                 Longs.toByteArray(timestamp),
                 Longs.toByteArray(amount),
                 Longs.toByteArray(fee),
-                getRecipientBytes(recipient),
-                SignUtil.arrayWithSize(Base58.encode((attachment ?: "").toByteArray()))
+                SignUtil.recipientBytes(recipient, version.toByte(), chainId),
+                SignUtil.attachmentBytes(attachment)
             )
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Transfer Transaction", e)
@@ -92,17 +87,5 @@ class TransferTransaction(
         }
 
         const val MAX_ATTACHMENT_SIZE = 140
-
-        fun getRecipientBytes(recipient: String): ByteArray {
-            return if (recipient.length <= 30) {
-                Bytes.concat(
-                    byteArrayOf(WavesConstants.VERSION.toByte()),
-                    byteArrayOf(WavesSdk.getEnvironment().chainId),
-                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize()
-                )
-            } else {
-                Base58.decode(recipient)
-            }
-        }
     }
 }

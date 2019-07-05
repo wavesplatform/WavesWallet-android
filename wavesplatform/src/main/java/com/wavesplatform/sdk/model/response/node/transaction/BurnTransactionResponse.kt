@@ -11,6 +11,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class BurnTransactionResponse(@SerializedName("assetId")
                               val assetId: String = "",
-                              @SerializedName("quantity")
-                              var quantity: Long = 0)
+                              @SerializedName("amount")
+                              var amount: Long = 0)
     : BaseTransactionResponse(type = BaseTransaction.BURN), Parcelable

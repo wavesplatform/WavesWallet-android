@@ -7,10 +7,9 @@ import com.google.common.primitives.Longs
 import com.google.common.primitives.Shorts
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.TransferTransaction.Companion.MAX_ATTACHMENT_SIZE
 import com.wavesplatform.sdk.utils.SignUtil
-import com.wavesplatform.sdk.utils.arrayWithSize
+import com.wavesplatform.sdk.utils.SignUtil.attachmentBytes
 import kotlinx.android.parcel.Parcelize
 
 
@@ -29,28 +28,30 @@ import kotlinx.android.parcel.Parcelize
  * 0.001 + 0.0005 × N, N is the number of transfers inside of a transaction
  */
 class MassTransferTransaction(
-        /**
-         * Id of transferable asset in Waves blockchain, different for main and test net
-         */
-        @SerializedName("assetId") var assetId: String?,
-        /**
-         * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string encoded in Base58
-         */
-        @SerializedName("attachment") var attachment: String,
-        /**
-         * Collection of recipients with amount each
-         */
-        @SerializedName("transfers") var transfers: List<Transfer> = mutableListOf())
-    : BaseTransaction(MASS_TRANSFER) {
+    /**
+     * Id of transferable asset in Waves blockchain, different for main and test net
+     */
+    @SerializedName("assetId") var assetId: String?,
+    /**
+     * Additional info [0,[MAX_ATTACHMENT_SIZE]] bytes of string encoded in Base58
+     */
+    @SerializedName("attachment") var attachment: String,
+    /**
+     * Collection of recipients with amount each
+     */
+    @SerializedName("transfers") var transfers: List<Transfer> = mutableListOf()
+) : BaseTransaction(MASS_TRANSFER) {
 
     /**
      * Total count of transfers, optional
      */
-    @SerializedName("transferCount") var transferCount: Int = 0
+    @SerializedName("transferCount")
+    var transferCount: Int = 0
     /**
      * Total amount of transfers, optional
      */
-    @SerializedName("totalAmount") var totalAmount: Long? = null
+    @SerializedName("totalAmount")
+    var totalAmount: Long? = null
 
     override fun sign(seed: String): String {
         version = 1
@@ -67,14 +68,16 @@ class MassTransferTransaction(
         }
 
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
-                    Base58.decode(senderPublicKey),
-                    assetIdArray,
-                    transfersArray(),
-                    Longs.toByteArray(timestamp),
-                    Longs.toByteArray(fee),
-                    WavesCrypto.base58decode(attachment).arrayWithSize())
+            Bytes.concat(
+                byteArrayOf(type.toByte()),
+                byteArrayOf(version.toByte()),
+                Base58.decode(senderPublicKey),
+                assetIdArray,
+                transfersArray(),
+                Longs.toByteArray(timestamp),
+                Longs.toByteArray(fee),
+                attachmentBytes(attachment)
+            )
         } catch (e: Exception) {
             Log.e("Sign", "Can't create bytes for sign in Mass Transfer Transaction", e)
             ByteArray(0)
@@ -84,7 +87,7 @@ class MassTransferTransaction(
     private fun transfersArray(): ByteArray {
         var recipientAmountChainArray = byteArrayOf()
         for (transfer in transfers) {
-            val recipient = TransferTransaction.getRecipientBytes(transfer.recipient)
+            val recipient = SignUtil.recipientBytes(transfer.recipient, version.toByte(), chainId)
             val amount = Longs.toByteArray(transfer.amount)
             recipientAmountChainArray = Bytes.concat(recipientAmountChainArray, recipient, amount)
         }
@@ -92,14 +95,18 @@ class MassTransferTransaction(
         return Bytes.concat(lengthBytes, recipientAmountChainArray)
     }
 
+    /**
+     * The item of the Mass-transfer transaction
+     */
     @Parcelize
     class Transfer(
-            /**
-             * Address or alias of Waves blockchain
-             */
-            @SerializedName("recipient") var recipient: String = "",
-            /**
-             * Amount of asset in satoshi
-             */
-            @SerializedName("amount") var amount: Long = 0L) : Parcelable
+        /**
+         * Address or alias of Waves blockchain
+         */
+        @SerializedName("recipient") var recipient: String = "",
+        /**
+         * Amount of asset in satoshi
+         */
+        @SerializedName("amount") var amount: Long = 0L
+    ) : Parcelable
 }

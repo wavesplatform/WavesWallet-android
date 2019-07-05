@@ -51,7 +51,7 @@ open class AssetBalanceResponse(
 
     fun getDecimals(): Int {
         return if (issueTransaction != null) {
-            issueTransaction?.decimals ?: 8
+            issueTransaction!!.decimals ?: 8
         } else {
             8
         }

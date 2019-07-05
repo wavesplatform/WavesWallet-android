@@ -200,7 +200,7 @@ open class HistoryTransactionResponse(
             return if (transaction.recipient.isNullOrEmpty()) {
                 ""
             } else {
-                "Recipient: ${transaction.recipient.clearAlias()}\n"
+                "Recipient: ${transaction.recipient.parseAlias()}\n"
             }
         }
 

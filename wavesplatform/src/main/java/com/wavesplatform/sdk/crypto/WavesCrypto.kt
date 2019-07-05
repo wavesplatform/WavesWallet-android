@@ -156,8 +156,8 @@ interface WavesCrypto {
         const val PRIVATE_KEY_LENGTH = 32
         const val SIGNATURE_LENGTH = 64
 
-        const val MAIN_NET_CHAIN_ID = 87
-        const val TEST_NET_CHAIN_ID = 84
+        const val MAIN_NET_CHAIN_ID: Byte = 87
+        const val TEST_NET_CHAIN_ID: Byte = 84
 
         override fun blake2b(input: Bytes): Bytes {
             return Hash.blake2b(input)

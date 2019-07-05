@@ -47,7 +47,7 @@ class InvokeScriptTransaction(
                 byteArrayOf(version.toByte()),
                 byteArrayOf(chainId),
                 Base58.decode(senderPublicKey),
-                TransferTransaction.getRecipientBytes(dApp),
+                SignUtil.recipientBytes(dApp, version.toByte(), chainId),
                 functionCallArray(),
                 paymentsArray(), // now it works with only one
                 Longs.toByteArray(fee),
@@ -183,8 +183,8 @@ class InvokeScriptTransaction(
          * Argument value can be one of four types:
          * [Long] for integer(0),
          * [Boolean] for boolean(1),
-         * [String] for binary(2)
-         * and [String] string(3). You can use "base64:binaryString" and just "binaryString". Can't be empty string
+         * [String] for binary(2) You can use "base64:binaryString" and just "binaryString". Can't be empty string
+         * and [String] string(3).
          *
          * And it depends on type.
          */

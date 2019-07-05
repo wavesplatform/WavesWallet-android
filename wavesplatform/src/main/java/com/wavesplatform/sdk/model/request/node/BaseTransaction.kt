@@ -21,7 +21,7 @@ abstract class BaseTransaction(
     var senderPublicKey: String = ""
 
     /**
-     * Unix time of sending of transaction to blockchain, must be in current time +/- half of hour
+     * Unix time of sending of transaction to blockchain, must be in current time +/- 1.5 hour
      */
     @SerializedName("timestamp")
     var timestamp: Long = 0L
@@ -36,7 +36,7 @@ abstract class BaseTransaction(
 
     /**
      * Version number of the data structure of the transaction.
-     * The value has to be equal to [WavesConstants.VERSION]
+     * The value has to be equal to 1, 2 or 3
      */
     @SerializedName("version")
     var version: Int = WavesConstants.VERSION
@@ -61,8 +61,8 @@ abstract class BaseTransaction(
 
     /**
      * Determines the network where the transaction will be published to.
-     * [WavesCrypto.TEST_NET_CHAIN_ID] for test network,
-     * [WavesCrypto.MAIN_NET_CHAIN_ID] for main network
+     * T or 84 in bytes for test network,
+     * W or 87 in for main network
      */
     @SerializedName("chainId")
     var chainId: Byte = WavesSdk.getEnvironment().chainId
