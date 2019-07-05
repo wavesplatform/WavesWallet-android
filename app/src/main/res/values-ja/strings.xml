@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">私たちは常にWavesウォレットをより良く、そしてより便利にするために改善を繰り返しています。新しい機能にアクセスするためにアプリを更新してください。</string>
   <string name="search_asset_hidden_title">非表示のトークン</string>
   <string name="my_orders_details_filled_hint">約定</string>
+  <string name="wallet_sorting_hidden_section">非表示のトークン</string>
+  <string name="wallet_sorting_favorite_empty">お気に入りにトークンが登録されていません</string>
+  <string name="wallet_sorting_default_empty">トークンのリストが空です</string>
+  <string name="wallet_sorting_hidden_empty">非表示リストにトークンが登録されていません</string>
 </resources>

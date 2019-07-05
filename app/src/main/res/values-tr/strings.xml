@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">Waves cüzdanını daha iyi ve daha kullaşılı yapmak için çalışıyoruz. Yeni özellikler için uygulamayı güncelleyin.</string>
   <string name="search_asset_hidden_title">Gizlenmiş tokenler</string>
   <string name="my_orders_details_filled_hint">Doldurulan</string>
+  <string name="wallet_sorting_hidden_section">Gizlenmiş tokenler</string>
+  <string name="wallet_sorting_favorite_empty">Sık kullanılanlara herhangi bir token eklemediniz</string>
+  <string name="wallet_sorting_default_empty">Token listesi boş</string>
+  <string name="wallet_sorting_hidden_empty">Herhangi bir token gizlemediniz</string>
 </resources>

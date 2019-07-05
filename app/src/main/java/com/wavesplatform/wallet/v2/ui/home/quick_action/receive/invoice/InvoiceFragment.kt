@@ -111,10 +111,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         text_asset_name.text = assetBalance.getName()
         text_asset_value.text = assetBalance.getDisplayAvailableBalance()
 
-        image_is_favourite.visibility = if (assetBalance.isFavorite) {
-            View.VISIBLE
-        } else {
-            View.GONE
+        if (assetBalance.isFavorite){
+            image_is_favorite.visiable()
+        }else{
+            image_is_favorite.gone()
         }
 
         edit_amount.applyFilterStartWithDot()

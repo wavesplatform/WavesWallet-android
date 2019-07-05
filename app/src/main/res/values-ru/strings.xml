@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">Мы постоянно работаем над тем, чтобы сделать Waves Wallet лучше и полезнее. Пожалуйста, обновите приложение и получите доступ к новым функциям.</string>
   <string name="search_asset_hidden_title">Скрытые токены</string>
   <string name="my_orders_details_filled_hint">Исполнено</string>
+  <string name="wallet_sorting_hidden_section">Скрытые токены</string>
+  <string name="wallet_sorting_favorite_empty">Вы не добавили токены в избранное</string>
+  <string name="wallet_sorting_default_empty">Список токенов пуст</string>
+  <string name="wallet_sorting_hidden_empty">Вы не добавляли токены в скрытое</string>
 </resources>

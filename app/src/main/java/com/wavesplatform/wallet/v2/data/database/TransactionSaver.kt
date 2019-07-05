@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.database
 
+import android.util.Log
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
@@ -20,6 +21,7 @@ import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import timber.log.Timber
 import javax.inject.Inject
 
 @Deprecated("Temp class for saving transactions, should refactor")
@@ -128,7 +130,7 @@ class TransactionSaver @Inject constructor() {
 
         subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
+                .subscribe ({
                     mergeAndSaveAllAssets(ArrayList(it)) { assetsInfo ->
                         transactions.forEach { trans ->
                             if (trans.assetId.isNullOrEmpty()) {
@@ -244,7 +246,9 @@ class TransactionSaver @Inject constructor() {
                             rxEventBus.post(Events.NeedUpdateHistoryScreen())
                         }
                     }
-                })
+                }, {
+                    it.printStackTrace()
+                }))
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {

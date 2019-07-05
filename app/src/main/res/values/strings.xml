@@ -679,4 +679,8 @@
     <string name="trade_order_dialog_negative_cancel">Cancel</string>
 
 
+    <string name="wallet_sorting_hidden_section">Hidden tokens</string>
+    <string name="wallet_sorting_favorite_empty">You didn\'t add tokens in favorite</string>
+    <string name="wallet_sorting_default_empty">The list of tokens is empty</string>
+    <string name="wallet_sorting_hidden_empty">You didn\'t add tokens in hidden</string>
 </resources>
