@@ -661,8 +661,7 @@ fun AssetBalance.getMaxDigitsBeforeZero(): Int {
 }
 
 fun loadDbWavesBalance(): AssetBalance {
-    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
-            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun getDeviceId(): String {
@@ -678,7 +677,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ResponseBody.clone(): ResponseBody {
-    var bufferClone = this.source().buffer()?.clone()
+    val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
 }
 
