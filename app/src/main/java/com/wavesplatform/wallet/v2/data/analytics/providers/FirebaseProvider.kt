@@ -15,7 +15,8 @@ class FirebaseProvider(private val context: Context) : ProviderType {
 
     override fun log(eventName: String, parameters: HashMap<String, Any>) {
         try {
-            FirebaseAnalytics.getInstance(context).logEvent(eventName, parameters.toBundle())
+            val event = eventName.replace(" ", "_") // need to replace space to underscore for Firebase
+            FirebaseAnalytics.getInstance(context).logEvent(event, parameters.toBundle())
         } catch (e: Exception) {
             Timber.d(e)
         }

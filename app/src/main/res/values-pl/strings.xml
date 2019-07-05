@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">Nieustannie pracujemy nad tym, aby Waves Wallet był lepszy i bardziej przydatny. Zaktualizuj swoją aplikację, aby uzyskać dostęp do nowych funkcji.</string>
   <string name="search_asset_hidden_title">Ukryte tokeny</string>
   <string name="my_orders_details_filled_hint">Wypełnione</string>
+  <string name="wallet_sorting_hidden_section">Ukryte tokeny</string>
+  <string name="wallet_sorting_favorite_empty">Nie dodałeś żetonów do ulubionych</string>
+  <string name="wallet_sorting_default_empty">Lista tokenów jest pusta</string>
+  <string name="wallet_sorting_hidden_empty">Nie dodałeś tokenów w ukrytej formie</string>
 </resources>

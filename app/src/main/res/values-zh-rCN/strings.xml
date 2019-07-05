@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">我们一直致力于使Waves Wallet变得更好，更实用。请更新您的应用以获取对新功能的访问权限。</string>
   <string name="search_asset_hidden_title">隐藏的代币</string>
   <string name="my_orders_details_filled_hint">已填</string>
+  <string name="wallet_sorting_hidden_section">隐藏的代币</string>
+  <string name="wallet_sorting_favorite_empty">您没有在收藏夹中添加代币</string>
+  <string name="wallet_sorting_default_empty">代币列表为空</string>
+  <string name="wallet_sorting_hidden_empty">您没有在隐藏中添加代币</string>
 </resources>

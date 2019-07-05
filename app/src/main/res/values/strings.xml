@@ -666,17 +666,13 @@
     <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
     <string name="search_asset_hidden_title">Hidden tokens</string>
     <string name="my_orders_details_filled_hint">Filled</string>
-
     <string name="wallet_sorting_hidden_section">Hidden assets</string>
     <string name="wallet_sorting_favorite_empty">You didn\'t add assets in favorite</string>
     <string name="wallet_sorting_default_empty">The list of assets is empty</string>
     <string name="wallet_sorting_hidden_empty">You didn\'t add assets in hidden</string>
-
     <string name="trade_order_dialog_title_attention">Attention!</string>
     <string name="trade_order_dialog_subtitle_price_highter_market">You order price is 5% higher than the latest market price</string>
     <string name="trade_order_dialog_subtitle_price_lower_market">You order price is 5% lower than the latest market price</string>
     <string name="trade_order_dialog_positive_place_order">Place Order</string>
     <string name="trade_order_dialog_negative_cancel">Cancel</string>
-
-
 </resources>
