@@ -78,6 +78,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransactionResponse> {
+        tx.sign(App.getAccessManager().getWallet().seedStr)
         return nodeService.transactionsBroadcast(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())

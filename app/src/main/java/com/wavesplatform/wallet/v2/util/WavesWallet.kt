@@ -122,5 +122,9 @@ class WavesWallet(val seed: ByteArray) {
         fun getPublicKeyStr(): String {
             return instance?.publicKeyStr ?: ""
         }
+
+        fun getPrivateKey(): ByteArray {
+            return instance?.privateKey ?: byteArrayOf()
+        }
     }
 }

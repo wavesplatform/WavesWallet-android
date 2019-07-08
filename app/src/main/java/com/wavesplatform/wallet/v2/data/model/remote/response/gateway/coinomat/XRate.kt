@@ -1,13 +1,13 @@
 /*
- * Created by Ershov Aleksandr on 1/4/2019
+ * Created by Eduard Zaydel on 1/4/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.model.service.coinomat
+package com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat
 
 import com.google.gson.annotations.SerializedName
 
-data class XRateResponse(
+data class XRate(
     @SerializedName("xrate") var xrate: String? = null,
     @SerializedName("in_min") var inMin: String? = null,
     @SerializedName("in_def") var inDef: String? = null,

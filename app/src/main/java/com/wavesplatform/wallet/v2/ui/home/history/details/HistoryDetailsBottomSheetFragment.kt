@@ -24,7 +24,7 @@ import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.sdk.model.response.node.TransferResponse
-import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
+import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig

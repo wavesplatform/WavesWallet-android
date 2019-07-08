@@ -7,22 +7,19 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
-import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.*
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants.coinomatCryptoCurrencies
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayWithdrawArgs
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.executeInBackground
 import com.wavesplatform.wallet.v2.util.find
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -31,7 +28,7 @@ import javax.inject.Inject
 class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfirmationView>() {
 
     @Inject
-    lateinit var coinomatServiceManager: CoinomatServiceManager
+    lateinit var gatewayProvider: GatewayProvider
 
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
@@ -46,46 +43,57 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     var success = false
 
-    fun confirmSend() {
-        val singed = signTransaction()
-        if (singed != null) {
-            submitPayment(singed)
+    fun confirmWithdrawTransaction() {
+        val transaction = getTxRequest()
+        when (type) {
+            SendPresenter.Type.GATEWAY -> makeWithdrawViaGateway(transaction)
+            else -> {
+                makeWithdrawViaWavesBlockchain(transaction)
+            }
         }
     }
 
-    private fun signTransaction(): TransferTransaction? {
-        val signed = getTxRequest()
-        signed.sign(App.getAccessManager().getWallet().seedStr)
-        return signed
+    private fun makeWithdrawViaWavesBlockchain(transaction: TransferTransaction) {
+        addSubscription(nodeServiceManager.transactionsBroadcast(transaction)
+                .executeInBackground()
+                .subscribe({ tx ->
+                    tx.recipient = tx.recipient.parseAlias()
+                    saveLastSentAddress(tx.recipient)
+                    success = true
+                    viewState.onShowTransactionSuccess(tx)
+                }, {
+                    if (it.errorBody()?.isSmartError() == true) {
+                        viewState.failedSendCauseSmart()
+                    } else {
+                        viewState.onShowError(R.string.transaction_failed)
+                    }
+                }))
     }
 
-    private fun submitPayment(signedTransaction: TransferTransaction) {
-        if (type == SendPresenter.Type.GATEWAY) {
-            createGateAndPayment()
+    private fun makeWithdrawViaGateway(transaction: TransferTransaction) {
+        addSubscription(gatewayProvider.getGatewayDataManager(transaction.assetId)
+                .makeWithdraw(GatewayWithdrawArgs(transaction, selectedAsset, moneroPaymentId))
+                .executeInBackground()
+                .subscribe({ tx ->
+                    success = true
+                    viewState.onShowTransactionSuccess(tx)
+                }, {
+                    if (it.errorBody()?.isSmartError() == true) {
+                        viewState.failedSendCauseSmart()
+                    } else {
+                        viewState.onShowError(R.string.transaction_failed)
+                    }
+                }))
+    }
+
+    fun getTicker(): String {
+        return if (assetInfo == null) {
+            ""
+        } else if (assetInfo!!.ticker.equals(null) ||
+                assetInfo!!.ticker.equals("")) {
+            assetInfo!!.name
         } else {
-            checkRecipientAlias(signedTransaction)
-            addSubscription(nodeServiceManager.transactionsBroadcast(signedTransaction)
-                    .compose(RxUtil.applySchedulersToObservable())
-                    .subscribe({ tx ->
-                        tx.recipient = tx.recipient.parseAlias()
-                        saveLastSentAddress(tx.recipient)
-                        success = true
-                        viewState.onShowTransactionSuccess(tx)
-                    }, {
-                        if (it.errorBody()?.isSmartError() == true) {
-                            viewState.failedSendCauseSmart()
-                        } else {
-                            viewState.onShowError(R.string.transaction_failed)
-                        }
-                    }))
-        }
-    }
-
-    private fun checkRecipientAlias(signedTransaction: TransferTransaction) {
-        signedTransaction.attachment = WavesCrypto.base58encode(
-                (signedTransaction.attachment ?: "").toByteArray())
-        if (signedTransaction.recipient.length <= 30) {
-            signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
+            assetInfo!!.ticker ?: ""
         }
     }
 
@@ -96,83 +104,26 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             recipient = recipient!!.makeAsAlias()
         }
 
-        val totalAmount = if (type == SendPresenter.Type.GATEWAY) {
-            amount + gatewayCommission
-        } else {
-            amount
-        }
+        val totalAmount =
+                if (type == SendPresenter.Type.GATEWAY || type == SendPresenter.Type.VOSTOK) amount + gatewayCommission
+                else amount
 
         return TransferTransaction(
                 assetId = selectedAsset!!.assetId,
                 recipient = recipient!!,
                 amount = MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
-                fee = blockchainCommission,
                 attachment = attachment,
+                fee = blockchainCommission,
                 feeAssetId = feeAsset.assetId)
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", address)}
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", address) }
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {
             viewState.showAddressBookUser(addressBookUser.name)
         }
-    }
-
-    private fun createGateAndPayment() {
-        val assetId = selectedAsset!!.assetId
-        val currencyTo = coinomatCryptoCurrencies()[assetId]
-
-        if (currencyTo.isNullOrEmpty()) {
-            viewState.onShowError(R.string.receive_error_network)
-            return
-        }
-
-        val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
-
-        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY &&
-                !this.moneroPaymentId.isNullOrEmpty()) {
-            this.moneroPaymentId
-        } else {
-            null
-        }
-
-        addSubscription(coinomatServiceManager.createTunnel(
-                currencyFrom,
-                currencyTo,
-                recipient,
-                moneroPaymentId)
-                .flatMap { createTunnel ->
-                    coinomatServiceManager.getTunnel(
-                            createTunnel.tunnelId,
-                            createTunnel.k1,
-                            createTunnel.k2,
-                            SendPresenter.LANG)
-                }
-                .flatMap {
-                    recipient = it.tunnel!!.walletFrom
-                    attachment = it.tunnel!!.attachment ?: ""
-                    val signedTransaction = signTransaction()
-                    if (signedTransaction == null) {
-                        null
-                    } else {
-                        checkRecipientAlias(signedTransaction)
-                        nodeServiceManager.transactionsBroadcast(signedTransaction)
-                    }
-                }
-                .compose(RxUtil.applySchedulersToObservable())
-                .subscribe({ tx ->
-                    tx.recipient = tx.recipient.parseAlias()
-                    saveLastSentAddress(tx.recipient)
-                    viewState.onShowTransactionSuccess(tx)
-                }, {
-                    if (it.errorBody()?.isSmartError() == true) {
-                        viewState.failedSendCauseSmart()
-                    } else {
-                        viewState.onShowError(R.string.receive_error_network)
-                    }
-                }))
     }
 
     private fun saveLastSentAddress(newAddress: String) {

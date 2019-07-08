@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.manager.service
+package com.wavesplatform.wallet.v2.data.remote
 
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.LastAppVersionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse

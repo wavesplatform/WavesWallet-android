@@ -7,47 +7,29 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
-import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants.coinomatCryptoCurrencies
-import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayDepositArgs
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.executeInBackground
 import javax.inject.Inject
 
 @InjectViewState
 class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurrencyView>() {
 
     @Inject
-    lateinit var coinomatServiceManager: CoinomatServiceManager
+    lateinit var gatewayProvider: GatewayProvider
+
     var assetBalance: AssetBalanceResponse? = null
-    var tunnel: GetTunnelResponse? = null
-    private var lang: String = "ru_RU"
     var nextStepValidation = false
+    var depositAddress: String? = null
 
-    fun getTunnel(assetId: String) {
-        val currencyFrom = coinomatCryptoCurrencies()[assetId]
-        if (currencyFrom.isNullOrEmpty()) {
-            viewState.onShowError(App.getAppContext()
-                    .getString(R.string.receive_error_network))
-            return
-        }
-
-        val currencyTo = "W$currencyFrom"
-
-        addSubscription(coinomatServiceManager.createTunnel(currencyFrom, currencyTo, getWavesAddress(), null)
-                .flatMap { createTunnel ->
-                    coinomatServiceManager.getTunnel(
-                            createTunnel.tunnelId,
-                            createTunnel.k1,
-                            createTunnel.k2,
-                            lang)
-                }
-                .compose(RxUtil.applySchedulersToObservable())
-                .subscribe({ tunnel ->
-                    this.tunnel = tunnel
-                    viewState.onShowTunnel(tunnel)
+    fun initDeposit(assetId: String) {
+        addSubscription(gatewayProvider.getGatewayDataManager(assetId)
+                .makeDeposit(GatewayDepositArgs(assetBalance))
+                .executeInBackground()
+                .subscribe({ response ->
+                    depositAddress = response.depositAddress
+                    viewState.onSuccessInitDeposit(response)
                 }, {
                     viewState.onGatewayError()
                     it.printStackTrace()

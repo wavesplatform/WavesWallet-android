@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -14,6 +15,7 @@ import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.sdk.model.response.node.transaction.BurnTransactionResponse
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -91,22 +93,25 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         relative_success.visiable()
 
         button_okay.click {
-            if (totalBurn) {
-                launchActivity<MainActivity>(clear = true)
-            } else {
-                setResult(com.wavesplatform.wallet.v2.data.Constants.RESULT_OK)
-                finish()
-            }
+            onBackPressed()
         }
     }
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            val intent = Intent().apply {
+                putExtra(BUNDLE_TOTAL_BURN, presenter.totalBurn)
+            }
+            setResult(Constants.RESULT_OK, intent)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun onShowError(errorMessageRes: String) {
@@ -131,5 +136,9 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_confirm.isEnabled = networkConnected
+    }
+
+    companion object {
+        const val BUNDLE_TOTAL_BURN = "total_burn"
     }
 }

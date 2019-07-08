@@ -32,6 +32,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -288,7 +289,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Constants.RESULT_OK) {
             if (requestCode == TokenBurnActivity.REQUEST_BURN_CONFIRM) {
-                presenter.reloadAssetDetails(3000)
+                val totalBurn = data?.getBooleanExtra(TokenBurnConfirmationActivity.BUNDLE_TOTAL_BURN, false)
+                        ?: false
+
+                if (totalBurn) {
+                    onBackPressed()
+                } else {
+                    presenter.reloadAssetDetails(3000)
+                }
             }
         }
     }

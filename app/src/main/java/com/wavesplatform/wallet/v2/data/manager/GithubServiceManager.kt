@@ -10,7 +10,7 @@ import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
-import com.wavesplatform.wallet.v2.data.manager.service.GithubService
+import com.wavesplatform.wallet.v2.data.remote.GithubService
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse

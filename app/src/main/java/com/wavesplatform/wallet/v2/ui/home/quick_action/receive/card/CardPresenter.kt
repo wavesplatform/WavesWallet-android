@@ -12,8 +12,8 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     @Inject
-    lateinit var coinomatServiceManager: CoinomatServiceManager
+    lateinit var coinomatServiceManager: CoinomatDataManager
 
     var crypto: String = WavesConstants.WAVES_ASSET_ID_FILLED
     private var amount: String = "0"

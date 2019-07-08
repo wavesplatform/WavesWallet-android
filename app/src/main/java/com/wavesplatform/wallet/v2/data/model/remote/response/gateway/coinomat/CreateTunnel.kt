@@ -3,11 +3,11 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.model.service.coinomat
+package com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat
 
 import com.google.gson.annotations.SerializedName
 
-data class CreateTunnelResponse(
+data class CreateTunnel(
     @SerializedName("ok") var ok: String? = null,
     @SerializedName("tunnel_id") var tunnelId: String? = null,
     @SerializedName("k1") var k1: String? = null,

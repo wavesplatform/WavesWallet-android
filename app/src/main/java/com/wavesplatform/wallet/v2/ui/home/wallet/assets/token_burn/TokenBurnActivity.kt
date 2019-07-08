@@ -170,7 +170,13 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             REQUEST_BURN_CONFIRM -> {
                 when (resultCode) {
                     Constants.RESULT_OK -> {
-                        setResult(Constants.RESULT_OK)
+                        val totalBurn = data?.getBooleanExtra(TokenBurnConfirmationActivity.BUNDLE_TOTAL_BURN, false)
+                                ?: false
+
+                        val intent = Intent().apply {
+                            putExtra(TokenBurnConfirmationActivity.BUNDLE_TOTAL_BURN, totalBurn)
+                        }
+                        setResult(Constants.RESULT_OK, intent)
                         finish()
                     }
                     Constants.RESULT_SMART_ERROR -> {

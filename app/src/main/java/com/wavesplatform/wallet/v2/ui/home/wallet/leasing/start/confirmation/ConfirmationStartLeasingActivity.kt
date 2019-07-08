@@ -76,18 +76,22 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         }
 
         button_okay.click {
-            setResult(Activity.RESULT_OK)
             onBackPressed()
         }
     }
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            setResult(Activity.RESULT_OK)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun successStartLeasing() {

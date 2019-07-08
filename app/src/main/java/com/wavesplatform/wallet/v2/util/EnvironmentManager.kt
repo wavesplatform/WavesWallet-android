@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.preference.PreferenceManager
+import android.text.TextUtils
 import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
@@ -25,13 +26,16 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
-import com.wavesplatform.wallet.v2.data.manager.service.GithubService
+import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
+import com.wavesplatform.wallet.v2.data.remote.GithubService
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import pers.victor.ext.currentTimeMillis
 import timber.log.Timber
+import kotlin.math.abs
+import kotlin.system.exitProcess
 
 class EnvironmentManager(var current: ClientEnvironment) {
 
@@ -39,9 +43,31 @@ class EnvironmentManager(var current: ClientEnvironment) {
     private var versionDisposable: Disposable? = null
 
     companion object {
-        const val BRANCH = "mobile/v2.3"
 
-        const val URL_COMMISSION_MAIN_NET = "$BRANCH/fee.json"
+        private const val BASE_PROXY_CONFIG_URL = "https://github-proxy.wvservices.com/"
+        private const val BASE_RAW_CONFIG_URL = "https://raw.githubusercontent.com/"
+
+        private const val BRANCH = "mobile/v2.5"
+
+        private const val KEY_ENV_TEST_NET = "env_testnet"
+        private const val KEY_ENV_MAIN_NET = "env_prod"
+
+        private const val FILENAME_TEST_NET = "environment_testnet.json"
+        private const val FILENAME_MAIN_NET = "environment_mainnet.json"
+
+        const val URL_CONFIG_MAIN_NET = BASE_PROXY_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
+        const val URL_CONFIG_TEST_NET = BASE_PROXY_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
+        const val URL_COMMISSION_MAIN_NET = BASE_PROXY_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/fee.json"
+
+        const val URL_RAW_CONFIG_MAIN_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
+        const val URL_RAW_CONFIG_TEST_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
+        const val URL_RAW_COMMISSION_MAIN_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/fee.json"
 
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
@@ -52,6 +78,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
         val netCode: Byte
             get() = environment.configuration.scheme[0].toByte()
+
+        val vostokNetCode: Byte
+            get() = environment.externalProperties.vostokNetCode.toByte()
 
         val globalConfiguration: GlobalConfigurationResponse
             get() = environment.configuration
@@ -108,6 +137,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             }
             instance = EnvironmentManager(initEnvironment)
 
+            getDefaultConfig()
 
             val timeCorrection = PreferenceManager
                     .getDefaultSharedPreferences(App.getAppContext())
@@ -128,6 +158,26 @@ class EnvironmentManager(var current: ClientEnvironment) {
                     WavesSdk.service().getDataService(),
                     WavesSdk.service().getNode(),
                     GithubServiceManager.create(null))
+        }
+
+        fun getDefaultConfig(): GlobalConfiguration? {
+            return when (environmentName) {
+                KEY_ENV_MAIN_NET -> {
+                    Gson().fromJson(
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), FILENAME_MAIN_NET),
+                            GlobalConfiguration::class.java)
+                }
+                KEY_ENV_TEST_NET -> {
+                    Gson().fromJson(
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), FILENAME_TEST_NET),
+                            GlobalConfiguration::class.java)
+                }
+                else -> {
+                    Gson().fromJson(
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), FILENAME_TEST_NET),
+                            GlobalConfiguration::class.java)
+                }
+            }
         }
 
         private fun loadConfiguration(dataService: DataService,
@@ -161,6 +211,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                         timeCorrection)
 
                                 WavesSdk.setEnvironment(environment)
+                                // todo set to instance!!.interceptor!!.setHosts(globalConfiguration.servers)
+                                // initGatewayHost
+                                pair.first.servers.gatewayUrl
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }
@@ -191,7 +244,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
 
-        private fun findAssetIdByAssetId(assetId: String): GlobalConfigurationResponse.ConfigAsset? {
+        fun findAssetIdByAssetId(assetId: String): GlobalConfigurationResponse.ConfigAsset? {
             return instance?.current?.configuration?.generalAssets?.firstOrNull { it.assetId == assetId }
         }
 
@@ -222,7 +275,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         private fun setTimeCorrection(timeCorrection: Long) {
-            if (Math.abs(timeCorrection) > 30_000) {
+            if (abs(timeCorrection) > 30_000) {
                 PreferenceManager
                         .getDefaultSharedPreferences(App.getAppContext())
                         .edit()
@@ -280,7 +333,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                     val componentName = intent.component
                     val mainIntent = Intent.makeRestartActivityTask(componentName)
                     application.startActivity(mainIntent)
-                    System.exit(0)
+                    exitProcess(0)
                 }
             }, 300)
         }

@@ -1,9 +1,9 @@
-package com.wavesplatform.wallet.v2.data.manager.service
+package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
-import com.wavesplatform.wallet.v2.data.model.service.coinomat.CreateTunnelResponse
-import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
-import com.wavesplatform.wallet.v2.data.model.service.coinomat.LimitResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.CreateTunnel
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.GetTunnel
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.Limit
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.XRate
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,7 +15,7 @@ interface CoinomatService {
             @Query("crypto") crypto: String?,
             @Query("address") address: String?,
             @Query("fiat") fiat: String?
-    ): Observable<LimitResponse>
+    ): Observable<Limit>
 
     @GET("v2/indacoin/rate.php")
     fun rate(
@@ -31,7 +31,7 @@ interface CoinomatService {
             @Query("currency_to") currencyTo: String?,
             @Query("wallet_to") address: String?,
             @Query("monero_payment_id") moneroPaymentId: String?
-    ): Observable<CreateTunnelResponse>
+    ): Observable<CreateTunnel>
 
     @GET("v1/get_tunnel.php")
     fun getTunnel(
@@ -39,7 +39,7 @@ interface CoinomatService {
             @Query("k1") k1: String?,
             @Query("k2") k2: String?,
             @Query("lang") lang: String?
-    ): Observable<GetTunnelResponse>
+    ): Observable<GetTunnel>
 
     // https://coinomat.com/api/v1/get_xrate.php?f=WETH&t=ETH&lang=ru_RU
     @GET("v1/get_xrate.php")
@@ -47,10 +47,9 @@ interface CoinomatService {
             @Query("f") from: String?,
             @Query("t") to: String?,
             @Query("lang") lang: String?
-    ): Observable<XRateResponse>
+    ): Observable<XRate>
 
-    companion object Factory {
-
+    companion object {
         const val GATEWAY_ADDRESS = "3PAs2qSeUAfgqSKS8LpZPKGYEjJKcud9Djr"
     }
 }

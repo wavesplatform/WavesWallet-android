@@ -51,8 +51,9 @@ import io.reactivex.disposables.CompositeDisposable
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
-import com.wavesplatform.wallet.v2.data.manager.CoinomatServiceManager
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
@@ -174,7 +175,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     private fun addErrorListener() {
         // todo check refactor without clients recreation & Check Errors to show or log
         WavesSdk.service().addOnErrorListener(onErrorListener!!)
-        dataManager.coinomatService = CoinomatServiceManager.create(onErrorListener)
+        dataManager.coinomatService = CoinomatDataManager.create(onErrorListener)
+        dataManager.gatewayService = GatewayDataManager.create(onErrorListener)
         dataManager.githubService = GithubServiceManager.create(onErrorListener)
     }
 
@@ -182,7 +184,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         mCompositeDisposable.clear()
         super.onPause()
         WavesSdk.service().removeOnErrorListener(onErrorListener!!)
-        CoinomatServiceManager.removeOnErrorListener()
+        CoinomatDataManager.removeOnErrorListener()
+        GatewayDataManager.removeOnErrorListener()
         GithubServiceManager.removeOnErrorListener()
     }
 

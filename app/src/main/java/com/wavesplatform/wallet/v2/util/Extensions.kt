@@ -46,6 +46,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
@@ -71,7 +72,6 @@ import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
 import java.util.*
-import kotlin.math.abs
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -96,6 +96,18 @@ inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
             }
         }
     })
+}
+
+fun String.formatBaseUrl(): String {
+    return if (this.isNotEmpty()) {
+        if (this.lastOrNull() == '/') {
+            this
+        } else {
+            this.plus("/")
+        }
+    } else {
+        this
+    }
 }
 
 fun View.animateVisible() {
@@ -864,4 +876,22 @@ fun HistoryTransactionResponse.isSponsorshipTransaction(): Boolean {
 
 fun HistoryTransactionResponse.transactionType(): TransactionType {
     return TransactionType.getTypeById(this.transactionTypeId)
+}
+
+fun String?.isValidVostokAddress(): Boolean {
+    if (this.isNullOrEmpty()) return false
+    return try {
+        val bytes = WavesCrypto.base58decode(this)
+        if (bytes.size == ADDRESS_LENGTH &&
+                bytes[0] == ADDRESS_VERSION &&
+                bytes[1] == EnvironmentManager.vostokNetCode) {
+            val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
+            val checkSumGenerated = calcCheckSum(bytes.copyOf(bytes.size - CHECK_SUM_LENGTH))
+            Arrays.equals(checkSum, checkSumGenerated)
+        } else {
+            false
+        }
+    } catch (e: Exception) {
+        false
+    }
 }
