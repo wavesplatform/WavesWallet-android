@@ -111,8 +111,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                         Function3 { wavesBalance: AssetBalance,
                                                     reservedBalances: Map<String, Long>,
                                                     assetBalances: AssetBalances ->
-                                    return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
-                                })
+                                            return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
+                                        })
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
@@ -152,6 +152,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
                                     val assetPref = savedAssetPrefs.firstOrNull { it.assetId == assetBalance.assetId }
+
+                                    markWavesAndMyTokensAsFavorite(mapDbAssets, assetBalance)
+
                                     assetBalance.isFavorite = assetPref?.isFavorite
                                             ?: assetBalance.isFavorite
                                     assetBalance.position = assetPref?.position
@@ -168,14 +171,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                     }
                                     if (assetBalance.isSpam) {
                                         assetBalance.isFavorite = false
-                                    }
-
-                                    if (savedAssetPrefs.isEmpty()) {
-                                        mapDbAssets?.let {
-                                            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
-                                                assetBalance.isFavorite = true
-                                            }
-                                        }
                                     }
                                 }
 
@@ -202,6 +197,14 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             }
                             .subscribeOn(Schedulers.io())
                 }
+    }
+
+    private fun markWavesAndMyTokensAsFavorite(mapDbAssets: Map<String, AssetBalance>?, assetBalance: AssetBalance) {
+        mapDbAssets?.let {
+            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                assetBalance.isFavorite = true
+            }
+        }
     }
 
     private fun trackZeroBalances(balances: List<AssetBalance>) {
