@@ -126,7 +126,6 @@ class WavesService(private var context: Context) {
                 .writeTimeout(timeout, TimeUnit.SECONDS)
                 .addInterceptor(receivedCookiesInterceptor())
                 .addInterceptor(addCookiesInterceptor())
-                .addInterceptor(createHostInterceptor())
                 .addInterceptor(
                         LoggingInterceptor.Builder()
                                 .loggable(BuildConfig.DEBUG)
@@ -170,10 +169,6 @@ class WavesService(private var context: Context) {
                 chain.proceed(chain.request())
             }
         }
-    }
-
-    private fun createHostInterceptor(): HostSelectionInterceptor {
-        return HostSelectionInterceptor(WavesSdk.getEnvironment())
     }
 
     private fun createCache(): Cache {

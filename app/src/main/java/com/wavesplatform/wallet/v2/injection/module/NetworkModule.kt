@@ -12,9 +12,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
-import com.wavesplatform.sdk.net.service.DataService
-import com.wavesplatform.sdk.net.service.MatcherService
-import com.wavesplatform.sdk.net.service.NodeService
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
@@ -104,7 +101,7 @@ class NetworkModule {
                 .addInterceptor(receivedCookiesInterceptor)
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
-                // todo check .addInterceptor(EnvironmentManager.createHostInterceptor())
+                .addInterceptor(EnvironmentManager.createGateWayHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)

@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.preference.PreferenceManager
-import android.text.TextUtils
 import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
@@ -41,6 +40,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
     private var configurationDisposable: Disposable? = null
     private var versionDisposable: Disposable? = null
+    private var gateWayHostInterceptor: HostInterceptor? = null
 
     companion object {
 
@@ -180,6 +180,11 @@ class EnvironmentManager(var current: ClientEnvironment) {
             }
         }
 
+        fun createGateWayHostInterceptor(): HostInterceptor {
+            instance!!.gateWayHostInterceptor = HostInterceptor(servers.gatewayUrl)
+            return instance!!.gateWayHostInterceptor!!
+        }
+
         private fun loadConfiguration(dataService: DataService,
                                       nodeService: NodeService,
                                       githubService: GithubService) {
@@ -211,8 +216,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                         timeCorrection)
 
                                 WavesSdk.setEnvironment(environment)
-                                // todo set to instance!!.interceptor!!.setHosts(globalConfiguration.servers)
-                                // initGatewayHost
                                 pair.first.servers.gatewayUrl
 
                                 globalConfiguration.generalAssets.map { it.assetId }
@@ -316,6 +319,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         private fun setConfiguration(globalConfiguration: GlobalConfigurationResponse) {
+            instance!!.gateWayHostInterceptor!!.setHost(globalConfiguration.servers.gatewayUrl)
             PreferenceManager
                     .getDefaultSharedPreferences(App.getAppContext())
                     .edit()
