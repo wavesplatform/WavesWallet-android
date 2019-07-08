@@ -2,7 +2,7 @@
 
 [**Website**](https://wavesplatform.com/) | [**Discord**](https://discord.gg/cnFmDyA) | [**Forum**](https://forum.wavesplatform.com/) | [**Support**](https://support.wavesplatform.com/) | [**Documentation**](https://docs.wavesplatform.com)
 
-<img src="https://s3.eu-central-1.amazonaws.com/it-1639.waves.mobile.pictures/social/v1/bannerAppAndroid.png" width="800" height="400" border="0" />
+<img src="https://s3.eu-central-1.amazonaws.com/it-1639.waves.mobile.pictures/social/v1/bannerAppAndroid.png" />
 
 [Waves Wallet Android app](https://play.google.com/store/apps/details?id=com.wavesplatform.wallet) is the official wallet software designed with mass adoption in mind. It allows to access your Waves account, handle financial operations, and trade on DEX.
 
