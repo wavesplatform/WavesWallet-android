@@ -9,8 +9,8 @@
 <a href="https://play.google.com/store/apps/details?id=com.wavesplatform.wallet" target="_blank"><img src="https://play.google.com/intl/en_gb/badges/images/generic/en_badge_web_generic.png" width="150" height="58" border="0" /></a>
 
 ## Easy start with WavesSDK
-* [Waves SDK Android](https://github.com/wavesplatform/WavesSDK-android/wiki/Get-started-with-WavesSDK-for-Android)
-* [Waves SDK iOS](https://github.com/wavesplatform/WavesSDK-iOS/wiki/Get-started-with-WavesSDK-for-iOS)
+* [Waves SDK for Android](https://github.com/wavesplatform/WavesSDK-android/wiki/Get-started-with-WavesSDK-for-Android)
+* [Waves SDK for iOS](https://github.com/wavesplatform/WavesSDK-iOS/wiki/Get-started-with-WavesSDK-for-iOS)
 
 ## Blockchain for the people
 
