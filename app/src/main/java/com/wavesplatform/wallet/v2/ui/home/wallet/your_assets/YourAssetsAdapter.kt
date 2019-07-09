@@ -36,7 +36,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {
-            setNewData(ArrayList<AssetBalance>(allData))
+            setNewData(allData)
         } else {
             for (item in allData) {
                 item.getName().notNull {
@@ -47,5 +47,14 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
             }
         }
         notifyDataSetChanged()
+    }
+
+    fun showOnlyWithBalance(onlyWithBalance: Boolean) {
+        val newAssets = if (onlyWithBalance) {
+            allData.filter { it.getAvailableBalance() > 0 }
+        } else {
+            allData
+        }
+        setNewData(newAssets)
     }
 }
