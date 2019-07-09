@@ -360,9 +360,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkRecipient(recipient: String) {
-        if (recipient.isNotEmpty()) {
-            presenter.recipient = recipient
+        presenter.recipient = recipient
 
+        if (recipient.isNotEmpty()) {
             when {
                 recipient.length in 4..30 -> {
                     presenter.recipientAssetId = ""
