@@ -53,6 +53,7 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
@@ -589,9 +590,7 @@ fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
     this.text = str.append(" $tokenName")
 }
 
-fun loadDbWavesBalance(): AssetBalanceResponse {
-    return find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
-}
+
 
 fun find(assetId: String): AssetBalanceResponse? {
     return (queryFirst<AssetBalanceDb> { equalTo("assetId", assetId) })?.convertFromDb()
@@ -622,14 +621,14 @@ fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
 }
 
 
-fun AssetInfo.getMaxDigitsBeforeZero(): Int {
+fun AssetInfoResponse.getMaxDigitsBeforeZero(): Int {
     return MoneyUtil.getScaledText(this.quantity, this.precision)
             .replace(",", "")
             .split(".")[0].length
 }
 
-fun loadDbWavesBalance(): AssetBalance {
-    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+fun loadDbWavesBalance(): AssetBalanceResponse {
+    return find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun getDeviceId(): String {

@@ -26,7 +26,7 @@ class SentryHelper {
 
         fun logException(exception: Exception) {
             if (exception is NetworkException) {
-                if (exception.kind == RetrofitException.Kind.NETWORK || exception.response?.code() == NOT_FOUND_HTTP_CODE) {
+                if (exception.kind == NetworkException.Kind.NETWORK || exception.response?.code() == NOT_FOUND_HTTP_CODE) {
                     // ignore this events to make less spam to Sentry
                 } else {
                     Sentry.capture(EventBuilder()

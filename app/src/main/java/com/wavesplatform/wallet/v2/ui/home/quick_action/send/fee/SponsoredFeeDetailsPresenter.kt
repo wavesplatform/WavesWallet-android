@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import javax.inject.Inject
 
@@ -60,7 +61,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                         .clearBalance()
                         .toBigDecimal()
                         && availableBalance >= feeDecimalValue
-                        && item.isMyWavesToken())
+                        && item.isMyWavesToken(WavesWallet.getAddress()))
                 || item.isWaves())
     }
 

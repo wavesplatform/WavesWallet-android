@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.data
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 
 object Constants {
 
@@ -34,6 +35,8 @@ object Constants {
     const val SUPPORT_EMAIL = "support@wavesplatform.com"
     const val SUPPORT_SITE = "https://support.wavesplatform.com/"
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
+
+    const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
 
 
     // Custom Result code
@@ -77,7 +80,7 @@ object Constants {
     }
 
     fun defaultCrypto(): Array<String> {
-        return com.wavesplatform.wallet.v2.util.EnvironmentManager.defaultAssets
+        return EnvironmentManager.defaultAssets
                 .filter { !it.isFiatMoney }
                 .map { it.assetId }
                 .toTypedArray()
@@ -91,7 +94,7 @@ object Constants {
     }
 
     fun defaultFiat(): Array<String> {
-        return com.wavesplatform.wallet.v2.util.EnvironmentManager.defaultAssets
+        return EnvironmentManager.defaultAssets
                 .filter { it.isFiatMoney }
                 .map { it.assetId }
                 .toTypedArray()

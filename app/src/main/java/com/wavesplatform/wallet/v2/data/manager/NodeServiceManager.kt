@@ -27,7 +27,6 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
@@ -176,13 +175,16 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    private fun markWavesAndMyTokensAsFavorite(mapDbAssets: Map<String, AssetBalance>?, assetBalance: AssetBalance) {
+    private fun markWavesAndMyTokensAsFavorite(
+            mapDbAssets: Map<String, AssetBalanceResponse>?, assetBalance: AssetBalanceResponse) {
         mapDbAssets?.let {
-            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+            if (mapDbAssets[assetBalance.assetId] == null
+                    && assetBalance.isMyWavesToken(WavesWallet.getAddress())) {
                 assetBalance.isFavorite = true
             }
         }
     }
+
     // todo check
     private fun mergeNetDbData(
             tripple: Triple<AssetBalanceResponse, Map<String, Long>, AssetBalancesResponse>,

@@ -27,7 +27,6 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
@@ -40,7 +39,6 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.getType
-import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*

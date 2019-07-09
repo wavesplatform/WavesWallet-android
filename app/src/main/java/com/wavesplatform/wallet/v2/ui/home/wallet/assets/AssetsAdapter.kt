@@ -97,12 +97,12 @@ class AssetsAdapter @Inject constructor() :
                                 == App.getAccessManager().getWallet()?.address)
                         .setGone(R.id.text_tag_spam, item.isSpam)
 
-                    helper.itemView.image_asset_icon.setAsset(item)
-                    helper.itemView.text_asset_value.makeTextHalfBold()
-                }
+                helper.itemView.image_asset_icon.setAsset(item)
+                helper.itemView.text_asset_value.makeTextHalfBold()
             }
         }
     }
+
 
     interface ScrollToHeaderListener {
         fun scrollToHeader(position: Int, itemView: View)

@@ -90,8 +90,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
-                Constants.wavesAssetInfo.getMaxDigitsBeforeZero(),
-                Constants.wavesAssetInfo.precision,
+                WavesConstants.WAVES_ASSET_INFO.getMaxDigitsBeforeZero(),
+                WavesConstants.WAVES_ASSET_INFO.precision,
                 Double.MAX_VALUE))
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
