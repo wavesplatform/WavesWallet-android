@@ -22,7 +22,6 @@ import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
-import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
@@ -66,12 +65,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         image_view_recipient_action.click {
-            IntentIntegrator(this)
-                    .setRequestCode(REQUEST_SCAN_QR_CODE)
-                    .setOrientationLocked(true)
-                    .setBeepEnabled(false)
-                    .setCaptureActivity(QrCodeScannerActivity::class.java)
-                    .initiateScan()
+            launchQrCodeScanner()
         }
 
         button_continue.click {
@@ -227,7 +221,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                     val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
-                    if (!address.isEmpty()) {
+                    if (address.isNotEmpty()) {
                         edit_address.setText(address)
                     } else {
                         showError(R.string.start_leasing_validation_address_is_invalid_error, R.id.root_view)
@@ -324,7 +318,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         var REQUEST_CHOOSE_ADDRESS = 57
         var REQUEST_LEASING_CONFIRMATION = 59
         var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
-        var REQUEST_SCAN_QR_CODE = 52
         var BUNDLE_WAVES = "waves_balance"
         var TOTAL_BALANCE = "100"
     }

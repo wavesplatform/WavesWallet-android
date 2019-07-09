@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.util
 
+import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.ClipData
@@ -44,6 +45,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
+import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
@@ -54,9 +56,12 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pers.victor.ext.Ext.ctx
+import pyxis.uzuki.live.richutilskt.impl.F2
+import pyxis.uzuki.live.richutilskt.utils.RPermission
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
@@ -100,6 +105,22 @@ fun String.formatBaseUrl(): String {
     } else {
         this
     }
+}
+
+const val REQUEST_SCAN_QR_CODE = 876
+fun Activity.launchQrCodeScanner(requestCode: Int = REQUEST_SCAN_QR_CODE) {
+    RPermission.instance.checkPermission(this, arrayOf(Manifest.permission.CAMERA), F2 { result, permissions ->
+        if (result == RPermission.PERMISSION_GRANTED) {
+            IntentIntegrator(this)
+                    .setRequestCode(requestCode)
+                    .setOrientationLocked(true)
+                    .setBeepEnabled(false)
+                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                    .initiateScan()
+        } else {
+            showError(R.string.common_permission_error, android.R.id.content)
+        }
+    })
 }
 
 fun View.animateVisible() {

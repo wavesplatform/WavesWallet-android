@@ -675,4 +675,6 @@
     <string name="trade_order_dialog_subtitle_price_lower_market">You order price is 5% lower than the latest market price</string>
     <string name="trade_order_dialog_positive_place_order">Place Order</string>
     <string name="trade_order_dialog_negative_cancel">Cancel</string>
+
+    <string name="common_permission_error">Permissions denied. Please give permissions to use this feature</string>
 </resources>
