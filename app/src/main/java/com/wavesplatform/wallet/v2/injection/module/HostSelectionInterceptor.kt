@@ -19,27 +19,32 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
     private var dataHost: String? = null
     @Volatile
     private var matcherHost: String? = null
+    @Volatile
+    private var gatewayHost: String? = null
 
     private val initNodeHost = HttpUrl.parse(initServers.nodeUrl)?.host()
     private val initDataHost = HttpUrl.parse(initServers.dataUrl)?.host()
     private val initMatcherHost = HttpUrl.parse(initServers.matcherUrl)?.host()
+    private val initGatewayHost = HttpUrl.parse(initServers.gatewayUrl)?.host()
 
     fun setHosts(servers: GlobalConfiguration.Servers) {
         nodeHost = HttpUrl.parse(servers.nodeUrl)?.host()
         dataHost = HttpUrl.parse(servers.dataUrl)?.host()
         matcherHost = HttpUrl.parse(servers.matcherUrl)?.host()
+        gatewayHost = HttpUrl.parse(servers.gatewayUrl)?.host()
     }
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         var request = chain.request()
-        if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null) {
+        if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null || this.gatewayHost != null) {
 
             var host = chain.request().url().host()
             when (host) {
                 initNodeHost -> nodeHost.notNull { host = it }
                 initDataHost -> dataHost.notNull { host = it }
                 initMatcherHost -> matcherHost.notNull { host = it }
+                initGatewayHost -> gatewayHost.notNull { host = it }
             }
 
             val newUrl = request.url().newBuilder()

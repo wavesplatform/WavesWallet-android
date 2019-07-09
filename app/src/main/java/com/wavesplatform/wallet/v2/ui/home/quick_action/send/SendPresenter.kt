@@ -11,25 +11,20 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
-import com.wavesplatform.wallet.v2.util.isSpamConsidered
-import com.wavesplatform.wallet.v2.util.isValidWavesAddress
-import com.wavesplatform.wallet.v2.util.isWaves
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -37,18 +32,17 @@ import javax.inject.Inject
 class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var gatewayProvider: GatewayProvider
+    var gatewayMetadata: GatewayMetadata = GatewayMetadata()
 
+    var type: Type = Type.UNKNOWN
     var selectedAsset: AssetBalance? = null
+
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
     var moneroPaymentId: String? = null
     var recipientAssetId: String? = null
-    var type: Type? = null
-    var gatewayCommission: BigDecimal = BigDecimal.ZERO
-    var gatewayMin: BigDecimal = BigDecimal.ZERO
-    var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
     var feeAsset: AssetBalance? = null
@@ -110,10 +104,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 return R.string.insufficient_funds
             } else if (isGatewayAmountError()) {
                 return R.string.insufficient_gateway_funds_error
-            } else if (Constants.findByGatewayId("XMR")!!.assetId == recipientAssetId &&
+            } else if (Constants.findByGatewayId("XMR")?.assetId == recipientAssetId &&
                     moneroPaymentId != null &&
-                    (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH ||
-                            moneroPaymentId!!.contains(" ".toRegex()))) {
+                    (moneroPaymentId?.length != MONERO_PAYMENT_ID_LENGTH ||
+                            moneroPaymentId?.contains(" ".toRegex()) == true)) {
                 return R.string.invalid_monero_payment_id
             }
         }
@@ -121,13 +115,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun isGatewayAmountError(): Boolean {
-        if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
-            val totalAmount = amount + gatewayCommission
+        if ((type == Type.VOSTOK || type == Type.GATEWAY) && selectedAsset != null && gatewayMetadata.maxLimit.toFloat() > 0) {
+            val totalAmount = amount + gatewayMetadata.fee
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
                     selectedAsset!!.getDecimals())
             return !(balance >= totalAmount &&
-                    totalAmount >= gatewayMin &&
-                    totalAmount <= gatewayMax)
+                    totalAmount >= gatewayMetadata.minLimit &&
+                    totalAmount <= gatewayMetadata.maxLimit)
         }
         return false
     }
@@ -153,38 +147,20 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    fun loadXRate(assetId: String) {
-        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
-        if (currencyTo.isNullOrEmpty()) {
-            type = Type.UNKNOWN
-            runOnUiThread {
-                viewState.showXRateError()
-            }
-            return
-        }
-
-        val currencyFrom = "W$currencyTo"
-        runAsync {
-            addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
-                    .subscribe({ xRate ->
-                        type = Type.GATEWAY
-                        gatewayCommission = BigDecimal(xRate.feeOut ?: "0")
-                        gatewayMin = BigDecimal(xRate.inMin ?: "0")
-                        gatewayMax = BigDecimal(xRate.inMax ?: "0")
-                        runOnUiThread {
-                            if (xRate == null) {
-                                viewState.showXRateError()
-                            } else {
-                                viewState.showXRate(xRate, currencyTo)
-                            }
-                        }
-                    }, {
-                        type = Type.UNKNOWN
-                        runOnUiThread {
-                            viewState.showXRateError()
-                        }
-                    }))
-        }
+    fun loadGatewayMetadata(assetId: String) {
+        addSubscription(gatewayProvider
+                .getGatewayDataManager(assetId)
+                .loadGatewayMetadata(GatewayMetadataArgs(selectedAsset, recipient))
+                .executeInBackground()
+                .subscribe({ metadata ->
+                    type = Type.GATEWAY
+                    val gatewayTicket = Constants.coinomatCryptoCurrencies()[assetId]
+                    gatewayMetadata = metadata
+                    viewState.onLoadMetadataSuccess(metadata, gatewayTicket)
+                }, {
+                    type = Type.UNKNOWN
+                    viewState.onLoadMetadataError()
+                }))
     }
 
     fun isRecipientValid(): Boolean? {
@@ -196,11 +172,15 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return null
         }
 
-        if (type == Type.GATEWAY && selectedAsset!!.assetId.equals(recipientAssetId)) {
+        if (type == Type.GATEWAY && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
-        if (type == Type.WAVES && isWavesAddress(recipient)) {
+        if (type == Type.WAVES && recipient.isValidWavesAddress()) {
+            return true
+        }
+
+        if (type == Type.VOSTOK && recipient.isValidVostokAddress() && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
@@ -275,7 +255,6 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     companion object {
-        const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
@@ -288,37 +267,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 null
             }
         }
-
-        fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidWavesAddress()) {
-                return false
-            }
-
-            val addressBytes = Base58.decode(address)
-
-            if (addressBytes[0] != 1.toByte() ||
-                    addressBytes[1] != EnvironmentManager.netCode) {
-                return false
-            }
-
-            val key = addressBytes.slice(IntRange(0, 21))
-            val check = addressBytes.slice(IntRange(22, 25))
-            val keyHash = Hash.secureHash(key.toByteArray())
-                    .toList()
-                    .slice(IntRange(0, 3))
-
-            for (i in 0..3) {
-                if (check[i] != keyHash[i]) {
-                    return false
-                }
-            }
-            return true
-        }
     }
 
     enum class Type {
         ALIAS,
         WAVES,
+        VOSTOK,
         GATEWAY,
         UNKNOWN
     }

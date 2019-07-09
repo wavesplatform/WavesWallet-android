@@ -11,7 +11,7 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Single
@@ -25,7 +25,7 @@ import javax.inject.Inject
 class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatManager: CoinomatDataManager
 
     var crypto: String = Constants.WAVES_ASSET_ID_FILLED
     private var amount: String = "0"

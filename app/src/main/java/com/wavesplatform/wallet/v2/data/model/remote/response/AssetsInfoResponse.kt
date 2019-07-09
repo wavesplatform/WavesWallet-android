@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.isWavesId
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -46,11 +47,11 @@ open class AssetInfo(
         return minSponsoredFee > 0
     }
 
-    fun getTokenTicker(): String? {
-        return if (name == Constants.WAVES_ASSET_ID_FILLED) {
-            Constants.WAVES_ASSET_ID_FILLED
-        } else {
-            ticker
+    fun getTokenTicker(): String {
+        return when {
+            id.isWavesId() -> Constants.WAVES_ASSET_ID_FILLED
+            ticker.isNullOrEmpty() -> name
+            else -> ticker ?: name
         }
     }
 }

@@ -130,7 +130,7 @@ class HistoryTransactionPagerAdapter constructor(
                 layout.text_tag_spam.visiable()
             } else {
                 if (isShowTicker(item.data.assetId)) {
-                    val ticker = item.data.asset?.getTicker()
+                    val ticker = item.data.asset?.getTokenTicker()
                     if (!ticker.isNullOrBlank()) {
                         layout.text_tag.text = ticker
                         layout.text_tag.visiable()

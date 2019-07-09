@@ -47,7 +47,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var matcherDataManager: MatcherDataManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-    var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
@@ -74,6 +73,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun transactionsBroadcast(tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest> {
+        tx.sign(getPrivateKey())
         return nodeService.transactionsBroadcast(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
@@ -98,14 +98,21 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
+    fun loadAssets(assetsFromDb: List<AssetBalance>? = null)
+            : Observable<Pair<List<AssetBalance>, List<SpamAsset>>> {
         return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
-                                return@flatMap Observable.zip(loadWavesBalance(), matcherDataManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalance, t2: Map<String, Long>, t3: AssetBalances ->
-                                    return@Function3 Triple(t1, t2, t3)
-                                })
+                                return@flatMap Observable.zip(
+                                        loadWavesBalance(),
+                                        matcherDataManager.loadReservedBalances(),
+                                        Observable.just(assets),
+                                        Function3 { wavesBalance: AssetBalance,
+                                                    reservedBalances: Map<String, Long>,
+                                                    assetBalances: AssetBalances ->
+                                            return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
+                                        })
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
@@ -145,6 +152,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
                                     val assetPref = savedAssetPrefs.firstOrNull { it.assetId == assetBalance.assetId }
+
+                                    markWavesAndMyTokensAsFavorite(mapDbAssets, assetBalance)
+
                                     assetBalance.isFavorite = assetPref?.isFavorite
                                             ?: assetBalance.isFavorite
                                     assetBalance.position = assetPref?.position
@@ -161,14 +171,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                     }
                                     if (assetBalance.isSpam) {
                                         assetBalance.isFavorite = false
-                                    }
-
-                                    if (savedAssetPrefs.isEmpty()) {
-                                        mapDbAssets?.let {
-                                            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
-                                                assetBalance.isFavorite = true
-                                            }
-                                        }
                                     }
                                 }
 
@@ -188,10 +190,21 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 trackZeroBalances(allAssets)
 
                                 // clear wallet from unimportant assets for new imported wallets
-                                return@map ClearAssetsHelper.clearUnimportantAssets(prefsUtil, allAssets.toMutableList(), fromAPI = true)
+                                return@map Pair(
+                                        ClearAssetsHelper.clearUnimportantAssets(
+                                                prefsUtil, allAssets.toMutableList(), fromAPI = true),
+                                        spamAssets)
                             }
                             .subscribeOn(Schedulers.io())
                 }
+    }
+
+    private fun markWavesAndMyTokensAsFavorite(mapDbAssets: Map<String, AssetBalance>?, assetBalance: AssetBalance) {
+        mapDbAssets?.let {
+            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                assetBalance.isFavorite = true
+            }
+        }
     }
 
     private fun trackZeroBalances(balances: List<AssetBalance>) {

@@ -3,8 +3,8 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.success
+package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection
 
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
-interface SuccessView : BaseMvpView
+interface SuccessRedirectionView : BaseMvpView

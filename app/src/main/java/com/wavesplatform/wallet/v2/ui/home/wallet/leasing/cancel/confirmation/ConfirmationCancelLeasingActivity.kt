@@ -69,7 +69,6 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         }
 
         button_okay.click {
-            setResult(Activity.RESULT_OK)
             onBackPressed()
         }
 
@@ -78,11 +77,16 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            setResult(Activity.RESULT_OK)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun successCancelLeasing() {

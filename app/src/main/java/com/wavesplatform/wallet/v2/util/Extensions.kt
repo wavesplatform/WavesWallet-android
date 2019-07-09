@@ -63,6 +63,7 @@ import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import kotlin.math.abs
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -87,6 +88,18 @@ inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
             }
         }
     })
+}
+
+fun String.formatBaseUrl(): String {
+    return if (this.isNotEmpty()) {
+        if (this.lastOrNull() == '/') {
+            this
+        } else {
+            this.plus("/")
+        }
+    } else {
+        this
+    }
 }
 
 fun View.animateVisible() {
@@ -659,9 +672,15 @@ fun AssetBalance.getMaxDigitsBeforeZero(): Int {
             .split(".")[0].length
 }
 
+
+fun AssetInfo.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity, this.precision)
+            .replace(",", "")
+            .split(".")[0].length
+}
+
 fun loadDbWavesBalance(): AssetBalance {
-    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
-            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun getDeviceId(): String {
@@ -677,7 +696,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ResponseBody.clone(): ResponseBody {
-    var bufferClone = this.source().buffer()?.clone()
+    val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
 }
 
@@ -685,17 +704,8 @@ fun ErrorResponse.isSmartError(): Boolean {
     return this.error in 305..308
 }
 
-fun AssetInfo.getTicker(): String {
-
-    if (this.id.isWavesId()) {
-        return Constants.wavesAssetInfo.name
-    }
-
-    return this.ticker ?: this.name
-}
-
 fun getScaledAmount(amount: Long, decimals: Int): String {
-    val absAmount = Math.abs(amount)
+    val absAmount = abs(amount)
     val value = BigDecimal.valueOf(absAmount, decimals)
     if (amount == 0L) {
         return "0"
@@ -775,6 +785,7 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBa
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
                             || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
                             || it.assetId == Constants.findByGatewayId(query.toUpperCase())?.assetId
+                            || it.assetId == Constants.findInConstantsGeneralAssets(query.toUpperCase())?.assetId
                 }
     }
 }

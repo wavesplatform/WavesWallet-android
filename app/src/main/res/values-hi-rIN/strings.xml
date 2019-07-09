@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">हम लगातार वेव्स वॉलेट को बेहतर और अधिक उपयोगी बनाने के लिए काम कर रहे हैं। नई सुविधाओं तक पहुँच प्राप्त करने के लिए कृपया अपने ऐप को अपडेट करें।</string>
   <string name="search_asset_hidden_title">छिपी टोकन</string>
   <string name="my_orders_details_filled_hint">भर ग्या</string>
+  <string name="wallet_sorting_hidden_section">छिपी टोकन</string>
+  <string name="wallet_sorting_favorite_empty">आपने पसंदीदा में टोकन नहीं जोड़े</string>
+  <string name="wallet_sorting_default_empty">टोकन की सूची खाली है</string>
+  <string name="wallet_sorting_hidden_empty">आपने छिपे में टोकन नहीं जोड़े</string>
 </resources>

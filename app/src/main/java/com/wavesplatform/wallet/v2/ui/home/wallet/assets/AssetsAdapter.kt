@@ -91,7 +91,7 @@ class AssetsAdapter @Inject constructor() :
                 val item = item as AssetBalance
                 helper.setText(R.id.text_asset_name, item.getName())
                         .setText(R.id.text_asset_value, getScaledAmount(
-                                item.getAvailableBalance() ?: 0L, item.getDecimals()))
+                                item.getAvailableBalance(), item.getDecimals()))
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)

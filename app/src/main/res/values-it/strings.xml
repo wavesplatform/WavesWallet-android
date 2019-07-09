@@ -666,4 +666,8 @@
   <string name="need_update_alert_description">Lavoriamo costantemente per rendere il Portafoglio Waves migliore e più utile. Aggiorna la tua app per accedere a nuove funzioni.</string>
   <string name="search_asset_hidden_title">Token nascosti</string>
   <string name="my_orders_details_filled_hint">Completato</string>
+  <string name="wallet_sorting_hidden_section">Token nascosti</string>
+  <string name="wallet_sorting_favorite_empty">Non hai aggiunto token tra i preferiti</string>
+  <string name="wallet_sorting_default_empty">L\'elenco dei Token è vuoto</string>
+  <string name="wallet_sorting_hidden_empty">Non hai aggiunto token tra quelli nascosti</string>
 </resources>

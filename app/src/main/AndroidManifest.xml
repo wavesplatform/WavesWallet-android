@@ -200,10 +200,6 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".v2.ui.home.quick_action.receive.about_redirection.AboutRedirectionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
             android:name=".v2.ui.home.wallet.your_assets.YourAssetsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
@@ -214,7 +210,6 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -241,7 +236,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
@@ -261,7 +255,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.success.SuccessActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity

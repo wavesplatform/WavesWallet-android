@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.animation.AnimationUtils
@@ -56,7 +57,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 R.drawable.ic_toolbar_back_white)
 
         if (intent == null || intent.extras == null) {
-            finish()
+            onBackPressed()
         }
 
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
@@ -69,13 +70,12 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
                 ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
-        if (presenter.type == SendPresenter.Type.GATEWAY) {
+        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
             presenter.gatewayCommission = BigDecimal(
                     intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
             text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
                     .toPlainString()
                     .stripZeros()}"
-            text_sum.makeTextHalfBold()
             text_gateway_fee_value.text = "${presenter.gatewayCommission.toPlainString().stripZeros()}" +
                     " ${presenter.selectedAsset!!.getName()}"
             gateway_commission_layout.visiable()
@@ -83,21 +83,26 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sum.text = "-${(presenter.amount)
                     .toPlainString()
                     .stripZeros()}"
-            text_sum.makeTextHalfBold()
         }
 
-        val ticker = presenter.assetInfo?.getTicker()
-        if (ticker.isNullOrBlank()) {
-            text_tag.text = presenter.selectedAsset!!.getName()
+        if (isShowTicker(presenter.selectedAsset?.assetId)) {
+            val ticker = presenter.assetInfo?.getTokenTicker()
+            if (!ticker.isNullOrBlank()) {
+                text_tag.text = ticker
+                text_tag.visiable()
+            }
         } else {
-            text_tag.text = ticker
+            text_sum.text = "${text_sum.text} ${presenter.selectedAsset?.getName()}"
         }
+
+        text_sum.makeTextHalfBold()
+
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset.getDecimals())} " +
                 presenter.feeAsset.getName()
 
-        if (presenter.type == SendPresenter.Type.GATEWAY) {
+        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
             attachment_layout.gone()
         } else {
             attachment_layout.visiable()
@@ -129,17 +134,17 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             analytics.trackEvent(AnalyticEvents.WalletAssetsSendConfirmEvent(name))
         }
         showTransactionProcessing()
-        presenter.confirmSend()
+        presenter.confirmWithdrawTransaction()
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
         completeTransactionProcessing()
-        text_leasing_result_value.text = getString(
+        text_transaction_result.text = getString(
                 R.string.send_success_you_have_sent_sum,
                 MoneyUtil.getScaledText(signed.amount, presenter.selectedAsset),
-                presenter.getTicker())
+                presenter.assetInfo?.name)
         button_okay.click {
-            launchActivity<MainActivity>(clear = true)
+            onBackPressed()
         }
         setSaveAddress(signed)
     }
@@ -208,11 +213,16 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            setResult(Activity.RESULT_OK)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun needToShowNetworkMessage(): Boolean = true

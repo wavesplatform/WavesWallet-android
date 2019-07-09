@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,14 +25,11 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_card.*
 import kotlinx.android.synthetic.main.content_asset_card.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
+import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -52,9 +50,9 @@ class CardFragment : BaseFragment(), CardView {
         button_continue.click {
             if (presenter.isValid()) {
                 analytics.trackEvent(AnalyticEvents.WalletAssetsCardReceiveTapEvent)
-                launchActivity<SuccessActivity> {
-                    putExtra(SuccessActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
-                    putExtra(SuccessActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))
+                launchActivity<SuccessRedirectionActivity>(REQUEST_CODE_SUCCESS_REDIRECTION) {
+                    putExtra(SuccessRedirectionActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
+                    putExtra(SuccessRedirectionActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))
                 }
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(presenter.createLink()))
                 startActivity(browserIntent)
@@ -107,7 +105,7 @@ class CardFragment : BaseFragment(), CardView {
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
         val currency = getCurrency(fiat)
-        skeletonScreen!!.hide()
+        skeletonScreen?.hide()
         if (min != null && max != null) {
             attention_title.text = getString(R.string.receive_limit, min, currency, max, currency)
             button_continue.isEnabled = true
@@ -115,12 +113,12 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showError(message: String) {
-        skeletonScreen!!.hide()
+        skeletonScreen?.hide()
         showError(message, R.id.content)
     }
 
     override fun onGatewayError() {
-        skeletonScreen!!.hide()
+        skeletonScreen?.hide()
         attention_title.text = getString(R.string.send_gateway_error_title)
         attention_subtitle.text = getString(R.string.send_gateway_error_subtitle)
         button_continue.isEnabled = false
@@ -144,8 +142,10 @@ class CardFragment : BaseFragment(), CardView {
         text_asset_name.text = assetBalance?.getName()
         text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
-        image_is_favourite.visiableIf {
-            assetBalance?.isFavorite!!
+        if (assetBalance?.isFavorite == true) {
+            image_is_favorite.visiable()
+        } else {
+            image_is_favorite.gone()
         }
 
         text_asset.gone()
@@ -190,7 +190,7 @@ class CardFragment : BaseFragment(), CardView {
     private fun setFiat(value: String) {
         amount_title.text = getString(R.string.receive_amount_title, getCurrency(value))
         presenter.fiatChanged(value)
-        skeletonScreen!!.show()
+        skeletonScreen?.show()
     }
 
     private fun getCurrency(value: String?): String {
@@ -205,13 +205,29 @@ class CardFragment : BaseFragment(), CardView {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_SUCCESS_REDIRECTION -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    onBackPressed()
+                }
+            }
+        }
+    }
+
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = presenter.asset != null && networkConnected
     }
 
-    companion object {
+    override fun onDestroyView() {
+        skeletonScreen?.hide()
+        super.onDestroyView()
+    }
 
+    companion object {
+        const val REQUEST_CODE_SUCCESS_REDIRECTION = 333
         const val USD = "USD"
         const val EURO = "EURO"
 

@@ -27,7 +27,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
         runAsync {
             addSubscription(queryAllAsSingle<AssetBalance>()
                     .toObservable()
-                    .map { it.filter { list -> !list.isSpam } }
+                    .map { it.filter { asset -> !asset.isSpam } }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         val result = mutableListOf<AssetSortingItem>()
@@ -86,7 +86,9 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun saveSortedPositions(data: MutableList<AssetSortingItem>) {
         data
-                .filter { it.type != AssetSortingItem.TYPE_FAVORITE_SEPARATOR && it.type != AssetSortingItem.TYPE_HIDDEN_HEADER }
+                .filter { it.type == AssetSortingItem.TYPE_DEFAULT_ITEM
+                        || it.type == AssetSortingItem.TYPE_HIDDEN_ITEM
+                        || it.type == AssetSortingItem.TYPE_FAVORITE_ITEM }
                 .mapIndexedTo(mutableListOf()) { position, item ->
                     item.asset.position = position
                     AssetBalanceStore(item.asset.assetId,
