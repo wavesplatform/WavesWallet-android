@@ -57,7 +57,7 @@ object Constants {
         const val TEST_NET_CODE = 'F'
     }
 
-    object GatewayType{
+    object GatewayType {
         const val COINOMAT = "coinomat"
         const val GATEWAY = "gateway"
     }
@@ -79,6 +79,13 @@ object Constants {
     fun defaultCrypto(): Array<String> {
         return com.wavesplatform.wallet.v2.util.EnvironmentManager.defaultAssets
                 .filter { !it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
+    }
+
+    fun defaultGateways(): Array<String> {
+        return EnvironmentManager.defaultAssets
+                .filter { it.isGateway }
                 .map { it.assetId }
                 .toTypedArray()
     }

@@ -207,6 +207,10 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         button_continue.isEnabled = presenter.nextStepValidation && networkConnected
     }
 
+    override fun onDestroyView() {
+        skeletonView?.hide()
+        super.onDestroyView()
+    }
 
     companion object {
         const val REQUEST_CODE_ADDRESS_SCREEN = 101

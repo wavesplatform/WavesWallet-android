@@ -93,12 +93,6 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         recycle_assets.adapter = adapter
         adapter.bindToRecyclerView(recycle_assets)
 
-        if (intent.hasExtra(CRYPTO_CURRENCY)) {
-            presenter.loadCryptoAssets(presenter.greaterZeroBalance, useWaves = false)
-        } else {
-            presenter.loadAssets(presenter.greaterZeroBalance)
-        }
-
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AssetBalanceResponse
 
@@ -111,6 +105,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             })
             onBackPressed()
         }
+
+        presenter.loadAssets(intent.hasExtra(CRYPTO_CURRENCY))
     }
 
     override fun showAssets(assets: MutableList<AssetBalanceResponse>) {
@@ -138,15 +134,12 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_sorting -> {
-                if (intent.hasExtra(CRYPTO_CURRENCY)) {
-                    presenter.loadCryptoAssets(!presenter.greaterZeroBalance)
-                } else {
-                    presenter.loadAssets(!presenter.greaterZeroBalance)
-                }
-                item.title = if (presenter.greaterZeroBalance) {
-                    getString(R.string.your_asset_activity_all)
-                } else {
+                item.title = if (item.title == getString(R.string.your_asset_activity_all)) {
+                    adapter.showOnlyWithBalance(false)
                     getString(R.string.your_asset_activity_greater_zero)
+                } else {
+                    adapter.showOnlyWithBalance(true)
+                    getString(R.string.your_asset_activity_all)
                 }
             }
         }

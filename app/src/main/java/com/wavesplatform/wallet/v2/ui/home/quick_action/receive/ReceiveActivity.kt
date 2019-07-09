@@ -40,12 +40,13 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
         adapter = if (intent.hasExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM)) {
             val assetBalance =
                     intent.getParcelableExtra<AssetBalanceResponse>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
-            ReceivePageAdapter(supportFragmentManager, this, assetBalance)
+            ReceivePageAdapter(supportFragmentManager, assetBalance)
         } else {
-            ReceivePageAdapter(supportFragmentManager, this, null)
+            ReceivePageAdapter(supportFragmentManager, null)
         }
 
         viewpager_receive.adapter = adapter
+        viewpager_receive.offscreenPageLimit = 3
         stl_receive.setViewPager(viewpager_receive)
 
         viewpager_receive.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

@@ -622,6 +622,16 @@ fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
 }
 
 
+fun AssetInfo.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity, this.precision)
+            .replace(",", "")
+            .split(".")[0].length
+}
+
+fun loadDbWavesBalance(): AssetBalance {
+    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
 fun getDeviceId(): String {
     return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
 }

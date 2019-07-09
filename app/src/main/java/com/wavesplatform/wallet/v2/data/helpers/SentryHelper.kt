@@ -20,19 +20,24 @@ import java.util.*
 class SentryHelper {
 
     companion object {
+        private const val NOT_FOUND_HTTP_CODE = 404
         private const val TAG_HTTP_CODE = "http.error"
         private const val TAG_NETWORK_TYPE = "network.type"
 
         fun logException(exception: Exception) {
             if (exception is NetworkException) {
-                Sentry.capture(EventBuilder()
-                        .withTimestamp(Date())
-                        .withTag(TAG_HTTP_CODE, exception.response?.code()?.toString())
-                        .withTag(TAG_NETWORK_TYPE, NetworkType.getByType(app.checkNetwork())?.typeName)
-                        .withLevel(Event.Level.ERROR)
-                        .withSentryInterface(ExceptionInterface(exception))
-                        .withRelease(BuildConfig.VERSION_NAME)
-                        .withMessage(formatSentryMessage(exception)))
+                if (exception.kind == RetrofitException.Kind.NETWORK || exception.response?.code() == NOT_FOUND_HTTP_CODE) {
+                    // ignore this events to make less spam to Sentry
+                } else {
+                    Sentry.capture(EventBuilder()
+                            .withTimestamp(Date())
+                            .withTag(TAG_HTTP_CODE, exception.response?.code()?.toString())
+                            .withTag(TAG_NETWORK_TYPE, NetworkType.getByType(app.checkNetwork())?.typeName)
+                            .withLevel(Event.Level.ERROR)
+                            .withSentryInterface(ExceptionInterface(exception))
+                            .withRelease(BuildConfig.VERSION_NAME)
+                            .withMessage(formatSentryMessage(exception)))
+                }
             } else {
                 Sentry.capture(exception)
             }

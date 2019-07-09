@@ -131,6 +131,9 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
 
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
                                     val assetPref = savedAssetPrefs.firstOrNull { it.assetId == assetBalance.assetId }
+
+                                    markWavesAndMyTokensAsFavorite(mapDbAssets, assetBalance)
+
                                     assetBalance.isFavorite = assetPref?.isFavorite
                                             ?: assetBalance.isFavorite
                                     assetBalance.position = assetPref?.position
@@ -147,16 +150,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                     }
                                     if (assetBalance.isSpam) {
                                         assetBalance.isFavorite = false
-                                    }
-
-                                    if (savedAssetPrefs.isEmpty()) {
-                                        mapDbAssets?.let {
-                                            if (mapDbAssets[assetBalance.assetId] == null
-                                                    && assetBalance.isMyWavesToken(
-                                                            WavesWallet.getAddress())) {
-                                                assetBalance.isFavorite = true
-                                            }
-                                        }
                                     }
                                 }
 
@@ -183,6 +176,14 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
+    private fun markWavesAndMyTokensAsFavorite(mapDbAssets: Map<String, AssetBalance>?, assetBalance: AssetBalance) {
+        mapDbAssets?.let {
+            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                assetBalance.isFavorite = true
+            }
+        }
+    }
+    // todo check
     private fun mergeNetDbData(
             tripple: Triple<AssetBalanceResponse, Map<String, Long>, AssetBalancesResponse>,
             mapDbAssets: Map<String, AssetBalanceResponse>?,
