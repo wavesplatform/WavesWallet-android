@@ -20,6 +20,8 @@ import com.wavesplatform.wallet.v2.util.zxing.encode.QRCodeEncoder
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -60,19 +62,25 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     }
 
     fun loadAliases() {
-        addSubscription(queryAllAsSingle<AliasDb>().toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .map { aliases ->
-                    val ownAliases = aliases.filter { it.own }
-                    viewState.afterSuccessLoadAliases(AliasDb.convertFromDb(ownAliases))
-                }
-                .observeOn(Schedulers.io())
-                .flatMap {
-                    dataServiceManager.loadAliases()
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
-                    viewState.afterSuccessLoadAliases(it)
-                })
+        runAsync {
+            addSubscription(queryAllAsSingle<AliasDb>().toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map { aliases ->
+                        val ownAliases = aliases.filter { it.own }
+                        runOnUiThread {
+                            viewState.afterSuccessLoadAliases(AliasDb.convertFromDb(ownAliases))
+                        }
+                    }
+                    .observeOn(Schedulers.io())
+                    .flatMap {
+                        dataServiceManager.loadAliases()
+                    }
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe {
+                        runOnUiThread {
+                            viewState.afterSuccessLoadAliases(it)
+                        }
+                    })
+        }
     }
 }

@@ -1,12 +1,15 @@
 package com.wavesplatform.wallet.v2.data.model.db
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.response.node.LeaseResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @RealmClass
 open class LeaseDb(
         @SerializedName("type") var type: Int = 0,
@@ -21,7 +24,7 @@ open class LeaseDb(
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("recipient") var recipient: String = "",
         @SerializedName("recipientAddress") var recipientAddress: String? = ""
-) : RealmModel {
+) : RealmModel, Parcelable {
 
     constructor(lease: LeaseResponse?) : this() {
         lease.notNull {

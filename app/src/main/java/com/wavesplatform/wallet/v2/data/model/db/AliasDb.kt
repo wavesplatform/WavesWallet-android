@@ -15,7 +15,7 @@ open class AliasDb(
         @PrimaryKey
         @SerializedName("alias") var alias: String? = "",
         @SerializedName("address") var address: String? = "",
-        var own: Boolean = false
+        @SerializedName("own") var own: Boolean = false
 ) : RealmModel, Parcelable {
 
     constructor(alias: AliasTransactionResponse?) : this() {
