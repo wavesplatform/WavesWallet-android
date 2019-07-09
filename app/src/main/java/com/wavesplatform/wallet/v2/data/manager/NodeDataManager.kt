@@ -111,8 +111,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                         Function3 { wavesBalance: AssetBalance,
                                                     reservedBalances: Map<String, Long>,
                                                     assetBalances: AssetBalances ->
-                                    return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
-                                })
+                                            return@Function3 Triple(wavesBalance, reservedBalances, assetBalances)
+                                        })
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
@@ -265,6 +265,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.createAlias(createAliasRequest)
                 .map {
                     it.address = getAddress()
+                    it.own = true
                     it.save()
                     return@map it
                 }

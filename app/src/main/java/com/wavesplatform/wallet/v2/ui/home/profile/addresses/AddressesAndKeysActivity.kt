@@ -77,7 +77,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         presenter.loadAliases()
     }
 
-    override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
+    override fun afterSuccessLoadAliases(ownAliases: MutableList<Alias>) {
         if (ownAliases.isEmpty()) {
             text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
         } else {
@@ -87,9 +87,12 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
             val bottomSheetFragment = AliasBottomSheetFragment()
             bottomSheetFragment.configureDialog(ownAliases.isEmpty(), AliasBottomSheetFragment.FROM_PROFILE)
             bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
-                override fun onSuccess() {
+                override fun onSuccess(alias: Alias) {
                     bottomSheetFragment.dismiss()
                     showSuccess(getString(R.string.new_alias_success_create), R.id.root)
+
+                    ownAliases.add(alias)
+                    text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
                 }
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)

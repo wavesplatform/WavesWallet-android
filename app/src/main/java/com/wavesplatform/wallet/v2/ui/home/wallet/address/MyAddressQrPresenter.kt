@@ -69,15 +69,15 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
                             .observeOn(AndroidSchedulers.mainThread())
                             .map { aliases ->
                                 val ownAliases = aliases.filter { it.own }
-                                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases) }
+                                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases.toMutableList()) }
                             }
                             .observeOn(Schedulers.io())
                             .flatMap {
                                 apiDataManager.loadAliases()
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe {
-                                runOnUiThread { viewState.afterSuccessLoadAliases(it) }
+                            .subscribe { aliases ->
+                                runOnUiThread { viewState.afterSuccessLoadAliases(aliases.toMutableList()) }
                             })
         }
     }

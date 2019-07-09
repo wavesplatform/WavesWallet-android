@@ -140,7 +140,6 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     override fun successCreateAlias(alias: Alias) {
-        alias.save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })
