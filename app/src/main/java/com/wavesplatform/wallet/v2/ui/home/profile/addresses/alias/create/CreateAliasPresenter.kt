@@ -61,7 +61,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                         if (error.isSmartError()) {
                             viewState.failedCreateAliasCauseSmart()
                         } else {
-                            viewState.failedCreateAlias(it.message)
+                            viewState.failedCreateAlias(error.message)
                         }
                     }
                 }))
