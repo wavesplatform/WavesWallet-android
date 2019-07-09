@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import javax.inject.Inject
 
@@ -45,12 +46,15 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     }
 
     private fun isValidBalanceForSponsoring(item: AssetBalanceResponse, fee: String): Boolean {
-        val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), WavesConstants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()
+        val sponsorBalance = MoneyUtil.getScaledText(
+                item.getSponsorBalance(),
+                WavesConstants.WAVES_ASSET_INFO.precision)
+                .clearBalance().toBigDecimal()
         val feeDecimalValue = fee.clearBalance().toBigDecimal()
         val availableBalance = MoneyUtil.getScaledText(
                 item.getAvailableBalance(), item.getDecimals()).clearBalance().toBigDecimal()
 
-        return ((sponsorBalance >= WavesConstants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal()
+        return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal()
                 && availableBalance >= feeDecimalValue)
                 || (sponsorBalance >= MoneyUtil.getScaledText(
                         wavesFee, WavesConstants.WAVES_ASSET_INFO.precision)
@@ -74,6 +78,6 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
         val value = ((MoneyUtil.getScaledText(wavesFee, WavesConstants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal() /
                 MoneyUtil.getScaledText(WavesConstants.WAVES_MIN_FEE, WavesConstants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()) * sponsorFee)
 
-        return value.toString()
+        return value.toPlainString()
     }
 }

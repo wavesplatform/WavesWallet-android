@@ -106,7 +106,7 @@ class CardFragment : BaseFragment(), CardView {
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
         val currency = getCurrency(fiat)
-        skeletonScreen!!.hide()
+        skeletonScreen?.hide()
         if (min != null && max != null) {
             attention_title.text = getString(R.string.receive_limit, min, currency, max, currency)
             button_continue.isEnabled = true
@@ -114,12 +114,12 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showError(message: String) {
-        skeletonScreen!!.hide()
+        skeletonScreen?.hide()
         showError(message, R.id.content)
     }
 
     override fun onGatewayError() {
-        skeletonScreen!!.hide()
+        skeletonScreen?.hide()
         attention_title.text = getString(R.string.send_gateway_error_title)
         attention_subtitle.text = getString(R.string.send_gateway_error_subtitle)
         button_continue.isEnabled = false
@@ -143,9 +143,9 @@ class CardFragment : BaseFragment(), CardView {
         text_asset_name.text = assetBalance?.getName()
         text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
-        if (assetBalance?.isFavorite == true){
+        if (assetBalance?.isFavorite == true) {
             image_is_favorite.visiable()
-        }else{
+        } else {
             image_is_favorite.gone()
         }
 
@@ -191,7 +191,7 @@ class CardFragment : BaseFragment(), CardView {
     private fun setFiat(value: String) {
         amount_title.text = getString(R.string.receive_amount_title, getCurrency(value))
         presenter.fiatChanged(value)
-        skeletonScreen!!.show()
+        skeletonScreen?.show()
     }
 
     private fun getCurrency(value: String?): String {
@@ -220,6 +220,11 @@ class CardFragment : BaseFragment(), CardView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = presenter.asset != null && networkConnected
+    }
+
+    override fun onDestroyView() {
+        skeletonScreen?.hide()
+        super.onDestroyView()
     }
 
     companion object {

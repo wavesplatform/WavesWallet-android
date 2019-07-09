@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.icon
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
@@ -25,7 +26,7 @@ class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<HistoryTrans
 
         helper.itemView.image_transaction.setImageDrawable(item.transactionType().icon())
         helper.itemView.text_transaction_name.text = mContext.getString(item.transactionType().title)
-        helper.itemView.text_transaction_value.text = MoneyUtil.getScaledText(item.amount, item.asset)
+        helper.itemView.text_transaction_value.text = MoneyUtil.getScaledText(item.amount, item.asset).stripZeros()
         helper.itemView.text_transaction_value.makeTextHalfBold()
     }
 }

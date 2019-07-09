@@ -88,22 +88,21 @@ class AssetsAdapter @Inject constructor() :
                     e.printStackTrace()
                 }
 
+                val item = item as AssetBalanceMultiItemEntity
+                helper.setText(R.id.text_asset_name, item.getName())
+                        .setText(R.id.text_asset_value, getScaledAmount(
+                                item.getAvailableBalance(), item.getDecimals()))
+                        .setGone(R.id.image_favourite, item.isFavorite)
+                        .setGone(R.id.text_my_asset, item.issueTransaction?.sender
+                                == App.getAccessManager().getWallet()?.address)
+                        .setGone(R.id.text_tag_spam, item.isSpam)
 
-                if (item is AssetBalanceMultiItemEntity) {
-                    helper.setText(R.id.text_asset_name, item.getName())
-                            .setText(R.id.text_asset_value, getScaledAmount(
-                                    item.getAvailableBalance(), item.getDecimals()))
-                            .setGone(R.id.image_favourite, item.isFavorite)
-                            .setGone(R.id.text_my_asset, item.issueTransaction?.sender
-                                    == App.getAccessManager().getWallet().address)
-                            .setGone(R.id.text_tag_spam, item.isSpam)
-
-                    helper.itemView.image_asset_icon.setAsset(item)
-                    helper.itemView.text_asset_value.makeTextHalfBold()
-                }
+                helper.itemView.image_asset_icon.setAsset(item)
+                helper.itemView.text_asset_value.makeTextHalfBold()
             }
         }
     }
+
 
     interface ScrollToHeaderListener {
         fun scrollToHeader(position: Int, itemView: View)

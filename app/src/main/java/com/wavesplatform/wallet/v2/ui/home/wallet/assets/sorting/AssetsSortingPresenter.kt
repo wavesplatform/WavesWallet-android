@@ -27,7 +27,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
         runAsync {
             addSubscription(queryAllAsSingle<AssetBalanceDb>()
                     .toObservable()
-                    .map { it.filter { list -> !list.isSpam } }
+                    .map { it.filter { asset -> !asset.isSpam } }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         val result = mutableListOf<AssetSortingItem>()
