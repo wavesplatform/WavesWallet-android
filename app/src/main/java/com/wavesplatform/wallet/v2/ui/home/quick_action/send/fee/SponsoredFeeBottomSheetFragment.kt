@@ -29,6 +29,9 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
 
     private var selectedAssetId: String? = null
     private var wavesFee: Long = Constants.WAVES_MIN_FEE
+    private var exchange: Boolean = false
+    private var amountAssetId: String = ""
+    private var priceAssetId: String = ""
 
     var onSelectedAssetListener: SponsoredAssetSelectedListener? = null
 
@@ -75,17 +78,30 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
             }
         }
 
-        presenter.loadSponsoredAssets {
-            rootView?.image_loader?.hide()
-            adapter.setNewData(it)
+        if (exchange) {
+            presenter.loadSponsoredAssets {
+                rootView?.image_loader?.hide()
+                adapter.setNewData(it)
+            }
+        } else {
+            presenter.loadExchangeCommission(amountAssetId, priceAssetId) {
+                rootView?.image_loader?.hide()
+                adapter.setNewData(it)
+            }
         }
 
         return rootView
     }
 
-    fun configureData(selectedAssetId: String, wavesFee: Long) {
+    fun configureData(selectedAssetId: String, wavesFee: Long,
+                      exchange: Boolean = false,
+                      amountAssetId: String = "",
+                      priceAssetId: String = "") {
         this.wavesFee = wavesFee
         this.selectedAssetId = selectedAssetId
+        this.exchange = exchange
+        this.amountAssetId = amountAssetId
+        this.priceAssetId = priceAssetId
     }
 
     override fun onDestroyView() {

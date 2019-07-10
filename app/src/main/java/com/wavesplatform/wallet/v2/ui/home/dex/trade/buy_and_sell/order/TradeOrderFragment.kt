@@ -17,11 +17,13 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.OrderListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -69,7 +71,42 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.initBalances()
         }
 
-        presenter.loadCommission()
+        commission_card.click {
+            val dialog = SponsoredFeeBottomSheetFragment()
+            dialog.configureData(
+                    selectedAssetId = Constants.WAVES_ASSET_ID_EMPTY,
+                    wavesFee = 10000,
+                    exchange = true,
+                    priceAssetId = presenter.data?.watchMarket?.market?.amountAsset ?: "",
+                    amountAssetId = presenter.data?.watchMarket?.market?.priceAsset ?: "")
+
+            dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
+                override fun onSelected(asset: AssetBalance, fee: Long) {
+                    commission_asset_name_text.text = asset.getName()
+                    commission_asset_name_text.visiable()
+                    text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
+
+                    presenter.feeAsset = asset.assetId
+                    presenter.fee = fee
+
+                    if (presenter.feeAsset.isWaves()) {
+                        text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
+                        commission_asset_name_text.visiable()
+                    } else {
+                        text_fee_transaction.text =
+                                "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
+                        commission_asset_name_text.gone()
+                    }
+
+                    /*text_amount_fee_error.text = getString(
+                            R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
+                            "${getScaledAmount(presenter.fee, asset.getDecimals())} ${asset.getName()}",
+                            presenter.gatewayMetadata.fee.toPlainString(),
+                            presenter.selectedAsset?.getName() ?: "")*/
+                }
+            }
+            dialog.show(activity!!.supportFragmentManager, dialog::class.java.simpleName)
+        }
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
             horizontal_amount_suggestion.visiable()

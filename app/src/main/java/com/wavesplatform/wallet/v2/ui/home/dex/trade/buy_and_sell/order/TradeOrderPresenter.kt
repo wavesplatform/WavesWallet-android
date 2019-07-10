@@ -33,8 +33,13 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
     var selectedExpiration = 5
     var newSelectedExpiration = 5
-    val expirationList = arrayOf(OrderExpiration.FIVE_MINUTES, OrderExpiration.THIRTY_MINUTES,
-            OrderExpiration.ONE_HOUR, OrderExpiration.ONE_DAY, OrderExpiration.ONE_WEEK, OrderExpiration.ONE_MONTH)
+    val expirationList = arrayOf(
+            OrderExpiration.FIVE_MINUTES,
+            OrderExpiration.THIRTY_MINUTES,
+            OrderExpiration.ONE_HOUR,
+            OrderExpiration.ONE_DAY,
+            OrderExpiration.ONE_WEEK,
+            OrderExpiration.ONE_MONTH)
 
     var orderType: Int = TradeBuyAndSellBottomSheetFragment.BUY_TYPE
 
@@ -43,6 +48,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var amountValidation = false
 
     var fee = 0L
+    var feeAsset = ""
 
     fun initBalances(){
         currentAmountBalance = queryFirst<AssetBalance> { equalTo("assetId",
@@ -80,7 +86,8 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                     currentAmountBalance = it[data?.watchMarket?.market?.amountAsset] ?: 0
                     currentPriceBalance = it[data?.watchMarket?.market?.priceAsset] ?: 0
 
-                    return@flatMap nodeDataManager.getCommissionForPair(data?.watchMarket?.market?.amountAsset,
+                    return@flatMap nodeDataManager.getCommissionForPair(
+                            data?.watchMarket?.market?.amountAsset,
                             data?.watchMarket?.market?.priceAsset)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -134,64 +141,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         return OrderBook.Pair(amountAsset, priceAsset)
     }
 
-    fun loadCommission() {
-        viewState.showCommissionLoading()
-        fee = 0L
-        addSubscription(Observable.zip(
-                matcherDataManager.getSettings(),
-                matcherDataManager.getSettingsRates(),
-                nodeDataManager.assetsBalances(),
-                io.reactivex.functions.Function3 { settings: MatcherSettings,
-                                   rates: MutableMap<String, Double>,
-                                   balances: MutableList<AssetBalance> ->
-                    return@Function3 Triple(settings, rates, balances)
-                })
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ triple ->
-                    val settings = triple.first
-                    val rates = triple.second
-                    val balances = triple.third
 
-
-                    val priceAssetId = data?.watchMarket?.market?.priceAsset
-                    val amountAssetId = data?.watchMarket?.market?.amountAsset
-
-
-                    val executedScripts = 1
-                    val availableCommissions = mutableListOf<Commission>()
-
-                    if (rates.size > 1) {
-
-                        val list = mutableListOf<String>()
-                        for (rate in rates) {
-                            val baseFee = settings.orderFee["dynamic"]?.baseFee!!
-                            availableCommissions
-                                    .add(Commission(rate.key, countMinFee(
-                                            rate.value, baseFee, executedScripts)))
-                        }
-
-                        if (orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                            //amount
-                        } else {
-                            //price
-                        }
-
-
-                    } else {
-                        // rates[0] waves
-                    }
-
-                    viewState.showCommissionSuccess(fee)
-                }, {
-                    it.printStackTrace()
-                    fee = 0L
-                    viewState.showCommissionError()
-                }))
-    }
-
-    private fun countMinFee(rate: Double, baseFee: Long, executedScripts: Int): Long {
-        return (rate * (baseFee + 400000 * executedScripts)).toLong()
-    }
 
     class Commission(val assetId: String, var commission: Long)
 }
