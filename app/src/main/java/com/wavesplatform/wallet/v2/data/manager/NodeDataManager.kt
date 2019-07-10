@@ -370,14 +370,19 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun burn(burn: BurnRequest): Observable<BurnRequest> {
-        return nodeService.burn(burn)
+    fun burn(request: BurnRequest, totalBurn: Boolean): Observable<BurnRequest> {
+        request.sign(getPrivateKey())
+
+        return nodeService.burn(request)
                 .doOnNext {
+                    if (totalBurn) {
+                        delete<AssetBalance> { equalTo("assetId", request.assetId) }
+                    }
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
     }
 
-    fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfo> {
+    fun scriptAddressInfo(address: String = getAddress()): Observable<ScriptInfo> {
         return nodeService.scriptAddressInfo(address)
                 .doOnNext {
                     prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
