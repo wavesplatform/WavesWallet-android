@@ -391,7 +391,7 @@
                     android:textColor="@color/error500"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
             </RelativeLayout>
 
@@ -553,6 +553,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
+                        android:drawableEnd="@drawable/ic_changearrows_14_basic_500"
+                        android:drawablePadding="4dp"
                         android:textColor="@color/disabled900"
                         android:visibility="invisible"
                         tools:text="0.003 Waves"
@@ -599,17 +601,7 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-        <include
-            layout="@layout/content_commission"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="40dp"
-            android:layout_marginTop="16dp" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_confirm"

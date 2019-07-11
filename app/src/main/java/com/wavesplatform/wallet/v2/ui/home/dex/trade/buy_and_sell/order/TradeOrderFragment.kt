@@ -8,7 +8,6 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -28,7 +27,6 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBot
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.content_commission.*
 import kotlinx.android.synthetic.main.fragment_trade_order.*
 import kotlinx.android.synthetic.main.fragment_trade_order.progress_bar_fee_transaction
 import pers.victor.ext.*
@@ -72,8 +70,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.initBalances()
         }
 
-        image_arrows.visibility = View.VISIBLE
-        commission_card.click {
+        text_fee_value.click {
             val dialog = SponsoredFeeBottomSheetFragment()
             dialog.configureData(
                     selectedAssetId = Constants.WAVES_ASSET_ID_EMPTY,
@@ -84,22 +81,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
                 override fun onSelected(asset: AssetBalance, fee: Long) {
-                    commission_asset_name_text.text = asset.getName()
-                    commission_asset_name_text.visiable()
-                    text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
-
                     presenter.feeAssetId = asset.assetId
                     presenter.fee = fee
-
-                    if (presenter.feeAssetId == Constants.WAVES_ASSET_ID_EMPTY
-                            || presenter.feeAssetId == Constants.WAVES_ASSET_ID_FILLED) {
-                        text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
-                        commission_asset_name_text.visiable()
-                    } else {
-                        text_fee_transaction.text =
-                                "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
-                        commission_asset_name_text.gone()
-                    }
+                    text_fee_value.text =
+                            "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
                 }
             }
             dialog.show(activity!!.supportFragmentManager, dialog::class.java.simpleName)
@@ -438,9 +423,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         button_confirm.click {
-
-            presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
-
             safeLet(presenter.data?.watchMarket,
                     presenter.data?.askPrice,
                     presenter.data?.bidPrice) { watchMarket, askPrice, bidPrice ->
@@ -483,7 +465,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     alertDialog.show()
                     alertDialog.makeStyled()
                 } else {
-                    // presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+                    presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
                 }
             }
         }
@@ -665,7 +647,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.isEnabled = presenter.isAllFieldsValid() && networkConnected
     }
 
-    /*override fun showCommissionLoading() {
+    override fun showCommissionLoading() {
         progress_bar_fee_transaction.show()
         text_fee_value.gone()
     }
@@ -683,30 +665,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         progress_bar_fee_transaction.hide()
         orderListener?.showError(getString(R.string.common_error_commission_receiving))
         text_fee_value.visiable()
-    }*/
+    }
 
     override fun onDestroyView() {
         progress_bar_fee_transaction.hide()
         super.onDestroyView()
-    }
-
-
-    override fun showCommissionLoading() {
-        progress_bar_fee_transaction.show()
-        text_fee_transaction.gone()
-    }
-
-    override fun showCommissionSuccess(unscaledAmount: Long) {
-        commission_card.visiable()
-        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
-        progress_bar_fee_transaction.hide()
-        text_fee_transaction.visiable()
-    }
-
-    override fun showCommissionError() {
-        text_fee_transaction.text = "-"
-        showError(R.string.common_error_commission_receiving, R.id.root)
-        progress_bar_fee_transaction.hide()
-        text_fee_transaction.visiable()
     }
 }

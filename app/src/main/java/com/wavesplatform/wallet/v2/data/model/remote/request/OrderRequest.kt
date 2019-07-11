@@ -32,7 +32,7 @@ data class OrderRequest(
         @SerializedName("matcherFeeAssetId") var matcherFeeAssetId: String = ""
 ) {
 
-    private fun toSignBytes(): ByteArray {
+    private fun toSignBytesV2(): ByteArray {
         return try {
             Bytes.concat(
                     byteArrayOf(version),
@@ -55,11 +55,11 @@ data class OrderRequest(
         return try {
             if (matcherFeeAssetId == Constants.WAVES_ASSET_ID_FILLED
                     || matcherFeeAssetId == Constants.WAVES_ASSET_ID_EMPTY) {
-                toSignBytes()
+                toSignBytesV2()
             } else {
                 version = 3
                 Bytes.concat(
-                        toSignBytes(),
+                        toSignBytesV2(),
                         SignUtil.arrayOption(matcherFeeAssetId))
             }
         } catch (e: Exception) {

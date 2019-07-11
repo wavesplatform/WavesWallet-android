@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
@@ -46,7 +47,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var totalPriceValidation = false
     var amountValidation = false
 
-    var fee = 0L
+    var fee = Constants.WAVES_ORDER_MIN_FEE
     var feeAssetId = ""
 
     fun initBalances(){
