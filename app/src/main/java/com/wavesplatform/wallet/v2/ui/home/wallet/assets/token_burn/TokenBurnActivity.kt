@@ -57,7 +57,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
         image_asset_icon.setAsset(presenter.assetBalance)
         text_asset_name.text = presenter.assetBalance.getName()
-        text_asset_value.text = presenter.assetBalance.getDisplayAvailableBalance()
+        text_asset_value.text = presenter.assetBalance.getDisplayAvailableBalance().stripZeros()
 
         text_use_total_balance.click {
             edit_amount.setText(presenter.assetBalance.getDisplayAvailableBalance().clearBalance())

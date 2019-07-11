@@ -15,10 +15,10 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.AddressUtil
+import com.wavesplatform.wallet.v2.util.REQUEST_SCAN_QR_CODE
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_import_account.*
@@ -58,7 +58,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
+            REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                     val seed = result.contents.replace(AddressUtil.WAVES_PREFIX, "")

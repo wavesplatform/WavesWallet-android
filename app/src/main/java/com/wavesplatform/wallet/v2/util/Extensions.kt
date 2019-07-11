@@ -5,10 +5,12 @@
 
 package com.wavesplatform.wallet.v2.util
 
+import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Typeface
@@ -26,6 +28,7 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatButton
@@ -44,6 +47,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
+import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
@@ -54,15 +58,20 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
+import kotlinx.android.synthetic.main.fragment_trade_order.*
 import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pers.victor.ext.Ext.ctx
-import pyxis.uzuki.live.richutilskt.utils.asDateString
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pers.victor.ext.activityManager
+import pers.victor.ext.inflate
+import pyxis.uzuki.live.richutilskt.impl.F2
+import pyxis.uzuki.live.richutilskt.utils.*
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import kotlin.arrayOf
 import kotlin.math.abs
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
@@ -100,6 +109,51 @@ fun String.formatBaseUrl(): String {
     } else {
         this
     }
+}
+
+const val REQUEST_SCAN_QR_CODE = 876
+fun Activity.launchQrCodeScanner(requestCode: Int = REQUEST_SCAN_QR_CODE) {
+    RPermission.instance.checkPermission(this, arrayOf(Manifest.permission.CAMERA), F2 { result, permissions ->
+        if (result == RPermission.PERMISSION_GRANTED) {
+            IntentIntegrator(this)
+                    .setRequestCode(requestCode)
+                    .setOrientationLocked(true)
+                    .setBeepEnabled(false)
+                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                    .initiateScan()
+        } else {
+            AlertDialog.Builder(this)
+                    .create()
+                    .apply {
+                        setTitle(getString(R.string.common_permission_error_title))
+                        setMessage(getString(R.string.common_permission_error_description))
+                        setButton(
+                                AlertDialog.BUTTON_POSITIVE,
+                                getString(R.string.common_permission_error_settings)) { dialog, _ ->
+                            launchPermissionsAppSettings()
+                            dialog.dismiss()
+                        }
+                        setButton(
+                                AlertDialog.BUTTON_NEGATIVE,
+                                getString(R.string.common_permission_error_cancel)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        show()
+                        makeStyled()
+                    }
+        }
+    })
+}
+
+fun Context.launchPermissionsAppSettings() {
+    val intent = Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data = Uri.fromParts("package", packageName, null)
+        addCategory(Intent.CATEGORY_DEFAULT)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    }
+    startActivity(intent)
 }
 
 fun View.animateVisible() {

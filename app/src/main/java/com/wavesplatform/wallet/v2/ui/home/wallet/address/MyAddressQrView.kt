@@ -13,5 +13,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface MyAddressQrView : BaseMvpView {
     fun showQRCode(qrCode: Bitmap?)
     fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView)
-    fun afterSuccessLoadAliases(ownAliases: List<Alias>)
+    fun afterSuccessLoadAliases(ownAliases: MutableList<Alias>)
 }

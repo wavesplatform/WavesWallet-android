@@ -8,12 +8,11 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account.scan
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.util.launchQrCodeScanner
 import kotlinx.android.synthetic.main.fragment_scan_seed.*
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -33,16 +32,7 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
         button_scan.click {
             analytics.trackEvent(AnalyticEvents.StartImportScanEvent)
 
-            IntentIntegrator(baseActivity)
-                    .setRequestCode(REQUEST_SCAN_QR_CODE)
-                    .setOrientationLocked(true)
-                    .setBeepEnabled(false)
-                    .setCaptureActivity(QrCodeScannerActivity::class.java)
-                    .initiateScan()
+            baseActivity.launchQrCodeScanner()
         }
-    }
-
-    companion object {
-        var REQUEST_SCAN_QR_CODE = 55
     }
 }

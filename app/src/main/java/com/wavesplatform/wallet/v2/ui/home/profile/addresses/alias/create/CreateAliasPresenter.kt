@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
 import com.arellomobile.mvp.InjectViewState
+import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -50,9 +51,9 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
 
         addSubscription(nodeDataManager.createAlias(aliasRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
+                .subscribe({ alias ->
                     viewState.showProgressBar(false)
-                    viewState.successCreateAlias(it)
+                    viewState.successCreateAlias(alias)
                 }, {
                     it.printStackTrace()
                     viewState.showProgressBar(false)

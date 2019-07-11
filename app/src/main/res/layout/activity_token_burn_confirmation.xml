@@ -106,8 +106,17 @@
                         android:paddingEnd="12dp"
                         android:paddingBottom="10dp"
                         android:textColor="@color/basic500"
+                        android:visibility="gone"
                         tools:text="The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again." />
 
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_line_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="14dp"
+                        android:background="@drawable/shape_dashed_line"
+                        android:layerType="software"
+                        android:visibility="gone" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_type_title"
