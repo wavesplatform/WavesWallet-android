@@ -79,12 +79,12 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
         }
 
         if (exchange) {
-            presenter.loadSponsoredAssets {
+            presenter.loadExchangeCommission(amountAssetId, priceAssetId) {
                 rootView?.image_loader?.hide()
                 adapter.setNewData(it)
             }
         } else {
-            presenter.loadExchangeCommission(amountAssetId, priceAssetId) {
+            presenter.loadSponsoredAssets {
                 rootView?.image_loader?.hide()
                 adapter.setNewData(it)
             }

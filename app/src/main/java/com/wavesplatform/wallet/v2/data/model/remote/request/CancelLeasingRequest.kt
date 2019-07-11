@@ -22,14 +22,14 @@ data class CancelLeasingRequest(
     @SerializedName("leaseId") var leaseId: String = "",
     @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("fee") var fee: Long = 0,
-    @SerializedName("version") var version: Int = Constants.VERSION,
+    @SerializedName("version") var version: Byte = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(Constants.VERSION),
                     byteArrayOf(EnvironmentManager.netCode),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),

@@ -82,7 +82,7 @@ object Constants {
     const val RESULT_OK_NO_RESULT = 204
     const val RESULT_SMART_ERROR = 307
 
-    const val VERSION = 2
+    const val VERSION: Byte = 2
     const val WAVES_ASSET_ID_EMPTY = ""
     const val WAVES_ASSET_ID_FILLED = "WAVES"
 

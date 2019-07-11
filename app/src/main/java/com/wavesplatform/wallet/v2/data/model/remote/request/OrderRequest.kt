@@ -12,28 +12,30 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 
 data class OrderRequest(
-    @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
-    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-    @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
-    @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
-    @SerializedName("price") var price: Long = 0L,
-    @SerializedName("amount") var amount: Long = 0L,
-    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
-    @SerializedName("expiration") var expiration: Long = 0L,
-    @SerializedName("matcherFee") var matcherFee: Long = 300000,
-    @SerializedName("version") var version: Int = Constants.VERSION,
-    @SerializedName("proofs") var proofs: MutableList<String?>? = null
+        @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
+        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+        @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
+        @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
+        @SerializedName("price") var price: Long = 0L,
+        @SerializedName("amount") var amount: Long = 0L,
+        @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
+        @SerializedName("expiration") var expiration: Long = 0L,
+        @SerializedName("matcherFee") var matcherFee: Long = 300000,
+        @SerializedName("version") var version: Byte = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null,
+        @SerializedName("matcherFeeAssetId") var matcherFeeAssetId: String = ""
 ) {
 
-    fun toSignBytes(): ByteArray {
+    private fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(
-                    byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(version),
                     Base58.decode(senderPublicKey),
                     Base58.decode(matcherPublicKey),
                     assetPair.toBytes(),
@@ -49,7 +51,24 @@ data class OrderRequest(
         }
     }
 
+    private fun toSignBytesV3(): ByteArray {
+        return try {
+            if (matcherFeeAssetId == Constants.WAVES_ASSET_ID_FILLED
+                    || matcherFeeAssetId == Constants.WAVES_ASSET_ID_EMPTY) {
+                toSignBytes()
+            } else {
+                version = 3
+                Bytes.concat(
+                        toSignBytes(),
+                        SignUtil.arrayOption(matcherFeeAssetId))
+            }
+        } catch (e: Exception) {
+            Log.e("OrderRequest", "Couldn't create toSignBytesV3", e)
+            ByteArray(0)
+        }
+    }
+
     fun sign(privateKey: ByteArray) {
-        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytesV3())))
     }
 }

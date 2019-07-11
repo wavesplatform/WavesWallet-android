@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @InjectViewState
 class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<SponsoredFeeDetailsView>() {
@@ -43,6 +44,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                             listener.invoke(it)
                         }, {
                             it.printStackTrace()
+                            viewState.showNetworkError()
                         }))
     }
 
@@ -53,6 +55,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
 
         viewState.showProgressBar(true)
 
+        wavesFee = Constants.WAVES_ORDER_MIN_FEE
         var addressMatcherScripted = false
         var amountAssetScripted = false
         var priceAssetScripted = false
@@ -110,12 +113,16 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                                     amountAssetScripted,
                                     priceAssetScripted)
 
-                            val baseFee = matcherSettings.orderFee["dynamic"]?.baseFee!!
+                            val baseFee = matcherSettings.orderFee[MatcherSettings.DYNAMIC]?.baseFee!!
                             val minFee = countMinFee(rate, baseFee, executedScripts)
 
                             if (minFee < matcherFeeAssetBalance.balance ?: 0) {
                                 sponsoredAssetItems.add(SponsoredAssetItem(
-                                        matcherFeeAssetBalance, minFee.toString(), true))
+                                        matcherFeeAssetBalance,
+                                        MoneyUtil.getScaledText(
+                                                minFee,
+                                                matcherFeeAssetBalance.getDecimals()).stripZeros(),
+                                        true))
                             }
                         }
                     }
@@ -154,7 +161,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     }
 
     private fun countMinFee(rate: Double, baseFee: Long, executedScripts: Int): Long {
-        return (rate * (baseFee + 400_000 * executedScripts)).toLong()
+        return ceil(rate * (baseFee + 400_000 * executedScripts)).toLong()
     }
 
     private fun isValidBalanceForSponsoring(item: AssetBalance, fee: String): Boolean {

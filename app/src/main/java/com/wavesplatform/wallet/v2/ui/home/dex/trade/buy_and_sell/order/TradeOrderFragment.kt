@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -71,6 +72,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.initBalances()
         }
 
+        image_arrows.visibility = View.VISIBLE
         commission_card.click {
             val dialog = SponsoredFeeBottomSheetFragment()
             dialog.configureData(
@@ -86,10 +88,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     commission_asset_name_text.visiable()
                     text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
 
-                    presenter.feeAsset = asset.assetId
+                    presenter.feeAssetId = asset.assetId
                     presenter.fee = fee
 
-                    if (presenter.feeAsset.isWaves()) {
+                    if (presenter.feeAssetId == Constants.WAVES_ASSET_ID_EMPTY
+                            || presenter.feeAssetId == Constants.WAVES_ASSET_ID_FILLED) {
                         text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
                         commission_asset_name_text.visiable()
                     } else {
@@ -97,12 +100,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                                 "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
                         commission_asset_name_text.gone()
                     }
-
-                    /*text_amount_fee_error.text = getString(
-                            R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
-                            "${getScaledAmount(presenter.fee, asset.getDecimals())} ${asset.getName()}",
-                            presenter.gatewayMetadata.fee.toPlainString(),
-                            presenter.selectedAsset?.getName() ?: "")*/
                 }
             }
             dialog.show(activity!!.supportFragmentManager, dialog::class.java.simpleName)
@@ -442,6 +439,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         button_confirm.click {
 
+            presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+
             safeLet(presenter.data?.watchMarket,
                     presenter.data?.askPrice,
                     presenter.data?.bidPrice) { watchMarket, askPrice, bidPrice ->
@@ -484,7 +483,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     alertDialog.show()
                     alertDialog.makeStyled()
                 } else {
-                    presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+                    // presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
                 }
             }
         }

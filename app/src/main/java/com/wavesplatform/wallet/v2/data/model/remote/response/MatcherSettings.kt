@@ -10,4 +10,8 @@ class MatcherSettings(
     class Fee(
             @SerializedName("baseFee") var baseFee: Long = Constants.WAVES_ORDER_MIN_FEE,
             @SerializedName("rates") var rates: MutableMap<String, Double> = hashMapOf())
+
+    companion object {
+        const val DYNAMIC = "dynamic"
+    }
 }

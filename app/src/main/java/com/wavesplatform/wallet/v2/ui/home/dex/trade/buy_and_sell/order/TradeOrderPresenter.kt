@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
-import io.reactivex.Observable
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -48,7 +47,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var amountValidation = false
 
     var fee = 0L
-    var feeAsset = ""
+    var feeAssetId = ""
 
     fun initBalances(){
         currentAmountBalance = queryFirst<AssetBalance> { equalTo("assetId",
@@ -115,6 +114,9 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         orderRequest.assetPair = createPair()
         orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer
+
+        orderRequest.matcherFeeAssetId = feeAssetId
+        orderRequest.matcherFee = fee
 
         addSubscription(matcherDataManager.placeOrder(orderRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
