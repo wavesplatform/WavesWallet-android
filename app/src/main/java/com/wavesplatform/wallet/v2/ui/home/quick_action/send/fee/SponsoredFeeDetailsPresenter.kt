@@ -46,8 +46,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     private fun isValidBalanceForSponsoring(item: AssetBalance, fee: String): Boolean {
         val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
         val feeDecimalValue = fee.clearBalance().toBigDecimal()
-        val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance()
-                ?: 0, item.getDecimals()).clearBalance().toBigDecimal()
+        val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance(), item.getDecimals()).clearBalance().toBigDecimal()
 
         return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal() && availableBalance >= feeDecimalValue) ||
 
@@ -71,6 +70,6 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
         val value = ((MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal() /
                 MoneyUtil.getScaledText(Constants.WAVES_MIN_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()) * sponsorFee)
 
-        return value.toString()
+        return value.toPlainString()
     }
 }

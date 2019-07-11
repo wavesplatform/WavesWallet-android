@@ -64,8 +64,12 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
         }
 
-        image_view_recipient_action.click {
-            launchQrCodeScanner()
+        image_view_generator_action.click {
+            if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
+                edit_address.setText("")
+            } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
+                launchQrCodeScanner()
+            }
         }
 
         button_continue.click {
@@ -78,7 +82,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
         }
 
-        edit_amount.applyFilterStartWithDot()
+        edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                Constants.wavesAssetInfo.getMaxDigitsBeforeZero(),
+                Constants.wavesAssetInfo.precision,
+                Double.MAX_VALUE))
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .skipInitialValue()
@@ -89,9 +96,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     if (it.isNotEmpty()) {
                         text_address_error.text = ""
                         text_address_error.gone()
+                        image_view_generator_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
+                        edit_address.tag = R.drawable.ic_deladdress_24_error_400
                     } else {
+                        presenter.nodeAddressValidation = false
                         text_address_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_address_error.visiable()
+                        image_view_generator_action.setImageResource(R.drawable.ic_qrcode_24_basic_500)
+                        edit_address.tag = R.drawable.ic_qrcode_24_basic_500
                     }
                     makeButtonEnableIfValid()
                     return@map it
