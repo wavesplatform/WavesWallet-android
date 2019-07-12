@@ -103,8 +103,6 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     }
 
     fun createOrder(amount: String, price: String) {
-        viewState.showProgressBar(true)
-
         orderRequest.amount = amount.clearBalance().toBigDecimal().setScale(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
         orderRequest.price = price.clearBalance().toBigDecimal().setScale((8.plus(data?.watchMarket?.market?.priceAssetDecimals
@@ -124,6 +122,21 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 .subscribe({
                     viewState.showProgressBar(false)
                     viewState.successPlaceOrder()
+                }, {
+                    it.printStackTrace()
+                    viewState.showProgressBar(false)
+                    it.errorBody()?.let {
+                        viewState.afterFailedPlaceOrder(it.message)
+                    }
+                }))
+    }
+
+    fun loadOrderBook(amountAssetId: String, priceAssetId: String) {
+        viewState.showProgressBar(true)
+        addSubscription(matcherDataManager.loadOrderBook(amountAssetId, priceAssetId)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    viewState.showOrderAttentionAndCreateOrder(it)
                 }, {
                     it.printStackTrace()
                     viewState.showProgressBar(false)

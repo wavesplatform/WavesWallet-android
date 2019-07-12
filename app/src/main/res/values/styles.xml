@@ -126,6 +126,11 @@
         <item name="android:stateListAnimator">@null</item>
     </style>
 
+    <style name="WavesButton.Gray" parent="WavesButton">
+        <item name="android:background">@drawable/shape_btn_waves_gray_default</item>
+        <item name="android:textColor">@color/blockchain_grey</item>
+    </style>
+
     <style name="CursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
