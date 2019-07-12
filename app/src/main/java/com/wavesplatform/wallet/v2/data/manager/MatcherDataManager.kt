@@ -25,7 +25,6 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
-import retrofit2.http.Path
 import javax.inject.Inject
 import javax.inject.Singleton
 
