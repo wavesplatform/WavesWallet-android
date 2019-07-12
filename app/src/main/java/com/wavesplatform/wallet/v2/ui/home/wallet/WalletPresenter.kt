@@ -14,6 +14,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class WalletPresenter @Inject constructor() : BasePresenter<WalletView>() {
+    var shadowEnable = false
+
     fun showTopBannerIfNeed() {
         if (!prefsUtil.getValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, false) &&
                 prefsUtil.getValue(PrefsUtil.KEY_IS_NEED_TO_SHOW_CLEARED_ALERT, false)) {
