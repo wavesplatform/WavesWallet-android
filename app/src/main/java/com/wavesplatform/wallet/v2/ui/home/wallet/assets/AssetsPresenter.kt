@@ -27,6 +27,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
+import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -71,7 +72,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         dbAssets = removeSpamAssets(
                                 ClearAssetsHelper.clearUnimportantAssets(
                                         prefsUtil, pair.first.toMutableList()),
-                                pair.second.toMutableList())
+                                dbSpamAssets)
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
@@ -118,10 +119,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun removeSpamAssets(assetBalances: MutableList<AssetBalance>, spams: MutableList<SpamAsset>)
-            : MutableList<AssetBalance> {
+    private fun removeSpamAssets(assetBalances: MutableList<AssetBalance>,
+                                 spams: MutableList<SpamAsset>): MutableList<AssetBalance> {
+        val spamAssets = spams.associateBy { it.assetId }
+
         assetBalances.forEach { asset ->
-            asset.isSpam = spams.any { it.assetId == asset.assetId }
+            asset.isSpam = spamAssets[asset.assetId] != null
+
             if (assetBalances.any { it.position != -1 }) {
                 if (asset.position == -1) {
                     asset.position = assetBalances.size + 1
