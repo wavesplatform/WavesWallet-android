@@ -13,7 +13,6 @@ import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
@@ -600,13 +599,49 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
     override fun setupInfo(transaction: Transaction): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
+        fun getOrderFeeText(order: Order?): String {
+            if (order == null) {
+                return ""
+            }
+
+            val matcherFee = order.matcherFee
+            val matcherFeeAssetId = order.matcherFeeAssetId
+
+            val info = queryFirst<AssetInfo> {
+                equalTo("id", matcherFeeAssetId ?: "")
+            } ?: return ""
+
+            return "${MoneyUtil.getScaledText(matcherFee, info).stripZeros()} ${info.name}"
+        }
+
         fun showTransactionFee() {
-            if (transaction.feeAssetObject?.name?.isWaves() == true) {
-                layout.text_fee?.text = MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()
-                layout.text_base_info_tag.visiable()
+            if (transaction.type == Transaction.EXCHANGE) {
+                var feeText = ""
+
+                if (App.getAccessManager().getWallet()?.address == transaction.order1?.sender) {
+                    feeText = getOrderFeeText(transaction.order1)
+                }
+
+                if (App.getAccessManager().getWallet()?.address == transaction.order2?.sender) {
+                    if (feeText.isNotBlank()) {
+                        feeText += "\n"
+                    }
+                    feeText += getOrderFeeText(transaction.order2)
+                }
+
+                layout.text_fee?.text = feeText
+                layout.text_base_info_tag?.visibility = View.GONE
             } else {
-                layout.text_fee?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
-                layout.text_base_info_tag.gone()
+                if (transaction.feeAssetObject?.name?.isWaves() == true) {
+                    layout.text_fee?.text = MoneyUtil.getScaledText(
+                            transaction.fee, transaction.feeAssetObject).stripZeros()
+                    layout.text_base_info_tag.visiable()
+                } else {
+                    layout.text_fee?.text = "${MoneyUtil.getScaledText(
+                            transaction.fee, 
+                            transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
+                    layout.text_base_info_tag.gone()
+                }
             }
         }
 

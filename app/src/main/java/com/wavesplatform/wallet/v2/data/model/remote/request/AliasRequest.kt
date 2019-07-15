@@ -22,7 +22,7 @@ data class AliasRequest(
     @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
     @SerializedName("fee") var fee: Long = 0,
     @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
-    @SerializedName("version") var version: Int = Constants.VERSION,
+    @SerializedName("version") var version: Byte = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null,
     @SerializedName("alias") var alias: String? = ""
 ) {
@@ -30,9 +30,9 @@ data class AliasRequest(
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(Constants.VERSION),
                     Base58.decode(senderPublicKey),
-                    Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
+                    Bytes.concat(byteArrayOf(Constants.VERSION),
                             byteArrayOf(EnvironmentManager.netCode),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),

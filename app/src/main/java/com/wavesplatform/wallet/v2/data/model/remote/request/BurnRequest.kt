@@ -24,7 +24,7 @@ data class BurnRequest(
     @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
     @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("type") val type: Int = Transaction.BURN,
-    @SerializedName("version") val version: Int = Constants.VERSION,
+    @SerializedName("version") val version: Byte = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null,
     @SerializedName("id") var id: String? = null
 ) {
@@ -33,7 +33,7 @@ data class BurnRequest(
         return try {
             Bytes.concat(
                     byteArrayOf(Transaction.BURN.toByte()),
-                    byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(Constants.VERSION),
                     byteArrayOf(chainId),
                     Base58.decode(App.getAccessManager().getWallet()!!.publicKeyStr),
                     Base58.decode(assetId),

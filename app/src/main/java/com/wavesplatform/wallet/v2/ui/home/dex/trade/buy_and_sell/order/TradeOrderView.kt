@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TradeOrderView : BaseMvpView {
@@ -14,4 +15,5 @@ interface TradeOrderView : BaseMvpView {
     fun showCommissionLoading()
     fun showCommissionSuccess(unscaledAmount: Long)
     fun showCommissionError()
+    fun showOrderAttentionAndCreateOrder(orderBook: OrderBook)
 }

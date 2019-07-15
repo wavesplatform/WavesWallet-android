@@ -7,16 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.stripZeros
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -30,16 +27,19 @@ import javax.inject.Inject
 class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBookView>() {
     var watchMarket: WatchMarket? = null
     var needFirstScrollToLastPrice = true
-    val subscriptions = CompositeDisposable()
+    private val subscriptions = CompositeDisposable()
 
     fun loadOrderBook() {
         addSubscription(
                 Observable.interval(0, 10, TimeUnit.SECONDS)
                         .retry(3)
                         .flatMap {
-                            return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
+                            val market = watchMarket?.market
+                            return@flatMap Observable.zip(matcherDataManager.loadOrderBook(
+                                    market?.amountAsset!!, market.priceAsset),
                                     apiDataManager.getLastTradeByPair(watchMarket),
-                                    BiFunction { orderBook: OrderBook, lastPrice: ArrayList<LastTradesResponse.Data.ExchangeTransaction> ->
+                                    BiFunction { orderBook: OrderBook,
+                                                 lastPrice: ArrayList<LastTradesResponse.Data.ExchangeTransaction> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }

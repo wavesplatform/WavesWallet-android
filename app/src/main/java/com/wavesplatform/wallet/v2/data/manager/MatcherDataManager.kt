@@ -54,8 +54,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }
 
-    fun loadOrderBook(watchMarket: WatchMarket?): Observable<OrderBook> {
-        return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
+    fun loadOrderBook(amountAssetId: String, priceAssetId: String?): Observable<OrderBook> {
+        return matcherService.getOrderBook(amountAssetId, priceAssetId)
     }
 
     fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
@@ -186,6 +186,14 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
+    }
+
+    fun getSettings(): Observable<MatcherSettings> {
+        return matcherService.getMatcherSettings()
+    }
+
+    fun getSettingsRates(): Observable<MutableMap<String, Double>> {
+        return matcherService.getMatcherSettingsRates()
     }
 
     companion object {
