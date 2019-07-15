@@ -22,7 +22,6 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 import com.oushangfeng.pinnedsectionitemdecoration.callback.OnHeaderClickAdapter
-import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -61,7 +60,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var adapter: AssetsAdapter
 
-    var elevationAppBarChangeListener : MainActivity.OnElevationAppBarChangeListener? = null
+    var elevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var headerItemDecoration: PinnedHeaderItemDecoration? = null
@@ -174,16 +173,16 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 val item = this.adapter.getItem(position) as AssetBalance
                 val positionWithoutSection = when {
                     // minus hidden section header and all clear assets
-                    item.isHidden -> position - 1 - adapter.data.count {
+                    item.isHidden -> position - getHeaderCount(position) - adapter.data.count {
                         (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
                     }
                     // minus hidden and spam sections header and all clear and hidden assets
-                    item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
-                        (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
-                    } -
-                            adapter.data.count {
-                                (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
-                            }
+                    item.isSpam ->
+                        position - getHeaderCount(position) - adapter.data.count {
+                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                        } - adapter.data.count {
+                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
+                        }
                     else -> position // no changes
                 }
                 launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
@@ -204,15 +203,12 @@ class AssetsFragment : BaseFragment(), AssetsView {
         elevationAppBarChangeListener?.onChange(false)
     }
 
-    private fun getCorrectionIndex(): Int {
-        val someFirstHidden = queryFirst<AssetBalance> {
-            equalTo("isHidden", true)
-        }
-        return if (someFirstHidden == null) {
-            1
-        } else {
-            2
-        }
+    private fun getHeaderCount(position: Int): Int {
+        return adapter.data
+                .subList(0, position)
+                .count {
+                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HEADER
+                }
     }
 
     override fun afterFailedUpdateAssets() {
