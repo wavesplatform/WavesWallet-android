@@ -11,7 +11,6 @@ import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.sdk.model.response.node.transaction.BurnTransactionResponse
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
@@ -22,8 +21,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_ASSET_BALANCE
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_BLOCKCHAIN_FEE
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_token_burn_confirmation.*
@@ -122,7 +119,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     }
 
     override fun failedTokenBurnCauseSmart() {
-        setResult(com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR)
+        setResult(Constants.RESULT_SMART_ERROR)
         onBackPressed()
     }
 

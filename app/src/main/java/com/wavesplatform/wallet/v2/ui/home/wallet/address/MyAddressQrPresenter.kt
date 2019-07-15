@@ -20,6 +20,8 @@ import com.wavesplatform.wallet.v2.util.zxing.encode.QRCodeEncoder
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -73,7 +75,7 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
                                 dataServiceManager.loadAliases()
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe { aliases -> // todo check
+                            .subscribe { aliases ->
                                 runOnUiThread { viewState.afterSuccessLoadAliases(aliases.toMutableList()) }
                             })
         }

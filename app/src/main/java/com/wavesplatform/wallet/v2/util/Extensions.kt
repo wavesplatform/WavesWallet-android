@@ -9,7 +9,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Typeface
@@ -27,7 +26,6 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatButton
@@ -41,52 +39,44 @@ import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.Window
-import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.common.primitives.Bytes
-import com.google.common.primitives.Shorts
 import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.sdk.net.NetworkException
-import com.wavesplatform.wallet.v2.data.model.local.TransactionType
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.node.OrderResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.sdk.model.response.node.OrderResponse
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R // todo check
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
-import kotlinx.android.synthetic.main.fragment_trade_order.*
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pers.victor.ext.Ext.ctx
-import pers.victor.ext.activityManager
-import pers.victor.ext.inflate
 import pyxis.uzuki.live.richutilskt.impl.F2
 import pyxis.uzuki.live.richutilskt.utils.*
 import java.io.File
 import java.util.*
 import kotlin.arrayOf
-import kotlin.math.abs
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {

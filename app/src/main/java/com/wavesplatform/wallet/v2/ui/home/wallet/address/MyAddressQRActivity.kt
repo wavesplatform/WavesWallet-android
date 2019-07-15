@@ -111,7 +111,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             val bottomSheetFragment = AliasBottomSheetFragment()
             bottomSheetFragment.configureDialog(ownAliases.isEmpty(), AliasBottomSheetFragment.FROM_WALLET)
             bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
-                override fun onSuccess(alias: Alias) {
+                override fun onSuccess(alias: AliasTransactionResponse) {
                     bottomSheetFragment.dismiss()
                     showSuccess(getString(R.string.new_alias_success_create), R.id.root)
 

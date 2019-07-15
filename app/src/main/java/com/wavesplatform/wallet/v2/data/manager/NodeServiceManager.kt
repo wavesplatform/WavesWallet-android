@@ -185,7 +185,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    // todo check
     private fun mergeNetDbData(
             tripple: Triple<AssetBalanceResponse, Map<String, Long>, AssetBalancesResponse>,
             mapDbAssets: Map<String, AssetBalanceResponse>?,
@@ -373,12 +372,11 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    // todo check
     fun burn(burn: BurnTransaction, totalBurn: Boolean): Observable<BurnTransactionResponse> {
         return nodeService.transactionsBroadcast(burn)
                 .doOnNext {
                     if (totalBurn) {
-                        delete<AssetBalanceDb> { equalTo("assetId", request.assetId) }
+                        delete<AssetBalanceDb> { equalTo("assetId", burn.assetId) }
                     }
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }

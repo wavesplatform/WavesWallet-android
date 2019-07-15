@@ -181,7 +181,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
     }
 
     interface OnCreateAliasListener {
-        fun onSuccess(alias: Alias)
+        fun onSuccess(alias: AliasTransactionResponse)
     }
 
     companion object {

@@ -18,7 +18,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.AddressUtil
 import com.wavesplatform.wallet.v2.util.REQUEST_SCAN_QR_CODE
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError

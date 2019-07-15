@@ -10,6 +10,7 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -26,8 +27,6 @@ class AddressesAndKeysPresenter @Inject constructor() : BasePresenter<AddressesA
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe { aliases ->
                                 runOnUiThread { viewState.afterSuccessLoadAliases(aliases.toMutableList()) }
-                            .subscribe { aliases ->
-                                viewState.afterSuccessLoadAliases(aliases.toMutableList()) // todo check
                             })
     }
 }

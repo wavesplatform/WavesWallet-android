@@ -9,11 +9,8 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.wallet.App
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.isSmartError
-import com.wavesplatform.wallet.v1.util.MoneyUtil // todo check
-import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.executeInBackground
@@ -37,8 +34,8 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
                 quantity = quantity)
         request.sign(App.getAccessManager().getWallet().seedStr)
 
-        addSubscription(nodeServiceManager.burn(request)
-                .executeInBackground() // todo check
+        addSubscription(nodeServiceManager.burn(request, totalBurn)
+                .executeInBackground()
                 .subscribe({
                     success = true
                     viewState.onShowBurnSuccess(it, totalBurn)
