@@ -55,7 +55,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
     private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
-    private var skeletonScreen: ViewSkeletonScreen? = null
 
     override fun configLayoutRes() = R.layout.fragment_asset_details_layout
 
@@ -100,12 +99,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         fillInformation(presenter.assetBalance)
 
         presenter.assetBalance.notNull {
-            skeletonScreen = Skeleton.bind(frame_last_transactions)
-                    .shimmer(true)
-                    .color(R.color.basic100)
-                    .load(R.layout.item_skeleton_wallet)
-                    .show()
-
             presenter.loadLastTransactionsFor(it, (activity as AssetDetailsActivity).getAllTransactions())
         }
 
@@ -121,7 +114,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     }
 
     override fun showLastTransactions(data: MutableList<HistoryItem>) {
-        skeletonScreen?.hide()
 
         if (data.isNotEmpty()) {
             // configure clickable card
@@ -276,9 +268,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     override fun onDestroyView() {
         historyAdapter.items = emptyList()
         view_pager_transaction_history.adapter = null
-        skeletonScreen?.hide()
-        skeletonScreen = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        mvpDelegate.onDestroy()
+        super.onDestroy()
     }
 
     companion object {

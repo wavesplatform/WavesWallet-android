@@ -9,5 +9,5 @@ import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionRes
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface AddressesAndKeysView : BaseMvpView {
-    fun afterSuccessLoadAliases(ownAliases: List<AliasTransactionResponse>)
+    fun afterSuccessLoadAliases(ownAliases: MutableList<AliasTransactionResponse>)
 }

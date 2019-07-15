@@ -20,12 +20,14 @@ class AddressesAndKeysPresenter @Inject constructor() : BasePresenter<AddressesA
                     queryAllAsSingle<AliasDb>().toObservable()
                             .map { aliases ->
                                 val ownAliases = aliases.filter { it.own }
-                                viewState.afterSuccessLoadAliases(AliasDb.convertFromDb(ownAliases))
+                                runOnUiThread { viewState.afterSuccessLoadAliases(AliasDb.convertFromDb(ownAliases)) }
                             }
                             .flatMap { dataServiceManager.loadAliases() }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe {
-                                viewState.afterSuccessLoadAliases(it)
+                            .subscribe { aliases ->
+                                runOnUiThread { viewState.afterSuccessLoadAliases(aliases.toMutableList()) }
+                            .subscribe { aliases ->
+                                viewState.afterSuccessLoadAliases(aliases.toMutableList()) // todo check
                             })
     }
 }

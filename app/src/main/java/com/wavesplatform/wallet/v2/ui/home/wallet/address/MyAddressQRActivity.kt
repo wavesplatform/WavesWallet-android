@@ -101,7 +101,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
     }
 
-    override fun afterSuccessLoadAliases(ownAliases: List<AliasTransactionResponse>) {
+    override fun afterSuccessLoadAliases(ownAliases: MutableList<AliasTransactionResponse>) {
         if (ownAliases.isEmpty()) {
             text_aliases_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
         } else {
@@ -111,9 +111,12 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             val bottomSheetFragment = AliasBottomSheetFragment()
             bottomSheetFragment.configureDialog(ownAliases.isEmpty(), AliasBottomSheetFragment.FROM_WALLET)
             bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
-                override fun onSuccess() {
+                override fun onSuccess(alias: Alias) {
                     bottomSheetFragment.dismiss()
                     showSuccess(getString(R.string.new_alias_success_create), R.id.root)
+
+                    ownAliases.add(alias)
+                    text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
                 }
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)

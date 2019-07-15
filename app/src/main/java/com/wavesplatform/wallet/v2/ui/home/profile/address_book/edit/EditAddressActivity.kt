@@ -27,13 +27,10 @@ import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
 import com.wavesplatform.wallet.v2.data.rules.AddressBookNameRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
-import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
-import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.onAction
+import com.wavesplatform.wallet.v2.util.*
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -81,11 +78,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                         if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
                             edit_address.setText("")
                         } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
-                            IntentIntegrator(this@EditAddressActivity).setRequestCode(ScanSeedFragment.REQUEST_SCAN_QR_CODE)
-                                    .setOrientationLocked(true)
-                                    .setBeepEnabled(false)
-                                    .setCaptureActivity(QrCodeScannerActivity::class.java)
-                                    .initiateScan()
+                            launchQrCodeScanner()
                         }
                     }
                 }
@@ -211,7 +204,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
+            REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                     result.contents.replace(WAVES_PREFIX, "").notNull {

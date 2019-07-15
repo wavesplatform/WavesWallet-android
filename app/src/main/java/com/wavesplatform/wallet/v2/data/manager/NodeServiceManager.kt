@@ -275,6 +275,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
         return nodeService.transactionsBroadcast(request)
                 .map {
                     it.address = getAddress()
+                    it.own = true
                     AliasDb(it).save()
                     return@map it
                 }
@@ -372,14 +373,18 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun burn(burn: BurnTransaction): Observable<BurnTransactionResponse> {
+    // todo check
+    fun burn(burn: BurnTransaction, totalBurn: Boolean): Observable<BurnTransactionResponse> {
         return nodeService.transactionsBroadcast(burn)
                 .doOnNext {
+                    if (totalBurn) {
+                        delete<AssetBalanceDb> { equalTo("assetId", request.assetId) }
+                    }
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
     }
 
-    fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfoResponse> {
+    fun scriptAddressInfo(address: String = getAddress()): Observable<ScriptInfoResponse> {
         return nodeService.scriptInfo(address)
                 .doOnNext {
                     prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)

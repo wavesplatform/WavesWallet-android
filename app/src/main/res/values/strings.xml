@@ -675,4 +675,9 @@
     <string name="trade_order_dialog_subtitle_price_lower_market">You order price is 5% lower than the latest market price</string>
     <string name="trade_order_dialog_positive_place_order">Place Order</string>
     <string name="trade_order_dialog_negative_cancel">Cancel</string>
+
+    <string name="common_permission_error_title">Need Permission</string>
+    <string name="common_permission_error_description">This app needs permission to use camera. You can grant them in app settings.</string>
+    <string name="common_permission_error_settings">Settings</string>
+    <string name="common_permission_error_cancel">Cancel</string>
 </resources>
