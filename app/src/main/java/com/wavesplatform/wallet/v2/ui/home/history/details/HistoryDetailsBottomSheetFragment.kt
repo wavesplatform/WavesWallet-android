@@ -618,11 +618,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             if (transaction.type == Transaction.EXCHANGE) {
                 var feeText = ""
 
-                if (transaction.order1?.isMyOrder() == true) {
+                if (App.getAccessManager().getWallet()?.address == transaction.order1?.sender) {
                     feeText = getOrderFeeText(transaction.order1)
                 }
 
-                if (transaction.order2?.isMyOrder() == true) {
+                if (App.getAccessManager().getWallet()?.address == transaction.order2?.sender) {
                     if (feeText.isNotBlank()) {
                         feeText += "\n"
                     }
@@ -633,10 +633,13 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 layout.text_base_info_tag?.visibility = View.GONE
             } else {
                 if (transaction.feeAssetObject?.name?.isWaves() == true) {
-                    layout.text_fee?.text = MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()
+                    layout.text_fee?.text = MoneyUtil.getScaledText(
+                            transaction.fee, transaction.feeAssetObject).stripZeros()
                     layout.text_base_info_tag.visiable()
                 } else {
-                    layout.text_fee?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
+                    layout.text_fee?.text = "${MoneyUtil.getScaledText(
+                            transaction.fee, 
+                            transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
                     layout.text_base_info_tag.gone()
                 }
             }

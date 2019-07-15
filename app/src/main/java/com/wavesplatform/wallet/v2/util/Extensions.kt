@@ -667,24 +667,6 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
-fun Order.isMyOrder(): Boolean {
-    val address = App.getAccessManager().getWallet()?.address
-
-    if (address == this.sender) {
-        return true
-    }
-
-    val aliases = queryAll<Alias>().filter { it.address == address }
-
-    for (alias in aliases) {
-        if (alias.alias == this.sender) {
-            return true
-        }
-    }
-
-    return false
-}
-
 fun AssetBalance.getMaxDigitsBeforeZero(): Int {
     return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
             .replace(",", "")

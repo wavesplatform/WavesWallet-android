@@ -99,7 +99,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                     val sponsoredAssetItems = mutableListOf<SponsoredAssetItem>()
                     settingsRates.forEach { (assetId, rate) ->
 
-                        val assetIdWavesChecked = if (assetId == Constants.WAVES_ASSET_ID_FILLED) {
+                        val assetIdWavesChecked = if (assetId.isWaves()) {
                             Constants.WAVES_ASSET_ID_EMPTY
                         } else {
                             assetId
