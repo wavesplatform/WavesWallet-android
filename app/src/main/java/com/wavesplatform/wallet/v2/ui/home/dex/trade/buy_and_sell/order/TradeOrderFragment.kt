@@ -8,11 +8,15 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
@@ -22,10 +26,12 @@ import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.OrderListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.dialog_order_attention.view.*
 import kotlinx.android.synthetic.main.fragment_trade_order.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
@@ -66,6 +72,26 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.data = it.getParcelable(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA)
             presenter.orderType = it.getInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE)
             presenter.initBalances()
+        }
+
+        text_fee_value.click {
+            val dialog = SponsoredFeeBottomSheetFragment()
+            dialog.configureData(
+                    selectedAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
+                    wavesFee = 10000,
+                    exchange = true,
+                    priceAssetId = presenter.data?.watchMarket?.market?.amountAsset,
+                    amountAssetId = presenter.data?.watchMarket?.market?.priceAsset)
+
+            dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
+                override fun onSelected(asset: AssetBalanceResponse, fee: Long) {
+                    presenter.feeAssetId = asset.assetId
+                    presenter.fee = fee
+                    text_fee_value.text =
+                            "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
+                }
+            }
+            dialog.show(baseActivity.supportFragmentManager, dialog::class.java.simpleName)
         }
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
@@ -401,51 +427,70 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         button_confirm.click {
+            presenter.data?.watchMarket?.market?.let { market ->
+                presenter.loadOrderBook(market.amountAsset, market.priceAsset)
+            }
+        }
+    }
 
-            safeLet(presenter.data?.watchMarket,
-                    presenter.data?.askPrice,
-                    presenter.data?.bidPrice) { watchMarket, askPrice, bidPrice ->
+    override fun showOrderAttentionAndCreateOrder(orderBook: OrderBookResponse) {
 
-                val marketPrice = MoneyUtil.getScaledPrice(
-                        listOf(askPrice, bidPrice)
-                                .average()
-                                .toLong(),
-                        watchMarket.market.amountAssetDecimals,
-                        watchMarket.market.priceAssetDecimals)
-                        .clearBalance()
-                        .toDouble()
+        val lastAskPrice = orderBook.asks.firstOrNull()?.price
 
-                val userPrice = edit_limit_price.text.toString().toDouble()
+        val lastBidPrice = orderBook.bids.firstOrNull()?.price
 
-                val attentionMessageResId: Int
-                val showAttention = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                    attentionMessageResId = R.string.trade_order_dialog_subtitle_price_highter_market
-                    userPrice > marketPrice * 1.05
-                } else {
-                    attentionMessageResId = R.string.trade_order_dialog_subtitle_price_lower_market
-                    userPrice < marketPrice * 0.95
-                }
+        val lastPriceTrade = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+            lastAskPrice
+        } else {
+            lastBidPrice
+        }
 
-                if (showAttention) {
-                    val alertDialog = AlertDialog.Builder(baseActivity).create()
-                    alertDialog.setTitle(getString(R.string.trade_order_dialog_title_attention))
-                    alertDialog.setMessage(getString(attentionMessageResId))
-                    alertDialog.setButton(
-                            AlertDialog.BUTTON_POSITIVE,
-                            getString(R.string.trade_order_dialog_positive_place_order)) { dialog, _ ->
-                        presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
-                        dialog.dismiss()
-                    }
-                    alertDialog.setButton(
-                            AlertDialog.BUTTON_NEGATIVE,
-                            getString(R.string.trade_order_dialog_negative_cancel)) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    alertDialog.show()
-                    alertDialog.makeStyled()
-                } else {
+        safeLet(presenter.data?.watchMarket, lastPriceTrade) { watchMarket, lastPrice ->
+
+            val marketPrice = MoneyUtil.getScaledPrice(
+                    lastPrice,
+                    watchMarket.market.amountAssetDecimals,
+                    watchMarket.market.priceAssetDecimals)
+                    .clearBalance()
+                    .toDouble()
+
+            val userPrice = edit_limit_price.text.toString().toDouble()
+
+            val attentionMessageResId: Int
+            val showAttention = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                attentionMessageResId = R.string.trade_order_dialog_subtitle_price_highter_market
+                userPrice > marketPrice * 1.05
+            } else {
+                attentionMessageResId = R.string.trade_order_dialog_subtitle_price_lower_market
+                userPrice < marketPrice * 0.95
+            }
+
+            if (showAttention) {
+                var dialog: AlertDialog? = null
+                val view = LayoutInflater.from(activity)
+                        .inflate(R.layout.dialog_order_attention, null)
+
+                view.attention_text.text = getString(attentionMessageResId)
+                view.button_confirm.click {
+                    dialog?.dismiss()
                     presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
                 }
+
+                view.button_cancel.click {
+                    dialog?.dismiss()
+                }
+
+                dialog = AlertDialog.Builder(baseActivity)
+                        .setCancelable(false)
+                        .setView(view)
+                        .create()
+
+                dialog.window?.setGravity(Gravity.BOTTOM)
+
+                dialog.show()
+                showProgressBar(false)
+            } else {
+                presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
             }
         }
     }
@@ -453,20 +498,24 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     private fun fillInputsWithValues() {
         presenter.data?.watchMarket.notNull { watchMarket ->
             if (presenter.data?.initPrice != null) {
-                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!,
+                        watchMarket.market.amountAssetDecimals,
+                        watchMarket.market.priceAssetDecimals).clearBalance()
                 edit_limit_price.setText(priceUIValue)
             }
             if (presenter.data?.initSum != null) {
                 if (presenter.data?.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
                     withAvailableSum { sum ->
                         val totalUIValue = MoneyUtil.getScaledPrice(sum,
-                                watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                                watchMarket.market.amountAssetDecimals,
+                                watchMarket.market.priceAssetDecimals).clearBalance()
                         presenter.humanTotalTyping = true
                         edit_total_price.setText(totalUIValue)
                     }
                 } else {
                     withAvailableAmount { amount ->
-                        val amountUIValue = MoneyUtil.getScaledText(amount, watchMarket.market.amountAssetDecimals).clearBalance()
+                        val amountUIValue = MoneyUtil.getScaledText(amount,
+                                watchMarket.market.amountAssetDecimals).clearBalance()
                         presenter.humanTotalTyping = true
                         edit_amount.setText(amountUIValue)
                     }

@@ -47,6 +47,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
@@ -844,7 +845,7 @@ fun getTransactionType(transaction: HistoryTransactionResponse, address: String)
         } else if (transaction.type == BaseTransaction.CANCEL_LEASING &&
                 !transaction.leaseId.isNullOrEmpty()) {
             Constants.ID_CANCELED_LEASING_TYPE
-        } else if ((transaction.type == BaseTransaction.TRANSFER || transaction.type == 9) &&
+        } else if ((transaction.type == BaseTransaction.TRANSFER || transaction.type == BaseTransaction.CANCEL_LEASING) &&
                 transaction.sender != address) {
             Constants.ID_RECEIVED_TYPE
         } else if (transaction.type == BaseTransaction.TRANSFER &&

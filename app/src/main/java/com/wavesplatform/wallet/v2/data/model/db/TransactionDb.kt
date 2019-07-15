@@ -11,7 +11,7 @@ import io.realm.annotations.RealmClass
 @RealmClass
 open class TransactionDb(
         @SerializedName("type")
-        var type: Int = 0,
+        var type: Byte = 0,
         @PrimaryKey
         @SerializedName("id")
         var id: String = "",

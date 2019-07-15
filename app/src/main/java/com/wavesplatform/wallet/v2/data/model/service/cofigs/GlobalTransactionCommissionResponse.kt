@@ -40,7 +40,7 @@ data class GlobalTransactionCommissionResponse(
     )
 
     class ParamsResponse(
-        var transactionType: Int? = null,
+        var transactionType: Byte? = null,
         var smartAccount: Boolean? = null,
         var smartAsset: Boolean? = null,
         var transfersCount: Int? = null,

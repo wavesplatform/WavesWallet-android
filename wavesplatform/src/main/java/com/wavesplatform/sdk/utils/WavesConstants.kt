@@ -17,13 +17,14 @@ class WavesConstants {
         const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
         const val URL_WAVES_STAGE_EXPLORER = "http://stage.wavesexplorer.com/tx/%s"
 
-        const val VERSION: Int = 2
+        const val VERSION: Byte = 2
         const val WAVES_ASSET_ID_EMPTY = ""
         const val WAVES_ASSET_ID_FILLED = "WAVES"
         const val SELL_ORDER_TYPE = "sell"
         const val BUY_ORDER_TYPE = "buy"
         const val CUSTOM_FEE_ASSET_NAME = "Waves"
         const val WAVES_MIN_FEE = 100000L
+        const val WAVES_ORDER_MIN_FEE = 300000L
         const val MIN_WAVES_SPONSORED_BALANCE = 1.005
 
         val WAVES_ASSET_INFO = AssetInfoResponse(

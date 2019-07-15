@@ -56,8 +56,8 @@ class SponsorshipTransaction(
 
     override fun toBytes(): ByteArray {
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
+            Bytes.concat(byteArrayOf(type),
+                    byteArrayOf(version),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
                     Longs.toByteArray(minSponsoredAssetFee ?: 0),

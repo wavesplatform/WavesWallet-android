@@ -18,11 +18,13 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.sdk.model.response.node.OrderResponse
 import com.wavesplatform.sdk.model.response.node.TransferResponse
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.sdk.utils.*
@@ -34,6 +36,7 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
@@ -603,13 +606,49 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
     override fun setupInfo(transaction: HistoryTransactionResponse): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
+        fun getOrderFeeText(order: OrderResponse?): String {
+            if (order == null) {
+                return ""
+            }
+
+            val matcherFee = order.matcherFee
+            val matcherFeeAssetId = order.matcherFeeAssetId
+
+            val info = queryFirst<AssetInfoDb> {
+                equalTo("id", matcherFeeAssetId ?: "")
+            } ?: return ""
+
+            return "${MoneyUtil.getScaledText(matcherFee, info.convertFromDb()).stripZeros()} ${info.name}"
+        }
+
         fun showTransactionFee() {
-            if (transaction.feeAssetObject?.name?.isWaves() == true) {
-                layout.text_fee?.text = MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()
-                layout.text_base_info_tag.visiable()
+            if (transaction.type == BaseTransaction.EXCHANGE) {
+                var feeText = ""
+
+                if (App.getAccessManager().getWallet().address == transaction.order1?.sender) {
+                    feeText = getOrderFeeText(transaction.order1)
+                }
+
+                if (App.getAccessManager().getWallet().address == transaction.order2?.sender) {
+                    if (feeText.isNotBlank()) {
+                        feeText += "\n"
+                    }
+                    feeText += getOrderFeeText(transaction.order2)
+                }
+
+                layout.text_fee?.text = feeText
+                layout.text_base_info_tag?.visibility = View.GONE
             } else {
-                layout.text_fee?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
-                layout.text_base_info_tag.gone()
+                if (transaction.feeAssetObject?.name?.isWaves() == true) {
+                    layout.text_fee?.text = MoneyUtil.getScaledText(
+                            transaction.fee, transaction.feeAssetObject).stripZeros()
+                    layout.text_base_info_tag.visiable()
+                } else {
+                    layout.text_fee?.text = "${MoneyUtil.getScaledText(
+                            transaction.fee, 
+                            transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
+                    layout.text_base_info_tag.gone()
+                }
             }
         }
 

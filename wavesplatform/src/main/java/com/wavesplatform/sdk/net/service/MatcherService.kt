@@ -8,9 +8,10 @@ package com.wavesplatform.sdk.net.service
 import com.google.gson.internal.LinkedTreeMap
 import com.wavesplatform.sdk.model.request.matcher.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
-import com.wavesplatform.sdk.model.response.matcher.MarketsResponse
-import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketsResponse
+import com.wavesplatform.sdk.model.response.matcher.MatcherSettingsResponse
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -27,9 +28,9 @@ interface MatcherService {
      */
     @GET("matcher/balance/reserved/{publicKey}")
     fun balanceReserved(
-        @Path("publicKey") publicKey: String?,
-        @Header("Timestamp") timestamp: Long,
-        @Header("Signature") signature: String
+            @Path("publicKey") publicKey: String?,
+            @Header("Timestamp") timestamp: Long,
+            @Header("Signature") signature: String
     ): Observable<Map<String, Long>>
 
     /**
@@ -52,9 +53,9 @@ interface MatcherService {
      */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/tradableBalance/{address}")
     fun orderBookTradableBalance(
-        @Path("amountAsset") amountAsset: String?,
-        @Path("priceAsset") priceAsset: String?,
-        @Path("address") address: String?
+            @Path("amountAsset") amountAsset: String?,
+            @Path("priceAsset") priceAsset: String?,
+            @Path("address") address: String?
     ): Observable<LinkedTreeMap<String, Long>>
 
     /**
@@ -62,11 +63,11 @@ interface MatcherService {
      */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/publicKey/{publicKey}")
     fun myOrders(
-        @Path("amountAsset") amountAsset: String?,
-        @Path("priceAsset") priceAsset: String?,
-        @Path("publicKey") publicKey: String?,
-        @Header("signature") signature: String?,
-        @Header("timestamp") timestamp: Long
+            @Path("amountAsset") amountAsset: String?,
+            @Path("priceAsset") priceAsset: String?,
+            @Path("publicKey") publicKey: String?,
+            @Header("signature") signature: String?,
+            @Header("timestamp") timestamp: Long
     ): Observable<List<AssetPairOrderResponse>>
 
     /**
@@ -80,9 +81,9 @@ interface MatcherService {
      */
     @POST("matcher/orderbook/{amountAsset}/{priceAsset}/cancel")
     fun cancelOrder(
-        @Path("amountAsset") amountAsset: String?,
-        @Path("priceAsset") priceAsset: String?,
-        @Body cancelOrderRequest: CancelOrderRequest?
+            @Path("amountAsset") amountAsset: String?,
+            @Path("priceAsset") priceAsset: String?,
+            @Body cancelOrderRequest: CancelOrderRequest?
     ): Observable<Any>
 
     /**
@@ -90,4 +91,11 @@ interface MatcherService {
      */
     @GET("matcher")
     fun matcherPublicKey(): Observable<String>
+
+
+    @GET("matcher/settings/rates")
+    fun getMatcherSettingsRates(): Observable<MutableMap<String, Double>>
+
+    @GET("matcher/settings")
+    fun getMatcherSettings(): Observable<MatcherSettingsResponse>
 }

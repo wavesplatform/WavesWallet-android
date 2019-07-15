@@ -11,11 +11,11 @@ import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookBidMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -29,16 +29,20 @@ import javax.inject.Inject
 class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBookView>() {
     var watchMarket: WatchMarketResponse? = null
     var needFirstScrollToLastPrice = true
-    val subscriptions = CompositeDisposable()
+    private val subscriptions = CompositeDisposable()
 
     fun loadOrderBook() {
         addSubscription(
                 Observable.interval(0, 10, TimeUnit.SECONDS)
                         .retry(3)
                         .flatMap {
-                            return@flatMap Observable.zip(matcherServiceManager.loadOrderBook(watchMarket),
+                            val market = watchMarket?.market
+                            return@flatMap Observable.zip(matcherServiceManager.loadOrderBook(
+                                    market?.amountAsset!!,
+                                    market.priceAsset),
                                     dataServiceManager.getLastTradeByPair(watchMarket),
-                                    BiFunction { orderBook: OrderBookResponse, lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
+                                    BiFunction { orderBook: OrderBookResponse,
+                                                 lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }

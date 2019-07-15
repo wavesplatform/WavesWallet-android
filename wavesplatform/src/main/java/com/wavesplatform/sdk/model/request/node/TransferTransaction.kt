@@ -54,15 +54,15 @@ class TransferTransaction(
 
         return try {
             Bytes.concat(
-                byteArrayOf(type.toByte()),
-                byteArrayOf(version.toByte()),
+                byteArrayOf(type),
+                byteArrayOf(version),
                 Base58.decode(senderPublicKey),
                 SignUtil.arrayOption(assetId),
                 SignUtil.arrayOption(feeAssetId),
                 Longs.toByteArray(timestamp),
                 Longs.toByteArray(amount),
                 Longs.toByteArray(fee),
-                SignUtil.recipientBytes(recipient, version.toByte(), chainId),
+                SignUtil.recipientBytes(recipient, version, chainId),
                 SignUtil.attachmentBytes(attachment)
             )
         } catch (e: Exception) {

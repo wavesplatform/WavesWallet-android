@@ -43,11 +43,11 @@ class InvokeScriptTransaction(
 
         return try {
             Bytes.concat(
-                byteArrayOf(type.toByte()),
-                byteArrayOf(version.toByte()),
+                byteArrayOf(type),
+                byteArrayOf(version),
                 byteArrayOf(chainId),
                 Base58.decode(senderPublicKey),
-                SignUtil.recipientBytes(dApp, version.toByte(), chainId),
+                SignUtil.recipientBytes(dApp, version, chainId),
                 functionCallArray(),
                 paymentsArray(), // now it works with only one
                 Longs.toByteArray(fee),

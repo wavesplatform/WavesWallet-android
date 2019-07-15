@@ -13,7 +13,10 @@ import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.isWaves
+import com.wavesplatform.sdk.utils.isWavesId
 
 /**
  * Create Order Request to DEX-matcher, decentralized exchange of Waves.
@@ -54,6 +57,10 @@ data class CreateOrderRequest(
      */
     @SerializedName("expiration") var expiration: Long = 0L,
     /**
+     * Matcher Fee Asset Id. You can change asset commission
+     */
+    @SerializedName("matcherFeeAssetId") var matcherFeeAssetId: String = "",
+    /**
      * Amount matcher fee of Waves in satoshi
      */
     @SerializedName("matcherFee") var matcherFee: Long = 300000,
@@ -61,7 +68,7 @@ data class CreateOrderRequest(
      * Version number of the data structure of the transaction.
      * The value has to be equal to 2
      */
-    @SerializedName("version") var version: Int = WavesConstants.VERSION,
+    @SerializedName("version") var version: Byte = WavesConstants.VERSION,
     /**
      * If the array is empty, then S= 3. If the array is not empty,
      * then S = 3 + 2 × N + (P1 + P2 + ... + Pn), where N is the number of proofs in the array,
@@ -72,6 +79,14 @@ data class CreateOrderRequest(
 ) {
 
     private fun toBytes(): ByteArray {
+        return if (matcherFeeAssetId.isWaves() || matcherFeeAssetId.isWavesId()) {
+            toBytesV2()
+        } else {
+            toBytesV3()
+        }
+    }
+
+    private fun toBytesV2(): ByteArray {
         return try {
             val orderTypeByte: Byte = if (orderType == WavesConstants.BUY_ORDER_TYPE) {
                 0
@@ -79,19 +94,31 @@ data class CreateOrderRequest(
                 1
             }
             Bytes.concat(
-                byteArrayOf(WavesConstants.VERSION.toByte()),
-                Base58.decode(senderPublicKey),
-                Base58.decode(matcherPublicKey),
-                assetPair.toBytes(),
-                byteArrayOf(orderTypeByte),
-                Longs.toByteArray(price),
-                Longs.toByteArray(amount),
-                Longs.toByteArray(timestamp),
-                Longs.toByteArray(expiration),
-                Longs.toByteArray(matcherFee)
+                    byteArrayOf(version),
+                    Base58.decode(senderPublicKey),
+                    Base58.decode(matcherPublicKey),
+                    assetPair.toBytes(),
+                    byteArrayOf(orderTypeByte),
+                    Longs.toByteArray(price),
+                    Longs.toByteArray(amount),
+                    Longs.toByteArray(timestamp),
+                    Longs.toByteArray(expiration),
+                    Longs.toByteArray(matcherFee)
             )
         } catch (e: Exception) {
             Log.e("CreateOrderRequest", "Couldn't create toBytes", e)
+            ByteArray(0)
+        }
+    }
+
+    private fun toBytesV3(): ByteArray {
+        return try {
+            version = 3
+            Bytes.concat(
+                    toBytesV2(),
+                    SignUtil.arrayOption(matcherFeeAssetId))
+        } catch (e: Exception) {
+            Log.e("CreateOrderRequest", "Couldn't create toBytesV3", e)
             ByteArray(0)
         }
     }

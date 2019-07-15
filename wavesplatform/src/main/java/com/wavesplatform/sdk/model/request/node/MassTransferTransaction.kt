@@ -69,8 +69,8 @@ class MassTransferTransaction(
 
         return try {
             Bytes.concat(
-                byteArrayOf(type.toByte()),
-                byteArrayOf(version.toByte()),
+                byteArrayOf(type),
+                byteArrayOf(version),
                 Base58.decode(senderPublicKey),
                 assetIdArray,
                 transfersArray(),
@@ -87,7 +87,7 @@ class MassTransferTransaction(
     private fun transfersArray(): ByteArray {
         var recipientAmountChainArray = byteArrayOf()
         for (transfer in transfers) {
-            val recipient = SignUtil.recipientBytes(transfer.recipient, version.toByte(), chainId)
+            val recipient = SignUtil.recipientBytes(transfer.recipient, version, chainId)
             val amount = Longs.toByteArray(transfer.amount)
             recipientAmountChainArray = Bytes.concat(recipientAmountChainArray, recipient, amount)
         }

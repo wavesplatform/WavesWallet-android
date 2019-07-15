@@ -12,7 +12,7 @@ abstract class BaseTransaction(
         /**
          * ID of the transaction type. Correct values in [1; 16] @see[BaseTransaction.Companion]
          */
-        @SerializedName("type") val type: Int) {
+        @SerializedName("type") val type: Byte) {
 
     /**
      * Account public key of the sender in Base58
@@ -39,7 +39,7 @@ abstract class BaseTransaction(
      * The value has to be equal to 1, 2 or 3
      */
     @SerializedName("version")
-    var version: Int = WavesConstants.VERSION
+    var version: Byte = WavesConstants.VERSION
 
     /**
      * Signatures v2 string set.
@@ -111,26 +111,26 @@ abstract class BaseTransaction(
 
     companion object {
 
-        const val GENESIS = 1 // Not using
-        const val PAYMENT = 2 // Not using
-        const val ISSUE = 3
-        const val TRANSFER = 4
-        const val REISSUE = 5
-        const val BURN = 6
-        const val EXCHANGE = 7
-        const val CREATE_LEASING = 8
-        const val CANCEL_LEASING = 9
-        const val CREATE_ALIAS = 10
-        const val MASS_TRANSFER = 11
-        const val DATA = 12
-        const val ADDRESS_SCRIPT = 13
-        const val SPONSORSHIP = 14
-        const val ASSET_SCRIPT = 15
-        const val SCRIPT_INVOCATION = 16
+        const val GENESIS: Byte = 1 // Not using
+        const val PAYMENT: Byte = 2 // Not using
+        const val ISSUE: Byte = 3
+        const val TRANSFER: Byte = 4
+        const val REISSUE: Byte = 5
+        const val BURN: Byte = 6
+        const val EXCHANGE: Byte = 7
+        const val CREATE_LEASING: Byte = 8
+        const val CANCEL_LEASING: Byte = 9
+        const val CREATE_ALIAS: Byte = 10
+        const val MASS_TRANSFER: Byte = 11
+        const val DATA: Byte = 12
+        const val ADDRESS_SCRIPT: Byte = 13
+        const val SPONSORSHIP: Byte = 14
+        const val ASSET_SCRIPT: Byte = 15
+        const val SCRIPT_INVOCATION: Byte = 16
 
         const val SET_SCRIPT_LANG_VERSION: Byte = 1
 
-        fun getNameBy(type: Int): String {
+        fun getNameBy(type: Byte): String {
             return when (type) {
                 GENESIS -> "Genesis"
                 PAYMENT -> "Payment"
