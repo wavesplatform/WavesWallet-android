@@ -67,12 +67,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                     SpamAssetDb.convertToDb(spam).saveAll()
 
                     return@map spam
-                }.map { spamListFromDb ->
-                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                        return@map spamListFromDb
-                    } else {
-                        return@map arrayListOf<SpamAssetResponse>()
-                    }
                 }
     }
 
@@ -120,6 +114,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
+                                val spamAssetsMap = spamAssets.associateBy { it.assetId }
                                 val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
                                 if (assetsFromDb != null && assetsFromDb.isNotEmpty()) {
@@ -144,9 +139,8 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                     assetBalance.inOrderBalance = tripple.second[assetBalance.assetId]
                                             ?: 0L
 
-                                    assetBalance.isSpam = spamAssets.any {
-                                        it.assetId == assetBalance.assetId
-                                    }
+                                    assetBalance.isSpam = spamAssetsMap[assetBalance.assetId] != null
+
                                     if (assetBalance.isSpam) {
                                         assetBalance.isFavorite = false
                                     }

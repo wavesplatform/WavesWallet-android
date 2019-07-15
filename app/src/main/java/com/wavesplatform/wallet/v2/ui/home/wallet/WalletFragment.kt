@@ -33,6 +33,7 @@ class WalletFragment : BaseFragment(), WalletView {
     @InjectPresenter
     lateinit var presenter: WalletPresenter
     private lateinit var adapter: WalletFragmentPageAdapter
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
@@ -47,6 +48,7 @@ class WalletFragment : BaseFragment(), WalletView {
 
         val elevationAppBarChangeListener = object : MainActivity.OnElevationAppBarChangeListener {
             override fun onChange(elevateEnable: Boolean) {
+                presenter.shadowEnable = elevateEnable
                 enableElevation(elevateEnable)
             }
         }
@@ -91,6 +93,7 @@ class WalletFragment : BaseFragment(), WalletView {
                 } else {
                     (adapter.fragments[position] as LeasingFragment).presenter.enableElevation
                 }
+                presenter.shadowEnable = enable
                 enableElevation(enable)
             }
         })
@@ -98,7 +101,12 @@ class WalletFragment : BaseFragment(), WalletView {
         stl_wallet.setCurrentTab(0, false)
     }
 
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
+    }
+
     private fun enableElevation(enable: Boolean) {
+        onElevationAppBarChangeListener?.onChange(true)
         if (enable) {
             ViewCompat.setZ(wallet_appbar_layout, 8F)
         } else {
@@ -119,6 +127,13 @@ class WalletFragment : BaseFragment(), WalletView {
                 }
             }.show()
             setScrollAlert(true)
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            enableElevation(presenter.shadowEnable)
         }
     }
 
