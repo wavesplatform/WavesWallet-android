@@ -93,7 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/disabled900"
-                    tools:text="0.00000001 NodeTX2" />
+                    android:gravity="end"
+                    tools:text="0.00000001 NodeTX2\n0.0001 Bitcoin" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_base_info_tag"

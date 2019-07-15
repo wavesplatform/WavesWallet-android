@@ -45,6 +45,7 @@ import android.widget.TextView
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -664,6 +665,24 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
             second
         }
     }
+}
+
+fun Order.isMyOrder(): Boolean {
+    val address = App.getAccessManager().getWallet()?.address
+
+    if (address == this.sender) {
+        return true
+    }
+
+    val aliases = queryAll<Alias>().filter { it.address == address }
+
+    for (alias in aliases) {
+        if (alias.alias == this.sender) {
+            return true
+        }
+    }
+
+    return false
 }
 
 fun AssetBalance.getMaxDigitsBeforeZero(): Int {
