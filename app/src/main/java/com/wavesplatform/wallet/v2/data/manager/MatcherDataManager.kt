@@ -54,10 +54,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }
 
-    fun loadOrderBook(watchMarket: WatchMarket?): Observable<OrderBook> {
-        return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
-    }
-
     fun loadOrderBook(amountAssetId: String, priceAssetId: String?): Observable<OrderBook> {
         return matcherService.getOrderBook(amountAssetId, priceAssetId)
     }

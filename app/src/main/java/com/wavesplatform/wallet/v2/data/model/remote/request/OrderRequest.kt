@@ -5,7 +5,6 @@
 
 package com.wavesplatform.wallet.v2.data.model.remote.request
 
-import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
@@ -16,6 +15,9 @@ import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
+import com.wavesplatform.wallet.v2.util.isWaves
+import com.wavesplatform.wallet.v2.util.isWavesId
+import timber.log.Timber
 
 data class OrderRequest(
         @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
@@ -32,6 +34,14 @@ data class OrderRequest(
         @SerializedName("matcherFeeAssetId") var matcherFeeAssetId: String = ""
 ) {
 
+    private fun toSignByte(): ByteArray {
+        return if (matcherFeeAssetId.isWaves() || matcherFeeAssetId.isWavesId()) {
+            toSignBytesV2()
+        } else {
+            toSignBytesV3()
+        }
+    }
+
     private fun toSignBytesV2(): ByteArray {
         return try {
             Bytes.concat(
@@ -46,29 +56,24 @@ data class OrderRequest(
                     Longs.toByteArray(expiration),
                     Longs.toByteArray(matcherFee))
         } catch (e: Exception) {
-            Log.e("OrderRequest", "Couldn't create toSignBytes", e)
+            Timber.e(e, "Couldn't create toSignBytes")
             ByteArray(0)
         }
     }
 
     private fun toSignBytesV3(): ByteArray {
         return try {
-            if (matcherFeeAssetId == Constants.WAVES_ASSET_ID_FILLED
-                    || matcherFeeAssetId == Constants.WAVES_ASSET_ID_EMPTY) {
-                toSignBytesV2()
-            } else {
-                version = 3
-                Bytes.concat(
-                        toSignBytesV2(),
-                        SignUtil.arrayOption(matcherFeeAssetId))
-            }
+            version = 3
+            Bytes.concat(
+                    toSignBytesV2(),
+                    SignUtil.arrayOption(matcherFeeAssetId))
         } catch (e: Exception) {
-            Log.e("OrderRequest", "Couldn't create toSignBytesV3", e)
+            Timber.e(e, "Couldn't create toSignBytesV3")
             ByteArray(0)
         }
     }
 
     fun sign(privateKey: ByteArray) {
-        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytesV3())))
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignByte())))
     }
 }

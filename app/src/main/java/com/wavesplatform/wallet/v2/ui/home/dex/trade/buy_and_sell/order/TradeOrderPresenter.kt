@@ -48,7 +48,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var amountValidation = false
 
     var fee = Constants.WAVES_ORDER_MIN_FEE
-    var feeAssetId = ""
+    var feeAssetId = Constants.WAVES_ASSET_ID_EMPTY
 
     fun initBalances(){
         currentAmountBalance = queryFirst<AssetBalance> { equalTo("assetId",

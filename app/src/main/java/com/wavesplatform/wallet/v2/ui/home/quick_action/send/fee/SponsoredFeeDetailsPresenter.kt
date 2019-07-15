@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.ceil
 
@@ -49,8 +50,8 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     }
 
 
-    fun loadExchangeCommission(amountAssetId: String,
-                               priceAssetId: String,
+    fun loadExchangeCommission(amountAssetId: String?,
+                               priceAssetId: String?,
                                listener: (MutableList<SponsoredAssetItem>) -> Unit) {
 
         viewState.showProgressBar(true)

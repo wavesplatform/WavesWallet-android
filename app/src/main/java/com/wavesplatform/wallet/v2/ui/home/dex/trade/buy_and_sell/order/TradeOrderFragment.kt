@@ -79,8 +79,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     selectedAssetId = Constants.WAVES_ASSET_ID_EMPTY,
                     wavesFee = 10000,
                     exchange = true,
-                    priceAssetId = presenter.data?.watchMarket?.market?.amountAsset ?: "",
-                    amountAssetId = presenter.data?.watchMarket?.market?.priceAsset ?: "")
+                    priceAssetId = presenter.data?.watchMarket?.market?.amountAsset,
+                    amountAssetId = presenter.data?.watchMarket?.market?.priceAsset)
 
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
                 override fun onSelected(asset: AssetBalance, fee: Long) {
@@ -90,7 +90,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                             "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
                 }
             }
-            dialog.show(activity!!.supportFragmentManager, dialog::class.java.simpleName)
+            dialog.show(baseActivity.supportFragmentManager, dialog::class.java.simpleName)
         }
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
@@ -426,24 +426,17 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         button_confirm.click {
-            val market = presenter.data?.watchMarket?.market
-            presenter.loadOrderBook(market?.amountAsset!!, market.priceAsset)
+            presenter.data?.watchMarket?.market?.let { market ->
+                presenter.loadOrderBook(market.amountAsset, market.priceAsset)
+            }
         }
     }
 
     override fun showOrderAttentionAndCreateOrder(orderBook: OrderBook) {
 
-        val lastAskPrice = if (orderBook.asks.isNotEmpty()) {
-            orderBook.asks[0].price
-        } else {
-            null
-        }
+        val lastAskPrice = orderBook.asks.firstOrNull()?.price
 
-        val lastBidPrice = if (orderBook.bids.isNotEmpty()) {
-            orderBook.bids[0].price
-        } else {
-            null
-        }
+        val lastBidPrice = orderBook.bids.firstOrNull()?.price
 
         val lastPriceTrade = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
             lastAskPrice
@@ -486,7 +479,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     dialog?.dismiss()
                 }
 
-                dialog = AlertDialog.Builder(activity!!)
+                dialog = AlertDialog.Builder(baseActivity)
                         .setCancelable(false)
                         .setView(view)
                         .create()
