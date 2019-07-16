@@ -1,1 +1,1 @@
-include ':wavesplatform', ':app'
+include ':app'
