@@ -145,11 +145,7 @@ class SendActivity : BaseActivity(), SendView {
                 amountEnable(true)
                 linear_fees_error.gone()
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
-                IntentIntegrator(this).setRequestCode(REQUEST_SCAN_RECEIVE)
-                        .setOrientationLocked(true)
-                        .setBeepEnabled(false)
-                        .setCaptureActivity(QrCodeScannerActivity::class.java)
-                        .initiateScan()
+                launchQrCodeScanner(REQUEST_SCAN_RECEIVE)
             }
         }
         image_view_monero_action.click {
@@ -157,11 +153,7 @@ class SendActivity : BaseActivity(), SendView {
                 edit_monero_payment_id.text = null
                 linear_fees_error.gone()
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
-                IntentIntegrator(this).setRequestCode(REQUEST_SCAN_MONERO)
-                        .setOrientationLocked(true)
-                        .setBeepEnabled(false)
-                        .setCaptureActivity(QrCodeScannerActivity::class.java)
-                        .initiateScan()
+                launchQrCodeScanner(REQUEST_SCAN_MONERO)
             }
         }
 
@@ -367,9 +359,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkRecipient(recipient: String) {
-        if (recipient.isNotEmpty()) {
-            presenter.recipient = recipient
+        presenter.recipient = recipient
 
+        if (recipient.isNotEmpty()) {
             when {
                 recipient.length in 4..30 -> {
                     presenter.recipientAssetId = ""
@@ -635,9 +627,9 @@ class SendActivity : BaseActivity(), SendView {
             text_asset_name.text = asset.getName()
             text_asset_value.text = asset.getDisplayAvailableBalance()
 
-            if (asset.isFavorite){
+            if (asset.isFavorite) {
                 image_is_favorite.visiable()
-            }else{
+            } else {
                 image_is_favorite.gone()
             }
 

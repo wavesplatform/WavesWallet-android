@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.util
 
+import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
@@ -38,41 +39,45 @@ import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.Window
-import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.sdk.net.NetworkException
-import com.wavesplatform.wallet.v2.data.model.local.TransactionType
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.model.response.node.OrderResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.sdk.model.response.node.OrderResponse
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pers.victor.ext.Ext.ctx
-import pyxis.uzuki.live.richutilskt.utils.asDateString
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pyxis.uzuki.live.richutilskt.impl.F2
+import pyxis.uzuki.live.richutilskt.utils.*
 import java.io.File
 import java.util.*
+import kotlin.arrayOf
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -109,6 +114,51 @@ fun String.formatBaseUrl(): String {
     } else {
         this
     }
+}
+
+const val REQUEST_SCAN_QR_CODE = 876
+fun Activity.launchQrCodeScanner(requestCode: Int = REQUEST_SCAN_QR_CODE) {
+    RPermission.instance.checkPermission(this, arrayOf(Manifest.permission.CAMERA), F2 { result, permissions ->
+        if (result == RPermission.PERMISSION_GRANTED) {
+            IntentIntegrator(this)
+                    .setRequestCode(requestCode)
+                    .setOrientationLocked(true)
+                    .setBeepEnabled(false)
+                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                    .initiateScan()
+        } else {
+            AlertDialog.Builder(this)
+                    .create()
+                    .apply {
+                        setTitle(getString(R.string.common_permission_error_title))
+                        setMessage(getString(R.string.common_permission_error_description))
+                        setButton(
+                                AlertDialog.BUTTON_POSITIVE,
+                                getString(R.string.common_permission_error_settings)) { dialog, _ ->
+                            launchPermissionsAppSettings()
+                            dialog.dismiss()
+                        }
+                        setButton(
+                                AlertDialog.BUTTON_NEGATIVE,
+                                getString(R.string.common_permission_error_cancel)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        show()
+                        makeStyled()
+                    }
+        }
+    })
+}
+
+fun Context.launchPermissionsAppSettings() {
+    val intent = Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data = Uri.fromParts("package", packageName, null)
+        addCategory(Intent.CATEGORY_DEFAULT)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    }
+    startActivity(intent)
 }
 
 fun View.animateVisible() {
@@ -795,7 +845,7 @@ fun getTransactionType(transaction: HistoryTransactionResponse, address: String)
         } else if (transaction.type == BaseTransaction.CANCEL_LEASING &&
                 !transaction.leaseId.isNullOrEmpty()) {
             Constants.ID_CANCELED_LEASING_TYPE
-        } else if ((transaction.type == BaseTransaction.TRANSFER || transaction.type == 9) &&
+        } else if ((transaction.type == BaseTransaction.TRANSFER || transaction.type == BaseTransaction.CANCEL_LEASING) &&
                 transaction.sender != address) {
             Constants.ID_RECEIVED_TYPE
         } else if (transaction.type == BaseTransaction.TRANSFER &&

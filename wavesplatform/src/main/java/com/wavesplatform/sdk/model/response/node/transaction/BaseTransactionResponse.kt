@@ -9,7 +9,7 @@ abstract class BaseTransactionResponse(
          * ID of the transaction type. Correct values in [1; 16]
          * see also Companion Object of BaseTransaction
          */
-        @SerializedName("type") val type: Int) {
+        @SerializedName("type") val type: Byte) {
 
     /**
      * Hash of all transaction data
@@ -55,7 +55,7 @@ abstract class BaseTransactionResponse(
      * The value has to be equal to 2
      */
     @SerializedName("version")
-    var version: Int = 2
+    var version: Byte = 2
 
     /**
      * Transaction signature fo v2

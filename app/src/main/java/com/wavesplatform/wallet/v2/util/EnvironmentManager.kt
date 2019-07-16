@@ -319,6 +319,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         private fun setConfiguration(globalConfiguration: GlobalConfigurationResponse) {
+            if (instance!!.gateWayHostInterceptor == null) {
+                createGateWayHostInterceptor()
+            }
             instance!!.gateWayHostInterceptor!!.setHost(globalConfiguration.servers.gatewayUrl)
             PreferenceManager
                     .getDefaultSharedPreferences(App.getAppContext())

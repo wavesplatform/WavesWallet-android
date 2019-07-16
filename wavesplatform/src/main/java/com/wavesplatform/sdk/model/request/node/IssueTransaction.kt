@@ -92,8 +92,8 @@ class IssueTransaction(
             }
 
             val bytes = Bytes.concat(
-                byteArrayOf(type.toByte()),
-                byteArrayOf(version.toByte()),
+                byteArrayOf(type),
+                byteArrayOf(version),
                 byteArrayOf(chainId),
                 Base58.decode(senderPublicKey),
                 name.toByteArray(Charset.forName("UTF-8")).arrayWithSize(),

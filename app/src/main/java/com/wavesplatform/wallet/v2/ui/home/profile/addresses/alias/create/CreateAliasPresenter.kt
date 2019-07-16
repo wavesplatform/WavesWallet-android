@@ -47,9 +47,9 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
         viewState.showProgressBar(true)
         addSubscription(nodeServiceManager.createAlias(aliasRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
+                .subscribe({ alias ->
                     viewState.showProgressBar(false)
-                    viewState.successCreateAlias(it)
+                    viewState.successCreateAlias(alias)
                 }, {
                     it.printStackTrace()
                     viewState.showProgressBar(false)

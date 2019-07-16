@@ -36,8 +36,8 @@ class LeaseTransaction(
 
     override fun toBytes(): ByteArray {
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
+            Bytes.concat(byteArrayOf(type),
+                    byteArrayOf(version),
                     byteArrayOf(0.toByte()),
                     Base58.decode(senderPublicKey),
                     resolveRecipientBytes(recipient.isAlias()),
@@ -52,7 +52,7 @@ class LeaseTransaction(
 
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
-            Bytes.concat(byteArrayOf(version.toByte()),
+            Bytes.concat(byteArrayOf(version),
                     byteArrayOf(chainId),
                     recipient.parseAlias().toByteArray(
                             Charset.forName("UTF-8")).arrayWithSize())

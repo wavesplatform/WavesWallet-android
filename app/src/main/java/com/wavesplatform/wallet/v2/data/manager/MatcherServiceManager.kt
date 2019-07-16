@@ -15,6 +15,7 @@ import com.wavesplatform.sdk.model.request.matcher.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.MatcherSettingsResponse
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
@@ -61,8 +62,8 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
         return matcherService.myOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }
 
-    fun loadOrderBook(watchMarket: WatchMarketResponse?): Observable<OrderBookResponse> {
-        return matcherService.orderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
+    fun loadOrderBook(amountAssetId: String, priceAssetId: String?): Observable<OrderBookResponse> {
+        return matcherService.orderBook(amountAssetId, priceAssetId)
     }
 
     fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
@@ -88,7 +89,7 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun placeOrder(orderRequest: CreateOrderRequest): Observable<Any> {
         orderRequest.senderPublicKey = getPublicKeyStr()
-        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+        App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)
         }
         return matcherService.createOrder(orderRequest)
@@ -192,6 +193,14 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
 
             return@Function3 filteredSpamList
         })
+    }
+
+    fun getSettings(): Observable<MatcherSettingsResponse> {
+        return matcherService.getMatcherSettings()
+    }
+
+    fun getSettingsRates(): Observable<MutableMap<String, Double>> {
+        return matcherService.getMatcherSettingsRates()
     }
 
     companion object {

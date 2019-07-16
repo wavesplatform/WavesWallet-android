@@ -41,8 +41,8 @@ class SetAssetScriptTransaction(
     override fun toBytes(): ByteArray {
         return try {
             Bytes.concat(
-                byteArrayOf(type.toByte()),
-                byteArrayOf(version.toByte()),
+                byteArrayOf(type),
+                byteArrayOf(version),
                 byteArrayOf(chainId),
                 WavesCrypto.base58decode(senderPublicKey),
                 WavesCrypto.base58decode(assetId),

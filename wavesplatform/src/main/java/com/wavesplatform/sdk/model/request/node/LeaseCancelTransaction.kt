@@ -25,8 +25,8 @@ class LeaseCancelTransaction(
 
     override fun toBytes(): ByteArray {
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
+            Bytes.concat(byteArrayOf(type),
+                    byteArrayOf(version),
                     byteArrayOf(chainId),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),

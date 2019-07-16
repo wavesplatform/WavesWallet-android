@@ -30,6 +30,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
+import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -129,10 +130,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     }
 
     private fun removeSpamAssets(assetsListFromDb: MutableList<AssetBalanceDb>,
-                                 spamListFromDb: MutableList<SpamAssetDb>)
-            : MutableList<AssetBalanceDb> {
+                                 spamListFromDb: MutableList<SpamAssetDb>): MutableList<AssetBalanceDb> {
+        val spamAssets = spamListFromDb.associateBy { it.assetId }
+
         assetsListFromDb.forEach { asset ->
-            asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
+            asset.isSpam = spamAssets[asset.assetId] != null
+
             if (assetsListFromDb.any { it.position != -1 }) {
                 if (asset.position == -1) {
                     asset.position = assetsListFromDb.size + 1

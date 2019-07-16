@@ -51,8 +51,8 @@ class DataTransaction(
 
     override fun toBytes(): ByteArray {
         return try {
-            Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(version.toByte()),
+            Bytes.concat(byteArrayOf(type),
+                    byteArrayOf(version),
                     Base58.decode(senderPublicKey),
                     dataBytes(),
                     Longs.toByteArray(timestamp),

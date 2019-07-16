@@ -67,12 +67,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                     SpamAssetDb.convertToDb(spam).saveAll()
 
                     return@map spam
-                }.map { spamListFromDb ->
-                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                        return@map spamListFromDb
-                    } else {
-                        return@map arrayListOf<SpamAssetResponse>()
-                    }
                 }
     }
 
@@ -120,6 +114,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
+                                val spamAssetsMap = spamAssets.associateBy { it.assetId }
                                 val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
                                 if (assetsFromDb != null && assetsFromDb.isNotEmpty()) {
@@ -144,9 +139,8 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                                     assetBalance.inOrderBalance = tripple.second[assetBalance.assetId]
                                             ?: 0L
 
-                                    assetBalance.isSpam = spamAssets.any {
-                                        it.assetId == assetBalance.assetId
-                                    }
+                                    assetBalance.isSpam = spamAssetsMap[assetBalance.assetId] != null
+
                                     if (assetBalance.isSpam) {
                                         assetBalance.isFavorite = false
                                     }
@@ -185,7 +179,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    // todo check
     private fun mergeNetDbData(
             tripple: Triple<AssetBalanceResponse, Map<String, Long>, AssetBalancesResponse>,
             mapDbAssets: Map<String, AssetBalanceResponse>?,
@@ -275,6 +268,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
         return nodeService.transactionsBroadcast(request)
                 .map {
                     it.address = getAddress()
+                    it.own = true
                     AliasDb(it).save()
                     return@map it
                 }
@@ -372,14 +366,17 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun burn(burn: BurnTransaction): Observable<BurnTransactionResponse> {
+    fun burn(burn: BurnTransaction, totalBurn: Boolean): Observable<BurnTransactionResponse> {
         return nodeService.transactionsBroadcast(burn)
                 .doOnNext {
+                    if (totalBurn) {
+                        delete<AssetBalanceDb> { equalTo("assetId", burn.assetId) }
+                    }
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
     }
 
-    fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfoResponse> {
+    fun scriptAddressInfo(address: String = getAddress()): Observable<ScriptInfoResponse> {
         return nodeService.scriptInfo(address)
                 .doOnNext {
                     prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)

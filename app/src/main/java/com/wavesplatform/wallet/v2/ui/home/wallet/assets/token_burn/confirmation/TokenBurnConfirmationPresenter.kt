@@ -9,10 +9,11 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.wallet.App
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.executeInBackground
 import javax.inject.Inject
 
 @InjectViewState
@@ -21,28 +22,22 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
     var assetBalance: AssetBalanceResponse? = null
     var amount: Double = 0.0
     var fee = 0L
-
     var success = false
     var totalBurn = false
 
     fun burn() {
-        val decimals = assetBalance!!.getDecimals()
-        val quantity = if (amount == 0.0) {
-            0
-        } else {
-            (amount * Math.pow(10.0, decimals.toDouble())).toLong()
-        }
+        val quantity = MoneyUtil.getUnscaledValue(amount.toString(), assetBalance)
+        totalBurn = quantity >= assetBalance?.balance ?: 0
 
         val request = BurnTransaction(
                 assetId = assetBalance!!.assetId,
                 quantity = quantity)
         request.sign(App.getAccessManager().getWallet().seedStr)
 
-        addSubscription(nodeServiceManager.burn(request)
-                .compose(RxUtil.applySchedulersToObservable())
+        addSubscription(nodeServiceManager.burn(request, totalBurn)
+                .executeInBackground()
                 .subscribe({
                     success = true
-                    totalBurn = quantity >= assetBalance?.balance ?: 0
                     viewState.onShowBurnSuccess(it, totalBurn)
                 }, {
                     it.errorBody()?.let { error ->
