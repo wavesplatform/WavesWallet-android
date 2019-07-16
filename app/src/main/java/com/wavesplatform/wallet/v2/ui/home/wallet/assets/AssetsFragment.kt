@@ -83,7 +83,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
                     swipe_container.isRefreshing = true
                     presenter.loadAssetsBalance()
                 })
-        // todo check
+
         presenter.loadAliases()
         presenter.loadAssetsBalance()
 

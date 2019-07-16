@@ -139,7 +139,6 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 }))
     }
 
-    // todo check
     fun loadOrderBook(amountAssetId: String, priceAssetId: String) {
         viewState.showProgressBar(true)
         addSubscription(matcherServiceManager.loadOrderBook(amountAssetId, priceAssetId)
