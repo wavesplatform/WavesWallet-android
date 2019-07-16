@@ -30,6 +30,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.WalletTabShadowListener
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -41,7 +42,7 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class LeasingFragment : BaseFragment(), LeasingView {
+class LeasingFragment : BaseFragment(), LeasingView, WalletTabShadowListener {
 
     @Inject
     @InjectPresenter
@@ -149,7 +150,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
             bottomSheetFragment.configureData(historyItem, position)
-            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment::class.java.simpleName)
         }
 
         skeletonScreen = Skeleton.bind(root)
@@ -158,8 +159,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 .load(R.layout.skeleton_leasing_layout)
                 .show()
 
-        nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener {
-            nestedScrollView, p1, p2, p3, p4 ->
+        nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { nestedScrollView, p1, p2, p3, p4 ->
             presenter.enableElevation = nestedScrollView.computeVerticalScrollOffset() > 4
             elevationAppBarChangeListener?.onChange(presenter.enableElevation)
         })
@@ -237,6 +237,11 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     override fun afterFailedLoadLeasing() {
         swipe_container.isRefreshing = false
+    }
+
+    override fun isShadowEnable(): Boolean {
+        return if (::presenter.isInitialized) presenter.enableElevation
+        else false
     }
 
     companion object {
