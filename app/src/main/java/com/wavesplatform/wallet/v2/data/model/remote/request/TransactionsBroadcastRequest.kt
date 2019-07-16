@@ -27,14 +27,14 @@ class TransactionsBroadcastRequest(
         @SerializedName("timestamp") var timestamp: Long,
         @SerializedName("fee") var fee: Long,
         @SerializedName("attachment") var attachment: String?,
-        @SerializedName("feeAssetId") var feeAssetId: String? = "",
+        @SerializedName("matcherFeeAssetId") var feeAssetId: String? = "",
         @SerializedName("sender") var sender: String? = ""
 ) {
 
     @SerializedName("type")
     val type: Int = 4
     @SerializedName("version")
-    var version: Int = Constants.VERSION
+    var version: Byte = Constants.VERSION
     @Transient
     var scheme: Byte = EnvironmentManager.netCode
     @SerializedName("proofs")

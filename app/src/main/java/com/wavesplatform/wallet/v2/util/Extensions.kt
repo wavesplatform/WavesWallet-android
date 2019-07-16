@@ -49,6 +49,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

@@ -19,21 +19,21 @@ import com.wavesplatform.wallet.v2.util.parseAlias
 import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
-    @SerializedName("type") val type: Int = Transaction.LEASE,
-    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-    @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
-    @SerializedName("amount") var amount: Long = 0,
-    @SerializedName("fee") var fee: Long = 0,
-    @SerializedName("recipient") var recipient: String = "",
-    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
-    @SerializedName("version") var version: Int = Constants.VERSION,
-    @SerializedName("proofs") var proofs: MutableList<String?>? = null
+        @SerializedName("type") val type: Int = Transaction.LEASE,
+        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+        @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
+        @SerializedName("amount") var amount: Long = 0,
+        @SerializedName("fee") var fee: Long = 0,
+        @SerializedName("recipient") var recipient: String = "",
+        @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
+        @SerializedName("version") var version: Byte = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(recipientIsAlias: Boolean): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(Constants.VERSION.toByte()),
+                    byteArrayOf(Constants.VERSION),
                     byteArrayOf(0.toByte()),
                     Base58.decode(senderPublicKey),
                     resolveRecipientBytes(recipientIsAlias),

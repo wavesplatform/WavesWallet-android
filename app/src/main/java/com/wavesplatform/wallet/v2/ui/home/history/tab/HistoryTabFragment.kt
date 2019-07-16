@@ -170,6 +170,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         }
     }
 
+    override fun onDestroyView() {
+        skeletonScreen?.hide()
+        super.onDestroyView()
+    }
+
     interface ChangeTabBarVisibilityListener {
         fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean = false)
     }

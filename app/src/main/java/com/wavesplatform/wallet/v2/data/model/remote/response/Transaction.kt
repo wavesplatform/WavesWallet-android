@@ -51,6 +51,7 @@ open class Order(
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("expiration") var expiration: Long = 0,
+        @SerializedName("matcherFeeAssetId") var matcherFeeAssetId: String? = null,
         @SerializedName("matcherFee") var matcherFee: Long = 0,
         @SerializedName("signature") var signature: String = ""
 ) : RealmModel {
@@ -116,7 +117,7 @@ open class Transaction(
         var lease: Lease? = Lease(),
         @SerializedName("fee")
         var fee: Long = 0,
-        @SerializedName("feeAssetId")
+        @SerializedName("matcherFeeAssetId")
         var feeAssetId: String? = null,
         @SerializedName("feeAssetObject")
         var feeAssetObject: AssetInfo? = AssetInfo(),
