@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
+import com.wavesplatform.wallet.v2.util.isAlias
 import com.wavesplatform.wallet.v2.util.makeAsAlias
 import com.wavesplatform.wallet.v2.util.parseAlias
 import java.nio.charset.Charset
@@ -47,12 +48,13 @@ class TransactionsBroadcastRequest(
     private fun checkAliasAndAttachment() {
         attachment = Base58.encode((attachment ?: "").toByteArray())
         if (recipient.length <= 30) {
-            recipient = recipient.makeAsAlias()
+            if (recipient.isAlias().not()) {
+                recipient = recipient.makeAsAlias()
+            }
         }
     }
 
     private fun toSignBytes(): ByteArray {
-        recipient = recipient.parseAlias()
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
@@ -62,7 +64,7 @@ class TransactionsBroadcastRequest(
                     Longs.toByteArray(timestamp),
                     Longs.toByteArray(amount),
                     Longs.toByteArray(fee),
-                    getRecipientBytes(recipient),
+                    getRecipientBytes(recipient.parseAlias()),
                     SignUtil.arrayWithSize(attachment))
         } catch (e: Exception) {
             Log.e("Wallet", "Couldn't create transaction sign", e)
