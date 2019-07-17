@@ -36,7 +36,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {
-            setNewData(allData)
+            setNewData(allData.toMutableList())
         } else {
             for (item in allData) {
                 item.getName().notNull {
@@ -55,6 +55,6 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         } else {
             allData
         }
-        setNewData(newAssets)
+        setNewData(newAssets.toMutableList())
     }
 }
