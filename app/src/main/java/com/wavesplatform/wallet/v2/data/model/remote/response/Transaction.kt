@@ -117,7 +117,7 @@ open class Transaction(
         var lease: Lease? = Lease(),
         @SerializedName("fee")
         var fee: Long = 0,
-        @SerializedName("matcherFeeAssetId")
+        @SerializedName("feeAssetId")
         var feeAssetId: String? = null,
         @SerializedName("feeAssetObject")
         var feeAssetObject: AssetInfo? = AssetInfo(),

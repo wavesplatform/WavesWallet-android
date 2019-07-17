@@ -87,17 +87,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 }))
     }
 
-    fun getTicker(): String {
-        return if (assetInfo == null) {
-            ""
-        } else if (assetInfo!!.ticker.equals(null) ||
-                assetInfo!!.ticker.equals("")) {
-            assetInfo!!.name
-        } else {
-            assetInfo!!.ticker ?: ""
-        }
-    }
-
     private fun getTxRequest(): TransactionsBroadcastRequest {
         if (recipient == null || recipient!!.length < 4) {
             recipient = ""
