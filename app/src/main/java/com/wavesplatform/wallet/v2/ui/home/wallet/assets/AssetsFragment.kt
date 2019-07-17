@@ -31,6 +31,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.WalletTabShadowListener
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
@@ -48,7 +49,7 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
-class AssetsFragment : BaseFragment(), AssetsView {
+class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
 
     @Inject
     @InjectPresenter
@@ -292,6 +293,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun isShadowEnable(): Boolean {
+        return if (::presenter.isInitialized) presenter.enableElevation
+        else false
     }
 
     companion object {

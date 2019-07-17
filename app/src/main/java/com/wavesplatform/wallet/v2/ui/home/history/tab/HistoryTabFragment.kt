@@ -79,11 +79,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         skeletonShow = true
 
         // make skeleton as designed
-        recycle_history.post {
-            recycle_history.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
-            recycle_history.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
-            recycle_history.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
-            recycle_history.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        recycle_history?.post {
+            recycle_history?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_history?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_history?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_history?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
