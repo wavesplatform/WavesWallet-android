@@ -7,7 +7,6 @@ package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.sdk.crypto.PrivateKeyAccount
 import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.utils.addressFromPublicKey
 import com.wavesplatform.sdk.utils.aesDecrypt
 import com.wavesplatform.sdk.utils.aesEncrypt
 import timber.log.Timber
@@ -32,7 +31,7 @@ class WavesWallet(val seed: ByteArray) {
         get() = String(seed, Charsets.UTF_8)
 
     init {
-        address = addressFromPublicKey(account.publicKey)
+        address = WavesCrypto.addressFromPublicKey(account.publicKey)
     }
 
     @Throws(Exception::class)

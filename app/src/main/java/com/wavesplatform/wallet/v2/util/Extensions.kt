@@ -50,6 +50,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.calcCheckSum
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
@@ -941,11 +942,13 @@ fun String?.isValidVostokAddress(): Boolean {
     if (this.isNullOrEmpty()) return false
     return try {
         val bytes = WavesCrypto.base58decode(this)
-        if (bytes.size == ADDRESS_LENGTH &&
-                bytes[0] == ADDRESS_VERSION &&
+        if (bytes.size == WavesCrypto.ADDRESS_LENGTH &&
+                bytes[0] == WavesCrypto.ADDRESS_VERSION &&
                 bytes[1] == EnvironmentManager.vostokNetCode) {
-            val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
-            val checkSumGenerated = calcCheckSum(bytes.copyOf(bytes.size - CHECK_SUM_LENGTH))
+            val checkSum = Arrays.copyOfRange(bytes,
+                    bytes.size - WavesCrypto.CHECK_SUM_LENGTH, bytes.size)
+            val checkSumGenerated = calcCheckSum(
+                    bytes.copyOf(bytes.size - WavesCrypto.CHECK_SUM_LENGTH))
             Arrays.equals(checkSum, checkSumGenerated)
         } else {
             false

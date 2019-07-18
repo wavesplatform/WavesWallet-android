@@ -8,6 +8,8 @@ package com.wavesplatform.wallet.v2.data.manager
 import android.content.Intent
 import android.text.TextUtils
 import com.vicpin.krealmextensions.RealmConfigStore
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.addressFromPublicKey
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
@@ -119,7 +121,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         var resultGuid = ""
         for (guid in guids) {
             val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-            if (addressFromPublicKey(publicKey) == address) {
+            if (addressFromPublicKey(WavesCrypto.base58decode(publicKey)) == address) {
                 resultGuid = guid
             }
         }
@@ -206,7 +208,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
-        } else AddressBookUserDb(addressFromPublicKey(publicKey), name)
+        } else AddressBookUserDb(addressFromPublicKey(WavesCrypto.base58decode(publicKey)), name)
     }
 
     fun deleteCurrentWavesWallet(): Boolean {
@@ -313,7 +315,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
             return ""
         }
         val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-        return addressFromPublicKey(publicKey)
+        return addressFromPublicKey(WavesCrypto.base58decode(publicKey))
     }
 
     fun storePassword(guid: String, publicKeyStr: String, encryptedPassword: String) {

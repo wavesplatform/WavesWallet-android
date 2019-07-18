@@ -7,6 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.addressFromPublicKey
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
