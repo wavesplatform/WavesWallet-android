@@ -11,6 +11,8 @@
     android:id="@+id/root"
     android:background="@color/white"
     android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 

@@ -21,12 +21,14 @@ import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.clearText
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -134,6 +136,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_sorting -> {
+                clearSearchInput()
                 item.title = if (item.title == getString(R.string.your_asset_activity_all)) {
                     adapter.showOnlyWithBalance(false)
                     getString(R.string.your_asset_activity_greater_zero)
@@ -144,6 +147,14 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun clearSearchInput() {
+        if (edit_search.text.isNotEmpty()) {
+            hideKeyboard()
+            edit_search.clearText()
+            edit_search.clearFocus()
+        }
     }
 
     private fun getEmptyView(): View {
