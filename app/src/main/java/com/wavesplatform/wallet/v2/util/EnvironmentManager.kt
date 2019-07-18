@@ -59,8 +59,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                 "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
         const val URL_CONFIG_TEST_NET = BASE_PROXY_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
-        const val URL_COMMISSION_MAIN_NET = BASE_PROXY_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/fee.json"
+        const val URL_COMMISSION_MAIN_NET = "/$BRANCH/fee.json"
 
         const val URL_RAW_CONFIG_MAIN_NET = BASE_RAW_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
