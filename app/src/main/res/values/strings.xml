@@ -680,4 +680,8 @@
     <string name="common_permission_error_description">This app needs permission to use camera. You can grant them in app settings.</string>
     <string name="common_permission_error_settings">Settings</string>
     <string name="common_permission_error_cancel">Cancel</string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>

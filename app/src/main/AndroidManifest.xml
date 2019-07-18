@@ -27,6 +27,21 @@
         android:roundIcon="${appIconRound}"
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
+        <receiver android:name=".v2.ui.widget.MarketWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/market_widget_info" />
+        </receiver>
+
+        <activity android:name=".v2.ui.widget.MarketWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -46,10 +61,12 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <data android:scheme="waves" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -175,11 +192,11 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity"
+            android:name=".v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity"
+            android:name=".v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
@@ -247,22 +264,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity"
+            android:name=".v2.ui.home.history.HistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.web.WebActivity"
+            android:name=".v2.ui.web.WebActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity"
+            android:name=".v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity"
+            android:name=".v2.ui.home.wallet.assets.search_asset.SearchAssetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".v2.ui.home.profile.settings.DevOptionsActivity"
             android:screenOrientation="portrait"
@@ -271,6 +288,7 @@
         <service
             android:name=".v2.data.service.UpdateApiDataService"
             android:stopWithTask="true" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -280,6 +298,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <receiver
             android:name="com.appsflyer.SingleInstallBroadcastReceiver"
             android:exported="true">
