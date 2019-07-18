@@ -542,7 +542,9 @@ class SendActivity : BaseActivity(), SendView {
         }
 
         if (url.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
-                url.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
+                url.contains("https://client.wavesplatform.com/%23send/".toRegex()) ||
+                url.contains("https://dex.wavesplatform.com/#send/".toRegex()) ||
+                url.contains("https://dex.wavesplatform.com/%23send/".toRegex())) {
             val uri = URI.create(url.replace(" ", "")
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))

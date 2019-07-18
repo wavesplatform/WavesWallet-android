@@ -74,7 +74,6 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     private fun setupUI() {
-        viewpager_wallet.offscreenPageLimit = 3
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
 
@@ -88,13 +87,8 @@ class WalletFragment : BaseFragment(), WalletView {
             }
 
             override fun onPageSelected(position: Int) {
-                val enable = if (position == 0) {
-                    (adapter.fragments[position] as AssetsFragment).presenter.enableElevation
-                } else {
-                    (adapter.fragments[position] as LeasingFragment).presenter.enableElevation
-                }
-                presenter.shadowEnable = enable
-                enableElevation(enable)
+                presenter.shadowEnable = (adapter.fragments[position] as WalletTabShadowListener).isShadowEnable()
+                enableElevation(presenter.shadowEnable)
             }
         })
 
