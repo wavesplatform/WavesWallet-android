@@ -68,7 +68,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         get() = super.getSupportFragmentManager()
     val fragmentContainer: Int
         @IdRes get() = 0
-    private val notNeedToAskPass: Boolean by lazy { this is SplashActivity || this is MarketWidgetConfigureActivity }
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -143,10 +142,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     public override fun onResume() {
         super.onResume()
         localizationDelegate.onResume(this)
-
-        if (notNeedToAskPass) {
-            return
-        }
 
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)

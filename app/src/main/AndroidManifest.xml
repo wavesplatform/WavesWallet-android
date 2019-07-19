@@ -37,7 +37,11 @@
                 android:resource="@xml/market_widget_info" />
         </receiver>
 
-        <activity android:name=".v2.ui.widget.MarketWidgetConfigureActivity">
+        <activity
+            android:name=".v2.ui.widget.MarketWidgetConfigureActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
