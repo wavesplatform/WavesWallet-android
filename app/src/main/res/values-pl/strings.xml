@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">MUSISZ wypełnić pole szczegółów płatności następującymi informacjami:</string>
-  <string name="about_fill_payment_info">CNM - Twój adres WAVES.\nJeśli tego nie zrobisz, nie możemy zasilić Twojego konta.</string>
   <string name="about_redirection_message">Po weryfikacji otrzymasz wiadomość e-mail z dalszymi instrukcjami</string>
   <string name="about_redirection_okay">W porządku</string>
   <string name="about_redirection_title">Zostałeś przekierowany do «IDNow»\ncelem weryfikacji</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">Kwota w %1$s</string>
   <string name="receive_asset">Token</string>
   <string name="receive_card">Karta</string>
-  <string name="receive_contact_msg">Na wypadek problemów z weryfikacją lub przetwarzaniem płatnościi - prosimy o kontakt z support teamem Coinomat — support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Kontynuuj</string>
   <string name="receive_cryptocurrency">Kryptowaluta</string>
   <string name="receive_dont_accept_international">Nie akceptujemy międzynarodowych przelewów od obywateli Stanów Zjednoczonych lub z banków USA</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">Spróbuj ponownie później</string>
-  <string name="send_gateway_error_title">Usługa Coinomat jest chwilowo niedostępna</string>
+  <string name="send_gateway_error_title">Usługa jest chwilowo niedostępna</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Opłaty wynoszą 1% od przekazanej kwoty.</string>
   <string name="send_gateway_info_gateway_fee">Opłata za bramę płatniczą wynosi %1$s %2$s</string>
-  <string name="send_gateway_info_gateway_limits">Wykryliśmy adres %1$s i wyślemy Twoje pieniądze przez bramkę Coinomat na ten adres. Minimalna kwota to %2$s %1$s, maksymalna kwota to %3$s %1$s.</string>
+  <string name="send_gateway_info_gateway_limits">Wykryliśmy adres %1$s i wyślemy twoje pieniądze przez bramę na ten adres. Minimalna kwota to %2$s %1$s, maksymalna kwota to %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Nie wypłacaj %1$s do ICO. Nie zasilimy Twojego konta tokenami z takiej dystrybucji zewnętrznej.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Jeśli zostałeś zweryfikowany i zdeponowałeś dolary amerykańskie, możesz wypłacić te pieniądze z powrotem na swoje konto bankowe. W przeciwnym razie najpierw zweryfikuj się u naszego partnera IDNow.eu</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Minimalna kwota to 500 USD. Jeśli masz jakieś pytania, wyślij e-mail na adres support@coinomat.com</string>
   <string name="send_monero_payment_id">Identyfikator płatności Monero</string>
   <string name="send_monero_payment_id_hint">Wklej lub wpisz swój identyfikator płatności</string>
   <string name="send_progress_sending">Wysyłanie…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">Nie dodałeś żetonów do ulubionych</string>
   <string name="wallet_sorting_default_empty">Lista tokenów jest pusta</string>
   <string name="wallet_sorting_hidden_empty">Nie dodałeś tokenów w ukrytej formie</string>
+  <string name="common_permission_error_title">Potrzebny jest dostęp do kamery</string>
+  <string name="common_permission_error_description">Ta aplikacja wymaga zezwolenia na korzystanie z kamery. Możesz przyznać je w ustawieniach aplikacji.</string>
+  <string name="common_permission_error_settings">Ustawienia</string>
+  <string name="common_permission_error_cancel">Anuluj</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Cena Twojego zlecenia jest 5% wyższa niż ostatnia cena na rynku</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Cena Twojego zlecenia jest o 5% niższa od ostatniej ceny rynkowej</string>
+  <string name="trade_order_dialog_positive_place_order">Wstaw zlecenie</string>
+  <string name="trade_order_dialog_negative_cancel">Anuluj</string>
+  <string name="trade_order_dialog_subtitle_proceed">Chcesz procedować?</string>
 </resources>
