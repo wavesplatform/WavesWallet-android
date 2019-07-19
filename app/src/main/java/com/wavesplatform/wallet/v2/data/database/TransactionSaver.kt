@@ -7,17 +7,22 @@ package com.wavesplatform.wallet.v2.data.database
 
 import android.util.Log
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
+import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.RxEventBus
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.util.WavesWallet
+import com.wavesplatform.wallet.v2.util.getTransactionType
+import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -30,24 +35,22 @@ class TransactionSaver @Inject constructor() {
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeServiceManager: NodeServiceManager
     @Inject
-    lateinit var apiDataManager: ApiDataManager
-    @Inject
-    lateinit var transactionUtil: TransactionUtil
-    private var allAssets = arrayListOf<AssetInfo>()
+    lateinit var dataServiceManager: DataServiceManager
+    private var allAssets = arrayListOf<AssetInfoResponse>()
     private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var currentLimit = DEFAULT_LIMIT
     private var prevLimit = DEFAULT_LIMIT
     private var needCheckToUpdateBalance = false
 
     fun saveTransactions(
-            sortedList: List<Transaction>,
+            sortedList: List<HistoryTransactionResponse>,
             limit: Int = DEFAULT_LIMIT,
             changeListener: OnTransactionLimitChangeListener? = null
     ) {
         currentLimit = limit
-        if (App.getAccessManager().getWallet() == null
+        if (!WavesWallet.isAuthenticated()
                 || sortedList.isEmpty()
                 || limit < 1) {
             rxEventBus.post(Events.NeedUpdateHistoryScreen())
@@ -56,7 +59,7 @@ class TransactionSaver @Inject constructor() {
 
         runAsync {
             // check if exist last transaction
-            queryAsync<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) },
+            queryAsync<TransactionDb>({ equalTo("id", sortedList[sortedList.size - 1].id) },
                     {
                         if (it.isEmpty()) {
                             // all list is new, need load more
@@ -87,7 +90,7 @@ class TransactionSaver @Inject constructor() {
                             }
                         } else {
                             // check if exist first transaction
-                            queryAsync<Transaction>({ equalTo("id", sortedList[0].id) },
+                            queryAsync<TransactionDb>({ equalTo("id", sortedList[0].id) },
                                     {
                                         if (it.isEmpty()) {
                                             // only few new transaction
@@ -104,7 +107,7 @@ class TransactionSaver @Inject constructor() {
         }
     }
 
-    private fun saveToDb(transactions: List<Transaction>) {
+    private fun saveToDb(transactions: List<HistoryTransactionResponse>) {
 
         // grab all assetsIds
         val tempGrabbedAssets = mutableListOf<String?>()
@@ -128,19 +131,19 @@ class TransactionSaver @Inject constructor() {
                 .distinct()
                 .toMutableList()
 
-        subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
+        subscriptions.add(dataServiceManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe ({
                     mergeAndSaveAllAssets(ArrayList(it)) { assetsInfo ->
                         transactions.forEach { trans ->
                             if (trans.assetId.isNullOrEmpty()) {
-                                trans.asset = Constants.wavesAssetInfo
+                                trans.asset = WavesConstants.WAVES_ASSET_INFO
                             } else {
                                 trans.asset = allAssets.firstOrNull { it.id == trans.assetId }
                             }
 
                             if (trans.feeAssetId.isNullOrEmpty()) {
-                                trans.feeAssetObject = Constants.wavesAssetInfo
+                                trans.feeAssetObject = WavesConstants.WAVES_ASSET_INFO
                             } else {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
@@ -148,7 +151,7 @@ class TransactionSaver @Inject constructor() {
                             if (!trans.payment.isNullOrEmpty()) {
                                 trans.payment.first()?.let { payment ->
                                     if (payment.assetId.isNullOrEmpty()) {
-                                        payment.asset = Constants.wavesAssetInfo
+                                        payment.asset = WavesConstants.WAVES_ASSET_INFO
                                     } else {
                                         payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
                                     }
@@ -160,8 +163,9 @@ class TransactionSaver @Inject constructor() {
                                     val aliasName = trans.recipient.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.recipientAddress = address
-                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                        trans.save()
+                                        trans.transactionTypeId = getTransactionType(
+                                                trans, WavesWallet.getAddress())
+                                        TransactionDb(trans).save()
                                     }
 
                                 }
@@ -169,8 +173,9 @@ class TransactionSaver @Inject constructor() {
                                     val aliasName = trans.lease?.recipient?.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.lease?.recipientAddress = address
-                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                        trans.save()
+                                        trans.transactionTypeId = getTransactionType(
+                                                trans, WavesWallet.getAddress())
+                                        TransactionDb(trans).save()
                                     }
                                 }
                                 else -> {
@@ -185,7 +190,7 @@ class TransactionSaver @Inject constructor() {
                                         val aliasName = transfer.recipient.parseAlias()
                                         loadAliasAddress(aliasName) { address ->
                                             transfer.recipientAddress = address
-                                            transfer.save()
+                                            TransferDb(transfer).save()
                                         }
                                     }
                                     else -> transfer.recipientAddress = transfer.recipient
@@ -195,13 +200,13 @@ class TransactionSaver @Inject constructor() {
                             if (trans.order1 != null) {
                                 val amountAsset =
                                         if (trans.order1?.assetPair?.amountAsset.isNullOrEmpty()) {
-                                            Constants.wavesAssetInfo
+                                            WavesConstants.WAVES_ASSET_INFO
                                         } else {
                                             allAssets.firstOrNull { it.id == trans.order1?.assetPair?.amountAsset }
                                         }
                                 val priceAsset =
                                         if (trans.order1?.assetPair?.priceAsset.isNullOrEmpty()) {
-                                            Constants.wavesAssetInfo
+                                            WavesConstants.WAVES_ASSET_INFO
                                         } else {
                                             allAssets.firstOrNull { it.id == trans.order1?.assetPair?.priceAsset }
                                         }
@@ -213,7 +218,8 @@ class TransactionSaver @Inject constructor() {
                                     it.assetPair?.priceAssetObject = priceAsset
                                 }
                             }
-                            trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                            trans.transactionTypeId = getTransactionType(
+                                    trans, WavesWallet.getAddress())
                         }
 
                         if (needCheckToUpdateBalance) {
@@ -233,7 +239,7 @@ class TransactionSaver @Inject constructor() {
                                 .filter { it.transactionType() == TransactionType.CANCELED_LEASING_TYPE }
                         if (canceledLeasingTransactions.isNotEmpty()) {
                             canceledLeasingTransactions.forEach {
-                                val first = queryFirst<Transaction> { equalTo("id", it.leaseId) }
+                                val first = queryFirst<TransactionDb> { equalTo("id", it.leaseId) }
                                 if (first?.status != LeasingStatus.CANCELED.status) {
                                     first?.status = LeasingStatus.CANCELED.status
                                     first?.save()
@@ -241,7 +247,7 @@ class TransactionSaver @Inject constructor() {
                             }
                         }
 
-                        transactions.saveAll()
+                        TransactionDb.convertToDb(transactions).saveAll()
                         runOnUiThread {
                             rxEventBus.post(Events.NeedUpdateHistoryScreen())
                         }
@@ -252,9 +258,9 @@ class TransactionSaver @Inject constructor() {
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
-        if (App.getAccessManager().getWallet() != null) {
+        if (App.getAccessManager().isAuthenticated()) {
             alias.notNull {
-                subscriptions.add(apiDataManager.loadAlias(it)
+                subscriptions.add(dataServiceManager.loadAlias(it)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe {
                             listener.invoke(it.address)
@@ -263,9 +269,9 @@ class TransactionSaver @Inject constructor() {
         }
     }
 
-    private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
+    private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfoResponse>, callback: (ArrayList<AssetInfoResponse>) -> Unit) {
         runAsync {
-            queryAllAsync<SpamAsset> { spams ->
+            queryAllAsync<SpamAssetDb> { spams ->
                 val spamMap = spams.associateBy { it.assetId }
                 val allAssetMap = allAssets.associateBy { it.id }
                 arrayList.iterator().forEach { newAsset ->

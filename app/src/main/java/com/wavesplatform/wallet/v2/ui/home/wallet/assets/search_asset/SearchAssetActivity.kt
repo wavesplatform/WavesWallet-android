@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
@@ -67,8 +67,8 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
         adapter.emptyView = emptyView
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
-            if (this.adapter.getItem(position) is AssetBalance) {
-                val item = this.adapter.getItem(position) as AssetBalance
+            if (this.adapter.getItem(position) is AssetBalanceMultiItemEntity) {
+                val item = this.adapter.getItem(position) as AssetBalanceMultiItemEntity
                 launchActivity<AssetDetailsActivity>(AssetsFragment.REQUEST_ASSET_DETAILS) {
                     putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
                     if (item.isHidden) {

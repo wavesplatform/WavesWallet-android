@@ -17,6 +17,7 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
@@ -24,7 +25,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -54,7 +55,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeServiceManager: NodeServiceManager
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
@@ -137,7 +138,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     App.getAccessManager().deleteCurrentWavesWallet()
 
                     presenter.prefsUtil.logOut()
-                    App.getAccessManager().restartApp(activity!!)
+                    restartApp()
                 }
                 dialog.dismiss()
             }

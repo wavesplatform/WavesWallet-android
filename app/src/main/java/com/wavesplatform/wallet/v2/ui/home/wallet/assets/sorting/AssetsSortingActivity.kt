@@ -17,14 +17,15 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.TabItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -119,8 +120,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             // add to not favorite list
                             addToListOf(AssetSortingItem.TYPE_DEFAULT_ITEM, globalItem, asset, linePosition)
 
-                            asset.save()
-                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
+                            AssetBalanceDb(asset).save()
+                            AssetBalanceStoreDb(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
                         AssetSortingItem.TYPE_DEFAULT_ITEM, AssetSortingItem.TYPE_HIDDEN_ITEM -> {
                             // remove from current list
@@ -135,8 +136,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             // add to favorite list
                             addToListOf(AssetSortingItem.TYPE_FAVORITE_ITEM, globalItem, asset, linePosition)
 
-                            asset.save()
-                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position,
+                            AssetBalanceDb(asset).save()
+                            AssetBalanceStoreDb(asset.assetId, asset.isHidden, asset.position,
                                     asset.isFavorite).save()
                         }
                     }
@@ -172,8 +173,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                     }
 
                     // Save to DB
-                    item.asset.save()
-                    AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+                    AssetBalanceDb(item.asset).save()
+                    AssetBalanceStoreDb(item.asset.assetId, item.asset.isHidden, item.asset.position,
                             item.asset.isFavorite).save()
                 }
             }
@@ -205,7 +206,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         common_tab_layout.currentTab = 0
     }
 
-    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalance, linePosition: Int) {
+    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalanceResponse, linePosition: Int) {
         globalItem.type = listType
         globalItem.asset = asset
 
@@ -247,8 +248,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 recycle_assets.itemAnimator = itemAnimator
             }
 
-            item.asset.save()
-            AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+            AssetBalanceDb(item.asset).save()
+            AssetBalanceStoreDb(item.asset.assetId, item.asset.isHidden, item.asset.position,
                     item.asset.isFavorite).save()
         }
     }

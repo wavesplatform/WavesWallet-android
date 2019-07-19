@@ -13,13 +13,12 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.formatBaseUrl
 import dagger.Module
 import dagger.Provides
@@ -102,7 +101,7 @@ class NetworkModule {
                 .addInterceptor(receivedCookiesInterceptor)
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
-                .addInterceptor(EnvironmentManager.createHostInterceptor())
+                .addInterceptor(EnvironmentManager.createGateWayHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
@@ -126,36 +125,6 @@ class NetworkModule {
     }
 
     @Singleton
-    @Named("NodeRetrofit")
-    @Provides
-    internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.nodeUrl.formatBaseUrl())
-                .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
-        return retrofit
-    }
-
-    @Singleton
-    @Named("MatcherRetrofit")
-    @Provides
-    internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.matcherUrl.formatBaseUrl())
-                .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
-        return retrofit
-    }
-
-    @Singleton
     @Named("GatewayRetrofit")
     @Provides
     internal fun provideGatewayRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
@@ -166,7 +135,6 @@ class NetworkModule {
         val retrofit = Retrofit.Builder()
                 .baseUrl(url.formatBaseUrl())
                 .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -182,7 +150,6 @@ class NetworkModule {
                 .baseUrl(Constants.URL_GITHUB_PROXY.formatBaseUrl())
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -198,45 +165,11 @@ class NetworkModule {
                 .baseUrl(Constants.URL_COINOMAT.formatBaseUrl())
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
-    }
-
-    @Singleton
-    @Named("ApiRetrofit")
-    @Provides
-    internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.dataUrl.formatBaseUrl())
-                .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
-        return retrofit
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideNodeService(@Named("NodeRetrofit") retrofit: Retrofit): NodeService {
-        return retrofit.create(NodeService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideMatcherService(@Named("MatcherRetrofit") retrofit: Retrofit): MatcherService {
-        return retrofit.create(MatcherService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideApiService(@Named("ApiRetrofit") retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
     }
 
     @Singleton

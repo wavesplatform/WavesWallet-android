@@ -14,14 +14,16 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -106,7 +108,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 })
     }
 
-    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalance) {
+    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalanceResponse) {
         presenter.assetBalance = assetBalance
         fillInformation(assetBalance)
     }
@@ -142,7 +144,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         }
     }
 
-    private fun configureTabsAccordingTo(assetBalance: AssetBalance?): ArrayList<HistoryTab> {
+    private fun configureTabsAccordingTo(assetBalance: AssetBalanceResponse?): ArrayList<HistoryTab> {
         val tabs = arrayListOf<HistoryTab>()
         assetBalance?.let { asset ->
             tabs.add(HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)))
@@ -158,7 +160,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         return tabs
     }
 
-    private fun fillInformation(assetBalance: AssetBalance?) {
+    private fun fillInformation(assetBalance: AssetBalanceResponse?) {
         formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         text_available_balance.text = assetBalance?.getDisplayAvailableBalance()

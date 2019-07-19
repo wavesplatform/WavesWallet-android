@@ -19,15 +19,15 @@ import com.github.moduth.blockcanary.BlockCanary;
 import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
-import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
-import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.sdk.WavesSdk;
 import com.wavesplatform.wallet.v2.data.analytics.Analytics;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
-import com.wavesplatform.wallet.v2.data.manager.GithubDataManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
+import com.wavesplatform.wallet.v2.util.EnvironmentManager;
+import com.wavesplatform.wallet.v2.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.util.connectivity.ConnectivityManager;
 
 import javax.inject.Inject;
 
@@ -47,8 +47,6 @@ public class App extends DaggerApplication {
     PrefsUtil mPrefsUtil;
     @Inject
     AuthHelper authHelper;
-    @Inject
-    GithubDataManager githubDataManager;
     private static App application;
     private static AccessManager accessManager;
     private LocalizationApplicationDelegate localizationDelegate
@@ -56,7 +54,6 @@ public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
-        EnvironmentManager.init(this);
         super.onCreate();
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -79,6 +76,9 @@ public class App extends DaggerApplication {
 
         accessManager = new AccessManager(mPrefsUtil, authHelper);
 
+        WavesSdk.init(this);
+        EnvironmentManager.update();
+
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
@@ -95,10 +95,9 @@ public class App extends DaggerApplication {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SimpleChromeCustomTabs.initialize(this);
-        EnvironmentManager.updateConfiguration(githubDataManager);
     }
 
-    public static Context getAppContext() {
+    public static App getAppContext() {
         return application;
     }
 

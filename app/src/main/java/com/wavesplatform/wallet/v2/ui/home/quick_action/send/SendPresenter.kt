@@ -9,20 +9,22 @@ import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
+import com.wavesplatform.sdk.model.request.node.TransferTransaction
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
+import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
+import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
-import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import java.math.BigDecimal
@@ -36,7 +38,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMetadata: GatewayMetadata = GatewayMetadata()
 
     var type: Type = Type.UNKNOWN
-    var selectedAsset: AssetBalance? = null
+    var selectedAsset: AssetBalanceResponse? = null
 
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
@@ -45,7 +47,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var recipientAssetId: String? = null
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance? = null
+    var feeAsset: AssetBalanceResponse? = null
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -59,7 +61,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     fun checkAlias(alias: String) {
         if (alias.length in 4..30) {
             addSubscription(
-                    apiDataManager.loadAlias(alias)
+                    dataServiceManager.loadAlias(alias)
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({ _ ->
                                 type = Type.ALIAS
@@ -74,16 +76,14 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
-    private fun getTxRequest(): TransactionsBroadcastRequest {
-        return TransactionsBroadcastRequest(
-                selectedAsset?.assetId ?: "",
-                App.getAccessManager().getWallet()!!.publicKeyStr,
-                recipient ?: "",
-                MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
-                EnvironmentManager.getTime(),
-                fee,
-                "",
-                feeAsset?.assetId ?: "")
+    private fun getTxRequest(): TransferTransaction {
+        return TransferTransaction(
+                assetId = selectedAsset?.assetId ?: "",
+                recipient = recipient ?: "",
+                amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
+                fee = fee,
+                attachment = SignUtil.textToBase58(""),
+                feeAssetId = feeAsset?.assetId ?: "")
     }
 
     private fun validateTransfer(): Int {
@@ -93,18 +93,18 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return R.string.invalid_address
         } else {
             val tx = getTxRequest()
-            if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
-                    > TransferTransactionRequest.MaxAttachmentSize) {
+            if (TransferTransaction.getAttachmentSize(tx.attachment)
+                    > TransferTransaction.MAX_ATTACHMENT_SIZE) {
                 return R.string.attachment_too_long
             } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                 return R.string.invalid_amount
-            } else if (tx.fee <= 0 || (feeAsset?.isWaves() != false && tx.fee < Constants.WAVES_MIN_FEE)) {
+            } else if (tx.fee <= 0 || (feeAsset?.isWaves() != false && tx.fee < WavesConstants.WAVES_MIN_FEE)) {
                 return R.string.insufficient_fee
             } else if (!isFundSufficient(tx)) {
                 return R.string.insufficient_funds
             } else if (isGatewayAmountError()) {
                 return R.string.insufficient_gateway_funds_error
-            } else if (Constants.findByGatewayId("XMR")?.assetId == recipientAssetId &&
+            } else if (findByGatewayId("XMR")?.assetId == recipientAssetId &&
                     moneroPaymentId != null &&
                     (moneroPaymentId?.length != MONERO_PAYMENT_ID_LENGTH ||
                             moneroPaymentId?.contains(" ".toRegex()) == true)) {
@@ -126,16 +126,16 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    private fun isFundSufficient(tx: TransactionsBroadcastRequest): Boolean {
+    private fun isFundSufficient(tx: TransferTransaction): Boolean {
         return if (isSameSendingAndFeeAssets()) {
-            tx.amount + tx.fee <= selectedAsset!!.balance!!
+            tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            val validFee = if (tx.feeAssetId?.isWaves() == true) {
-                tx.fee <= queryFirst<AssetBalance> { equalTo("assetId", "") }?.balance ?: 0
+            val validFee = if (tx.feeAssetId.isWaves()) {
+                tx.fee <= queryFirst<AssetBalanceDb> {
+                    equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
             } else {
                 true
             }
-
             tx.amount <= selectedAsset!!.balance!! && validFee
         }
     }
@@ -195,12 +195,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
-                nodeDataManager.assetDetails(assetId),
-                Function3 { t1: GlobalTransactionCommission,
-                            t2: ScriptInfo,
-                            t3: AssetsDetails ->
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
+                nodeServiceManager.assetDetails(assetId),
+                Function3 { t1: GlobalTransactionCommissionResponse,
+                            t2: ScriptInfoResponse,
+                            t3: AssetsDetailsResponse ->
                     return@Function3 Triple(t1, t2, t3)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -208,11 +208,11 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     val commission = triple.first
                     val scriptInfo = triple.second
                     val assetsDetails = triple.third
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.TRANSFER
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = BaseTransaction.TRANSFER
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
-                    fee = countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     feeWaves = fee
                     viewState.showCommissionSuccess(fee)
                 }, {
@@ -224,13 +224,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     fun loadAssetForLink(assetId: String, url: String) {
         addSubscription(
-                nodeDataManager.assetDetails(assetId)
+                nodeServiceManager.assetDetails(assetId)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe({ assetsDetails ->
-                            val assetBalance = AssetBalance(
+                            val assetBalance = AssetBalanceResponse(
                                     assetsDetails.assetId,
                                     quantity = assetsDetails.quantity,
-                                    issueTransaction = IssueTransaction(
+                                    issueTransaction = IssueTransactionResponse(
                                             assetId = assetsDetails.assetId,
                                             id = assetsDetails.assetId,
                                             name = assetsDetails.name,
@@ -240,7 +240,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                             reissuable = assetsDetails.reissuable,
                                             timestamp = assetsDetails.issueTimestamp,
                                             sender = assetsDetails.issuer))
-                            assetBalance.save()
+                            AssetBalanceDb(assetBalance).save()
                             if (!TextUtils.isEmpty(url)) {
                                 viewState.setDataFromUrl(url)
                             } else {
@@ -257,7 +257,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     companion object {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
-        fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
+        fun getAssetId(recipient: String?, assetBalance: AssetBalanceResponse?): String? {
             val configAsset = EnvironmentManager.globalConfiguration.generalAssets
                     .firstOrNull { it.assetId == assetBalance?.assetId }
 

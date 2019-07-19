@@ -16,12 +16,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
@@ -101,7 +101,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
     }
 
-    override fun afterSuccessLoadAliases(ownAliases: MutableList<Alias>) {
+    override fun afterSuccessLoadAliases(ownAliases: MutableList<AliasTransactionResponse>) {
         if (ownAliases.isEmpty()) {
             text_aliases_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
         } else {
@@ -111,7 +111,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             val bottomSheetFragment = AliasBottomSheetFragment()
             bottomSheetFragment.configureDialog(ownAliases.isEmpty(), AliasBottomSheetFragment.FROM_WALLET)
             bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
-                override fun onSuccess(alias: Alias) {
+                override fun onSuccess(alias: AliasTransactionResponse) {
                     bottomSheetFragment.dismiss()
                     showSuccess(getString(R.string.new_alias_success_create), R.id.root)
 

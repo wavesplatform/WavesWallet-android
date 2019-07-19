@@ -12,10 +12,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
@@ -23,11 +23,11 @@ import com.wavesplatform.wallet.v2.data.rules.SeedRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.util.applyFilterStartEmptySpace
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.onAction
+import com.wavesplatform.sdk.utils.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayWithdrawArgs
 import com.wavesplatform.wallet.v2.data.model.remote.request.gateway.InitGatewayRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.gateway.InitDepositResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.gateway.InitWithdrawResponse
@@ -20,9 +20,8 @@ interface GatewayService {
     fun initWithdraw(@Body request: InitGatewayRequest): Observable<InitWithdrawResponse>
 
     @POST("v1/external/send")
-    fun sendWithdrawTransaction(@Body request: TransactionsBroadcastRequest): Observable<SendTransactionResponse>
+    fun sendWithdrawTransaction(@Body request: GatewayWithdrawArgs.Transaction): Observable<SendTransactionResponse>
 
     @POST("v1/external/deposit")
     fun initDeposit(@Body request: InitGatewayRequest): Observable<InitDepositResponse>
-
 }

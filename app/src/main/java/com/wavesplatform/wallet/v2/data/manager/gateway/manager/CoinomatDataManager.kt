@@ -5,32 +5,36 @@
 
 package com.wavesplatform.wallet.v2.data.manager.gateway.manager
 
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.sdk.WavesSdk
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
+import com.wavesplatform.sdk.net.NetworkException
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.utils.SignUtil
+import com.wavesplatform.sdk.utils.parseAlias
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayDepositArgs
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayWithdrawArgs
-import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayDeposit
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
-import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.CreateTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.Limit
-import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.coinomat.XRate
-import com.wavesplatform.wallet.v2.util.parseAlias
+import com.wavesplatform.wallet.v2.data.remote.CoinomatService
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway {
+class CoinomatDataManager @Inject constructor() : BaseServiceManager(), BaseGateway {
 
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeDataManager: NodeServiceManager
 
     override fun loadGatewayMetadata(args: GatewayMetadataArgs): Observable<GatewayMetadata> {
         val currencyTo = Constants.coinomatCryptoCurrencies()[args.asset?.assetId]
@@ -51,7 +55,7 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
                 }
     }
 
-    override fun makeWithdraw(args: GatewayWithdrawArgs): Observable<TransactionsBroadcastRequest> {
+    override fun makeWithdraw(args: GatewayWithdrawArgs): Observable<TransferTransactionResponse> {
         val currencyTo = Constants.coinomatCryptoCurrencies()[args.transaction.assetId]
         val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
 
@@ -69,9 +73,10 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
                 }
                 .flatMap {
                     args.transaction.recipient = it.tunnel?.walletFrom ?: args.transaction.recipient
-                    args.transaction.attachment = it.tunnel?.attachment ?: ""
+                    args.transaction.attachment = SignUtil.textToBase58(
+                            it.tunnel?.attachment ?: "")
 
-                    args.transaction.sign(getPrivateKey())
+                    args.transaction.sign(App.getAccessManager().getWallet().seedStr)
 
                     nodeDataManager.transactionsBroadcast(args.transaction)
                 }
@@ -134,6 +139,24 @@ class CoinomatDataManager @Inject constructor() : BaseDataManager(), BaseGateway
     }
 
     companion object {
+
         const val LANG: String = "ru_RU"
+
+        private var onErrorListener: OnErrorListener? = null
+
+        fun create(onErrorListener: OnErrorListener? = null): CoinomatService {
+            this.onErrorListener = onErrorListener
+            return WavesSdk.service().createService(Constants.URL_COINOMAT,
+                    object : OnErrorListener {
+                        override fun onError(exception: NetworkException) {
+                            CoinomatDataManager.onErrorListener?.onError(exception)
+                        }
+                    })
+                    .create(CoinomatService::class.java)
+        }
+
+        fun removeOnErrorListener() {
+            onErrorListener = null
+        }
     }
 }

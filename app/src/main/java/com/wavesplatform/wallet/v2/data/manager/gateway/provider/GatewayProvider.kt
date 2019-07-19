@@ -5,11 +5,11 @@
 
 package com.wavesplatform.wallet.v2.data.manager.gateway.provider
 
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.BaseGateway
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,5 +30,4 @@ class GatewayProvider @Inject constructor() {
             else -> coinomatManager
         }
     }
-
 }

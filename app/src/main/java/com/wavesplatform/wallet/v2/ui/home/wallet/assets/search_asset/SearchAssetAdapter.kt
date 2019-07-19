@@ -8,11 +8,11 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import kotlinx.android.synthetic.main.item_wallet_asset.view.*
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class SearchAssetAdapter  @Inject constructor() :
 
         when (helper.itemViewType) {
             AssetsAdapter.TYPE_ASSET, AssetsAdapter.TYPE_HIDDEN_ASSET -> {
-                val assetBalance = multiItemEntity as AssetBalance
+                val assetBalance = multiItemEntity as AssetBalanceResponse
                 helper.setText(R.id.text_asset_name, assetBalance.getName())
                         .setText(R.id.text_asset_value, getScaledAmount(
                                 assetBalance.getAvailableBalance(), assetBalance.getDecimals()))

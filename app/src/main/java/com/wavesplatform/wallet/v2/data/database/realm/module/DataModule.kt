@@ -5,12 +5,10 @@
 
 package com.wavesplatform.wallet.v2.data.database.realm.module
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.*
 import io.realm.annotations.RealmModule
 
-@RealmModule(classes = [AssetBalance::class, IssueTransaction::class, Transaction::class, Data::class,
-    Transfer::class, AssetPair::class, Order::class, Lease::class, Alias::class, SpamAsset::class,
-    AssetInfo::class, Payment::class])
+@RealmModule(classes = [AssetBalanceDb::class, IssueTransactionDb::class, TransactionDb::class, DataDb::class,
+    TransferDb::class, AssetPairDb::class, OrderDb::class, LeaseDb::class, AliasDb::class, SpamAssetDb::class,
+    AssetInfoDb::class, PaymentDb::class])
 class DataModule

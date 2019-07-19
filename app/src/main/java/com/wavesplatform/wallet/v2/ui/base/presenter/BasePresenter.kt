@@ -8,12 +8,12 @@ package com.wavesplatform.wallet.v2.ui.base.presenter
 import com.arellomobile.mvp.MvpPresenter
 import com.arellomobile.mvp.MvpView
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
-import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
-import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
+import com.wavesplatform.wallet.v2.data.manager.MatcherServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -29,13 +29,13 @@ open class BasePresenter<T : MvpView> @Inject constructor() : MvpPresenter<T>() 
     @Inject
     lateinit var preferenceHelper: PreferencesHelper
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeServiceManager: NodeServiceManager
     @Inject
-    lateinit var apiDataManager: ApiDataManager
+    lateinit var dataServiceManager: DataServiceManager
     @Inject
-    lateinit var matcherDataManager: MatcherDataManager
+    lateinit var matcherServiceManager: MatcherServiceManager
     @Inject
-    lateinit var githubDataManager: GithubDataManager
+    lateinit var githubServiceManager: GithubServiceManager
     @Inject
     lateinit var prefsUtil: PrefsUtil
     @Inject

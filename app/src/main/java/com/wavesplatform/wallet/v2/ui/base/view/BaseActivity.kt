@@ -28,13 +28,15 @@ import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.wavesplatform.sdk.WavesSdk
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -45,9 +47,14 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
@@ -80,7 +87,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var mErrorManager: ErrorManager
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var dataManager: BaseServiceManager
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
 
@@ -89,6 +96,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     protected lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var noInternetLayout: View? = null
+
+    private var onErrorListener: OnErrorListener? = null
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -123,13 +132,20 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 .observeInternetConnectivity()
                 .distinctUntilChanged()
                 .onErrorResumeNext(Observable.empty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
                 }, {
                     it.printStackTrace()
                 }))
+
+        onErrorListener = object : OnErrorListener {
+            override fun onError(exception: NetworkException) {
+                val retrySubject = PublishSubject.create<Events.RetryEvent>()
+                mErrorManager.handleError(exception, retrySubject)
+                SentryHelper.logException(exception)
+            }
+        }
     }
 
     protected fun exit() {
@@ -156,9 +172,21 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 }, { t: Throwable? -> t?.printStackTrace() }))
     }
 
+    private fun addErrorListener() {
+        // todo check refactor without clients recreation & Check Errors to show or log
+        WavesSdk.service().addOnErrorListener(onErrorListener!!)
+        dataManager.coinomatService = CoinomatDataManager.create(onErrorListener)
+        dataManager.gatewayService = GatewayDataManager.create(onErrorListener)
+        dataManager.githubService = GithubServiceManager.create(onErrorListener)
+    }
+
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
+        WavesSdk.service().removeOnErrorListener(onErrorListener!!)
+        CoinomatDataManager.removeOnErrorListener()
+        GatewayDataManager.removeOnErrorListener()
+        GithubServiceManager.removeOnErrorListener()
     }
 
     override fun onDestroy() {
@@ -171,7 +199,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     private fun askPassCodeIfNeed() {
         val guid = App.getAccessManager().getLastLoggedInGuid()
 
-        val notAuthenticated = App.getAccessManager().getWallet() == null
+        val notAuthenticated = !App.getAccessManager().isAuthenticated()
         val hasGuidToLogin = !TextUtils.isEmpty(guid)
 
         if (!MonkeyTest.isTurnedOn() && hasGuidToLogin && notAuthenticated && askPassCode()) {
@@ -287,10 +315,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         } else {
             window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
         }
-    }
-
-    protected fun restartApp() {
-        App.getAccessManager().restartApp(this)
     }
 
     protected fun clearAndLogout() {

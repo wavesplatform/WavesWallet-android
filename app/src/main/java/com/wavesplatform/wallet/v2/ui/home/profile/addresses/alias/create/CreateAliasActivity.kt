@@ -13,11 +13,12 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showAlertAboutScriptedAccount
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
@@ -85,7 +86,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                     makeButtonEnableIfValid()
                     return@map it.toString()
                 }
-                .filter { !it.isEmpty() }
+                .filter { it.isNotEmpty() }
                 .distinctUntilChanged()
                 .flatMap {
                     return@flatMap Observable.zip(validateObservable, Observable.just(it), BiFunction { t1: Boolean, t2: String ->
@@ -94,7 +95,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 }
                 .filter { it.first }
                 .map {
-                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < presenter.fee) {
+                    if (presenter.wavesBalance.getAvailableBalance() < presenter.fee) {
                         presenter.aliasValidation = false
                         makeButtonEnableIfValid()
                         til_new_alias_symbol.error = getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
@@ -111,7 +112,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 })
 
         button_create_alias.click {
-            presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString())
+            presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString() ?: "")
         }
 
         presenter.loadWavesBalance()
@@ -139,7 +140,8 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         exitFromActivity()
     }
 
-    override fun successCreateAlias(alias: Alias) {
+    override fun successCreateAlias(alias: AliasTransactionResponse) {
+        AliasDb(alias).save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })
@@ -169,7 +171,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     companion object {
-        const val RESULT_ALIAS = "alias"
+        const val RESULT_ALIAS = "aliasBytes"
         const val BUNDLE_BLOCKCHAIN_COMMISSION = "blockchain_commission"
     }
 }

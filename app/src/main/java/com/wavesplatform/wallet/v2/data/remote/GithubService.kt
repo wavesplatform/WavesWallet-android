@@ -5,14 +5,15 @@
 
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.LastAppVersionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastAppVersion
-import com.wavesplatform.wallet.v2.data.model.remote.response.News
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Url
 
 interface GithubService {
@@ -21,14 +22,17 @@ interface GithubService {
     fun spamAssets(@Url url: String = EnvironmentManager.servers.spamUrl): Observable<String>
 
     @GET
-    fun news(@Url url: String = News.URL): Observable<News>
+    fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url): Observable<GlobalConfigurationResponse>
 
-    @GET
-    fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url): Observable<GlobalConfiguration>
+    @GET("{newsPath}")
+    fun news(@Path("newsPath") newsPath: String? = NewsResponse.URL): Observable<NewsResponse>
 
-    @GET
-    fun globalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET): Observable<GlobalTransactionCommission>
+    @GET("{commissionPath}")
+    fun globalCommission(@Path("commissionPath") commissionPath: String?
+                         = EnvironmentManager.URL_COMMISSION_MAIN_NET)
+            : Observable<GlobalTransactionCommissionResponse>
 
-    @GET
-    fun loadLastAppVersion(@Url url: String = Constants.URL_VERSION): Observable<LastAppVersion>
+    @GET("{versionPath}")
+    fun loadLastAppVersion(@Path("versionPath") versionPath: String? = Constants.URL_GITHUB_CONFIG_VERSION)
+            : Observable<LastAppVersionResponse>
 }

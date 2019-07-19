@@ -11,13 +11,15 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -27,7 +29,7 @@ import kotlin.collections.ArrayList
 
 @InjectViewState
 class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>() {
-    var watchMarket: WatchMarket? = null
+    var watchMarket: WatchMarketResponse? = null
     var selectedTimeFrame = 0
     var newSelectedTimeFrame = 0
     val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES, ChartTimeFrame.FIFTEEN_MINUTES, ChartTimeFrame.THIRTY_MINUTES,
@@ -38,12 +40,14 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     private var barEntries: ArrayList<BarEntry> = ArrayList()
     var currentTimeFrame: Int = 30
         set(value) {
-            if (App.getAccessManager().getWallet() == null) {
+            if (!WavesWallet.isAuthenticated()) {
                 return
             }
             field = value
             watchMarket?.market?.currentTimeFrame = value
-            watchMarket?.market?.save()
+            watchMarket?.market.notNull {
+                MarketResponseDb(it).save()
+            }
         }
     private var prevToDate: Long = 0
     private var timer: Timer? = null
@@ -101,7 +105,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         barEntries = ArrayList()
         val fromTimestamp = to!! - 100L * currentTimeFrame.toLong() * 1000 * 60
 
-        addSubscription(apiDataManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
+        addSubscription(dataServiceManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
                 .flatMap { candles ->
                     chartModel.candleList = candles
                     Observable.fromIterable(candles)
@@ -131,7 +135,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun refreshCandles() {
         val to = EnvironmentManager.getTime()
-        addSubscription(apiDataManager.loadCandles(
+        addSubscription(dataServiceManager.loadCandles(
                 watchMarket,
                 currentTimeFrame, prevToDate, to)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -154,7 +158,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     fun getTradesByPair() {
-        addSubscription(apiDataManager.getLastTradeByPair(watchMarket)
+        addSubscription(dataServiceManager.getLastTradeByPair(watchMarket)
                 .map { it.firstOrNull() }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ tradesMarket ->
