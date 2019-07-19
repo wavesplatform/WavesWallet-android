@@ -82,7 +82,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 recipient = recipient ?: "",
                 amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 fee = fee,
-                attachment = "",
+                attachment = SignUtil.textToBase58(""),
                 feeAssetId = feeAsset?.assetId ?: "")
     }
 

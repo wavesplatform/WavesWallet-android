@@ -10,6 +10,7 @@ import com.wavesplatform.sdk.model.response.node.transaction.TransferTransaction
 import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.utils.MoneyUtil.Companion.getScaledText
+import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.sdk.utils.parseAlias
 import com.wavesplatform.wallet.App
@@ -22,6 +23,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.request.gateway.InitGateway
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayDeposit
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.data.remote.GatewayService
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,12 +45,16 @@ class GatewayDataManager @Inject constructor() : BaseServiceManager(), BaseGatew
     override fun makeWithdraw(args: GatewayWithdrawArgs): Observable<TransferTransactionResponse> {
         return loadGatewayMetadata(GatewayMetadataArgs(args.asset, args.transaction.recipient))
                 .flatMap { metadata ->
-                    args.transaction.attachment = metadata.gatewayProcessId ?: ""
+                    args.transaction.attachment = SignUtil.textToBase58(
+                            metadata.gatewayProcessId ?: "")
                     args.transaction.recipient = metadata.gatewayRecipientAddress ?: args.transaction.recipient
 
                     args.transaction.sign(App.getAccessManager().getWallet().seedStr)
 
-                    return@flatMap gatewayService.sendWithdrawTransaction(args.transaction)
+                    val gatewayTransaction = GatewayWithdrawArgs.Transaction(
+                            args.transaction, App.getAccessManager().getWallet().address)
+
+                    return@flatMap gatewayService.sendWithdrawTransaction(gatewayTransaction)
                             .map {
                                 val txResponse = TransferTransactionResponse(
                                         args.transaction.assetId,
@@ -82,7 +88,7 @@ class GatewayDataManager @Inject constructor() : BaseServiceManager(), BaseGatew
 
         fun create(onErrorListener: OnErrorListener? = null): GatewayService {
             this.onErrorListener = onErrorListener
-            return WavesSdk.service().createService(Constants.URL_COINOMAT,
+            return WavesSdk.service().createService(EnvironmentManager.servers.gatewayUrl,
                     object : OnErrorListener {
                         override fun onError(exception: NetworkException) {
                             GatewayDataManager.onErrorListener?.onError(exception)

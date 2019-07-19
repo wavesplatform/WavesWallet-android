@@ -6,9 +6,11 @@
 package com.wavesplatform.wallet.v2.data.manager.gateway.manager
 
 import com.wavesplatform.sdk.WavesSdk
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
 import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.parseAlias
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
@@ -71,7 +73,8 @@ class CoinomatDataManager @Inject constructor() : BaseServiceManager(), BaseGate
                 }
                 .flatMap {
                     args.transaction.recipient = it.tunnel?.walletFrom ?: args.transaction.recipient
-                    args.transaction.attachment = it.tunnel?.attachment ?: ""
+                    args.transaction.attachment = SignUtil.textToBase58(
+                            it.tunnel?.attachment ?: "")
 
                     args.transaction.sign(App.getAccessManager().getWallet().seedStr)
 

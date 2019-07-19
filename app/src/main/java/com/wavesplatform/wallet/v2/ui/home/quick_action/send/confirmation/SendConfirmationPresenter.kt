@@ -101,7 +101,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 assetId = selectedAsset!!.assetId,
                 recipient = recipient!!,
                 amount = MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
-                attachment = attachment,
+                attachment = SignUtil.textToBase58(attachment),
                 fee = blockchainCommission,
                 feeAssetId = feeAsset.assetId)
     }
