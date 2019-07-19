@@ -27,6 +27,7 @@
             android:layout_weight="0.5">
 
             <LinearLayout
+                android:id="@+id/linear_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -36,12 +37,27 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="6dp">
 
-                <ImageView
-                    android:id="@+id/image_update"
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_update_14_dark" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/image_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_update_14_dark" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_updating"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center_vertical"
+                        android:indeterminate="true"
+                        android:indeterminateDrawable="@drawable/widget_progress_indeterminate_dark"
+                        android:visibility="gone" />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/text_update"

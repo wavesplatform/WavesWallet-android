@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 19/7/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_fill_payment_details">आपको निम्नलिखित जानकारी के साथ भुगतान विवरण फ़ील्ड भरना होगा:</string>
   <string name="about_fill_payment_info">सीएनएम — आपके वेव्स पता \nअगर आप नहीं करते हैं तो हम आपके खाते को क्रेडिट नहीं कर सकते हैं।</string>

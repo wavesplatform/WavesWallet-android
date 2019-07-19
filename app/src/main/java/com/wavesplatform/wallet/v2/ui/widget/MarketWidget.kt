@@ -17,8 +17,10 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetTheme
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import pers.victor.ext.Ext.ctx
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
+import kotlin.random.Random
 
 
 /**
@@ -51,15 +53,19 @@ class MarketWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        when (intent.action) {
-            ACTION_CURRENCY_CHANGE -> {
-                val widgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                        ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        val widgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+                ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
-                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+        if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            when (intent.action) {
+                ACTION_CURRENCY_CHANGE -> {
                     MarketWidgetCurrency.switchCurrency(context, widgetId)
 
                     updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId)
+                }
+                ACTION_UPDATE -> {
+                    updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId,
+                            arrayListOf(WidgetProgressState.PROGRESS, WidgetProgressState.IDLE).shuffled().first())
                 }
             }
         }
@@ -68,18 +74,38 @@ class MarketWidget : AppWidgetProvider() {
     companion object {
         const val PREFS_NAME = "com.wavesplatform.wallet.v2.ui.widget.MarketWidget"
         const val ACTION_CURRENCY_CHANGE = "currency_change_action"
+        const val ACTION_UPDATE = "update_action"
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
-                                     appWidgetId: Int) {
+                                     appWidgetId: Int, progressState: WidgetProgressState = WidgetProgressState.NONE) {
             // Construct the RemoteViews object
             val theme = MarketWidgetTheme.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureClicks(context, appWidgetId, views)
+            configureProgressState(context, progressState, views)
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
+        }
+
+        private fun configureProgressState(context: Context, progressState: WidgetProgressState, views: RemoteViews) {
+            when (progressState) {
+                WidgetProgressState.IDLE -> {
+                    views.setViewVisibility(R.id.image_update, View.VISIBLE)
+                    views.setViewVisibility(R.id.progress_updating, View.GONE)
+                    views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_update))
+                }
+                WidgetProgressState.PROGRESS -> {
+                    views.setViewVisibility(R.id.image_update, View.GONE)
+                    views.setViewVisibility(R.id.progress_updating, View.VISIBLE)
+                    views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_updating))
+                }
+                else -> {
+                    // nothing
+                }
+            }
         }
 
         private fun highLightCurrency(context: Context, theme: MarketWidgetTheme, appWidgetId: Int): SpannableString {
@@ -97,7 +123,7 @@ class MarketWidget : AppWidgetProvider() {
         }
 
         private fun configureClicks(context: Context, appWidgetId: Int, views: RemoteViews) {
-            // set on click on 'setting' button
+            // set on click intent to 'setting' button
             val configIntent = Intent(context, MarketWidgetConfigureActivity::class.java)
             configIntent.action = AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
             configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -105,13 +131,26 @@ class MarketWidget : AppWidgetProvider() {
                     configIntent, 0)
             views.setOnClickPendingIntent(R.id.image_configuration, pIntent)
 
-            // set on click on 'currency switch' button
-            val countIntent = Intent(ctx, MarketWidget::class.java)
-            countIntent.action = ACTION_CURRENCY_CHANGE
-            countIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            pIntent = PendingIntent.getBroadcast(context, appWidgetId, countIntent, 0)
+            // set on click intent to 'currency switch' button
+            val currencySwitcherIntent = Intent(ctx, MarketWidget::class.java)
+            currencySwitcherIntent.action = ACTION_CURRENCY_CHANGE
+            currencySwitcherIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            pIntent = PendingIntent.getBroadcast(context, appWidgetId, currencySwitcherIntent, 0)
             views.setOnClickPendingIntent(R.id.text_currency, pIntent)
+
+            // set on click intent to 'update' button
+            val updateIntent = Intent(ctx, MarketWidget::class.java)
+            updateIntent.action = ACTION_UPDATE
+            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            pIntent = PendingIntent.getBroadcast(context, appWidgetId, updateIntent, 0)
+            views.setOnClickPendingIntent(R.id.linear_update, pIntent)
         }
+    }
+
+    enum class WidgetProgressState {
+        IDLE,
+        PROGRESS,
+        NONE
     }
 }
 

@@ -27,6 +27,7 @@
             android:layout_weight="0.5">
 
             <LinearLayout
+                android:id="@+id/linear_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -36,12 +37,28 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="6dp">
 
-                <ImageView
-                    android:id="@+id/image_update"
+
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_update_14_classic" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/image_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_update_14_classic" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_updating"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center_vertical"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        android:indeterminateDrawable="@drawable/widget_progress_indeterminate_classic" />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/text_update"
@@ -68,8 +85,8 @@
                 android:layout_gravity="end|center_vertical"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:paddingTop="6dp"
                 android:paddingStart="10dp"
+                android:paddingTop="6dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="6dp"
                 android:text="USD / EUR"
@@ -91,8 +108,8 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:paddingTop="6dp"
+                android:paddingEnd="10dp"
                 android:paddingBottom="6dp"
                 android:src="@drawable/ic_setting_14_classic" />
 
