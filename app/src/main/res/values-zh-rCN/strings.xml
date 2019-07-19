@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">您必须将以下信息填写到付款详细信息中：</string>
-  <string name="about_fill_payment_info">CNM — 您的WAVES地址。 \nlf 您不能这样做，我们没法确认您的账户。</string>
   <string name="about_redirection_message">完成验证后，您将收到一封包含进一步说明的电子邮件</string>
   <string name="about_redirection_okay">OK</string>
   <string name="about_redirection_title">您被重定向到《IDNow》 \n以进行验证</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">金额为 %1$s</string>
   <string name="receive_asset">代币</string>
   <string name="receive_card">卡</string>
-  <string name="receive_contact_msg">如果验证或付款处理有问题，请联系Coinomat支持团队 — support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">继续</string>
   <string name="receive_cryptocurrency">数字货币</string>
   <string name="receive_dont_accept_international">我们不接受美国公民或美国银行的国际电汇</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">稍后再试</string>
-  <string name="send_gateway_error_title">Coinomat服务暂时无法使用</string>
+  <string name="send_gateway_error_title">服务暂时不可用</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">费用是转账金额的1%。</string>
   <string name="send_gateway_info_gateway_fee">网关费用为 %1$s %2$s</string>
-  <string name="send_gateway_info_gateway_limits">我们检测到了 %1$s 的地址，并将通过Coinomat网关将您的钱发送到该地址。最低金额为 %2$s %1$s, 最高金额为%3$s %1$s。</string>
+  <string name="send_gateway_info_gateway_limits">我们检测到了%1$s地址，并将通过网关将您的钱发送到该地址。最低金额为%2$s %1$s ，最高金额为%3$s %1$s 。</string>
   <string name="send_gateway_info_gateway_warning">不要将 %1$s 提取给ICO。我们不支持您的帐户存入该ICO的代币。</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">如果您已经过验证并已存入美元，则可以将这些美元退回到您的银行帐户。否则，请通过我们的合作伙伴IDNow.eu进行验证</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">最低金额为500美元。如果您有任何疑问，请发送电子邮件至support@coinomat.com</string>
   <string name="send_monero_payment_id">Monero付款ID</string>
   <string name="send_monero_payment_id_hint">粘贴或输入您的付款ID</string>
   <string name="send_progress_sending">发送中…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">您没有在收藏夹中添加代币</string>
   <string name="wallet_sorting_default_empty">代币列表为空</string>
   <string name="wallet_sorting_hidden_empty">您没有在隐藏中添加代币</string>
+  <string name="common_permission_error_title">需要相机访问</string>
+  <string name="common_permission_error_description">此应用需要使用相机的权限。您可以在应用设置中授予它们。</string>
+  <string name="common_permission_error_settings">设置</string>
+  <string name="common_permission_error_cancel">取消</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">您的订单价格比最新市场价格高出5％</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">您的订单价格比最新市场价格低5％</string>
+  <string name="trade_order_dialog_positive_place_order">下订单</string>
+  <string name="trade_order_dialog_negative_cancel">取消</string>
+  <string name="trade_order_dialog_subtitle_proceed">你想继续吗？</string>
 </resources>
