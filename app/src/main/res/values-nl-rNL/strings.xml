@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">U moet de volgende informatie bij de betalingsdetails invoeren:</string>
-  <string name="about_fill_payment_info">CNM — Uw WAVES adres. \nAls u dit niet invoert kunnen we uw account niet crediteren.</string>
   <string name="about_redirection_message">Na de verificatie ontvangt u een email met verdere instructies.</string>
   <string name="about_redirection_okay">Oké</string>
   <string name="about_redirection_title">U wordt doorgestuurd naar «IDNow» \nvoor verificatie</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">Bedrag in %1$s</string>
   <string name="receive_asset">Token</string>
   <string name="receive_card">Kaart</string>
-  <string name="receive_contact_msg">Neem in geval van problemen met verificatie of betalingsverwerking contact op met het ondersteuningsteam van Coinomat — support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Doorgaan</string>
   <string name="receive_cryptocurrency">Сryptovaluta</string>
   <string name="receive_dont_accept_international">Wij accepteren geen internationale bankoverschrijvingen van Amerikaanse burgers of van Amerikaanse banken</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">Probeer later opnieuw</string>
-  <string name="send_gateway_error_title">Coinomat Service tijdelijk niet beschikbaar</string>
+  <string name="send_gateway_error_title">Service tijdelijk niet beschikbaar</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">De kosten zijn 1% van het overgedragen bedrag.</string>
   <string name="send_gateway_info_gateway_fee">De gateway kosten zijn %1$s %2$s</string>
-  <string name="send_gateway_info_gateway_limits">We hebben %1$s adres gevonden en sturen uw geld via de Coinomat-gateway naar dat adres. Minimumbedrag is %2$s %1$s, maximumbedrag is %3$s %1$s.</string>
+  <string name="send_gateway_info_gateway_limits">We hebben %1$s adres gevonden en sturen uw geld via de gateway naar dat adres. Minimumbedrag is %2$s %1$s, maximumbedrag is %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Neem geen %1$s op naar een ICO. We zullen uw account niet crediteren met tokens van die verkoop.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Als u bent geverifieerd en US dollars heeft gestort, kunt u deze dollars terugboeken naar uw bankrekening. Anders moet u worden geverifieerd door onze partner IDNow.eu</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Het minimumbedrag is 500 US dollar. Als je vragen hebt, stuur dan een e-mail naar support@coinomat.com</string>
   <string name="send_monero_payment_id">Monero Betalings ID</string>
   <string name="send_monero_payment_id_hint">Plak of typ uw betalings ID</string>
   <string name="send_progress_sending">Bezig met verzenden…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">U heeft geen favoriete tokens</string>
   <string name="wallet_sorting_default_empty">De lijst met tokens is leeg</string>
   <string name="wallet_sorting_hidden_empty">U hebt geen verborgen tokens</string>
+  <string name="common_permission_error_title">Toegang tot camera nodig</string>
+  <string name="common_permission_error_description">Deze app heeft toestemming nodig om de camera te gebruiken. U kunt dit in app-instellingen toestaan.</string>
+  <string name="common_permission_error_settings">Instellingen</string>
+  <string name="common_permission_error_cancel">Annuleer</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Je bestelprijs is 5% hoger dan de laatste marktprijs</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Uw bestelprijs is 5% lager dan de laatste marktprijs</string>
+  <string name="trade_order_dialog_positive_place_order">Plaats order</string>
+  <string name="trade_order_dialog_negative_cancel">Annuleer</string>
+  <string name="trade_order_dialog_subtitle_proceed">Wilt u doorgaan?</string>
 </resources>
