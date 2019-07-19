@@ -46,8 +46,8 @@ class MarketWidget : AppWidgetProvider() {
 
             val widgetText = MarketWidgetConfigureActivity.loadTitlePref(context, appWidgetId)
             // Construct the RemoteViews object
-            val views = RemoteViews(context.packageName, R.layout.market_widget)
-            views.setTextViewText(R.id.appwidget_text, widgetText)
+            val views = RemoteViews(context.packageName, MarketWidgetTheme.getTheme(context, appWidgetId).themeLayout)
+//            views.setTextViewText(R.id.appwidget_text, widgetText)
 
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)

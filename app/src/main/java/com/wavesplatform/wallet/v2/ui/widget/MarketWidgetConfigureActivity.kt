@@ -10,43 +10,42 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.PopupMenu
 import android.view.View
 import android.widget.EditText
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import kotlinx.android.synthetic.main.market_widget_configure.*
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import pers.victor.ext.click
+
 
 /**
  * The configuration screen for the [MarketWidget] AppWidget.
  */
-class MarketWidgetConfigureActivity : Activity() {
-    internal var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    val mAppWidgetText: EditText by lazy { findViewById<View>(R.id.appwidget_text) as EditText  }
-    internal var mOnClickListener: View.OnClickListener = View.OnClickListener {
-        val context = this@MarketWidgetConfigureActivity
+class MarketWidgetConfigureActivity : BaseActivity() {
 
-        // When the button is clicked, store the string locally
-        val widgetText = mAppWidgetText.text.toString()
-        saveTitlePref(context, mAppWidgetId, widgetText)
+    private var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
-        // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        MarketWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId)
+    override fun configLayoutRes(): Int = R.layout.market_widget_configure
 
-        // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
-        setResult(Activity.RESULT_OK, resultValue)
-        finish()
-    }
-
-    public override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    override fun onViewReady(savedInstanceState: Bundle?) {
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(Activity.RESULT_CANCELED)
 
-        setContentView(R.layout.market_widget_configure)
-        findViewById<View>(R.id.add_button).setOnClickListener(mOnClickListener)
+        add_button.click {
+            // It is the responsibility of the configuration activity to update the app widget
+            val appWidgetManager = AppWidgetManager.getInstance(this)
+            MarketWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId)
+
+            // Make sure we pass back the original appWidgetId
+            val resultValue = Intent()
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
+            setResult(Activity.RESULT_OK, resultValue)
+            finish()
+        }
 
         // Find the widget id from the intent.
         val extras = intent.extras
@@ -61,7 +60,22 @@ class MarketWidgetConfigureActivity : Activity() {
             return
         }
 
-        mAppWidgetText.setText(loadTitlePref(this@MarketWidgetConfigureActivity, mAppWidgetId))
+        val menu = PopupMenu(this, edit_theme)
+        menu.setOnMenuItemClickListener { item ->
+            val themeName = item.title.toString()
+
+            edit_theme.setText(themeName)
+            MarketWidgetTheme.setTheme(this, mAppWidgetId, themeName)
+
+            return@setOnMenuItemClickListener true
+        }
+        MarketWidgetTheme.values().forEach { theme ->
+            menu.menu.add(theme.name)
+        }
+
+        edit_theme.click {
+            menu.show()
+        }
     }
 
     companion object {

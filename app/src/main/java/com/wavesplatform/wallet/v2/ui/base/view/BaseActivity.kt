@@ -38,6 +38,7 @@ import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.ui.widget.MarketWidgetConfigureActivity
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -67,6 +68,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         get() = super.getSupportFragmentManager()
     val fragmentContainer: Int
         @IdRes get() = 0
+    private val notNeedToAskPass: Boolean by lazy { this is SplashActivity || this is MarketWidgetConfigureActivity }
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -140,12 +142,11 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
+        localizationDelegate.onResume(this)
 
-        if (this is SplashActivity) {
+        if (notNeedToAskPass) {
             return
         }
-
-        localizationDelegate.onResume(this)
 
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by Eduard Zaydel on 18/7/2019
   ~ Copyright © 2019 Waves Platform. All rights reserved.
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -16,11 +16,48 @@
         android:layout_marginBottom="8dp"
         android:text="@string/configure" />
 
-    <EditText
-        android:id="@+id/appwidget_text"
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:id="@+id/til_theme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:textColorHint="@color/basic500"
+        app:errorEnabled="true"
+        app:hintTextAppearance="@style/TextLabel">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/accent50"
+            android:editable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Theme"
+            android:inputType="text"
+            android:paddingBottom="20dp"
+            android:singleLine="true"
+            android:textColorHint="@color/basic500" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:id="@+id/til_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/basic500"
+        app:errorEnabled="true"
+        app:hintTextAppearance="@style/TextLabel">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/accent50"
+            android:hint="Interval"
+            android:inputType="text"
+            android:paddingBottom="20dp"
+            android:singleLine="true"
+            android:textColorHint="@color/basic500" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
 
     <Button
         android:id="@+id/add_button"
