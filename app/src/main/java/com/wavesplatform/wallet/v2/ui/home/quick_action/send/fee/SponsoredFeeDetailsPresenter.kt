@@ -16,6 +16,7 @@ import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -66,7 +67,8 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                     Observable.zip(
                             nodeServiceManager.scriptAddressInfo(
                                     addressFromPublicKey(WavesCrypto.base58decode(
-                                            matcherPublicKey.replace("\"", "")))),
+                                            matcherPublicKey.replace("\"", "")),
+                                            EnvironmentManager.netCode)),
                             nodeServiceManager.assetDetails(amountAssetId),
                             nodeServiceManager.assetDetails(priceAssetId),
                             io.reactivex.functions.Function3 { addressMatcherScripted: ScriptInfoResponse,
