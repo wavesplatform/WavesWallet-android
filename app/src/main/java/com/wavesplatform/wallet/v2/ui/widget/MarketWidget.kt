@@ -11,16 +11,15 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
-import android.widget.RemoteViews
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetTheme
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import pers.victor.ext.Ext.ctx
+import android.widget.RemoteViews
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
-import kotlin.random.Random
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetTheme
 
 
 /**
@@ -40,6 +39,7 @@ class MarketWidget : AppWidgetProvider() {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
             MarketWidgetTheme.removeTheme(context, appWidgetId)
+            MarketWidgetCurrency.removeCurrency(context, appWidgetId)
         }
     }
 
@@ -65,7 +65,7 @@ class MarketWidget : AppWidgetProvider() {
                 }
                 ACTION_UPDATE -> {
                     updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId,
-                            arrayListOf(WidgetProgressState.PROGRESS, WidgetProgressState.IDLE).shuffled().first())
+                            arrayListOf(MarketWidgetProgressState.PROGRESS, MarketWidgetProgressState.IDLE).shuffled().first())
                 }
             }
         }
@@ -77,7 +77,7 @@ class MarketWidget : AppWidgetProvider() {
         const val ACTION_UPDATE = "update_action"
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
-                                     appWidgetId: Int, progressState: WidgetProgressState = WidgetProgressState.NONE) {
+                                     appWidgetId: Int, progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             // Construct the RemoteViews object
             val theme = MarketWidgetTheme.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
@@ -90,14 +90,14 @@ class MarketWidget : AppWidgetProvider() {
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
-        private fun configureProgressState(context: Context, progressState: WidgetProgressState, views: RemoteViews) {
+        private fun configureProgressState(context: Context, progressState: MarketWidgetProgressState, views: RemoteViews) {
             when (progressState) {
-                WidgetProgressState.IDLE -> {
+                MarketWidgetProgressState.IDLE -> {
                     views.setViewVisibility(R.id.image_update, View.VISIBLE)
                     views.setViewVisibility(R.id.progress_updating, View.GONE)
                     views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_update))
                 }
-                WidgetProgressState.PROGRESS -> {
+                MarketWidgetProgressState.PROGRESS -> {
                     views.setViewVisibility(R.id.image_update, View.GONE)
                     views.setViewVisibility(R.id.progress_updating, View.VISIBLE)
                     views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_updating))
@@ -110,16 +110,16 @@ class MarketWidget : AppWidgetProvider() {
 
         private fun highLightCurrency(context: Context, theme: MarketWidgetTheme, appWidgetId: Int): SpannableString {
             val currency = MarketWidgetCurrency.getCurrency(context, appWidgetId).name
-            val spannableString = SpannableString(context.getString(R.string.market_widget_currency_text))
+            val highLightString = SpannableString(context.getString(R.string.market_widget_currency_text))
 
             val activeSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.currencyActiveColor))
             val inActiveSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.currencyInactiveColor))
 
-            spannableString.setSpan(inActiveSpan, 0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(activeSpan, spannableString.indexOf(currency),
-                    spannableString.indexOf(currency) + currency.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            highLightString.setSpan(inActiveSpan, 0, highLightString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            highLightString.setSpan(activeSpan, highLightString.indexOf(currency),
+                    highLightString.indexOf(currency) + currency.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-            return spannableString
+            return highLightString
         }
 
         private fun configureClicks(context: Context, appWidgetId: Int, views: RemoteViews) {
@@ -132,25 +132,19 @@ class MarketWidget : AppWidgetProvider() {
             views.setOnClickPendingIntent(R.id.image_configuration, pIntent)
 
             // set on click intent to 'currency switch' button
-            val currencySwitcherIntent = Intent(ctx, MarketWidget::class.java)
+            val currencySwitcherIntent = Intent(context, MarketWidget::class.java)
             currencySwitcherIntent.action = ACTION_CURRENCY_CHANGE
             currencySwitcherIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             pIntent = PendingIntent.getBroadcast(context, appWidgetId, currencySwitcherIntent, 0)
             views.setOnClickPendingIntent(R.id.text_currency, pIntent)
 
             // set on click intent to 'update' button
-            val updateIntent = Intent(ctx, MarketWidget::class.java)
+            val updateIntent = Intent(context, MarketWidget::class.java)
             updateIntent.action = ACTION_UPDATE
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             pIntent = PendingIntent.getBroadcast(context, appWidgetId, updateIntent, 0)
             views.setOnClickPendingIntent(R.id.linear_update, pIntent)
         }
-    }
-
-    enum class WidgetProgressState {
-        IDLE,
-        PROGRESS,
-        NONE
     }
 }
 
