@@ -8,6 +8,9 @@ jobs:
       JVM_OPTS: -Xmx4g -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
+      - run:
+            name: Update SDK & Licenses
+            command: yes | sdkmanager --licenses && yes | sdkmanager --update
       - checkout
       - run:
           name: Install Submodules
