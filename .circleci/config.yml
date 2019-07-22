@@ -10,7 +10,7 @@ jobs:
     steps:
       - run:
             name: Update SDK & Licenses
-            command: yes | sdkmanager --licenses && yes | sdkmanager --update
+            command: y | sdkmanager --licenses && y | sdkmanager --update
       - checkout
       - run:
           name: Install Submodules
