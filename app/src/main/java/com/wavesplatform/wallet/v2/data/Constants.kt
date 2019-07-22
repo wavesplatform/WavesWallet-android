@@ -88,7 +88,7 @@ object Constants {
 
     fun defaultGateways(): Array<String> {
         return EnvironmentManager.defaultAssets
-                .filter { it.isGateway }
+                .filter { it.isGateway && !it.isFiatMoney }
                 .map { it.assetId }
                 .toTypedArray()
     }
