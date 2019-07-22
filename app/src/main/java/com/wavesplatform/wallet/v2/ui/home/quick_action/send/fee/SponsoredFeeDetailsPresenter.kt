@@ -65,7 +65,8 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                 .flatMap { matcherPublicKey ->
                     Observable.zip(
                             nodeServiceManager.scriptAddressInfo(
-                                    addressFromPublicKey(WavesCrypto.base58decode(matcherPublicKey))),
+                                    addressFromPublicKey(WavesCrypto.base58decode(
+                                            matcherPublicKey.replace("\"", "")))),
                             nodeServiceManager.assetDetails(amountAssetId),
                             nodeServiceManager.assetDetails(priceAssetId),
                             io.reactivex.functions.Function3 { addressMatcherScripted: ScriptInfoResponse,
