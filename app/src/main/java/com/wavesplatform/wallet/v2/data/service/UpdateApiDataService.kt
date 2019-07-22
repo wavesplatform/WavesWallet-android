@@ -65,7 +65,7 @@ class UpdateApiDataService : Service() {
             } else {
                 stopSelf()
             }
-            return Service.START_NOT_STICKY
+            return START_NOT_STICKY
         }
 
         val transaction = queryFirst<TransactionDb>()
@@ -92,7 +92,7 @@ class UpdateApiDataService : Service() {
         subscriptions.add(nodeServiceManager.currentBlocksHeight()
                 .subscribe {
                 })
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {
