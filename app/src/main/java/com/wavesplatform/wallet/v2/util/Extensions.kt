@@ -760,10 +760,10 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
         val queryLower = query!!.toLowerCase()
         list.filter { !it.isSpam }
                 .filter {
-                    it.assetId.toLowerCase().contains(queryLower)
+                    it.assetId.toLowerCase().equals(queryLower)
                             || it.getName().toLowerCase().contains(queryLower)
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
-                            || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.issueTransaction?.assetId?.toLowerCase()?.equals(queryLower) ?: false
                             || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
                             || it.assetId == findInConstantsGeneralAssets(query.toUpperCase())?.assetId
                 }
