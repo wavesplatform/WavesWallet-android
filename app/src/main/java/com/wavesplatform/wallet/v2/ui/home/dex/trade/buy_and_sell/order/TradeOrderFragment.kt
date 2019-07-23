@@ -435,62 +435,62 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     override fun showOrderAttentionAndCreateOrder(orderBook: OrderBookResponse) {
 
-        val lastAskPrice = orderBook.asks.firstOrNull()?.price
-
-        val lastBidPrice = orderBook.bids.firstOrNull()?.price
-
         val lastPriceTrade = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-            lastAskPrice
+            orderBook.asks.firstOrNull()?.price
         } else {
-            lastBidPrice
+            orderBook.bids.firstOrNull()?.price
         }
 
-        safeLet(presenter.data?.watchMarket, lastPriceTrade) { watchMarket, lastPrice ->
+        if (lastPriceTrade == null) {
+            presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+        } else {
+            presenter.data?.watchMarket.notNull { watchMarket ->
 
-            val marketPrice = MoneyUtil.getScaledPrice(
-                    lastPrice,
-                    watchMarket.market.amountAssetDecimals,
-                    watchMarket.market.priceAssetDecimals)
-                    .clearBalance()
-                    .toDouble()
+                val marketPrice = MoneyUtil.getScaledPrice(
+                        lastPriceTrade,
+                        watchMarket.market.amountAssetDecimals,
+                        watchMarket.market.priceAssetDecimals)
+                        .clearBalance()
+                        .toDouble()
 
-            val userPrice = edit_limit_price.text.toString().toDouble()
+                val userPrice = edit_limit_price.text.toString().toDouble()
 
-            val attentionMessageResId: Int
-            val showAttention = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                attentionMessageResId = R.string.trade_order_dialog_subtitle_price_highter_market
-                userPrice > marketPrice * 1.05
-            } else {
-                attentionMessageResId = R.string.trade_order_dialog_subtitle_price_lower_market
-                userPrice < marketPrice * 0.95
-            }
+                val attentionMessageResId: Int
+                val showAttention = if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                    attentionMessageResId = R.string.trade_order_dialog_subtitle_price_highter_market
+                    userPrice > marketPrice * 1.05
+                } else {
+                    attentionMessageResId = R.string.trade_order_dialog_subtitle_price_lower_market
+                    userPrice < marketPrice * 0.95
+                }
 
-            if (showAttention) {
-                var dialog: AlertDialog? = null
-                val view = LayoutInflater.from(activity)
-                        .inflate(R.layout.dialog_order_attention, null)
+                if (showAttention) {
+                    var dialog: AlertDialog? = null
+                    val view = LayoutInflater.from(activity)
+                            .inflate(R.layout.dialog_order_attention, null)
 
-                view.attention_text.text = getString(attentionMessageResId)
-                view.button_confirm.click {
-                    dialog?.dismiss()
+                    view.attention_text.text = getString(attentionMessageResId)
+                    view.button_confirm.click {
+                        dialog?.dismiss()
+                        presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+                    }
+
+                    view.button_cancel.click {
+                        dialog?.dismiss()
+                    }
+
+                    dialog = AlertDialog.Builder(baseActivity)
+                            .setCancelable(false)
+                            .setView(view)
+                            .create()
+
+                    dialog.window?.setGravity(Gravity.BOTTOM)
+
+                    dialog.show()
+                    showProgressBar(false)
+                } else {
                     presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
                 }
-
-                view.button_cancel.click {
-                    dialog?.dismiss()
-                }
-
-                dialog = AlertDialog.Builder(baseActivity)
-                        .setCancelable(false)
-                        .setView(view)
-                        .create()
-
-                dialog.window?.setGravity(Gravity.BOTTOM)
-
-                dialog.show()
-                showProgressBar(false)
-            } else {
-                presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
             }
         }
     }
