@@ -10,6 +10,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableString
@@ -31,7 +32,7 @@ class MarketWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            updateWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
@@ -61,10 +62,10 @@ class MarketWidget : AppWidgetProvider() {
                 ACTION_CURRENCY_CHANGE -> {
                     MarketWidgetCurrency.switchCurrency(context, widgetId)
 
-                    updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId)
+                    updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
                 ACTION_UPDATE -> {
-                    updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId,
+                    updateWidget(context, AppWidgetManager.getInstance(context), widgetId,
                             arrayListOf(MarketWidgetProgressState.PROGRESS, MarketWidgetProgressState.IDLE).shuffled().first())
                 }
             }
@@ -76,18 +77,38 @@ class MarketWidget : AppWidgetProvider() {
         const val ACTION_CURRENCY_CHANGE = "currency_change_action"
         const val ACTION_UPDATE = "update_action"
 
-        internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
-                                     appWidgetId: Int, progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
+        internal fun updateWidget(context: Context, appWidgetManager: AppWidgetManager,
+                                  appWidgetId: Int, progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             // Construct the RemoteViews object
             val theme = MarketWidgetTheme.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureClicks(context, appWidgetId, views)
             configureProgressState(context, progressState, views)
+            configureMarketList(context, appWidgetId, views)
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_markets)
+        }
+
+        internal fun updateWidgetProgress(context: Context, appWidgetId: Int,
+                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val theme = MarketWidgetTheme.getTheme(context, appWidgetId)
+            val views = RemoteViews(context.packageName, theme.themeLayout)
+
+            configureProgressState(context, progressState, views)
+
+            appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
+        }
+
+        private fun configureMarketList(context: Context, appWidgetId: Int, views: RemoteViews) {
+            val adapter = Intent(context, MarketWidgetAdapterService::class.java)
+            adapter.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            adapter.data = Uri.parse(adapter.toUri(Intent.URI_INTENT_SCHEME))
+            views.setRemoteAdapter(R.id.list_markets, adapter)
         }
 
         private fun configureProgressState(context: Context, progressState: MarketWidgetProgressState, views: RemoteViews) {

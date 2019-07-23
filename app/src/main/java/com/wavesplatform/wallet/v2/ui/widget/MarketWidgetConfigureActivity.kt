@@ -56,7 +56,7 @@ class MarketWidgetConfigureActivity : BaseActivity() {
         add_button.click {
             // It is the responsibility of the configuration activity to update the app widget
             val appWidgetManager = AppWidgetManager.getInstance(this)
-            MarketWidget.updateAppWidget(this, appWidgetManager, widgetId)
+            MarketWidget.updateWidget(this, appWidgetManager, widgetId)
 
             // Make sure we pass back the original appWidgetId
             val resultValue = Intent()

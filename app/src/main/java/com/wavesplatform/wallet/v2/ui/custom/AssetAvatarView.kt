@@ -17,6 +17,7 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.AppWidgetTarget
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -47,6 +48,8 @@ class AssetAvatarView : AppCompatImageView {
     * Used as background of the initials with asset specific color
     * */
     internal lateinit var paint: Paint
+
+    private var workWithWidget: Boolean = false
 
     /*
     * Text size for asset letter
@@ -103,6 +106,10 @@ class AssetAvatarView : AppCompatImageView {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
+    fun configureForWidget() {
+        this.workWithWidget = true
+    }
+
     /*
     * Get initials for asset drawable
     * */
@@ -140,13 +147,25 @@ class AssetAvatarView : AppCompatImageView {
         setDrawable(isSponsoredAsset, isScriptAsset)
 
         if (avatar != null) {
-            Glide.with(context)
-                    .load(avatar)
-                    .apply(RequestOptions()
-                            .placeholder(drawable)
-                            .centerCrop()
-                            .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
-                    .into(this)
+            if (workWithWidget) {
+                setImageBitmap(Glide.with(context)
+                        .asBitmap()
+                        .load(avatar)
+                        .apply(RequestOptions()
+                                .placeholder(drawable)
+                                .centerCrop()
+                                .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
+                        .submit()
+                        .get())
+            } else {
+                Glide.with(context)
+                        .load(avatar)
+                        .apply(RequestOptions()
+                                .placeholder(drawable)
+                                .centerCrop()
+                                .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
+                        .into(this)
+            }
         }
     }
 

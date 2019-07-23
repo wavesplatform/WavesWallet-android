@@ -27,6 +27,11 @@
         android:roundIcon="${appIconRound}"
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
+
+        <service
+            android:name=".v2.ui.widget.MarketWidgetAdapterService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
         <receiver android:name=".v2.ui.widget.MarketWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

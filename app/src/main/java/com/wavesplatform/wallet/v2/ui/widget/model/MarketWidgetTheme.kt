@@ -16,8 +16,8 @@ enum class MarketWidgetTheme(@LayoutRes var themeLayout: Int, // base layout for
                              @ColorRes var currencyActiveColor: Int, // color for active text on switch of USD / EUR
                              @ColorRes var currencyInactiveColor: Int // color for inactive text on switch of USD / EUR
 ) {
-    CLASSIC(R.layout.market_widget_classic, 0, R.color.black, R.color.basic500),
-    DARK(R.layout.market_widget_dark, 0, R.color.white, R.color.disabled700);
+    CLASSIC(R.layout.market_widget_classic, R.layout.item_market_widget_classic, R.color.black, R.color.basic500),
+    DARK(R.layout.market_widget_dark, R.layout.item_market_widget_dark, R.color.white, R.color.disabled700);
 
     companion object {
         private const val PREF_THEME_KEY = "appwidget_theme_"

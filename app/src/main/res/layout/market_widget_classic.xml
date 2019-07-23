@@ -10,8 +10,11 @@
     android:padding="@dimen/widget_margin">
 
     <ListView
+        android:layout_marginTop="5dp"
         android:id="@+id/list_markets"
         android:layout_width="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:layout_height="match_parent"
         android:layout_above="@+id/linear_bottom_configuration" />
 
