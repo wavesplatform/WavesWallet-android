@@ -23,6 +23,7 @@ open class OrderDb(
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("expiration") var expiration: Long = 0,
+        @SerializedName("matcherFeeAssetId") var matcherFeeAssetId: String? = null,
         @SerializedName("matcherFee") var matcherFee: Long = 0,
         @SerializedName("signature") var signature: String = ""
 ) : RealmModel, Parcelable {
@@ -39,6 +40,7 @@ open class OrderDb(
             this.amount = it.amount
             this.timestamp = it.timestamp
             this.expiration = it.expiration
+            this.matcherFeeAssetId = it.matcherFeeAssetId
             this.matcherFee = it.matcherFee
             this.signature = it.signature
         }
@@ -56,6 +58,7 @@ open class OrderDb(
                 amount = amount,
                 timestamp = timestamp,
                 expiration = expiration,
+                matcherFeeAssetId = matcherFeeAssetId,
                 matcherFee = matcherFee,
                 signature = signature)
     }
