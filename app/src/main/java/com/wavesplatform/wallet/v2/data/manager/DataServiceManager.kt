@@ -8,11 +8,8 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.*
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
-import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.data.CandlesResponse
-import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -124,5 +121,14 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 .map {
                     return@map it.candles.sortedBy { it.time }
                 }
+    }
+
+    fun loadPairs(pairs: String? = null,
+                  searchByAsset: String? = null,
+                  searchByAssets: List<String>? = null,
+                  matchExactly: Boolean? = null,
+                  limit: Int = 30
+    ): Observable<SearchPairResponse> {
+        return dataService.pairs(pairs, searchByAsset, searchByAssets, matchExactly, limit)
     }
 }

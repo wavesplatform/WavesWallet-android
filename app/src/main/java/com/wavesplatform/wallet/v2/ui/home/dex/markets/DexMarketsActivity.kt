@@ -15,12 +15,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.showError
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -55,8 +57,6 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         recycle_markets.layoutManager = LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_markets)
 
-        presenter.getMarkets()
-
         edit_search.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
@@ -71,9 +71,13 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_search_24_basic_500, 0,
+                                R.drawable.ic_clear_24_basic_500, 0)
                     } else {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_search_24_basic_500, 0,
+                                0, 0)
                     }
                     return@map it.toString()
                 }
@@ -82,6 +86,18 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     adapter.filter(it)
+                })
+
+        progress_bar.hide()
+        edit_search.visiable()
+
+        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { query ->
+                    presenter.search(query)
                 })
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
