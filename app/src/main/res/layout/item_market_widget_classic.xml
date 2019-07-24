@@ -28,7 +28,6 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
                 android:src="@drawable/asset_gray_icon" />
 
             <TextView
@@ -76,6 +75,10 @@
             android:background="@drawable/bg_widget_percent_up"
             android:gravity="center"
             android:text="+2.04%"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp"
             android:textColor="@color/white"
             android:textSize="12sp" />
 

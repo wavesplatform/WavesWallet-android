@@ -6,29 +6,31 @@
 package com.wavesplatform.wallet.v2.ui.widget.model
 
 import android.content.Context
-import android.support.annotation.ColorRes
 import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-enum class MarketWidgetTheme(@LayoutRes var themeLayout: Int, // base layout for theme
-                             @LayoutRes var marketItemLayout: Int, // layout for item of market
-                             @ColorRes var currencyActiveColor: Int, // color for active text on switch of USD / EUR
-                             @ColorRes var currencyInactiveColor: Int // color for inactive text on switch of USD / EUR
+enum class MarketWidgetStyle(@StringRes var styleName: Int,
+                             @LayoutRes var themeLayout: Int, // base layout for theme
+                             @LayoutRes var marketItemLayout: Int, // layout for item of market,
+                             var colors: MarketWidgetStyleColors
 ) {
-    CLASSIC(R.layout.market_widget_classic, R.layout.item_market_widget_classic, R.color.black, R.color.basic500),
-    DARK(R.layout.market_widget_dark, R.layout.item_market_widget_dark, R.color.white, R.color.disabled700);
+    CLASSIC(R.string.widget_style_classic, R.layout.market_widget_classic,
+            R.layout.item_market_widget_classic, MarketWidgetStyleColors.CLASSIC),
+    DARK(R.string.widget_style_dark, R.layout.market_widget_dark,
+            R.layout.item_market_widget_dark, MarketWidgetStyleColors.DARK);
 
     companion object {
         private const val PREF_THEME_KEY = "appwidget_theme_"
 
-        fun getTheme(context: Context, appWidgetId: Int): MarketWidgetTheme {
+        fun getTheme(context: Context, appWidgetId: Int): MarketWidgetStyle {
             val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
             val theme = prefs.getString(PREF_THEME_KEY + appWidgetId, null)
             return values().firstOrNull { it.name == theme } ?: CLASSIC
         }
 
-        fun setTheme(context: Context, appWidgetId: Int, theme: MarketWidgetTheme) {
+        fun setTheme(context: Context, appWidgetId: Int, theme: MarketWidgetStyle) {
             val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
             prefs.putString(PREF_THEME_KEY + appWidgetId, theme.name)
             prefs.apply()

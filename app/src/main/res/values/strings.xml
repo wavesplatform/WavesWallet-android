@@ -692,4 +692,7 @@
     <string name="market_widget_update">Update</string>
     <string name="market_widget_updating">Updating</string>
     <string name="market_widget_currency_text">USD / EUR</string>
+
+    <string name="widget_style_classic">Classic</string>
+    <string name="widget_style_dark">Dark</string>
 </resources>

@@ -20,7 +20,7 @@ import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetTheme
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 
 
 /**
@@ -39,7 +39,7 @@ class MarketWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            MarketWidgetTheme.removeTheme(context, appWidgetId)
+            MarketWidgetStyle.removeTheme(context, appWidgetId)
             MarketWidgetCurrency.removeCurrency(context, appWidgetId)
         }
     }
@@ -65,7 +65,7 @@ class MarketWidget : AppWidgetProvider() {
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
                 ACTION_UPDATE -> {
-                    updateWidget(context, AppWidgetManager.getInstance(context), widgetId,
+                    updateWidgetProgress(context, widgetId,
                             arrayListOf(MarketWidgetProgressState.PROGRESS, MarketWidgetProgressState.IDLE).shuffled().first())
                 }
             }
@@ -80,7 +80,7 @@ class MarketWidget : AppWidgetProvider() {
         internal fun updateWidget(context: Context, appWidgetManager: AppWidgetManager,
                                   appWidgetId: Int, progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             // Construct the RemoteViews object
-            val theme = MarketWidgetTheme.getTheme(context, appWidgetId)
+            val theme = MarketWidgetStyle.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureClicks(context, appWidgetId, views)
@@ -96,7 +96,7 @@ class MarketWidget : AppWidgetProvider() {
         internal fun updateWidgetProgress(context: Context, appWidgetId: Int,
                                           progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
-            val theme = MarketWidgetTheme.getTheme(context, appWidgetId)
+            val theme = MarketWidgetStyle.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureProgressState(context, progressState, views)
@@ -129,12 +129,12 @@ class MarketWidget : AppWidgetProvider() {
             }
         }
 
-        private fun highLightCurrency(context: Context, theme: MarketWidgetTheme, appWidgetId: Int): SpannableString {
+        private fun highLightCurrency(context: Context, theme: MarketWidgetStyle, appWidgetId: Int): SpannableString {
             val currency = MarketWidgetCurrency.getCurrency(context, appWidgetId).name
             val highLightString = SpannableString(context.getString(R.string.market_widget_currency_text))
 
-            val activeSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.currencyActiveColor))
-            val inActiveSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.currencyInactiveColor))
+            val activeSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.colors.currencyActiveColor))
+            val inActiveSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.colors.currencyInactiveColor))
 
             highLightString.setSpan(inActiveSpan, 0, highLightString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             highLightString.setSpan(activeSpan, highLightString.indexOf(currency),

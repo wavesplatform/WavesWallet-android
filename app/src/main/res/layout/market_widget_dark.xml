@@ -13,10 +13,13 @@
         android:id="@+id/list_markets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/linear_bottom_configuration"
+        android:clipToPadding="false"
         android:divider="@null"
-        android:layout_marginTop="5dp"
         android:dividerHeight="0dp"
-        android:layout_above="@+id/linear_bottom_configuration" />
+        android:overScrollMode="never"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
 
     <LinearLayout
         android:id="@+id/linear_bottom_configuration"

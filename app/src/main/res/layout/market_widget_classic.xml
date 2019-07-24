@@ -10,13 +10,16 @@
     android:padding="@dimen/widget_margin">
 
     <ListView
-        android:layout_marginTop="5dp"
         android:id="@+id/list_markets"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linear_bottom_configuration"
+        android:clipToPadding="false"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/linear_bottom_configuration" />
+        android:overScrollMode="never"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
 
     <LinearLayout
         android:id="@+id/linear_bottom_configuration"
@@ -58,8 +61,8 @@
                         android:layout_height="14dp"
                         android:layout_gravity="center_vertical"
                         android:indeterminate="true"
-                        android:visibility="gone"
-                        android:indeterminateDrawable="@drawable/widget_progress_indeterminate_classic" />
+                        android:indeterminateDrawable="@drawable/widget_progress_indeterminate_classic"
+                        android:visibility="gone" />
 
                 </FrameLayout>
 

@@ -10,14 +10,17 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetTheme
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import pers.victor.ext.dp
 import pers.victor.ext.sp
+import kotlin.random.Random
 
 
 class MarketWidgetAdapterFactory constructor(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
@@ -46,18 +49,42 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val theme = MarketWidgetTheme.getTheme(context, widgetID)
+        val theme = MarketWidgetStyle.getTheme(context, widgetID)
         val marketViewRv = RemoteViews(context.packageName, theme.marketItemLayout)
         val data = data[position]
 
-        marketViewRv.setImageViewBitmap(com.wavesplatform.wallet.R.id.image_asset_icon, createAvatarViewBitmap(data))
-        marketViewRv.setTextViewText(com.wavesplatform.wallet.R.id.text_asset_name, data)
+        marketViewRv.setImageViewBitmap(R.id.image_asset_icon, createAvatarViewBitmap(data))
+        marketViewRv.setTextViewText(R.id.text_asset_name, data)
+
+        when {
+            data.toInt() < 0 -> {
+                marketViewRv.setTextColor(R.id.text_market_percent,
+                        ContextCompat.getColor(context, theme.colors.percentDropTextColor))
+                marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
+                        theme.colors.percentDropBackground)
+                marketViewRv.setTextViewText(R.id.text_market_percent, "$data%")
+            }
+            data.toInt() > 0 -> {
+                marketViewRv.setTextColor(R.id.text_market_percent,
+                        ContextCompat.getColor(context, theme.colors.percentIncreaseTextColor))
+                marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
+                        theme.colors.percentIncreaseBackground)
+                marketViewRv.setTextViewText(R.id.text_market_percent, "+$data%")
+            }
+            data.toInt() == 0 -> {
+                marketViewRv.setTextColor(R.id.text_market_percent,
+                        ContextCompat.getColor(context, theme.colors.percentWithoutChangeTextColor))
+                marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
+                        theme.colors.percentWithoutChangeBackground)
+                marketViewRv.setTextViewText(R.id.text_market_percent, "$data%")
+            }
+        }
 
         return marketViewRv
     }
 
     override fun getViewTypeCount(): Int {
-        return 1
+        return 2
     }
 
     override fun hasStableIds(): Boolean {
@@ -66,11 +93,15 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
 
     override fun onDataSetChanged() {
         data.clear()
-        data.add("btc")
-        data.add("btc1")
-        data.add("btc2")
-        data.add("btc3")
-        data.add("btc4")
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
+        data.add(Random.nextInt(-10, 10).toString())
     }
 
     override fun onDestroy() {

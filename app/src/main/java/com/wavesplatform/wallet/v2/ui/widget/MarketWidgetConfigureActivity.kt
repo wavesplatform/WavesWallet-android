@@ -13,7 +13,7 @@ import android.support.v7.widget.PopupMenu
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.market_widget_configure.*
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetTheme
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import pers.victor.ext.click
 
 
@@ -34,12 +34,12 @@ class MarketWidgetConfigureActivity : BaseActivity() {
                         val themeName = item.title.toString()
 
                         edit_theme.setText(themeName)
-                        MarketWidgetTheme.setTheme(this@MarketWidgetConfigureActivity, widgetId, themeName)
+                        MarketWidgetStyle.setTheme(this@MarketWidgetConfigureActivity, widgetId, themeName)
 
                         true
                     }
 
-                    MarketWidgetTheme.values().forEach { theme ->
+                    MarketWidgetStyle.values().forEach { theme ->
                         menu.add(theme.name)
                     }
                 }
@@ -65,7 +65,7 @@ class MarketWidgetConfigureActivity : BaseActivity() {
             finish()
         }
 
-        edit_theme.setText(MarketWidgetTheme.getTheme(this, widgetId).name)
+        edit_theme.setText(MarketWidgetStyle.getTheme(this, widgetId).name)
         edit_theme.click {
             menu.show()
         }

@@ -9,9 +9,9 @@ import android.content.Context
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-enum class MarketWidgetCurrency(id: String, symbol: String) {
-    USD(Constants.Fiat.USD_ID, Constants.Fiat.USD_SYMBOL),
-    EUR(Constants.Fiat.EUR_ID, Constants.Fiat.EUR_SYMBOL);
+enum class MarketWidgetCurrency(symbol: String) {
+    USD(Constants.Fiat.USD_SYMBOL),
+    EUR(Constants.Fiat.EUR_SYMBOL);
 
     companion object {
         private const val PREF_CURRENCY_KEY = "appwidget_currency_"
