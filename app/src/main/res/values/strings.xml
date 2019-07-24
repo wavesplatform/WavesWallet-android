@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   ~ Created by Eduard Zaydel on 19/7/2019
   ~ Copyright © 2019 Waves Platform. All rights reserved.
   -->
@@ -695,4 +694,10 @@
 
     <string name="widget_style_classic">Classic</string>
     <string name="widget_style_dark">Dark</string>
+
+
+    <string name="widget_interval_1_min">1 minute</string>
+    <string name="widget_interval_5_min">5 minutes</string>
+    <string name="widget_interval_10_min">10 minutes</string>
+    <string name="widget_interval_manually">Update manually</string>
 </resources>
