@@ -194,7 +194,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
+        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
