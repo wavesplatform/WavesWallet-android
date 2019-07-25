@@ -15,18 +15,18 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
-import com.wavesplatform.sdk.model.response.data.SearchPairResponse
+import com.vicpin.krealmextensions.delete
+import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.showError
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
-import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
@@ -97,7 +97,10 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { query ->
-                    presenter.search(query)
+                    if (query.isNotEmpty()) {
+                        progress_bar.show()
+                        presenter.search(query)
+                    }
                 })
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -117,7 +120,14 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
             val item = this.adapter.getItem(position) as MarketResponse
 
-            item.checked = !item.checked
+            if (item.checked) {
+                item.checked = false
+                delete<MarketResponseDb> { equalTo("id", item.id) }
+            } else {
+                item.checked = true
+                MarketResponseDb(item).save()
+            }
+
             this.adapter.setData(position, item)
             this.adapter.allData[this.adapter.allData.indexOf(item)] = item
         }
@@ -125,16 +135,8 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
         progress_bar.hide()
-
         adapter.allData = ArrayList(markets)
         adapter.setNewData(markets)
-
-        if (markets.isEmpty()) {
-            edit_search.gone()
-        } else {
-            edit_search.visiable()
-        }
-
         adapter.emptyView = getEmptyView()
     }
 
@@ -150,10 +152,6 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun onBackPressed() {
-        if (this.adapter.allData.isNotEmpty()) {
-            presenter.saveSelectedMarkets(this.adapter.allData)
-        }
-
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })

@@ -6,9 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.queryAll
-import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
@@ -16,6 +14,8 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Observable
+import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -24,47 +24,53 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
     fun search(query: String) {
 
-        fun getObservableLoadPairs(char: Char): Observable<SearchPairResponse> {
-            val searchByAssets = query.split(char).filter { it.trim().isNotEmpty() }
-            return if (searchByAssets.size > 1) {
-                dataServiceManager.loadPairs(searchByAssets = searchByAssets)
-            } else {
-                dataServiceManager.loadPairs(searchByAsset = searchByAssets[0])
-            }
-        }
-
         if (query.isEmpty()) {
             return
         }
 
-        val observableSearch = when {
-            query.contains('/') -> getObservableLoadPairs('/')
-            query.contains('\\') -> getObservableLoadPairs('\\')
-            else -> dataServiceManager.loadPairs(searchByAsset = query)
-        }
+        runAsync {
+            fun getObservableLoadPairs(char: Char): Observable<SearchPairResponse> {
+                val searchByAssets = query.split(char).filter { it.trim().isNotEmpty() }
+                return if (searchByAssets.size > 1) {
+                    dataServiceManager.loadPairs(searchByAssets = searchByAssets)
+                } else {
+                    dataServiceManager.loadPairs(searchByAsset = searchByAssets[0])
+                }
+            }
 
-        var searchResult: SearchPairResponse? = null
-        val assetIds = hashSetOf<String>()
+            val observableSearch = when {
+                query.contains('/') -> getObservableLoadPairs('/')
+                query.contains('\\') -> getObservableLoadPairs('\\')
+                else -> dataServiceManager.loadPairs(searchByAsset = query)
+            }
 
-        addSubscription(observableSearch
-                .flatMap { result ->
-                    searchResult = result
-                    result.data.forEach {
-                        assetIds.add(it.amountAsset)
-                        assetIds.add(it.priceAsset)
+            var searchResult: SearchPairResponse? = null
+            val assetIds = hashSetOf<String>()
+
+            addSubscription(observableSearch
+                    .flatMap { result ->
+                        searchResult = result
+                        result.data.forEach {
+                            assetIds.add(it.amountAsset)
+                            assetIds.add(it.priceAsset)
+                        }
+                        dataServiceManager.assetsInfoByIds(assetIds.toList())
                     }
-                    dataServiceManager.assetsInfoByIds(assetIds.toList())
-                }
-                .flatMap {
-                    Observable.just(createMarkets(searchResult, it))
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
-                    viewState.afterSuccessGetMarkets(it)
-                }, {
-                    viewState.afterFailGetMarkets()
-                    it.printStackTrace()
-                }))
+                    .flatMap {
+                        Observable.just(createMarkets(searchResult, it))
+                    }
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({
+                        runOnUiThread {
+                            viewState.afterSuccessGetMarkets(it)
+                        }
+                    }, {
+                        runOnUiThread {
+                            viewState.afterFailGetMarkets()
+                        }
+                        it.printStackTrace()
+                    }))
+        }
     }
 
 
@@ -108,11 +114,5 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         }
 
         return marketList
-    }
-
-    fun saveSelectedMarkets(data: List<MarketResponse>) {
-        deleteAll<MarketResponseDb>()
-        val selectedMarkets = data.filter { it.checked }
-        MarketResponseDb.convertToDb(selectedMarkets).saveAll()
     }
 }
