@@ -17,16 +17,16 @@ import android.widget.RemoteViewsService
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.ui.widget.model.*
 import pers.victor.ext.dp
 import pers.victor.ext.sp
-import kotlin.random.Random
 
 
 class MarketWidgetAdapterFactory constructor(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
-    var data: MutableList<String> = mutableListOf()
+    var data: MutableList<MarketWidgetActiveAsset> = mutableListOf()
     private var widgetID: Int = AppWidgetManager.INVALID_APPWIDGET_ID
+    private val activeAssetsStore: MarketWidgetActiveAssetStore by lazy { MarketWidgetActiveAssetMockStore }
 
     init {
         widgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -54,29 +54,29 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
         val data = data[position]
 
         marketViewRv.setImageViewBitmap(R.id.image_asset_icon, createAvatarViewBitmap(data))
-        marketViewRv.setTextViewText(R.id.text_asset_name, data)
+        marketViewRv.setTextViewText(R.id.text_asset_name, data.name)
 
         when {
-            data.toInt() < 0 -> {
+            position < 0 -> {
                 marketViewRv.setTextColor(R.id.text_market_percent,
                         ContextCompat.getColor(context, theme.colors.percentDropTextColor))
                 marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
                         theme.colors.percentDropBackground)
-                marketViewRv.setTextViewText(R.id.text_market_percent, "$data%")
+                marketViewRv.setTextViewText(R.id.text_market_percent, "$position%")
             }
-            data.toInt() > 0 -> {
+            position > 0 -> {
                 marketViewRv.setTextColor(R.id.text_market_percent,
                         ContextCompat.getColor(context, theme.colors.percentIncreaseTextColor))
                 marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
                         theme.colors.percentIncreaseBackground)
-                marketViewRv.setTextViewText(R.id.text_market_percent, "+$data%")
+                marketViewRv.setTextViewText(R.id.text_market_percent, "+$position%")
             }
-            data.toInt() == 0 -> {
+            position == 0 -> {
                 marketViewRv.setTextColor(R.id.text_market_percent,
                         ContextCompat.getColor(context, theme.colors.percentWithoutChangeTextColor))
                 marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
                         theme.colors.percentWithoutChangeBackground)
-                marketViewRv.setTextViewText(R.id.text_market_percent, "$data%")
+                marketViewRv.setTextViewText(R.id.text_market_percent, "$position%")
             }
         }
 
@@ -93,27 +93,18 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
 
     override fun onDataSetChanged() {
         data.clear()
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
-        data.add(Random.nextInt(-10, 10).toString())
+        data.addAll(activeAssetsStore.queryAll())
     }
 
     override fun onDestroy() {
 
     }
 
-    private fun createAvatarViewBitmap(data: String): Bitmap? {
+    private fun createAvatarViewBitmap(data: MarketWidgetActiveAsset): Bitmap? {
         val assetAvatarView = AssetAvatarView(context)
 
         assetAvatarView.configureForWidget()
-        // TODO: Change from waves to 'data'
-        assetAvatarView.setAsset(Constants.wavesAssetInfo)
+        assetAvatarView.setAsset(data)
         assetAvatarView.textSize = 11.sp.toFloat()
 
         return loadBitmapFromView(assetAvatarView, 20.dp)

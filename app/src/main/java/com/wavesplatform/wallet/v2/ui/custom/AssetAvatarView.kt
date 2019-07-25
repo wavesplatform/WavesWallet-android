@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
@@ -104,6 +105,10 @@ class AssetAvatarView : AppCompatImageView {
     * */
     fun setAsset(asset: AssetInfo) {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
+    }
+
+    fun setAsset(asset: MarketWidgetActiveAsset) {
+        setValues(asset.id, asset.name, isSponsoredAsset = false, isScriptAsset = false)
     }
 
     fun configureForWidget() {

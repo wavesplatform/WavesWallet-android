@@ -32,7 +32,7 @@ interface ApiService {
             @Query("limit") limit: Int
     ): Observable<LastTradesResponse>
 
-    @GET("candles/{amountAsset}/{priceAsset}")
+    @GET("v0/candles/{amountAsset}/{priceAsset}")
     fun loadCandles(
             @Path("amountAsset") amountAsset: String?,
             @Path("priceAsset") priceAsset: String?,
