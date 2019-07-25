@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1小时</string>
   <string name="chart_time_frame_24_hours">24小时</string>
   <string name="chart_time_frame_30_min">30分钟</string>
-  <string name="chart_time_frame_4_hours">4个小时</string>
+  <string name="chart_time_frame_3_hours">3个小时</string>
   <string name="chart_time_frame_5_min">5分钟</string>
   <string name="check_connectivity_exit">没有连接到Internet</string>
   <string name="choose_account">选择帐户</string>

@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 घंटा</string>
   <string name="chart_time_frame_24_hours">चौबीस घंटे</string>
   <string name="chart_time_frame_30_min">30 मिनिट</string>
-  <string name="chart_time_frame_4_hours">चार घंटे</string>
+  <string name="chart_time_frame_3_hours">तीन घंटे</string>
   <string name="chart_time_frame_5_min">5 मिनट</string>
   <string name="check_connectivity_exit">इंटरनेट से कोई कनेक्शन नहीं</string>
   <string name="choose_account">खाता चुनें</string>

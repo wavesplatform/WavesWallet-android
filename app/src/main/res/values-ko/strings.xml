@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 시간</string>
   <string name="chart_time_frame_24_hours">24 시간</string>
   <string name="chart_time_frame_30_min">30 분</string>
-  <string name="chart_time_frame_4_hours">4 시간</string>
+  <string name="chart_time_frame_3_hours">3 시간</string>
   <string name="chart_time_frame_5_min">5 분</string>
   <string name="check_connectivity_exit">인터넷에 연결되어있지 않습니다</string>
   <string name="choose_account">계정 선택</string>

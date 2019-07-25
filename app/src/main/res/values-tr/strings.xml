@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 saat</string>
   <string name="chart_time_frame_24_hours">24 saat</string>
   <string name="chart_time_frame_30_min">30 dakika</string>
-  <string name="chart_time_frame_4_hours">4 saat</string>
+  <string name="chart_time_frame_3_hours">3 saat</string>
   <string name="chart_time_frame_5_min">5 dakika</string>
   <string name="check_connectivity_exit">İnternet bağlantısı bulunmamaktadır</string>
   <string name="choose_account">Hesabınızı seçin</string>

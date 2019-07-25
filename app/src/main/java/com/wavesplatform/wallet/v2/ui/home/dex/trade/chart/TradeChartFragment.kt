@@ -124,7 +124,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
                 buttonPositive?.setTextColor(findColor(com.wavesplatform.wallet.R.color.basic300))
                 buttonPositive?.isClickable = false
             } else {
-                buttonPositive?.setTextColor(findColor(com.wavesplatform.wallet.R.color.submit400))
+                buttonPositive?.setTextColor(findColor(R.color.submit400))
                 buttonPositive?.isClickable = true
             }
             presenter.newSelectedTimeFrame = item

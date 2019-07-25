@@ -33,7 +33,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     var selectedTimeFrame = 0
     var newSelectedTimeFrame = 0
     val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES, ChartTimeFrame.FIFTEEN_MINUTES, ChartTimeFrame.THIRTY_MINUTES,
-            ChartTimeFrame.ONE_HOUR, ChartTimeFrame.FOUR_HOURS, ChartTimeFrame.TWENTY_FOUR_HOURS)
+            ChartTimeFrame.ONE_HOUR, ChartTimeFrame.THREE_HOURS, ChartTimeFrame.TWENTY_FOUR_HOURS)
 
     var chartModel: ChartModel = ChartModel()
     private var entries: ArrayList<CandleEntry> = ArrayList()
@@ -113,10 +113,10 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                 .filter { candle -> candle.volume != null }
                 .filter { candle -> candle.volume!! > 0 }
                 .map { candle ->
-                    val e = CandleEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
+                    val e = CandleEntry((candle.time.time / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
                     entries.add(e)
 
-                    barEntries.add(BarEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
+                    barEntries.add(BarEntry((candle.time.time / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
 
                     candle
                 }
@@ -145,8 +145,15 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                     for (candle in candles) {
                         if (candle.volume != null) {
                             if (candle.volume!! > 0) {
-                                ces.add(CandleEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat()))
-                                bes.add(BarEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
+                                ces.add(CandleEntry((candle.time.time
+                                        / (1000 * 60 * currentTimeFrame)).toFloat(),
+                                        candle.high!!.toFloat(),
+                                        candle.low!!.toFloat(),
+                                        candle.openValue!!.toFloat(),
+                                        candle.close!!.toFloat()))
+                                bes.add(BarEntry((candle.time.time
+                                        / (1000 * 60 * currentTimeFrame)).toFloat(),
+                                        candle.volume!!.toFloat()))
                             }
                         }
                     }
