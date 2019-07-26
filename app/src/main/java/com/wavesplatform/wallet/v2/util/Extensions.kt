@@ -728,7 +728,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isSpam(assetId: String?): Boolean {
-    return (App.getAccessManager().getWallet() != null
+    return (App.getAccessManager().isAuthenticated()
             && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
