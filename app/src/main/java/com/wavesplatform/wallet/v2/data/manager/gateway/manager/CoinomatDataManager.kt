@@ -76,7 +76,7 @@ class CoinomatDataManager @Inject constructor() : BaseServiceManager(), BaseGate
                     args.transaction.attachment = SignUtil.textToBase58(
                             it.tunnel?.attachment ?: "")
 
-                    args.transaction.sign(App.getAccessManager().getWallet().seedStr)
+                    args.transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
                     nodeDataManager.transactionsBroadcast(args.transaction)
                 }

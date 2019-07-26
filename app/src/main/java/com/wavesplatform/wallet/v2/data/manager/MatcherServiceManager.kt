@@ -41,7 +41,7 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
-        App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
+        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(WavesCrypto.base58decode(getPublicKeyStr()),
                     Longs.toByteArray(timestamp))
             signature = WavesCrypto.base58encode(
@@ -53,7 +53,7 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
     fun loadMyOrders(watchMarket: WatchMarketResponse?): Observable<List<AssetPairOrderResponse>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
-        App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
+        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(WavesCrypto.base58decode(getPublicKeyStr()),
                     Longs.toByteArray(timestamp))
             signature = WavesCrypto.base58encode(
@@ -70,7 +70,7 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
         val request = CancelOrderRequest()
         request.sender = getPublicKeyStr()
         request.orderId = orderId ?: ""
-        App.getAccessManager().getWallet().privateKey.notNull {
+        App.getAccessManager().getWallet()?.privateKey.notNull {
             request.sign(it)
         }
         return matcherService.cancelOrder(amountAsset, priceAsset, request)
@@ -89,7 +89,7 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun placeOrder(orderRequest: CreateOrderRequest): Observable<Any> {
         orderRequest.senderPublicKey = getPublicKeyStr()
-        App.getAccessManager().getWallet().privateKey.notNull { privateKey ->
+        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)
         }
         return matcherService.createOrder(orderRequest)
