@@ -25,7 +25,8 @@ class ChooseAccountPresenter @Inject constructor() : BasePresenter<ChooseAccount
         for (i in guids.indices) {
             val publicKey = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_PUB_KEY, "")
             val name = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_WALLET_NAME, "")
-            val address = WavesCrypto.addressFromPublicKey(WavesCrypto.base58decode(publicKey))
+            val address = WavesCrypto.addressFromPublicKey(
+                    WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
             wallets.add(WalletItem(guids[i], name, address, publicKey))
             list.add(AddressBookUserDb(address, name))
         }

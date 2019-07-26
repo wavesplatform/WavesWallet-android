@@ -606,19 +606,23 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
     override fun setupInfo(transaction: HistoryTransactionResponse): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
-        fun getOrderFeeText(order: OrderResponse?): String {
-            if (order == null) {
+        fun getExchangeFeeText(transaction: HistoryTransactionResponse?, order: OrderResponse?): String {
+            if (transaction == null || order == null) {
                 return ""
             }
 
-            val matcherFee = order.matcherFee
-            val matcherFeeAssetId = order.matcherFeeAssetId
-
-            val info = queryFirst<AssetInfoDb> {
-                equalTo("id", matcherFeeAssetId ?: "")
+            val feeAssetInfo = queryFirst<AssetInfoDb> {
+                equalTo("id", order.matcherFeeAssetId ?: "")
             } ?: return ""
 
-            return "${MoneyUtil.getScaledText(matcherFee, info.convertFromDb()).stripZeros()} ${info.name}"
+            val matcherFee = if (order.orderType == WavesConstants.SELL_ORDER_TYPE) {
+                transaction.sellMatcherFee
+            } else {
+                transaction.buyMatcherFee
+            }
+
+            return "${MoneyUtil.getScaledText(matcherFee, 
+                    feeAssetInfo.convertFromDb()).stripZeros()} ${feeAssetInfo.name}"
         }
 
         fun showTransactionFee() {
@@ -626,14 +630,14 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 var feeText = ""
 
                 if (App.getAccessManager().getWallet().address == transaction.order1?.sender) {
-                    feeText = getOrderFeeText(transaction.order1)
+                    feeText = getExchangeFeeText(transaction, transaction.order1)
                 }
 
                 if (App.getAccessManager().getWallet().address == transaction.order2?.sender) {
                     if (feeText.isNotBlank()) {
                         feeText += "\n"
                     }
-                    feeText += getOrderFeeText(transaction.order2)
+                    feeText += getExchangeFeeText(transaction, transaction.order2)
                 }
 
                 layout.text_fee?.text = feeText

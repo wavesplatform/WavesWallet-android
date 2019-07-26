@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1時間</string>
   <string name="chart_time_frame_24_hours">24時間</string>
   <string name="chart_time_frame_30_min">30分</string>
-  <string name="chart_time_frame_4_hours">4時間</string>
+  <string name="chart_time_frame_3_hours">3時間</string>
   <string name="chart_time_frame_5_min">5分</string>
   <string name="check_connectivity_exit">インターネット接続がありません</string>
   <string name="choose_account">アカウントを選択</string>
