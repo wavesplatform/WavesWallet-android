@@ -15,6 +15,7 @@ import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
+import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
@@ -116,11 +117,14 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
             timeFrame: Int,
             from: Long,
             to: Long
-    ): Observable<List<CandlesResponse.CandleResponse>> {
+    ): Observable<List<CandlesResponse.Data.CandleResponse>> {
+        val interval = ChartTimeFrame.findByServerTime(timeFrame) ?: ChartTimeFrame.THIRTY_MINUTES
         return dataService.candles(watchMarket?.market?.amountAsset,
-                watchMarket?.market?.priceAsset, "${timeFrame}m", from, to)
-                .map {
-                    return@map it.candles.sortedBy { it.time }
+                watchMarket?.market?.priceAsset, interval.interval, from, to)
+                .map { response ->
+                    val candles = mutableListOf<CandlesResponse.Data.CandleResponse>()
+                    response.data.forEach { candles.add(it.data) }
+                    return@map candles.sortedBy { it.time }
                 }
     }
 

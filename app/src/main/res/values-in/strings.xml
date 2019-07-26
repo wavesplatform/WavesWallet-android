@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 jam</string>
   <string name="chart_time_frame_24_hours">24 jam</string>
   <string name="chart_time_frame_30_min">30 menit</string>
-  <string name="chart_time_frame_4_hours">4 jam</string>
+  <string name="chart_time_frame_3_hours">3 jam</string>
   <string name="chart_time_frame_5_min">5 menit</string>
   <string name="check_connectivity_exit">Tidak ada koneksi ke Internet</string>
   <string name="choose_account">Pilih akun</string>
