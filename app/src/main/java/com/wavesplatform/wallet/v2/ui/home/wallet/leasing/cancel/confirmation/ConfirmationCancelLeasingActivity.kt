@@ -11,6 +11,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -124,7 +125,8 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8)} ${WavesConstants.WAVES_ASSET_INFO.name}"
+        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()}" +
+                " ${WavesConstants.WAVES_ASSET_INFO.name}"
         button_okay.isEnabled = true
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
