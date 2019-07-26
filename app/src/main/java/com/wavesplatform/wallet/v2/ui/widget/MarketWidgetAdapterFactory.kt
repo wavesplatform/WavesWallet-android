@@ -10,16 +10,21 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import pers.victor.ext.dp
 import pers.victor.ext.sp
+import kotlin.random.Random
 
 
 class MarketWidgetAdapterFactory constructor(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
@@ -53,8 +58,11 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
         val marketViewRv = RemoteViews(context.packageName, theme.marketItemLayout)
         val data = data[position]
 
+        val price = Random.nextDouble(100.0, 5000.0)
+
         marketViewRv.setImageViewBitmap(R.id.image_asset_icon, createAvatarViewBitmap(data))
         marketViewRv.setTextViewText(R.id.text_asset_name, data.name)
+        marketViewRv.setTextViewText(R.id.text_market_value, formatPrice(price))
 
         when {
             position < 0 -> {
@@ -81,6 +89,26 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
         }
 
         return marketViewRv
+    }
+
+    private fun formatPrice(price: Double): SpannableString {
+        val formattedPrice = formatForWidgetPrice(price)
+        val currencySymbol = MarketWidgetCurrency.getCurrency(context, widgetID).symbol
+
+        val result = SpannableString("$currencySymbol$formattedPrice")
+
+        val pointIndex =
+                if (result.indexOf(".") != -1) result.indexOf(".")
+                else result.length
+
+        result.setSpan(StyleSpan(Typeface.BOLD), 0, pointIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.setSpan(AbsoluteSizeSpan(14.sp), 0, pointIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.setSpan(AbsoluteSizeSpan(12.sp), pointIndex, result.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return result
+    }
+
+    private fun formatForWidgetPrice(number: Number): String {
+        return String.format("%,.2f", number).replace(",", ".")
     }
 
     override fun getViewTypeCount(): Int {

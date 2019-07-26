@@ -9,7 +9,7 @@ import android.content.Context
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-enum class MarketWidgetCurrency(symbol: String) {
+enum class MarketWidgetCurrency(var symbol: String) {
     USD(Constants.Fiat.USD_SYMBOL),
     EUR(Constants.Fiat.EUR_SYMBOL);
 
