@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.MatcherServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
@@ -32,6 +33,8 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     @Inject
     lateinit var matcherServiceManager: MatcherServiceManager
+    @Inject
+    lateinit var nodeServiceManager: NodeServiceManager
 
     var cancelOrderListener: CancelOrderListener? = null
 
@@ -120,15 +123,46 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             view.relative_status.gone()
             view.relative_confirmations.gone()
 
-            // fill fee field
-            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, WavesConstants.WAVES_ASSET_INFO.precision).stripZeros()
-            view.text_base_info_tag.visiable()
+            setFee(data, view)
 
             // fill time field
             view.text_timestamp?.text = data.orderResponse.timestamp.date("dd.MM.yyyy HH:mm")
         }
 
         return view
+    }
+
+    private fun setFee(data: MyOrderTransaction, view: View) {
+        if (data.orderResponse.feeAsset != null && data.orderResponse.fee != null) {
+
+            val feeAssetBalance = find(data.orderResponse.feeAsset!!)
+
+            if (feeAssetBalance == null) {
+                showProgressBar(true)
+                eventSubscriptions.add(nodeServiceManager.assetDetails(data.orderResponse.feeAsset!!)
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe({
+                            showProgressBar(false)
+                            view.text_fee?.text =
+                                    "${MoneyUtil.getScaledText(
+                                            data.orderResponse.fee ?: 0, 
+                                            it.decimals).stripZeros()} " +
+                                    it.name
+                        }, {
+                            showProgressBar(false)
+                            it.printStackTrace()
+                        }))
+            } else {
+                view.text_fee?.text =
+                        "${MoneyUtil.getScaledText(
+                                data.orderResponse.fee ?: 0,
+                                feeAssetBalance.getDecimals()).stripZeros()} " +
+                                feeAssetBalance.getName()
+            }
+        } else {
+            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, WavesConstants.WAVES_ASSET_INFO.precision).stripZeros()
+            view.text_base_info_tag.visiable()
+        }
     }
 
     override fun setupFooter(data: MyOrderTransaction): View? {

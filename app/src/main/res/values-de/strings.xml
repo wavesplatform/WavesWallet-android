@@ -134,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 Stunde</string>
   <string name="chart_time_frame_24_hours">24 Stunden</string>
   <string name="chart_time_frame_30_min">30 Minuten</string>
-  <string name="chart_time_frame_4_hours">4 Stunden</string>
+  <string name="chart_time_frame_3_hours">3 Stunden</string>
   <string name="chart_time_frame_5_min">5 Minuten</string>
   <string name="check_connectivity_exit">Keine Verbindung zum Internet</string>
   <string name="choose_account">Wählen Sie einen Account</string>

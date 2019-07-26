@@ -53,7 +53,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
                     try {
                         val encryptedPassword = prefs.getValue(
                                 guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "")
-                        aesDecrypt(encryptedPassword, seed)
+                        WavesCrypto.aesDecrypt(encryptedPassword, seed)
                     } catch (e: Exception) {
                         throw Exceptions.propagate(Throwable("Decrypt wallet failed"))
                     }
@@ -70,7 +70,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
                 val keyPassword = randomString()
                 pinStore.writePassword(guid, passCode, keyPassword)
                         .subscribe({
-                            val encryptedPassword = aesEncrypt(password, keyPassword)
+                            val encryptedPassword = WavesCrypto.aesEncrypt(password, keyPassword)
                             prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword)
                             if (!subscriber.isDisposed) {
                                 subscriber.onComplete()
@@ -121,7 +121,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         var resultGuid = ""
         for (guid in guids) {
             val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-            if (addressFromPublicKey(WavesCrypto.base58decode(publicKey)) == address) {
+            if (addressFromPublicKey(WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
+                    == address) {
                 resultGuid = guid
             }
         }
@@ -208,7 +209,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
-        } else AddressBookUserDb(addressFromPublicKey(WavesCrypto.base58decode(publicKey)), name)
+        } else AddressBookUserDb(addressFromPublicKey(
+                WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode), name)
     }
 
     fun deleteCurrentWavesWallet(): Boolean {
@@ -315,7 +317,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
             return ""
         }
         val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-        return addressFromPublicKey(WavesCrypto.base58decode(publicKey))
+        return addressFromPublicKey(WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
     }
 
     fun storePassword(guid: String, publicKeyStr: String, encryptedPassword: String) {

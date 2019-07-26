@@ -58,14 +58,14 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (App.getAccessManager().isAuthenticated() ||
+        if (!App.getAccessManager().isAuthenticated() ||
                 ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 stopForeground(true)
             } else {
                 stopSelf()
             }
-            return Service.START_NOT_STICKY
+            return START_NOT_STICKY
         }
 
         val transaction = queryFirst<TransactionDb>()
@@ -92,7 +92,7 @@ class UpdateApiDataService : Service() {
         subscriptions.add(nodeServiceManager.currentBlocksHeight()
                 .subscribe {
                 })
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {
