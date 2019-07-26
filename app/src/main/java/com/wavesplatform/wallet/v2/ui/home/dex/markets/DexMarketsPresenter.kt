@@ -7,12 +7,15 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAll
+import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -25,55 +28,27 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
     fun initLoad() {
         runAsync {
 
-            val WAVES = "WAVES"
-            val USD = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck"
-            val BTC = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"
-
-            val mainAssets = mutableListOf(WAVES, USD, BTC)
-
-            val generalAssetIdList = mutableListOf("WAVES",
-                    "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU",
-                    "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", // USD
-                    "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", // BTC
-                    "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu",
-                    "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk",
-                    "BrjUWjndUanm5VsJkbUip8VRYy6LWJePtxya3FNv4TQa",
-                    "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy",
-                    "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN",
-                    "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H",
-                    "725Yv9oceWsB4GsYwyy4A52kEwyVrL5avubkeChSnL46",
-                    "AxAmJaro7BJ4KasYiZhw7HkjwgYtt2nekPuF2CN9LMym",
-                    "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3",
-                    "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
-                    "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
-                    "7FzrHF1pueRFrPEupz6oiVGTUZqe8epvC7ggWUx8n1bd",
-                    "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8")
-
-            val initPairsList = mutableListOf<String>()
-            for (amountAssetId in mainAssets) {
-                for (priceAssetId in generalAssetIdList) {
-                    if (amountAssetId != priceAssetId) {
-                        initPairsList.add("$amountAssetId/$priceAssetId")
-                    }
-                }
-            }
-
-            var searchResult: SearchPairResponse? = null
+            val initPairsList = createInitPairs()
+            var requestResult: SearchPairResponse? = null
             val assetIds = hashSetOf<String>()
 
-            addSubscription(dataServiceManager.loadPairs(pairs = initPairsList)
+            addSubscription(dataServiceManager.loadPairs(PairRequest(pairs = initPairsList, limit = 200))
                     .flatMap { result ->
                         for (index in 0 until result.data.size) {
                             if (result.data[index].data != null) {
                                 val pair = initPairsList[index].split("/")
                                 assetIds.add(pair[0])
                                 assetIds.add(pair[1])
+
+                                result.data[index].amountAsset = pair[0]
+                                result.data[index].priceAsset = pair[1]
                             }
                         }
+                        requestResult = result
                         dataServiceManager.assetsInfoByIds(assetIds.toList())
                     }
                     .flatMap {
-                        Observable.just(createMarkets(searchResult, it))
+                        Observable.just(createMarkets(requestResult, it))
                     }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
@@ -118,8 +93,12 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                     .flatMap { result ->
                         searchResult = result
                         result.data.forEach {
-                            assetIds.add(it.amountAsset)
-                            assetIds.add(it.priceAsset)
+                            it.amountAsset.notNull { assetId ->
+                                assetIds.add(assetId)
+                            }
+                            it.priceAsset.notNull { assetId ->
+                                assetIds.add(assetId)
+                            }
                         }
                         dataServiceManager.assetsInfoByIds(assetIds.toList())
                     }
@@ -140,9 +119,25 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         }
     }
 
-
     private fun createMarkets(searchResult: SearchPairResponse?, assets: List<AssetInfoResponse>)
             : MutableList<MarketResponse> {
+
+        val marketList = mutableListOf<MarketResponse>()
+        val savedMarkets = queryAll<MarketResponseDb>()
+
+        searchResult?.data?.forEach { data ->
+            if (data.data == null || data.amountAsset == null || data.priceAsset == null) {
+                return@forEach
+            }
+            marketList.add(createMarket(data, assets, savedMarkets))
+        }
+
+        return marketList
+    }
+
+    private fun createMarket(data: SearchPairResponse.Pair,
+                             assets: List<AssetInfoResponse>,
+                             savedMarkets: List<MarketResponseDb>): MarketResponse {
 
         fun find(assetId: String): AssetInfoResponse? {
             assets.forEach {
@@ -153,33 +148,51 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
             return null
         }
 
-        val marketList = mutableListOf<MarketResponse>()
-        val savedMarkets = queryAll<MarketResponseDb>()
+        val market = MarketResponse()
+        val amountAsset = find(data.amountAsset!!)
+        val priceAsset = find(data.priceAsset!!)
 
-        searchResult?.data?.forEach { data ->
-            val market = MarketResponse()
-            val amountAsset = find(data.amountAsset)
-            val priceAsset = find(data.priceAsset)
+        market.id = data.amountAsset + data.priceAsset
 
-            market.id = data.amountAsset + data.priceAsset
+        market.amountAsset = data.amountAsset!!
+        market.priceAsset = data.priceAsset!!
 
-            market.amountAsset = data.amountAsset
-            market.priceAsset = data.priceAsset
+        market.amountAssetLongName = amountAsset?.name
+        market.priceAssetLongName = priceAsset?.name
 
-            market.amountAssetLongName = amountAsset?.name
-            market.priceAssetLongName = priceAsset?.name
+        market.amountAssetShortName = amountAsset?.ticker ?: amountAsset?.name
+        market.priceAssetShortName = priceAsset?.ticker ?: priceAsset?.name
 
-            market.amountAssetShortName = amountAsset?.ticker ?: amountAsset?.name
-            market.priceAssetShortName = priceAsset?.ticker ?: priceAsset?.name
+        market.amountAssetDecimals = amountAsset?.precision ?: 8
+        market.priceAssetDecimals = priceAsset?.precision ?: 8
 
-            market.amountAssetDecimals = amountAsset?.precision ?: 8
-            market.priceAssetDecimals = priceAsset?.precision ?: 8
+        market.checked = savedMarkets.firstOrNull { it.id == market.id } != null
 
-            market.checked = savedMarkets.firstOrNull { it.id == market.id } != null
+        return market
+    }
 
-            marketList.add(market)
+    private fun createInitPairs(): MutableList<String> {
+        val initPairsList = mutableListOf<String>()
+        for (amountAssetId in EnvironmentManager.defaultAssets.subList(0, 4)) {
+            for (priceAssetId in EnvironmentManager.defaultAssets) {
+
+                var price = priceAssetId.assetId
+                var amount = amountAssetId.assetId
+
+                if (price == "") {
+                    price = "WAVES"
+                }
+
+                if (amount == "") {
+                    amount = "WAVES"
+                }
+
+                if (amount != price) {
+                    initPairsList.add("$amount/$price")
+                    initPairsList.add("$price/$amount")
+                }
+            }
         }
-
-        return marketList
+        return initPairsList
     }
 }

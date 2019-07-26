@@ -132,6 +132,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
             this.adapter.allData[this.adapter.allData.indexOf(item)] = item
         }
 
+        progress_bar.show()
         presenter.initLoad()
     }
 

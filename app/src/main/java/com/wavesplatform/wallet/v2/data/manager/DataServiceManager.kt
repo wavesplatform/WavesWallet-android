@@ -8,14 +8,15 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.*
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -135,5 +136,9 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 searchByAssets,
                 matchExactly,
                 limit)
+    }
+
+    fun loadPairs(request: PairRequest): Observable<SearchPairResponse> {
+        return dataService.pairs(request)
     }
 }
