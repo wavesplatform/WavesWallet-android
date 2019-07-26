@@ -15,12 +15,12 @@ import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.OrderListener
@@ -29,6 +29,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeB
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.dialog_order_attention.view.*
 import kotlinx.android.synthetic.main.fragment_trade_order.*
@@ -76,14 +77,14 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         text_fee_value.click {
             val dialog = SponsoredFeeBottomSheetFragment()
             dialog.configureData(
-                    selectedAssetId = Constants.WAVES_ASSET_ID_EMPTY,
+                    selectedAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
                     wavesFee = 10000,
                     exchange = true,
                     priceAssetId = presenter.data?.watchMarket?.market?.amountAsset,
                     amountAssetId = presenter.data?.watchMarket?.market?.priceAsset)
 
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
-                override fun onSelected(asset: AssetBalance, fee: Long) {
+                override fun onSelected(asset: AssetBalanceResponse, fee: Long) {
                     presenter.feeAssetId = asset.assetId
                     presenter.fee = fee
                     text_fee_value.text =
@@ -432,7 +433,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
     }
 
-    override fun showOrderAttentionAndCreateOrder(orderBook: OrderBook) {
+    override fun showOrderAttentionAndCreateOrder(orderBook: OrderBookResponse) {
 
         val lastAskPrice = orderBook.asks.firstOrNull()?.price
 
@@ -560,7 +561,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     private fun isValidWavesFee(): Boolean {
-        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > presenter.fee) {
+        return if (presenter.wavesBalance.getAvailableBalance() > presenter.fee) {
             true
         } else {
             if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true &&
@@ -682,7 +683,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun showCommissionSuccess(unscaledAmount: Long) {
         fillInputsWithValues()
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
-                "${Constants.wavesAssetInfo.name}"
+                "${WavesConstants.WAVES_ASSET_INFO.name}"
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
     }

@@ -16,11 +16,12 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
@@ -28,7 +29,6 @@ import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActiv
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.content_empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import kotlinx.android.synthetic.main.content_header_dex_layout.view.*
@@ -82,7 +82,7 @@ class DexFragment : BaseFragment(), DexView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (isNetworkConnected()) {
                 val args = Bundle()
-                args.classLoader = WatchMarket::class.java.classLoader
+                args.classLoader = WatchMarketResponse::class.java.classLoader
                 args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
 
                 launchActivity<TradeActivity>(options = args)
@@ -132,7 +132,7 @@ class DexFragment : BaseFragment(), DexView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarket>) {
+    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarketResponse>) {
         swipe_container.isRefreshing = false
         presenter.clearOldPairsSubscriptions()
 
@@ -156,7 +156,7 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
-    override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
+    override fun afterSuccessLoadPairInfo(watchMarket: WatchMarketResponse, index: Int) {
         adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil
                 .getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
                 .currentDateAsTimeSpanString(activity!!)

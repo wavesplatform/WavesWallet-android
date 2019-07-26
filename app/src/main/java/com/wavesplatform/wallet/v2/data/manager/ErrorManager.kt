@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.RxEventBus
@@ -18,29 +18,29 @@ class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPrefere
     private lateinit var mActivity: BaseActivity
     private lateinit var retrySubject: PublishSubject<Events.RetryEvent>
 
-    fun handleError(response: RetrofitException, retrySubject: PublishSubject<Events.RetryEvent>) {
+    fun handleError(response: NetworkException, retrySubject: PublishSubject<Events.RetryEvent>) {
         mRxEventBus.post(Events.ErrorEvent(response, retrySubject))
     }
 
-    fun showError(context: Context, retrofitException: RetrofitException, retrySubject: PublishSubject<Events.RetryEvent>) {
+    fun showError(context: Context, retrofitException: NetworkException, retrySubject: PublishSubject<Events.RetryEvent>) {
         this.mActivity = context as BaseActivity
         this.retrySubject = retrySubject
 
-        if (retrofitException.kind === RetrofitException.Kind.NETWORK || retrofitException.response!!.code() == 504) {
+        if (retrofitException.kind === NetworkException.Kind.NETWORK || retrofitException.response!!.code() == 504) {
             handleNetworkError(retrofitException)
-        } else if (retrofitException.kind === RetrofitException.Kind.HTTP) {
+        } else if (retrofitException.kind === NetworkException.Kind.HTTP) {
             handleHttpError(retrofitException)
-        } else if (retrofitException.kind === RetrofitException.Kind.UNEXPECTED) {
+        } else if (retrofitException.kind === NetworkException.Kind.UNEXPECTED) {
             handleUnexpectedError(retrofitException)
         }
     }
 
-    private fun handleNetworkError(retrofitException: RetrofitException) {
+    private fun handleNetworkError(retrofitException: NetworkException) {
         // TODO: call method from activity or show here
-//        mActivity.showNetworkError()
+        // mActivity.showNetworkError()
     }
 
-    private fun handleHttpError(error: RetrofitException) {
+    private fun handleHttpError(error: NetworkException) {
         when (error.response!!.code()) {
             401 -> handleUnauthorizedException()
             500 -> {
@@ -52,7 +52,7 @@ class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPrefere
         // TODO: redirect to start screen and clear session (mPreferencesHelper)
     }
 
-    fun handleUnexpectedError(exception: RetrofitException) {
+    fun handleUnexpectedError(exception: NetworkException) {
         // TODO: Something went wrong...
     }
 }

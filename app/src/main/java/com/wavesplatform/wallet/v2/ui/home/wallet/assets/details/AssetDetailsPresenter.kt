@@ -8,11 +8,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.findAssetBalanceInDb
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -26,18 +28,18 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var needToUpdate: Boolean = false
     var isShow = true
     var scrollRange: Float = -1f
-    var allTransaction: List<Transaction> = emptyList()
-    private var findAssetList = listOf<AssetBalance>()
+    var allTransaction: List<HistoryTransactionResponse> = emptyList()
+    private var findAssetList = listOf<AssetBalanceResponse>()
 
 
     fun loadSearchAssets(query: String) {
         runAsync {
             if (findAssetList.isEmpty()) {
-                findAssetList = queryAll()
+                findAssetList = AssetBalanceDb.convertFromDb(queryAll())
             }
             val find = findAssetBalanceInDb(query, findAssetList)
-            val result = mutableListOf<AssetBalance>()
-            val hiddenAssets = mutableListOf<AssetBalance>()
+            val result = mutableListOf<AssetBalanceResponse>()
+            val hiddenAssets = mutableListOf<AssetBalanceResponse>()
 
             find.forEach {
                 if (it.isFavorite) {
@@ -56,8 +58,8 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
             }
             result.addAll(hiddenAssets)
 
-            addSubscription(queryAllAsSingle<Transaction>()
-                    .map { allTransaction = it }
+            addSubscription(queryAllAsSingle<TransactionDb>()
+                    .map { allTransaction = TransactionDb.convertFromDb(it) }
                     .subscribe({
                         runOnUiThread {
                             viewState.afterSuccessLoadAssets(result)
@@ -71,8 +73,8 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     fun loadAssets(itemType: Int) {
         runAsync {
             addSubscription(Single.zip(queryAllAsSingle(), queryAllAsSingle(),
-                    BiFunction { assets: List<AssetBalance>, transactions: List<Transaction> ->
-                        allTransaction = transactions
+                    BiFunction { assets: List<AssetBalanceDb>, transactions: List<TransactionDb> ->
+                        allTransaction = TransactionDb.convertFromDb(transactions)
                         return@BiFunction assets
                     })
                     .map {
@@ -94,7 +96,7 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
                     .compose(RxUtil.applySingleDefaultSchedulers())
                     .subscribe({
                         runOnUiThread {
-                            viewState.afterSuccessLoadAssets(it)
+                            viewState.afterSuccessLoadAssets(AssetBalanceDb.convertFromDb(it))
                         }
                     }, {
                         it.printStackTrace()

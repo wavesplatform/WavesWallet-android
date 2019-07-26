@@ -9,6 +9,9 @@ jobs:
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
       - checkout
+      - run:
+          name: Install Submodules
+          command: git submodule sync && git submodule update --init
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 #      - run:

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
@@ -19,7 +19,7 @@ interface SendView : BaseMvpView {
     fun showCommissionLoading()
     fun showCommissionSuccess(unscaledAmount: Long)
     fun showCommissionError()
-    fun showLoadAssetSuccess(assetBalance: AssetBalance)
+    fun showLoadAssetSuccess(assetBalance: AssetBalanceResponse)
     fun showLoadAssetError(errorMsgRes: Int)
     fun setDataFromUrl(url: String?)
 }

@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.network
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import javax.inject.Inject
 
 @InjectViewState
@@ -21,7 +21,7 @@ class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
 
     fun checkValidUrl(url: String) {
         viewState.showProgressBar(true)
-        addSubscription(githubDataManager.isValidNewSpamUrl(url)
+        addSubscription(githubServiceManager.isValidNewSpamUrl(url)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
                     viewState.showProgressBar(false)

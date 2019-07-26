@@ -9,17 +9,17 @@ import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.item_your_assets.view.*
 import javax.inject.Inject
 
-class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.item_your_assets, null) {
+class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalanceResponse, BaseViewHolder>(R.layout.item_your_assets, null) {
 
-    var allData: MutableList<AssetBalance> = arrayListOf()
+    var allData: MutableList<AssetBalanceResponse> = arrayListOf()
     var currentAssetId: String? = null
 
-    override fun convert(helper: BaseViewHolder, item: AssetBalance) {
+    override fun convert(helper: BaseViewHolder, item: AssetBalanceResponse) {
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)

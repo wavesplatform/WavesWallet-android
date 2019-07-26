@@ -8,20 +8,22 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
+import com.wavesplatform.wallet.R
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment.Companion.FILLED_ORDER_PERCENT
+import com.wavesplatform.wallet.v2.util.getStatus
+import com.wavesplatform.wallet.v2.util.getType
 import kotlinx.android.synthetic.main.item_my_orders.view.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderResponse, BaseViewHolder>(R.layout.item_my_orders, null) {
+class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<AssetPairOrderResponse, BaseViewHolder>(R.layout.item_my_orders, null) {
     var market: MarketResponse = MarketResponse()
 
-    override fun convert(helper: BaseViewHolder, item: OrderResponse) {
+    override fun convert(helper: BaseViewHolder, item: AssetPairOrderResponse) {
         helper
                 .setText(R.id.text_side, mContext.getString(item.getType().typeUI))
                 .setText(R.id.text_price, item.getScaledPrice(market.amountAssetDecimals, market.priceAssetDecimals))

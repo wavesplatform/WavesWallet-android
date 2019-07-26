@@ -9,7 +9,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.annotation.NonNull
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.AppCompatImageView
 import android.text.TextPaint
@@ -17,12 +16,12 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.AppWidgetTarget
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.Constants.defaultAssetsAvatar
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import pers.victor.ext.resize
 import pers.victor.ext.sp
@@ -94,7 +93,7 @@ class AssetAvatarView : AppCompatImageView {
     /*
     * Set asset object to get initials for drawable
     * */
-    fun setAsset(asset: AssetBalance?) {
+    fun setAsset(asset: AssetBalanceResponse?) {
         setValues(asset?.assetId ?: " ", asset?.getName() ?: " ",
                 asset?.isSponsored() == true,
                 asset?.isScripted() == true)
@@ -103,7 +102,7 @@ class AssetAvatarView : AppCompatImageView {
     /*
     * Set asset info object to get initials for drawable
     * */
-    fun setAsset(asset: AssetInfo) {
+    fun setAsset(asset: AssetInfoResponse) {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
@@ -128,13 +127,14 @@ class AssetAvatarView : AppCompatImageView {
 
     private fun getColorBackgroundBy(assetId: String): Int {
         if (TextUtils.isEmpty(assetId)) {
-            return Constants.alphabetColor[0]
+            return com.wavesplatform.wallet.v2.data.Constants.alphabetColor[0]
         }
         val sum = assetId.split("")
                 .filter { it != "" }
                 .map { char -> char.codePointAt(0) }
                 .reduce { acc, code -> acc + code }
-        return Constants.alphabetColor[sum % Constants.alphabetColor.size]
+        return com.wavesplatform.wallet.v2.data.Constants.alphabetColor[
+                sum % com.wavesplatform.wallet.v2.data.Constants.alphabetColor.size]
     }
 
     /*
@@ -142,8 +142,8 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
-            else -> Constants.defaultAssetsAvatar()[assetId]
+            "" -> defaultAssetsAvatar()[WavesConstants.WAVES_ASSET_ID_FILLED]
+            else -> defaultAssetsAvatar()[assetId]
         }
 
         paint.color = getColorBackgroundBy(assetId)

@@ -7,24 +7,25 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.errorBody
 import java.math.RoundingMode
 import javax.inject.Inject
 
 @InjectViewState
 class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>() {
     var data: BuySellData? = BuySellData()
-    var orderRequest: OrderRequest = OrderRequest()
-    var wavesBalance: AssetBalance = AssetBalance()
+    var orderRequest: CreateOrderRequest = CreateOrderRequest()
+    var wavesBalance: AssetBalanceResponse = AssetBalanceResponse()
 
     var humanTotalTyping = false
 
@@ -47,14 +48,17 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var totalPriceValidation = false
     var amountValidation = false
 
-    var fee = Constants.WAVES_ORDER_MIN_FEE
-    var feeAssetId = Constants.WAVES_ASSET_ID_EMPTY
+    var fee = WavesConstants.WAVES_ORDER_MIN_FEE
+    var feeAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY
 
-    fun initBalances(){
-        currentAmountBalance = queryFirst<AssetBalance> { equalTo("assetId",
-                data?.watchMarket?.market?.amountAsset?.withWavesIdConvert()) }?.getAvailableBalance() ?: 0L
-        currentPriceBalance = queryFirst<AssetBalance> { equalTo("assetId",
-                data?.watchMarket?.market?.priceAsset?.withWavesIdConvert()) }?.getAvailableBalance() ?: 0L
+    fun initBalances() {
+        val amountAssetDb = queryFirst<AssetBalanceDb> { equalTo("assetId",
+                data?.watchMarket?.market?.amountAsset?.withWavesIdConvert()) }
+        currentAmountBalance = amountAssetDb?.convertFromDb()?.getAvailableBalance() ?: 0L
+
+        val priceAssetDb = queryFirst<AssetBalanceDb> { equalTo("assetId",
+                data?.watchMarket?.market?.priceAsset?.withWavesIdConvert()) }
+        currentPriceBalance = priceAssetDb?.convertFromDb()?.getAvailableBalance() ?: 0L
     }
 
     fun isAllFieldsValid(): Boolean {
@@ -62,15 +66,15 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     }
 
     fun getMatcherKey() {
-        addSubscription(matcherDataManager.getMatcherKey()
+        addSubscription(matcherServiceManager.getMatcherKey()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
-                    orderRequest.matcherPublicKey = it
+                    orderRequest.matcherPublicKey = it.replace("\"", "")
                 })
     }
 
     fun loadWavesBalance() {
-        addSubscription(nodeDataManager.loadWavesBalance()
+        addSubscription(nodeServiceManager.loadWavesBalance()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     wavesBalance = it
@@ -80,13 +84,13 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     fun loadPairBalancesAndCommission() {
         viewState.showCommissionLoading()
         fee = 0L
-        addSubscription(matcherDataManager.getBalanceFromAssetPair(data?.watchMarket)
+        addSubscription(matcherServiceManager.getBalanceFromAssetPair(data?.watchMarket)
                 .flatMap {
                     // save balance
                     currentAmountBalance = it[data?.watchMarket?.market?.amountAsset] ?: 0
                     currentPriceBalance = it[data?.watchMarket?.market?.priceAsset] ?: 0
 
-                    return@flatMap nodeDataManager.getCommissionForPair(
+                    return@flatMap nodeServiceManager.getCommissionForPair(
                             data?.watchMarket?.market?.amountAsset,
                             data?.watchMarket?.market?.priceAsset)
                 }
@@ -109,7 +113,11 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 ?: 0).minus(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0)), RoundingMode.HALF_UP).unscaledValue().toLong()
 
-        orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
+        orderRequest.orderType = if (orderType == 0) {
+            WavesConstants.BUY_ORDER_TYPE
+        } else {
+            WavesConstants.SELL_ORDER_TYPE
+        }
         orderRequest.assetPair = createPair()
         orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer
@@ -117,7 +125,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         orderRequest.matcherFeeAssetId = feeAssetId
         orderRequest.matcherFee = fee
 
-        addSubscription(matcherDataManager.placeOrder(orderRequest)
+        addSubscription(matcherServiceManager.placeOrder(orderRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.showProgressBar(false)
@@ -133,7 +141,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
     fun loadOrderBook(amountAssetId: String, priceAssetId: String) {
         viewState.showProgressBar(true)
-        addSubscription(matcherDataManager.loadOrderBook(amountAssetId, priceAssetId)
+        addSubscription(matcherServiceManager.loadOrderBook(amountAssetId, priceAssetId)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.showOrderAttentionAndCreateOrder(it)
@@ -146,15 +154,15 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 }))
     }
 
-    private fun createPair(): OrderBook.Pair {
+    private fun createPair(): OrderBookResponse.PairResponse {
         val amountAsset =
                 if (data?.watchMarket?.market?.amountAsset?.isWaves() == true) ""
-                else data?.watchMarket?.market?.amountAsset
+                else data?.watchMarket?.market?.amountAsset ?: ""
         val priceAsset =
                 if (data?.watchMarket?.market?.priceAsset?.isWaves() == true) ""
-                else data?.watchMarket?.market?.priceAsset
+                else data?.watchMarket?.market?.priceAsset ?: ""
 
-        return OrderBook.Pair(amountAsset, priceAsset)
+        return OrderBookResponse.PairResponse(amountAsset, priceAsset)
     }
 
 

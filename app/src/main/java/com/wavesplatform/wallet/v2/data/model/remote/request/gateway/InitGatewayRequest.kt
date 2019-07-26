@@ -6,7 +6,6 @@
 package com.wavesplatform.wallet.v2.data.model.remote.request.gateway
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 
 data class InitGatewayRequest(
         @SerializedName("userAddress") val userAddress: String?,

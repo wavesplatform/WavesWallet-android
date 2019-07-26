@@ -12,18 +12,19 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.asksira.loopingviewpager.LoopingViewPager
+import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
+import com.wavesplatform.wallet.v2.util.ClientEnvironment
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.click
 import pers.victor.ext.visiable
@@ -99,17 +100,17 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
             val newEnvironment = when (EnvironmentManager.environmentName) {
-                EnvironmentManager.KEY_ENV_MAIN_NET -> {
+                ClientEnvironment.KEY_ENV_MAIN_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    EnvironmentManager.Environment.TEST_NET
+                    ClientEnvironment.TEST_NET
                 }
-                EnvironmentManager.KEY_ENV_TEST_NET -> {
+                ClientEnvironment.KEY_ENV_TEST_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_prod)
-                    EnvironmentManager.Environment.MAIN_NET
+                    ClientEnvironment.MAIN_NET
                 }
                 else -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    EnvironmentManager.Environment.TEST_NET
+                    ClientEnvironment.TEST_NET
                 }
             }
             button_switch_net.click {

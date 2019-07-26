@@ -7,21 +7,20 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
+import com.wavesplatform.sdk.model.request.node.TransferTransaction
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayWithdrawArgs
-import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.executeInBackground
+import com.wavesplatform.wallet.v2.util.find
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -34,13 +33,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String = ""
-    var selectedAsset: AssetBalance? = null
-    var assetInfo: AssetInfo? = null
+    var selectedAsset: AssetBalanceResponse? = null
+    var assetInfo: AssetInfoResponse? = null
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalanceResponse = find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 
     var success = false
 
@@ -54,8 +53,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun makeWithdrawViaWavesBlockchain(transaction: TransactionsBroadcastRequest) {
-        addSubscription(nodeDataManager.transactionsBroadcast(transaction)
+    private fun makeWithdrawViaWavesBlockchain(transaction: TransferTransaction) {
+        addSubscription(nodeServiceManager.transactionsBroadcast(transaction)
                 .executeInBackground()
                 .subscribe({ tx ->
                     tx.recipient = tx.recipient.parseAlias()
@@ -71,7 +70,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 }))
     }
 
-    private fun makeWithdrawViaGateway(transaction: TransactionsBroadcastRequest) {
+    private fun makeWithdrawViaGateway(transaction: TransferTransaction) {
         addSubscription(gatewayProvider.getGatewayDataManager(transaction.assetId)
                 .makeWithdraw(GatewayWithdrawArgs(transaction, selectedAsset, moneroPaymentId))
                 .executeInBackground()
@@ -87,7 +86,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 }))
     }
 
-    private fun getTxRequest(): TransactionsBroadcastRequest {
+    private fun getTxRequest(): TransferTransaction {
         if (recipient == null || recipient!!.length < 4) {
             recipient = ""
         } else if (recipient!!.length <= 30) {
@@ -98,20 +97,17 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 if (type == SendPresenter.Type.GATEWAY || type == SendPresenter.Type.VOSTOK) amount + gatewayCommission
                 else amount
 
-        return TransactionsBroadcastRequest(
-                selectedAsset!!.assetId,
-                App.getAccessManager().getWallet()!!.publicKeyStr,
-                recipient!!,
-                MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
-                EnvironmentManager.getTime(),
-                blockchainCommission,
-                attachment,
-                feeAsset.assetId,
-                App.getAccessManager().getWallet()?.address)
+        return TransferTransaction(
+                assetId = selectedAsset!!.assetId,
+                recipient = recipient!!,
+                amount = MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
+                attachment = SignUtil.textToBase58(attachment),
+                fee = blockchainCommission,
+                feeAssetId = feeAsset.assetId)
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address) }
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", address) }
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {

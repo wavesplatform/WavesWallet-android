@@ -15,18 +15,18 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayDeposit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
+import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
 import kotlinx.android.synthetic.main.content_asset_card.*
@@ -50,7 +50,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         if (arguments == null) {
             assetChangeEnable(true)
         } else {
-            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+            val assetBalance = arguments!!.getParcelable<AssetBalanceResponse>(
                     YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
             assetChangeEnable(false)
@@ -88,7 +88,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
-            val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            val assetBalance = data?.getParcelableExtra<AssetBalanceResponse>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
         } else if (requestCode == InvoiceFragment.REQUEST_CODE_ADDRESS_SCREEN && resultCode == Activity.RESULT_OK) {
             onBackPressed()
@@ -109,7 +109,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         attention_subtitle?.text = getString(R.string.receive_warning_will_send,
                 response.minLimit,
                 response.currencyFrom)
-        if (Constants.findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
+        if (findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
             warning_crypto_title?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
             warning_crypto_subtitle?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
         } else {
@@ -139,7 +139,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         button_continue?.isEnabled = false
     }
 
-    private fun setAssetBalance(assetBalance: AssetBalance?) {
+    private fun setAssetBalance(assetBalance: AssetBalanceResponse?) {
         presenter.assetBalance = assetBalance
 
         image_asset_icon.setAsset(assetBalance)
@@ -216,7 +216,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         const val REQUEST_CODE_ADDRESS_SCREEN = 101
         const val REQUEST_SELECT_ASSET = 10001
 
-        fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
+        fun newInstance(assetBalance: AssetBalanceResponse?): CryptoCurrencyFragment {
             val fragment = CryptoCurrencyFragment()
             if (assetBalance == null) {
                 return fragment

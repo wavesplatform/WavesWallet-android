@@ -21,9 +21,10 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -91,7 +92,7 @@ class CardFragment : BaseFragment(), CardView {
         }
     }
 
-    override fun showWaves(asset: AssetBalance?) {
+    override fun showWaves(asset: AssetBalanceResponse?) {
         asset.notNull { setAssetBalance(it) }
     }
 
@@ -137,7 +138,7 @@ class CardFragment : BaseFragment(), CardView {
                 activity!!, R.color.basic50))
     }
 
-    private fun setAssetBalance(assetBalance: AssetBalance?) {
+    private fun setAssetBalance(assetBalance: AssetBalanceResponse?) {
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance?.getName()
         text_asset_value.text = assetBalance?.getDisplayAvailableBalance()

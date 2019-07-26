@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">È necessario compilare il campo dei dettagli di pagamento con le seguenti informazioni:</string>
-  <string name="about_fill_payment_info">CNM — il tuo indirizzo WAVES. \nSe non procedi, non possiamo accreditare il tuo account.</string>
   <string name="about_redirection_message">Dopo aver completato l\'identificazione riceverai un email con ulteriori istruzioni</string>
   <string name="about_redirection_okay">Va bene</string>
   <string name="about_redirection_title">Sei stato reindirizzato verso «IDNow» \nper la verifica</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">Importo in %1$s</string>
   <string name="receive_asset">Token</string>
   <string name="receive_card">Carta</string>
-  <string name="receive_contact_msg">In caso di problemi con la verifica o l\'elaborazione del pagamento, contattare il team di supporto Coinomat - support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Continua</string>
   <string name="receive_cryptocurrency">Criptovaluta</string>
   <string name="receive_dont_accept_international">Non accettiamo bonifici internazionali da cittadini o banche statunitensi</string>
@@ -534,7 +530,6 @@
   <string name="send_gateway_info_gateway_limits">Abbiamo rilevato %1$s indirizzo e invieremo i tuoi soldi tramite il gateway Coinomat a questo indirizzo. L\'importo minimo è %2$s %1$s, l\'importo massimo è %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Non trasferire %1$s in favore di una ICO. Non accrediteremo sul tuo account i token provenienti da quell\'iniziativa.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Se sei stato già verificato ed hai depositato dollari USA, puoi ritrasferire indietro questi dollari sul conto bancario. Altrimenti, avvia la verifica con il nostro partner IDNow.eu</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">L\'importo minimo è di 500 dollari USA. In caso di domande, è sufficiente inviare un\'e-mail a support@coinomat.com</string>
   <string name="send_monero_payment_id">ID pagamento Monero</string>
   <string name="send_monero_payment_id_hint">Incolla o digita il tuo ID di pagamento</string>
   <string name="send_progress_sending">Invio…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">Non hai aggiunto token tra i preferiti</string>
   <string name="wallet_sorting_default_empty">L\'elenco dei Token è vuoto</string>
   <string name="wallet_sorting_hidden_empty">Non hai aggiunto token tra quelli nascosti</string>
+  <string name="common_permission_error_title">Accesso alla telecamera necessario</string>
+  <string name="common_permission_error_description">Questa app necessita dell\'autorizzazione per usare la fotocamera. Puoi concederla nelle impostazioni dell\'app.</string>
+  <string name="common_permission_error_settings">Impostazioni</string>
+  <string name="common_permission_error_cancel">Annulla</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Il tuo ordine è superiore del 5% rispetto al più recente prezzo di mercato</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Il tuo ordine è inferiore del 5% rispetto al più recente prezzo di mercato</string>
+  <string name="trade_order_dialog_positive_place_order">Invia ordine</string>
+  <string name="trade_order_dialog_negative_cancel">Annulla</string>
+  <string name="trade_order_dialog_subtitle_proceed">Vuoi procedere?</string>
 </resources>

@@ -6,12 +6,12 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
@@ -33,20 +33,20 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
-                BiFunction { t1: GlobalTransactionCommission,
-                             t2: ScriptInfo ->
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
+                BiFunction { t1: GlobalTransactionCommissionResponse,
+                             t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ triple ->
                     val commission = triple.first
                     val scriptInfo = triple.second
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.LEASE
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = BaseTransaction.CREATE_LEASING
                     params.smartAccount = scriptInfo.extraFee != 0L
-                    fee = TransactionUtil.countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)
                     viewState.afterSuccessLoadWavesBalance(wavesBalance)
                 }, {

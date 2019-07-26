@@ -8,7 +8,9 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAll
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import com.wavesplatform.wallet.v2.util.findAssetBalanceInDb
@@ -17,11 +19,11 @@ import javax.inject.Inject
 @InjectViewState
 class SearchAssetPresenter @Inject constructor() : BasePresenter<SearchAssetView>() {
 
-    private var findAssetList = listOf<AssetBalance>()
+    private var findAssetList = listOf<AssetBalanceResponse>()
     var lastQuery = ""
 
     fun queryAllAssets() {
-        findAssetList = queryAll()
+        findAssetList = AssetBalanceDb.convertFromDb(queryAll())
     }
 
     fun search(query: String) {
@@ -34,16 +36,16 @@ class SearchAssetPresenter @Inject constructor() : BasePresenter<SearchAssetView
 
         find.forEach {
             if (it.isFavorite) {
-                result.add(it)
+                result.add(AssetBalanceMultiItemEntity(AssetBalanceDb(it)))
             }
         }
 
         find.forEach {
             if (!it.isFavorite) {
                 if (it.isHidden) {
-                    hiddenAssets.add(it)
+                    hiddenAssets.add(AssetBalanceMultiItemEntity(AssetBalanceDb(it)))
                 } else {
-                    result.add(it)
+                    result.add(AssetBalanceMultiItemEntity(AssetBalanceDb(it)))
                 }
             }
         }

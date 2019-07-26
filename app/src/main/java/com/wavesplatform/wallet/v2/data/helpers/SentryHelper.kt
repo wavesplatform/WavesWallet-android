@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.helpers
 
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.BuildConfig
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.local.NetworkType
 import com.wavesplatform.wallet.v2.util.clone
 import io.sentry.Sentry
@@ -25,8 +25,8 @@ class SentryHelper {
         private const val TAG_NETWORK_TYPE = "network.type"
 
         fun logException(exception: Exception) {
-            if (exception is RetrofitException) {
-                if (exception.kind == RetrofitException.Kind.NETWORK || exception.response?.code() == NOT_FOUND_HTTP_CODE) {
+            if (exception is NetworkException) {
+                if (exception.kind == NetworkException.Kind.NETWORK || exception.response?.code() == NOT_FOUND_HTTP_CODE) {
                     // ignore this events to make less spam to Sentry
                 } else {
                     Sentry.capture(EventBuilder()
@@ -43,7 +43,7 @@ class SentryHelper {
             }
         }
 
-        private fun formatSentryMessage(retrofitException: RetrofitException): String {
+        private fun formatSentryMessage(retrofitException: NetworkException): String {
             return "Error: ${retrofitException.kind.name}\n" +
                     "Url: ${retrofitException.url}\n" +
                     "Code: ${retrofitException.response?.code()}\n" +

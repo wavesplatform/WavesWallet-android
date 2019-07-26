@@ -3,8 +3,6 @@ package com.wavesplatform.wallet.v2.util
 import android.text.TextUtils
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 

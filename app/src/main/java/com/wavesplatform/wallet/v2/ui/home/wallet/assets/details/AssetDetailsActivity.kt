@@ -16,11 +16,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
@@ -146,7 +147,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    override fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalance>) {
+    override fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalanceResponse>) {
         // configure top avatars pager
         adapterAvatar.items = sortedToFirstFavoriteList
         adapterAvatar.notifyDataSetChanged()
@@ -201,15 +202,15 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    fun getAllTransactions(): List<Transaction> {
+    fun getAllTransactions(): List<HistoryTransactionResponse> {
         return presenter.allTransaction
     }
 
     private fun unmarkAsFavorite() {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = false
-        item.save()
-        AssetBalanceStore(item.assetId, item.isHidden, item.position, item.isFavorite).save()
+        AssetBalanceDb(item).save()
+        AssetBalanceStoreDb(item.assetId, item.isHidden, item.position, item.isFavorite).save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_off))
     }
 
@@ -217,8 +218,8 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = true
         item.isHidden = false
-        item.save()
-        AssetBalanceStore(item.assetId, item.isHidden, item.position, item.isFavorite).save()
+        AssetBalanceDb(item).save()
+        AssetBalanceStoreDb(item.assetId, item.isHidden, item.position, item.isFavorite).save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
     }
 

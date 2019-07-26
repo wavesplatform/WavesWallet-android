@@ -1,11 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
-  ~ Created by Eduard Zaydel on 19/7/2019
-  ~ Copyright © 2019 Waves Platform. All rights reserved.
-  -->
-
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
-    <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t do it, we can’t credit your account.</string>
     <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
     <string name="about_redirection_okay">Okay</string>
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
@@ -471,8 +465,6 @@
     <string name="receive_amount_title">Amount in %1$s</string>
     <string name="receive_asset">Token</string>
     <string name="receive_card">Card</string>
-    <string name="receive_contact_msg">In case of problems with verification or payment processing, please contact the Coinomat support team — support@coinomat.com</string>
-    <string name="receive_contact_msg_key">support@coinomat.com</string>
     <string name="receive_continue">Continue</string>
     <string name="receive_cryptocurrency">Сryptocurrency</string>
     <string name="receive_dont_accept_international">We don\'t accept international wire transfers from US Citizens or from USA Banks</string>
@@ -532,13 +524,12 @@
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
     <string name="send_gateway_error_subtitle">Try again later</string>
-    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_title">Service temporarily unavailable</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Fees are 1% from the amount transferred.</string>
     <string name="send_gateway_info_gateway_fee">Gateway fee is %1$s %2$s</string>
-    <string name="send_gateway_info_gateway_limits">We detected %1$s address and will send your money through Coinomat gateway to that address. Minimum amount is %2$s %1$s, maximum amount is %3$s %1$s.</string>
+    <string name="send_gateway_info_gateway_limits">We detected %1$s address and will send your money through gateway to that address. Minimum amount is %2$s %1$s, maximum amount is %3$s %1$s.</string>
     <string name="send_gateway_info_gateway_warning">Do not withdraw %1$s to an ICO. We will not credit your account with tokens from that sale.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">If you have been verified and have deposited US dollars, you can withdraw these dollars back to your bank account. Otherwise, get verified by our partner IDNow.eu</string>
-    <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">The minimum amount is 500 US Dollar. If you have any questions, please just send an email to support@coinomat.com</string>
     <string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
     <string name="send_progress_sending">Sending…</string>
@@ -670,20 +661,20 @@
     <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
     <string name="search_asset_hidden_title">Hidden tokens</string>
     <string name="my_orders_details_filled_hint">Filled</string>
-    <string name="wallet_sorting_hidden_section">Hidden assets</string>
-    <string name="wallet_sorting_favorite_empty">You didn\'t add assets in favorite</string>
-    <string name="wallet_sorting_default_empty">The list of assets is empty</string>
-    <string name="wallet_sorting_hidden_empty">You didn\'t add assets in hidden</string>
-    <string name="trade_order_dialog_subtitle_price_highter_market">You order price is 5% higher than the latest market price</string>
-    <string name="trade_order_dialog_subtitle_price_lower_market">You order price is 5% lower than the latest market price</string>
-    <string name="trade_order_dialog_subtitle_proceed">Do you want to proceed?</string>
-    <string name="trade_order_dialog_positive_place_order">Place Order</string>
-    <string name="trade_order_dialog_negative_cancel">Cancel</string>
-
-    <string name="common_permission_error_title">Need Permission</string>
+    <string name="wallet_sorting_hidden_section">Hidden tokens</string>
+    <string name="wallet_sorting_favorite_empty">You didn\'t add tokens in favorite</string>
+    <string name="wallet_sorting_default_empty">The list of tokens is empty</string>
+    <string name="wallet_sorting_hidden_empty">You didn\'t add tokens in hidden</string>
+    <string name="common_permission_error_title">Need camera access</string>
     <string name="common_permission_error_description">This app needs permission to use camera. You can grant them in app settings.</string>
     <string name="common_permission_error_settings">Settings</string>
     <string name="common_permission_error_cancel">Cancel</string>
+    <string name="trade_order_dialog_subtitle_price_highter_market">You order price is 5% higher than the latest market price</string>
+    <string name="trade_order_dialog_subtitle_price_lower_market">You order price is 5% lower than the latest market price</string>
+    <string name="trade_order_dialog_positive_place_order">Place Order</string>
+    <string name="trade_order_dialog_negative_cancel">Cancel</string>
+    <string name="trade_order_dialog_subtitle_proceed">Do you want to proceed?</string>
+
 
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>

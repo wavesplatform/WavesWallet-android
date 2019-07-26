@@ -5,8 +5,6 @@
   -->
 
 <resources>
-  <string name="about_fill_payment_details">आपको निम्नलिखित जानकारी के साथ भुगतान विवरण फ़ील्ड भरना होगा:</string>
-  <string name="about_fill_payment_info">सीएनएम — आपके वेव्स पता \nअगर आप नहीं करते हैं तो हम आपके खाते को क्रेडिट नहीं कर सकते हैं।</string>
   <string name="about_redirection_message">सत्यापन के माध्यम से जाने के बाद आपको आगे के निर्देशों के साथ एक ईमेल प्राप्त होगा</string>
   <string name="about_redirection_okay">ठीक है</string>
   <string name="about_redirection_title">आपको जाँच के लिए «IDNow» \nपर रीडायरेक्ट किया गया था</string>
@@ -212,7 +210,7 @@
   <string name="dex_markets_list_toolbar_title">बाजार</string>
   <string name="dex_sorting_empty">यहां कुछ भी नहीं…</string>
   <string name="dex_sorting_toolbar_title">सॉर्टिंग</string>
-  <string name="dex_toolbar_title">डेक्स</string>
+  <string name="dex_toolbar_title">DEX</string>
   <string name="dex_trade_buy">खरीदें</string>
   <string name="dex_trade_sell">बेचना</string>
   <string name="dex_trade_tab_chart">चार्ट</string>
@@ -472,8 +470,6 @@
   <string name="receive_amount_title">अमाउंट इन %1$s</string>
   <string name="receive_asset">टोकन</string>
   <string name="receive_card">कार्ड</string>
-  <string name="receive_contact_msg">सत्यापन या भुगतान प्रसंस्करण के साथ समस्याओं के मामले में, कृपया कोइनोमाट समर्थन टीम - support@coinomat.com से संपर्क करें</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">जारी रहना</string>
   <string name="receive_cryptocurrency">क्रिप्टोकरेन्सी</string>
   <string name="receive_dont_accept_international">हम अमेरिकी नागरिकों या यूएसए बैंकों से अंतरराष्ट्रीय वायर ट्रांसफर्स स्वीकार नहीं करते हैं</string>
@@ -533,13 +529,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">나중에 다시 시도하세요</string>
-  <string name="send_gateway_error_title">Coinomat 서비스를 일시적으로 사용할 수 없습니다</string>
+  <string name="send_gateway_error_title">सेवा अस्थायी रूप से अनुपलब्ध है</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">फ़ीस स्थानांतरित राशि से 1% है।</string>
   <string name="send_gateway_info_gateway_fee">%1$s %2$s गेटवे फ़ीस है</string>
   <string name="send_gateway_info_gateway_limits">हमने %1$s पता पता लगाया है और उस पते पर कोइनोमाट गेटवे के माध्यम से आपका पैसा भेज देगा। न्यूनतम राशि %2$s %1$s है, अधिकतम राशि %3$s %1$s है।</string>
   <string name="send_gateway_info_gateway_warning">आईसीओ में %1$s न निकालना । हम उस खाते से टोकन आपके खाते को क्रेडिट नहीं करेंगे।</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">यदि आप सत्यापित हैं और यूएस डॉलर जमा कर चुके हैं, तो आप इन डॉलर को अपने बैंक खाते में वापस ले सकते हैं। अन्यथा, हमारे साथी IDNow.eu द्वारा सत्यापित करें</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">न्यूनतम राशि 500 ​​अमेरिकी डॉलर है। यदि आपके कोई प्रश्न हैं, तो कृपया support@coinomat.com पर एक ईमेल भेजें</string>
   <string name="send_monero_payment_id">मोनरो पेमेंट आईडी</string>
   <string name="send_monero_payment_id_hint">पेस्ट करें या अपनी पेमेंट आईडी टाइप करें</string>
   <string name="send_progress_sending">भेजा जा रहा है …</string>
@@ -675,4 +670,13 @@
   <string name="wallet_sorting_favorite_empty">आपने पसंदीदा में टोकन नहीं जोड़े</string>
   <string name="wallet_sorting_default_empty">टोकन की सूची खाली है</string>
   <string name="wallet_sorting_hidden_empty">आपने छिपे में टोकन नहीं जोड़े</string>
+  <string name="common_permission_error_title">कैमरा एक्सेस की आवश्यकता है</string>
+  <string name="common_permission_error_description">इस ऐप के लिए कैमरे के इस्तेमाल की अनुमति चाहिए। आप उन्हें ऐप सेटिंग में अनुदान दे सकते हैं।</string>
+  <string name="common_permission_error_settings">सेटिंग्स</string>
+  <string name="common_permission_error_cancel">रद्द करना</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">आपके ऑर्डर का मूल्य नवीनतम बाजार मूल्य की तुलना में 5% अधिक है</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">आपके ऑर्डर की कीमत नवीनतम बाजार मूल्य की तुलना में 5% कम है</string>
+  <string name="trade_order_dialog_positive_place_order">ऑर्डर देना</string>
+  <string name="trade_order_dialog_negative_cancel">रद्द करना</string>
+  <string name="trade_order_dialog_subtitle_proceed">क्या आप आगे बढ़ना चाहते हैं?</string>
 </resources>
