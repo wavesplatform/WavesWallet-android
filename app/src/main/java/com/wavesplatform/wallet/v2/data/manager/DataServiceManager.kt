@@ -123,12 +123,17 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun loadPairs(pairs: String? = null,
+    fun loadPairs(pairs: List<String>? = null,
                   searchByAsset: String? = null,
                   searchByAssets: List<String>? = null,
                   matchExactly: Boolean? = null,
                   limit: Int = 30
     ): Observable<SearchPairResponse> {
-        return dataService.pairs(pairs, searchByAsset, searchByAssets, matchExactly, limit)
+        return dataService.pairs(
+                pairs,
+                searchByAsset,
+                searchByAssets,
+                matchExactly,
+                limit)
     }
 }

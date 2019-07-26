@@ -131,6 +131,8 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
             this.adapter.setData(position, item)
             this.adapter.allData[this.adapter.allData.indexOf(item)] = item
         }
+
+        presenter.initLoad()
     }
 
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
