@@ -12,12 +12,15 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
+import com.ethanhua.skeleton.Skeleton
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
@@ -40,6 +43,8 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
     @Inject
     lateinit var adapter: DexMarketsAdapter
+
+    private var skeletonScreen: RecyclerViewSkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): DexMarketsPresenter = presenter
@@ -85,13 +90,13 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { query ->
-                    if (query.isNotEmpty()) {
-                        progress_bar.show()
-                        presenter.search(query.trim())
+                    skeletonScreen.notNull {
+                        setSkeletonGradient()
+                        it.show()
                     }
+                    presenter.search(query.trim())
                 })
 
-        progress_bar.hide()
         edit_search.visiable()
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -123,19 +128,31 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
             this.adapter.allData[this.adapter.allData.indexOf(item)] = item
         }
 
-        progress_bar.show()
+        skeletonScreen = Skeleton.bind(recycle_markets)
+                .adapter(recycle_markets.adapter)
+                .shimmer(true)
+                .count(5)
+                .color(R.color.basic50)
+                .load(R.layout.item_skeleton_markets)
+                .frozen(false)
+                .show()
+        setSkeletonGradient()
         presenter.initLoad()
     }
 
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
-        progress_bar.hide()
+        skeletonScreen.notNull {
+            it.hide()
+        }
         adapter.allData = ArrayList(markets)
         adapter.setNewData(markets)
         adapter.emptyView = getEmptyView()
     }
 
     override fun afterFailGetMarkets() {
-        progress_bar.hide()
+        skeletonScreen.notNull {
+            it.hide()
+        }
         showError(R.string.common_server_error, R.id.root)
     }
 
@@ -154,9 +171,20 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun onDestroy() {
-        progress_bar?.hide()
+        skeletonScreen.notNull {
+            it.hide()
+        }
         super.onDestroy()
     }
 
     override fun needToShowNetworkMessage() = true
+
+    private fun setSkeletonGradient() {
+        recycle_markets?.post {
+            recycle_markets?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_markets?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_markets?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_markets?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        }
+    }
 }
