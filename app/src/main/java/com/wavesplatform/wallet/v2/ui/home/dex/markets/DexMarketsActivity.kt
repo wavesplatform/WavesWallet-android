@@ -84,24 +84,15 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    adapter.filter(it)
+                .subscribe { query ->
+                    if (query.isNotEmpty()) {
+                        progress_bar.show()
+                        presenter.search(query.trim())
+                    }
                 })
 
         progress_bar.hide()
         edit_search.visiable()
-
-        eventSubscriptions.add(RxTextView.textChanges(edit_search)
-                .skipInitialValue()
-                .map(CharSequence::toString)
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { query ->
-                    if (query.isNotEmpty()) {
-                        progress_bar.show()
-                        presenter.search(query)
-                    }
-                })
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as MarketResponse
