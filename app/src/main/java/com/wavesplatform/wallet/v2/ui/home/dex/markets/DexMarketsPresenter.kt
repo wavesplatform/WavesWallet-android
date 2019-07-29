@@ -7,16 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAll
-import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
-import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -123,10 +120,58 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
             marketMap[market.id ?: ""] = market
         }
 
+        val sortedList = sort(marketMap.values.toMutableList())
+        return filterSpam(sortedList)
+    }
+
+
+    private fun sort(markets: MutableList<MarketResponse>): MutableList<MarketResponse> {
+
+        // configure hash groups
+        val hashGroup = linkedMapOf<String, MutableList<MarketResponse>>()
+
+        EnvironmentManager.defaultAssets.forEach {
+            if (it.assetId.isWaves()) {
+                hashGroup[WavesConstants.WAVES_ASSET_ID_EMPTY] = mutableListOf()
+            } else {
+                hashGroup[it.assetId] = mutableListOf()
+            }
+        }
+
+        val other = "other"
+        hashGroup[other] = mutableListOf()
+
+        // fill information and sort by group
+        markets.forEach { market ->
+
+            val group = if (market.amountAsset.isWaves()) {
+                hashGroup[WavesConstants.WAVES_ASSET_ID_EMPTY]
+            } else {
+                hashGroup[market.amountAsset]
+            }
+
+            if (group != null) {
+                group.add(market)
+            } else {
+                hashGroup[other]?.add(market)
+            }
+        }
+
+        val sortedMarketsList = mutableListOf<MarketResponse>()
+
+        hashGroup.values.forEach {
+            sortedMarketsList.addAll(it)
+        }
+
+        return sortedMarketsList
+    }
+
+
+    private fun filterSpam(markets: MutableList<MarketResponse>): MutableList<MarketResponse> {
         val spamAssets = queryAll<SpamAssetDb>()
 
         val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-            marketMap.values.filter { market ->
+            markets.filter { market ->
                 val amountSpam = spamAssets.firstOrNull {
                     it.assetId == market.amountAsset
                 }
@@ -136,11 +181,12 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                 amountSpam == null && priceSpam == null
             }
         } else {
-            marketMap.values
+            markets
         }
 
         return filteredSpamList.toMutableList()
     }
+
 
     private fun createMarket(data: SearchPairResponse.Pair,
                              assets: List<AssetInfoResponse>,
@@ -183,12 +229,12 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                 var price = priceAssetId.assetId
                 var amount = amountAssetId.assetId
 
-                if (price == "") {
-                    price = "WAVES"
+                if (price.isWavesId()) {
+                    price = WavesConstants.WAVES_ASSET_ID_FILLED
                 }
 
-                if (amount == "") {
-                    amount = "WAVES"
+                if (amount.isWavesId()) {
+                    amount = WavesConstants.WAVES_ASSET_ID_FILLED
                 }
 
                 if (amount != price) {
