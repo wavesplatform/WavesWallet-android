@@ -12,6 +12,7 @@ import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -22,7 +23,18 @@ import javax.inject.Inject
 
 @InjectViewState
 class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>() {
+
     var needToUpdate: Boolean = false
+    private val defaultAssets: MutableList<String> = mutableListOf()
+
+    init {
+        EnvironmentManager.defaultAssets.forEach {
+            defaultAssets.add(it.assetId)
+        }
+        defaultAssets.add(Constants.VstGeneralAsset.assetId)
+        defaultAssets.add(Constants.MrtGeneralAsset.assetId)
+        defaultAssets.add(Constants.WctGeneralAsset.assetId)
+    }
 
     fun initLoad() {
         val initPairsList = createInitPairs()
@@ -130,11 +142,11 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         // configure hash groups
         val hashGroup = linkedMapOf<String, MutableList<MarketResponse>>()
 
-        EnvironmentManager.defaultAssets.forEach {
-            if (it.assetId.isWaves()) {
+        defaultAssets.forEach {
+            if (it.isWaves()) {
                 hashGroup[WavesConstants.WAVES_ASSET_ID_EMPTY] = mutableListOf()
             } else {
-                hashGroup[it.assetId] = mutableListOf()
+                hashGroup[it] = mutableListOf()
             }
         }
 
@@ -213,8 +225,8 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
         market.checked = savedMarkets.firstOrNull { it.id == market.id } != null
 
-        if (EnvironmentManager.defaultAssets.firstOrNull { it.assetId == amountAsset?.id } != null
-                || EnvironmentManager.defaultAssets.firstOrNull { it.assetId == priceAsset?.id } != null) {
+        if (defaultAssets.firstOrNull { it == amountAsset?.id } != null
+                || defaultAssets.firstOrNull { it == priceAsset?.id } != null) {
             market.popular = true
         }
 
@@ -223,11 +235,11 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
     private fun createInitPairs(): MutableList<String> {
         val initPairsList = mutableListOf<String>()
-        for (amountAssetId in EnvironmentManager.defaultAssets.subList(0, FIRST_MAIN_ASSETS_ID)) {
-            for (priceAssetId in EnvironmentManager.defaultAssets) {
+        for (amountAssetId in defaultAssets.subList(0, FIRST_MAIN_ASSETS_ID)) {
+            for (priceAssetId in defaultAssets) {
 
-                var price = priceAssetId.assetId
-                var amount = amountAssetId.assetId
+                var price = priceAssetId
+                var amount = amountAssetId
 
                 if (price.isWavesId()) {
                     price = WavesConstants.WAVES_ASSET_ID_FILLED
