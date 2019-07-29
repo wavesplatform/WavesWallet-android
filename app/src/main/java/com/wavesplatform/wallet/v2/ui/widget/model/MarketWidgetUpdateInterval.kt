@@ -10,11 +10,15 @@ import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-enum class MarketWidgetUpdateInterval(@StringRes title: Int, interval: Int) {
+enum class MarketWidgetUpdateInterval(@StringRes var title: Int, var interval: Int) {
     MIN_1(R.string.widget_interval_1_min, 1),
     MIN_5(R.string.widget_interval_5_min, 5),
     MIN_10(R.string.widget_interval_10_min, 10),
     MANUALLY(R.string.widget_interval_manually, 0);
+
+    fun getIntervalOnMillis(): Long {
+        return 1000L * 60L * interval
+    }
 
     companion object {
         private const val PREF_INTERVAL_KEY = "appwidget_interval_"
@@ -22,7 +26,7 @@ enum class MarketWidgetUpdateInterval(@StringRes title: Int, interval: Int) {
         fun getInterval(context: Context, appWidgetId: Int): MarketWidgetUpdateInterval {
             val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
             val interval = prefs.getString(PREF_INTERVAL_KEY + appWidgetId, null)
-            return values().firstOrNull { it.name == interval } ?: MIN_5
+            return values().firstOrNull { it.name == interval } ?: MIN_1 // TODO: Change to 5 min after test auto update
         }
 
         fun setInterval(context: Context, appWidgetId: Int, interval: MarketWidgetUpdateInterval) {

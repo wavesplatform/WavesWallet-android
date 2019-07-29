@@ -21,6 +21,10 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
+import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
+import com.wavesplatform.wallet.v2.util.startAlarmUpdate
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 
 
 /**
@@ -33,12 +37,14 @@ class MarketWidget : AppWidgetProvider() {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
+            context.startAlarmUpdate<MarketWidget>(appWidgetId)
         }
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
+            context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
             MarketWidgetStyle.removeTheme(context, appWidgetId)
             MarketWidgetCurrency.removeCurrency(context, appWidgetId)
         }
@@ -68,6 +74,12 @@ class MarketWidget : AppWidgetProvider() {
                     updateWidgetProgress(context, widgetId,
                             arrayListOf(MarketWidgetProgressState.PROGRESS, MarketWidgetProgressState.IDLE).shuffled().first())
                 }
+                ACTION_AUTO_UPDATE_WIDGET -> {
+                    updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
+                    runDelayed(10000) {
+                        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+                    }
+                }
             }
         }
     }
@@ -84,7 +96,7 @@ class MarketWidget : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureClicks(context, appWidgetId, views)
-            configureProgressState(context, progressState, views)
+            configureProgressState(context, appWidgetId, progressState, views)
             configureMarketList(context, appWidgetId, views)
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
@@ -99,7 +111,7 @@ class MarketWidget : AppWidgetProvider() {
             val theme = MarketWidgetStyle.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
-            configureProgressState(context, progressState, views)
+            configureProgressState(context, appWidgetId, progressState, views)
 
             appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
         }
@@ -111,17 +123,19 @@ class MarketWidget : AppWidgetProvider() {
             views.setRemoteAdapter(R.id.list_markets, adapter)
         }
 
-        private fun configureProgressState(context: Context, progressState: MarketWidgetProgressState, views: RemoteViews) {
+        private fun configureProgressState(context: Context, appWidgetId: Int, progressState: MarketWidgetProgressState, views: RemoteViews) {
             when (progressState) {
                 MarketWidgetProgressState.IDLE -> {
                     views.setViewVisibility(R.id.image_update, View.VISIBLE)
                     views.setViewVisibility(R.id.progress_updating, View.GONE)
                     views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_update))
+                    configureClicks(context, appWidgetId, views)
                 }
                 MarketWidgetProgressState.PROGRESS -> {
                     views.setViewVisibility(R.id.image_update, View.GONE)
                     views.setViewVisibility(R.id.progress_updating, View.VISIBLE)
                     views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_updating))
+                    views.setOnClickPendingIntent(R.id.linear_update, null)
                 }
                 else -> {
                     // nothing
