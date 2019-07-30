@@ -90,10 +90,8 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { query ->
-                    skeletonScreen.notNull {
-                        setSkeletonGradient()
-                        it.show()
-                    }
+                    skeletonScreen?.show()
+                    setSkeletonGradient()
                     presenter.search(query.trim())
                 })
 
@@ -141,18 +139,14 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
-        skeletonScreen.notNull {
-            it.hide()
-        }
+        skeletonScreen?.hide()
         adapter.allData = ArrayList(markets)
         adapter.setNewData(markets)
         adapter.emptyView = getEmptyView()
     }
 
     override fun afterFailGetMarkets() {
-        skeletonScreen.notNull {
-            it.hide()
-        }
+        skeletonScreen?.hide()
         showError(R.string.common_server_error, R.id.root)
     }
 
@@ -171,9 +165,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun onDestroy() {
-        skeletonScreen.notNull {
-            it.hide()
-        }
+        skeletonScreen?.hide()
         super.onDestroy()
     }
 
