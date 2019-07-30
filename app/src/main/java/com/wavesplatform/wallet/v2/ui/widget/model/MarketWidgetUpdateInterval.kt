@@ -11,10 +11,10 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
 enum class MarketWidgetUpdateInterval(@StringRes title: Int, interval: Int) {
-    MIN_1(R.string.widget_interval_1_min, 1),
-    MIN_5(R.string.widget_interval_5_min, 5),
-    MIN_10(R.string.widget_interval_10_min, 10),
-    MANUALLY(R.string.widget_interval_manually, 0);
+    MIN_1(R.string.market_widget_config_interval_1_min, 1),
+    MIN_5(R.string.market_widget_config_interval_5_min, 5),
+    MIN_10(R.string.market_widget_config_interval_10_min, 10),
+    MANUALLY(R.string.market_widget_config_interval_manually, 0);
 
     companion object {
         private const val PREF_INTERVAL_KEY = "appwidget_interval_"

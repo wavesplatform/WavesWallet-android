@@ -134,7 +134,7 @@
     <string name="chart_time_frame_1_hour">1 hour</string>
     <string name="chart_time_frame_24_hours">24 hours</string>
     <string name="chart_time_frame_30_min">30 minutes</string>
-    <string name="chart_time_frame_4_hours">4 hours</string>
+    <string name="chart_time_frame_3_hours">3 hours</string>
     <string name="chart_time_frame_5_min">5 minutes</string>
     <string name="check_connectivity_exit">No connection to the Internet</string>
     <string name="choose_account">Choose account</string>
@@ -677,18 +677,23 @@
 
 
     <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="market_widget_update">Update</string>
     <string name="market_widget_updating">Updating</string>
     <string name="market_widget_currency_text">USD / EUR</string>
 
-    <string name="widget_style_classic">Classic</string>
-    <string name="widget_style_dark">Dark</string>
+    <string name="market_widget_config_update_interval">Update interval</string>
+    <string name="market_widget_config_interval_1_min">1 minute</string>
+    <string name="market_widget_config_interval_5_min">5 minutes</string>
+    <string name="market_widget_config_interval_10_min">10 minutes</string>
+    <string name="market_widget_config_interval_manually">Update manually</string>
 
+    <string name="market_widget_config_widget_style">Widget style</string>
+    <string name="market_widget_config_classic">Classic</string>
+    <string name="market_widget_config_dark">Dark</string>
 
-    <string name="widget_interval_1_min">1 minute</string>
-    <string name="widget_interval_5_min">5 minutes</string>
-    <string name="widget_interval_10_min">10 minutes</string>
-    <string name="widget_interval_manually">Update manually</string>
+    <string name="market_widget_config_title">Market pulse</string>
+    <string name="market_widget_config_interval">Interval</string>
+    <string name="market_widget_config_add_token">Add token</string>
+    <string name="market_widget_config_style">Style</string>
 </resources>

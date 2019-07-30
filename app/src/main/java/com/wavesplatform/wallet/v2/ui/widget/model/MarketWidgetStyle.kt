@@ -16,9 +16,9 @@ enum class MarketWidgetStyle(@StringRes var styleName: Int,
                              @LayoutRes var marketItemLayout: Int, // layout for item of market,
                              var colors: MarketWidgetStyleColors
 ) {
-    CLASSIC(R.string.widget_style_classic, R.layout.market_widget_classic,
+    CLASSIC(R.string.market_widget_config_classic, R.layout.market_widget_classic,
             R.layout.item_market_widget_classic, MarketWidgetStyleColors.CLASSIC),
-    DARK(R.string.widget_style_dark, R.layout.market_widget_dark,
+    DARK(R.string.market_widget_config_dark, R.layout.market_widget_dark,
             R.layout.item_market_widget_dark, MarketWidgetStyleColors.DARK);
 
     companion object {
