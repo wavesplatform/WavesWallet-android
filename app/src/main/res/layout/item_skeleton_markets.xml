@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="16dp">
+
+    <View
+        android:id="@+id/image_info"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/asset_gray_icon" />
+
+    <View
+        android:id="@+id/text_name"
+        android:layout_toEndOf="@+id/image_info"
+        android:layout_marginStart="12dp"
+        android:layout_width="64dp"
+        android:layout_height="10dp"
+        android:background="@drawable/skeleton_basic_100_round_7" />
+
+    <View
+        android:id="@+id/text_full_name"
+        android:layout_marginStart="12dp"
+        android:layout_width="92dp"
+        android:layout_height="10dp"
+        android:background="@drawable/skeleton_basic_100_round_7"
+        android:layout_below="@+id/text_name"
+        android:layout_marginTop="6dp"
+        android:layout_toEndOf="@+id/image_info" />
+
+    <View
+        android:id="@+id/checkbox_choose"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/asset_gray_icon"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
