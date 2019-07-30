@@ -24,7 +24,8 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
 import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 
 /**
@@ -32,6 +33,9 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
  * App Widget Configuration implemented in [MarketWidgetConfigureActivity]
  */
 class MarketWidget : AppWidgetProvider() {
+
+    @Inject
+    lateinit var marketWidgetDataManager: MarketWidgetDataManager
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -55,11 +59,13 @@ class MarketWidget : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context) {
+        marketWidgetDataManager.clearSubscription()
         // Enter relevant functionality for when the last widget is disabled
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
+        AndroidInjection.inject(this, context)
         val widgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
@@ -76,9 +82,11 @@ class MarketWidget : AppWidgetProvider() {
                 }
                 ACTION_AUTO_UPDATE_WIDGET -> {
                     updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
-                    runDelayed(10000) {
+                    marketWidgetDataManager.loadMarketsPrices(widgetId, successListener = {
                         updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
-                    }
+                    }, errorListener = {
+                        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+                    })
                 }
             }
         }
