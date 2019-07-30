@@ -459,7 +459,7 @@ class SendActivity : BaseActivity(), SendView {
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         commission_card.visiable()
-        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
+        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
     }

@@ -25,7 +25,7 @@ class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse,
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {
-            setNewData(ArrayList<MarketResponse>(allData))
+            setNewData(ArrayList(allData))
         } else {
             for (item in allData) {
                 val name = "${item.amountAssetShortName}/${item.priceAssetShortName} " +
