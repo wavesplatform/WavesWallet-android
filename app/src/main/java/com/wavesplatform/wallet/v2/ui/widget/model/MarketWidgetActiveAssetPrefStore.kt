@@ -5,20 +5,26 @@
 
 package com.wavesplatform.wallet.v2.ui.widget.model
 
-object MarketWidgetActiveAssetPrefStore : MarketWidgetActiveAssetStore {
-    override fun queryAll(): MutableList<MarketWidgetActiveAsset> {
+import android.content.Context
+
+object MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
+    override fun save(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun remove(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveAsset> {
         TODO("not implemented")
     }
 
-    override fun save(assetMarket: MarketWidgetActiveAsset) {
+    override fun saveAll(context: Context, widgetId: Int, dataList: MutableList<MarketWidgetActiveAsset>) {
         TODO("not implemented")
     }
 
-    override fun saveAll(assetsMarkets: MutableList<MarketWidgetActiveAsset>) {
-        TODO("not implemented")
-    }
-
-    override fun remove(assetMarket: MarketWidgetActiveAsset) {
+    override fun clear(context: Context, widgetId: Int) {
         TODO("not implemented")
     }
 }

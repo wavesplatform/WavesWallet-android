@@ -5,10 +5,13 @@
 
 package com.wavesplatform.wallet.v2.ui.widget.model
 
-object MarketWidgetActiveAssetMockStore : MarketWidgetActiveAssetStore {
+import android.content.Context
+
+object MarketWidgetActiveAssetMockStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
+
     private var activeAssets = mutableListOf<MarketWidgetActiveAsset>()
 
-    override fun queryAll(): MutableList<MarketWidgetActiveAsset> {
+    override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveAsset> {
         if (activeAssets.isEmpty()) {
             activeAssets.add(MarketWidgetActiveAsset("Waves", "WAVES",
                     "WAVES", "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"))
@@ -22,15 +25,19 @@ object MarketWidgetActiveAssetMockStore : MarketWidgetActiveAssetStore {
         return activeAssets
     }
 
-    override fun save(assetMarket: MarketWidgetActiveAsset) {
-        activeAssets.add(assetMarket)
+    override fun saveAll(context: Context, widgetId: Int, dataList: MutableList<MarketWidgetActiveAsset>) {
+        activeAssets.addAll(dataList)
     }
 
-    override fun saveAll(assetsMarkets: MutableList<MarketWidgetActiveAsset>) {
-        activeAssets.addAll(assetsMarkets)
+    override fun clear(context: Context, widgetId: Int) {
+        activeAssets.clear()
     }
 
-    override fun remove(assetMarket: MarketWidgetActiveAsset) {
-        activeAssets.remove(assetMarket)
+    override fun save(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
+        activeAssets.add(data)
+    }
+
+    override fun remove(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
+        activeAssets.remove(data)
     }
 }

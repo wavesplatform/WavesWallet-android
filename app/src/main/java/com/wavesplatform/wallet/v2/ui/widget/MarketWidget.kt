@@ -41,6 +41,7 @@ class MarketWidget : AppWidgetProvider() {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
+            loadPrice(context, appWidgetId)
             context.startAlarmUpdate<MarketWidget>(appWidgetId)
         }
     }
@@ -64,8 +65,8 @@ class MarketWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
         AndroidInjection.inject(this, context)
+        super.onReceive(context, intent)
         val widgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
@@ -73,23 +74,25 @@ class MarketWidget : AppWidgetProvider() {
             when (intent.action) {
                 ACTION_CURRENCY_CHANGE -> {
                     MarketWidgetCurrency.switchCurrency(context, widgetId)
-
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
                 ACTION_UPDATE -> {
-                    updateWidgetProgress(context, widgetId,
-                            arrayListOf(MarketWidgetProgressState.PROGRESS, MarketWidgetProgressState.IDLE).shuffled().first())
+                    loadPrice(context, widgetId)
                 }
                 ACTION_AUTO_UPDATE_WIDGET -> {
-                    updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
-                    marketWidgetDataManager.loadMarketsPrices(widgetId, successListener = {
-                        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
-                    }, errorListener = {
-                        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
-                    })
+                    loadPrice(context, widgetId)
                 }
             }
         }
+    }
+
+    private fun loadPrice(context: Context, widgetId: Int) {
+        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
+        marketWidgetDataManager.loadMarketsPrices(context, widgetId, successListener = {
+            updateWidget(context, AppWidgetManager.getInstance(context), widgetId, MarketWidgetProgressState.IDLE)
+        }, errorListener = {
+            updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+        })
     }
 
     companion object {
