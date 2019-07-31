@@ -18,9 +18,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
 import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
@@ -52,6 +50,9 @@ class MarketWidget : AppWidgetProvider() {
             context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
             MarketWidgetStyle.removeTheme(context, appWidgetId)
             MarketWidgetCurrency.removeCurrency(context, appWidgetId)
+            MarketWidgetUpdateInterval.removeInterval(context, appWidgetId)
+            MarketWidgetActiveMarketStore.clear(context, appWidgetId)
+            MarketWidgetActiveAssetPrefStore.clear(context, appWidgetId)
         }
     }
 
