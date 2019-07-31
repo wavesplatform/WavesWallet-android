@@ -183,6 +183,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         assetsDialog.onChooseListener = object : AssetsBottomSheetFragment.OnChooseListener {
             override fun onChoose(assets: ArrayList<String>) {
                 this@MarketWidgetConfigureActivity.assets = assets
+
             }
         }
     }

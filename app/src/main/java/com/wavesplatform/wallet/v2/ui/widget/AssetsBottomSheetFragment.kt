@@ -29,7 +29,6 @@ import javax.inject.Inject
 
 class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
-    private var assets = arrayListOf<String>()
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private lateinit var editSearch: EditDrawableText
     private lateinit var recycleAssets: RecyclerView
@@ -58,7 +57,7 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        assets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
+        adapter.chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
 
         val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout, container, false)
 
@@ -105,11 +104,7 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        val assetsList = arrayListOf<String>()
-        adapter.chosenAssets.forEach {
-            assetsList.add(it.id)
-        }
-        onChooseListener?.onChoose(assetsList)
+        onChooseListener?.onChoose(adapter.chosenAssets)
     }
 
     private fun search(query: String) {
@@ -125,8 +120,8 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     skeletonScreen?.hide()
-                    adapter.allData = ArrayList(AssetsAdapter.convert(result))
-                    adapter.setNewData(AssetsAdapter.convert(result))
+                    adapter.allData = ArrayList(result)
+                    adapter.setNewData(result)
                     adapter.emptyView = getEmptyView()
                 }, {
                     afterFailGetMarkets()
@@ -135,18 +130,18 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun initLoad() {
-        val initAssets = if (assets.isEmpty()) {
+        val initAssets = if (adapter.chosenAssets.isEmpty()) {
             defaultAssets
         } else {
-            assets
+            adapter.chosenAssets
         }
 
         eventSubscriptions.add(dataServiceManager.assets(ids = initAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     skeletonScreen?.hide()
-                    adapter.allData = ArrayList(AssetsAdapter.convert(result))
-                    adapter.setNewData(AssetsAdapter.convert(result))
+                    adapter.allData = ArrayList(result)
+                    adapter.setNewData(result)
                     adapter.emptyView = getEmptyView()
                 }, {
                     afterFailGetMarkets()
