@@ -30,6 +30,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private var themeName = MarketWidgetStyle.CLASSIC
     private var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
+    private var assets = arrayListOf<String>()
 
     private val widgetId: Int by lazy {
         intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -58,6 +59,14 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tab_navigation.addOnTabSelectedListener(this)
 
         toolbar_close.click {
+            // It is the responsibility of the configuration activity to update the app widget
+            val appWidgetManager = AppWidgetManager.getInstance(this)
+            MarketWidget.updateWidget(this, appWidgetManager, widgetId)
+
+            // Make sure we pass back the original appWidgetId
+            val resultValue = Intent()
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            setResult(Activity.RESULT_OK, resultValue)
             finish()
         }
     }
@@ -72,23 +81,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         when (tab?.position) {
-            INTERVAL_TAB -> {
-                showIntervalDialog()
-            }
-            ADD_TAB -> {
-                // It is the responsibility of the configuration activity to update the app widget
-                val appWidgetManager = AppWidgetManager.getInstance(this)
-                MarketWidget.updateWidget(this, appWidgetManager, widgetId)
-
-                // Make sure we pass back the original appWidgetId
-                val resultValue = Intent()
-                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                setResult(Activity.RESULT_OK, resultValue)
-                finish()
-            }
-            THEME_TAB -> {
-                showThemeDialog()
-            }
+            INTERVAL_TAB -> showIntervalDialog()
+            ADD_TAB -> showAssetsDialog()
+            THEME_TAB -> showThemeDialog()
         }
     }
 
@@ -178,6 +173,18 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         val ft = supportFragmentManager.beginTransaction()
         ft.add(optionDialog, optionDialog::class.java.simpleName)
         ft.commitAllowingStateLoss()
+    }
+
+    private fun showAssetsDialog() {
+        val assetsDialog = AssetsBottomSheetFragment.newInstance(assets)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(assetsDialog, assetsDialog::class.java.simpleName)
+        ft.commitAllowingStateLoss()
+        assetsDialog.onChooseListener = object : AssetsBottomSheetFragment.OnChooseListener {
+            override fun onChoose(assets: ArrayList<String>) {
+                this@MarketWidgetConfigureActivity.assets = assets
+            }
+        }
     }
 
     companion object {
