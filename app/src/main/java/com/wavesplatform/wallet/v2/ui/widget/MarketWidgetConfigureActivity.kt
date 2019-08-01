@@ -36,6 +36,7 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
@@ -103,7 +104,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {
-                R.id.asset_delete -> {
+                R.id.image_delete -> {
                     adapter.remove(position)
                     /*presenter.needToUpdate = true
 
@@ -119,12 +120,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
             }
         }
 
-        // configure drag and drop
         val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(adapter)
         val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
         itemTouchHelper.attachToRecyclerView(tokensList)
 
-        // allow drag and manage background of view
         adapter.enableDragItem(itemTouchHelper, R.id.image_drag, false)
         adapter.setOnItemDragListener(object : OnItemDragListener {
             override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
@@ -160,12 +159,11 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .shimmer(true)
                 .count(5)
                 .color(R.color.basic50)
-                .load(R.layout.item_skeleton_assets)
+                .load(R.layout.item_skeleton_widget_drag_assets)
                 .frozen(false)
                 .show()
-
+        setSkeletonGradient()
         loadAssets(Constants.defaultGateways().toList())
-
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -329,6 +327,15 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 this@MarketWidgetConfigureActivity.assets = assets
                 loadAssets(assets)
             }
+        }
+    }
+
+    private fun setSkeletonGradient() {
+        recycle_markets?.post {
+            recycle_markets?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_markets?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_markets?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_markets?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
     }
 
