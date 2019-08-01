@@ -11,16 +11,36 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.widget.AppCompatTextView
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
+import com.chad.library.adapter.base.listener.OnItemDragListener
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
+import com.ethanhua.skeleton.Skeleton
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.SearchPairResponse
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import kotlinx.android.synthetic.main.market_widget_configure.*
+import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
+import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
-import kotlinx.android.synthetic.main.market_widget_configure.tab_navigation
+import com.wavesplatform.wallet.v2.util.showError
+import io.reactivex.Observable
+import kotlinx.android.synthetic.main.content_empty_data.view.*
+import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
+import pers.victor.ext.inflate
+import javax.inject.Inject
 
 
 /**
@@ -28,9 +48,15 @@ import pers.victor.ext.click
  */
 class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedListener {
 
+    @Inject
+    lateinit var dataServiceManager: DataServiceManager
+    @Inject
+    lateinit var adapter: TokenAdapter
     private var themeName = MarketWidgetStyle.CLASSIC
     private var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
     private var assets = arrayListOf<String>()
+    private var skeletonScreen: RecyclerViewSkeletonScreen? = null
+
 
     private val widgetId: Int by lazy {
         intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -69,6 +95,77 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
             setResult(Activity.RESULT_OK, resultValue)
             finish()
         }
+
+
+        tokensList.layoutManager = LinearLayoutManager(this)
+        tokensList.itemAnimator = FadeInWithoutDelayAnimator()
+        adapter.bindToRecyclerView(tokensList)
+
+        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+            when (view.id) {
+                R.id.asset_delete -> {
+                    adapter.remove(position)
+                    /*presenter.needToUpdate = true
+
+                    val item = this.adapter.getItem(position)
+                    item.notNull { item ->
+                        MarketResponseDb(item).delete { equalTo("id", item.id) }
+
+                        // remove from current list
+                        this.adapter.data.removeAt(position)
+                        this.adapter.notifyItemRemoved(position)
+                    }*/
+                }
+            }
+        }
+
+        // configure drag and drop
+        val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(adapter)
+        val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
+        itemTouchHelper.attachToRecyclerView(tokensList)
+
+        // allow drag and manage background of view
+        adapter.enableDragItem(itemTouchHelper, R.id.image_drag, false)
+        adapter.setOnItemDragListener(object : OnItemDragListener {
+            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                /*if (view_drag_bg.height == 0) {
+                    view_drag_bg.setHeight(viewHolder.itemView.card_market.height - dp2px(1))
+                    view_drag_bg.setWidth(viewHolder.itemView.card_market.width - dp2px(1))
+                }
+
+                val originalPos = IntArray(2)
+                viewHolder.itemView.card_market.getLocationOnScreen(originalPos)
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
+                view_drag_bg.visiable()
+
+                viewHolder.itemView.card_market.cardElevation = dp2px(4).toFloat()*/
+            }
+
+            override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
+                /*presenter.needToUpdate = true
+
+                val originalPos = IntArray(2)
+                target.itemView.card_market.getLocationOnScreen(originalPos)
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()*/
+            }
+
+            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                /*viewHolder.itemView.card_market.cardElevation = dp2px(2).toFloat()
+                view_drag_bg.gone()*/
+            }
+        })
+
+        skeletonScreen = Skeleton.bind(tokensList)
+                .adapter(adapter)
+                .shimmer(true)
+                .count(5)
+                .color(R.color.basic50)
+                .load(R.layout.item_skeleton_assets)
+                .frozen(false)
+                .show()
+
+        loadAssets(Constants.defaultGateways().toList())
+
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -85,6 +182,53 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
             ADD_TAB -> showAssetsDialog()
             THEME_TAB -> showThemeDialog()
         }
+    }
+
+    private fun loadAssets(assets: List<String>) {
+        skeletonScreen?.show()
+        val pairList = arrayListOf<SearchPairResponse.Pair>()
+        eventSubscriptions.add(dataServiceManager.assets(ids = assets)
+                .flatMap {
+                    adapter.allData = it
+                    Observable.fromIterable(assets)
+                }
+                .flatMap { dataServiceManager.loadPairs(searchByAsset = it) }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ result ->
+                    pairList.add(result.data[0])
+                }, {
+                    afterFailGetMarkets()
+                    it.printStackTrace()
+                    skeletonScreen?.hide()
+                }, {
+                    adapter.setNewData(pairList)
+                    adapter.emptyView = getEmptyView()
+                    skeletonScreen?.hide()
+
+                    pairList.forEach {
+                        val assetInfo = adapter.allData.firstOrNull()
+                        // todo something
+                        MarketWidgetActiveAsset(
+                                assetInfo?.name ?: "-",
+                                widgetId.toString(),
+                                it.amountAsset ?: "",
+                                it.priceAsset ?: "")
+                    }
+
+
+
+                }))
+    }
+
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.content_address_book_empty_state)
+        view.text_empty.text = getString(R.string.dex_market_empty)
+        return view
+    }
+
+    private fun afterFailGetMarkets() {
+        skeletonScreen?.hide()
+        showError(R.string.common_server_error, R.id.root)
     }
 
     private fun getCustomView(tabIcon: Int, tabText: Int): View? {
@@ -112,7 +256,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showIntervalDialog() {
-        val position = when(intervalUpdate) {
+        val position = when (intervalUpdate) {
             MarketWidgetUpdateInterval.MIN_1 -> 0
             MarketWidgetUpdateInterval.MIN_5 -> 1
             MarketWidgetUpdateInterval.MIN_10 -> 2
@@ -128,9 +272,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 getString(R.string.market_widget_config_update_interval),
                 position
         )
-        optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener{
+        optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
             override fun onChange(optionPosition: Int) {
-                intervalUpdate = when(optionPosition) {
+                intervalUpdate = when (optionPosition) {
                     0 -> MarketWidgetUpdateInterval.MIN_1
                     1 -> MarketWidgetUpdateInterval.MIN_5
                     2 -> MarketWidgetUpdateInterval.MIN_10
@@ -147,7 +291,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showThemeDialog() {
-        val position = when(themeName) {
+        val position = when (themeName) {
             MarketWidgetStyle.CLASSIC -> 0
             MarketWidgetStyle.DARK -> 1
         }
@@ -159,9 +303,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 getString(R.string.market_widget_config_widget_style),
                 position
         )
-        optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener{
+        optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
             override fun onChange(optionPosition: Int) {
-                themeName = when(optionPosition) {
+                themeName = when (optionPosition) {
                     0 -> MarketWidgetStyle.CLASSIC
                     1 -> MarketWidgetStyle.DARK
                     else -> MarketWidgetStyle.CLASSIC
@@ -183,7 +327,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         assetsDialog.onChooseListener = object : AssetsBottomSheetFragment.OnChooseListener {
             override fun onChoose(assets: ArrayList<String>) {
                 this@MarketWidgetConfigureActivity.assets = assets
-
+                loadAssets(assets)
             }
         }
     }

@@ -32,12 +32,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_toolbar_close" />
 
+    <View
+        android:id="@+id/view_drag_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_rect_outline_checked"
+        android:visibility="gone" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tokensList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/tab_navigation"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView"></android.support.v7.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_navigation"

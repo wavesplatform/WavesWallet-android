@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.widget
+package com.wavesplatform.wallet.v2.ui.widget.adapters
 
 import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.AppCompatTextView

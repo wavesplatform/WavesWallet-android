@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.widget.adapters.AssetsAdapter
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
