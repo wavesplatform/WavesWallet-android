@@ -21,6 +21,11 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
+import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
+import com.wavesplatform.wallet.v2.util.startAlarmUpdate
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 
 /**
@@ -29,16 +34,22 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
  */
 class MarketWidget : AppWidgetProvider() {
 
+    @Inject
+    lateinit var marketWidgetDataManager: MarketWidgetDataManager
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
+            loadPrice(context, appWidgetId)
+            context.startAlarmUpdate<MarketWidget>(appWidgetId)
         }
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
+            context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
             MarketWidgetStyle.removeTheme(context, appWidgetId)
             MarketWidgetCurrency.removeCurrency(context, appWidgetId)
         }
@@ -49,10 +60,12 @@ class MarketWidget : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context) {
+        marketWidgetDataManager.clearSubscription()
         // Enter relevant functionality for when the last widget is disabled
     }
 
     override fun onReceive(context: Context, intent: Intent) {
+        AndroidInjection.inject(this, context)
         super.onReceive(context, intent)
         val widgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 ?: AppWidgetManager.INVALID_APPWIDGET_ID
@@ -61,15 +74,25 @@ class MarketWidget : AppWidgetProvider() {
             when (intent.action) {
                 ACTION_CURRENCY_CHANGE -> {
                     MarketWidgetCurrency.switchCurrency(context, widgetId)
-
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
                 ACTION_UPDATE -> {
-                    updateWidgetProgress(context, widgetId,
-                            arrayListOf(MarketWidgetProgressState.PROGRESS, MarketWidgetProgressState.IDLE).shuffled().first())
+                    loadPrice(context, widgetId)
+                }
+                ACTION_AUTO_UPDATE_WIDGET -> {
+                    loadPrice(context, widgetId)
                 }
             }
         }
+    }
+
+    private fun loadPrice(context: Context, widgetId: Int) {
+        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
+        marketWidgetDataManager.loadMarketsPrices(context, widgetId, successListener = {
+            updateWidget(context, AppWidgetManager.getInstance(context), widgetId, MarketWidgetProgressState.IDLE)
+        }, errorListener = {
+            updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+        })
     }
 
     companion object {
@@ -84,7 +107,7 @@ class MarketWidget : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureClicks(context, appWidgetId, views)
-            configureProgressState(context, progressState, views)
+            configureProgressState(context, appWidgetId, progressState, views)
             configureMarketList(context, appWidgetId, views)
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
@@ -99,7 +122,7 @@ class MarketWidget : AppWidgetProvider() {
             val theme = MarketWidgetStyle.getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
-            configureProgressState(context, progressState, views)
+            configureProgressState(context, appWidgetId, progressState, views)
 
             appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
         }
@@ -111,17 +134,19 @@ class MarketWidget : AppWidgetProvider() {
             views.setRemoteAdapter(R.id.list_markets, adapter)
         }
 
-        private fun configureProgressState(context: Context, progressState: MarketWidgetProgressState, views: RemoteViews) {
+        private fun configureProgressState(context: Context, appWidgetId: Int, progressState: MarketWidgetProgressState, views: RemoteViews) {
             when (progressState) {
                 MarketWidgetProgressState.IDLE -> {
                     views.setViewVisibility(R.id.image_update, View.VISIBLE)
                     views.setViewVisibility(R.id.progress_updating, View.GONE)
                     views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_update))
+                    configureClicks(context, appWidgetId, views)
                 }
                 MarketWidgetProgressState.PROGRESS -> {
                     views.setViewVisibility(R.id.image_update, View.GONE)
                     views.setViewVisibility(R.id.progress_updating, View.VISIBLE)
                     views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_updating))
+                    views.setOnClickPendingIntent(R.id.linear_update, null)
                 }
                 else -> {
                     // nothing

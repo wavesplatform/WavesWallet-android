@@ -10,23 +10,28 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import pers.victor.ext.dp
 import pers.victor.ext.sp
+import kotlin.random.Random
 
 
 class MarketWidgetAdapterFactory constructor(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
-    var data: MutableList<MarketWidgetActiveAsset> = mutableListOf()
+    var data: MutableList<MarketWidgetActiveMarket.UI> = mutableListOf()
     private var widgetID: Int = AppWidgetManager.INVALID_APPWIDGET_ID
-    private val activeAssetsStore: MarketWidgetActiveAssetStore by lazy { MarketWidgetActiveAssetMockStore }
+    private val activeAssetsStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> by lazy { MarketWidgetActiveMarketStore }
 
     init {
         widgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -55,6 +60,7 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
 
         marketViewRv.setImageViewBitmap(R.id.image_asset_icon, createAvatarViewBitmap(data))
         marketViewRv.setTextViewText(R.id.text_asset_name, data.name)
+        marketViewRv.setTextViewText(R.id.text_market_value, formatPrice(data))
 
         when {
             position < 0 -> {
@@ -83,6 +89,33 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
         return marketViewRv
     }
 
+    private fun formatPrice(data: MarketWidgetActiveMarket.UI): SpannableString {
+        val currentCurrency = MarketWidgetCurrency.getCurrency(context, widgetID)
+
+        val price = when (currentCurrency) {
+            MarketWidgetCurrency.USD -> data.usdData.price
+            MarketWidgetCurrency.EUR -> data.eurData.price
+        }
+
+        val formattedPrice = formatForWidgetPrice(price)
+        val currencySymbol = currentCurrency.symbol
+
+        val result = SpannableString("$currencySymbol$formattedPrice")
+
+        val pointIndex =
+                if (result.indexOf(".") != -1) result.indexOf(".")
+                else result.length
+
+        result.setSpan(StyleSpan(Typeface.BOLD), 0, pointIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.setSpan(AbsoluteSizeSpan(14.sp), 0, pointIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.setSpan(AbsoluteSizeSpan(12.sp), pointIndex, result.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return result
+    }
+
+    private fun formatForWidgetPrice(number: Number): String {
+        return String.format("%,.2f", number).replace(",", ".")
+    }
+
     override fun getViewTypeCount(): Int {
         return 2
     }
@@ -93,14 +126,14 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
 
     override fun onDataSetChanged() {
         data.clear()
-        data.addAll(activeAssetsStore.queryAll())
+        data.addAll(activeAssetsStore.queryAll(context, widgetID))
     }
 
     override fun onDestroy() {
 
     }
 
-    private fun createAvatarViewBitmap(data: MarketWidgetActiveAsset): Bitmap? {
+    private fun createAvatarViewBitmap(data: MarketWidgetActiveMarket.UI): Bitmap? {
         val assetAvatarView = AssetAvatarView(context)
 
         assetAvatarView.configureForWidget()

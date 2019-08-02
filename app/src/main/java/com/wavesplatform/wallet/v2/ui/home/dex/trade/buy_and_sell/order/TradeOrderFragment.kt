@@ -119,6 +119,12 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         edit_limit_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
         edit_total_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
 
+        edit_amount.addTextChangedListener {
+            after {
+
+            }
+        }
+
         CounterHandler.Builder()
                 .valueView(edit_amount)
                 .incrementalView(image_amount_plus)
