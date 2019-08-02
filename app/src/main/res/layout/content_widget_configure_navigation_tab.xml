@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal|bottom"
     android:orientation="vertical"
-    android:padding="2dp"
+    android:padding="6dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.AppCompatImageView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         tools:text="@string/market_widget_config_interval"/>
 
 </LinearLayout>

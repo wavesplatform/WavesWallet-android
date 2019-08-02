@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.widget
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
@@ -15,6 +16,9 @@ import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -220,6 +224,11 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private fun checkCanAddPair() {
         canAddPair = adapter.data.size < 10
+
+        val count = SpannableStringBuilder("${adapter.data.size}/10")
+        count.setSpan(StyleSpan(Typeface.BOLD), 0, count.length - 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        tokensCounter.text = count
+
         val addTab = tab_navigation.getTabAt(ADD_TAB)
         val imageTab = addTab?.customView?.findViewById<ImageView>(R.id.image_tab)
         val textTab = addTab?.customView?.findViewById<TextView>(R.id.text_tab)
@@ -235,13 +244,19 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    private fun load(assetInfo: AssetInfoResponse) {
+    private fun loadPair(assetInfo: AssetInfoResponse) {
         skeletonScreen?.show()
         setSkeletonGradient()
         eventSubscriptions.add(dataServiceManager.loadPairs(searchByAsset = assetInfo.id)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe(
                         { result ->
+                            if (result.data.isEmpty()) {
+                                skeletonScreen?.hide()
+                                showError(R.string.market_widget_config_cant_find_currency_pair, R.id.root)
+                                return@subscribe
+                            }
+
                             val data = adapter.data
                             val mostValuablePair = result.data[0]
                             data.add(TokenAdapter.TokenPair(assetInfo, mostValuablePair))
@@ -372,7 +387,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 this@MarketWidgetConfigureActivity.assets.add(asset.id)
                 val token = adapter.data.firstOrNull { it.assetInfo.id == asset.id }
                 if (token == null) {
-                    load(asset)
+                    loadPair(asset)
                 } else {
                     showError(R.string.market_widget_config_error_add_asset, R.id.root)
                 }

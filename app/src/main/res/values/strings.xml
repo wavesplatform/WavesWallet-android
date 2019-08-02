@@ -698,4 +698,6 @@
     <string name="market_widget_config_style">Style</string>
 
     <string name="market_widget_config_error_add_asset">This asset already added</string>
+    <string name="market_widget_config_token_list">Tokens list</string>
+    <string name="market_widget_config_cant_find_currency_pair">Can\'t find any currency pair</string>
 </resources>
