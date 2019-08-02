@@ -10,7 +10,7 @@ import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-enum class MarketWidgetUpdateInterval(@StringRes title: Int, interval: Int) {
+enum class MarketWidgetUpdateInterval(@StringRes var title: Int, var interval: Int) {
     MIN_1(R.string.market_widget_config_interval_1_min, 1),
     MIN_5(R.string.market_widget_config_interval_5_min, 5),
     MIN_10(R.string.market_widget_config_interval_10_min, 10),

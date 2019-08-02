@@ -41,6 +41,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefStore
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
@@ -97,6 +98,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tab_navigation.addOnTabSelectedListener(this)
 
         toolbar_close.click {
+            MarketWidgetActiveAssetPrefStore.saveAll(this, widgetId, widgetAssetPairs)
             // It is the responsibility of the configuration activity to update the app widget
             val appWidgetManager = AppWidgetManager.getInstance(this)
             MarketWidget.updateWidget(this, appWidgetManager, widgetId)
@@ -184,10 +186,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     private fun updateWidgetAssetPairs() {
         widgetAssetPairs.clear()
         adapter.data.forEach {
-            // todo something
             widgetAssetPairs.add(MarketWidgetActiveAsset(
                     it.assetInfo.name,
-                    widgetId.toString(),
+                    widgetId.toString() + (it.pair.amountAsset ?: "") + (it.pair.priceAsset ?: ""),
                     it.pair.amountAsset ?: "",
                     it.pair.priceAsset ?: ""))
         }
