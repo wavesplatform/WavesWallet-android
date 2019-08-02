@@ -10,6 +10,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,6 +18,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
@@ -25,6 +27,8 @@ import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
@@ -36,7 +40,7 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_dex_markets.*
+import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
@@ -57,7 +61,8 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     private var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
     private var assets = arrayListOf<String>()
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
-
+    private var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
+    private var canAddPair = false
 
     private val widgetId: Int by lazy {
         intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -102,23 +107,16 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tokensList.itemAnimator = FadeInWithoutDelayAnimator()
         adapter.bindToRecyclerView(tokensList)
 
-        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
-            when (view.id) {
-                R.id.image_delete -> {
-                    adapter.remove(position)
-                    /*presenter.needToUpdate = true
-
-                    val item = this.adapter.getItem(position)
-                    item.notNull { item ->
-                        MarketResponseDb(item).delete { equalTo("id", item.id) }
-
-                        // remove from current list
-                        this.adapter.data.removeAt(position)
-                        this.adapter.notifyItemRemoved(position)
-                    }*/
+        adapter.onItemChildClickListener =
+                BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+                    when (view.id) {
+                        R.id.image_delete -> {
+                            adapter.remove(position)
+                            updateWidgetAssetPairs()
+                            checkCanAddPair()
+                        }
+                    }
                 }
-            }
-        }
 
         val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(adapter)
         val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
@@ -127,30 +125,16 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         adapter.enableDragItem(itemTouchHelper, R.id.image_drag, false)
         adapter.setOnItemDragListener(object : OnItemDragListener {
             override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-                /*if (view_drag_bg.height == 0) {
-                    view_drag_bg.setHeight(viewHolder.itemView.card_market.height - dp2px(1))
-                    view_drag_bg.setWidth(viewHolder.itemView.card_market.width - dp2px(1))
-                }
-
-                val originalPos = IntArray(2)
-                viewHolder.itemView.card_market.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
-                view_drag_bg.visiable()
-
-                viewHolder.itemView.card_market.cardElevation = dp2px(4).toFloat()*/
+                // do nothing
             }
 
-            override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
-                /*presenter.needToUpdate = true
-
-                val originalPos = IntArray(2)
-                target.itemView.card_market.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()*/
+            override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int,
+                                          target: RecyclerView.ViewHolder, to: Int) {
+                // do nothing
             }
 
             override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-                /*viewHolder.itemView.card_market.cardElevation = dp2px(2).toFloat()
-                view_drag_bg.gone()*/
+                updateWidgetAssetPairs()
             }
         })
 
@@ -163,7 +147,16 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .frozen(false)
                 .show()
         setSkeletonGradient()
-        loadAssets(Constants.defaultGateways().toList())
+
+        Constants.defaultGateways().toList().forEach {
+            if (it.isWavesId()) {
+                assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
+            } else {
+                assets.add(it)
+            }
+        }
+
+        loadAssets(assets)
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -182,41 +175,89 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
+    private fun updateWidgetAssetPairs() {
+        widgetAssetPairs.clear()
+        adapter.data.forEach {
+            // todo something
+            widgetAssetPairs.add(MarketWidgetActiveAsset(
+                    it.assetInfo.name,
+                    widgetId.toString(),
+                    it.pair.amountAsset ?: "",
+                    it.pair.priceAsset ?: ""))
+        }
+    }
+
     private fun loadAssets(assets: List<String>) {
         skeletonScreen?.show()
-        val pairList = arrayListOf<SearchPairResponse.Pair>()
+        setSkeletonGradient()
+        val tokenPairList = arrayListOf<TokenAdapter.TokenPair>()
         eventSubscriptions.add(dataServiceManager.assets(ids = assets)
                 .flatMap {
-                    adapter.allData = it
-                    Observable.fromIterable(assets)
+                    Observable.fromIterable(it)
                 }
-                .flatMap { dataServiceManager.loadPairs(searchByAsset = it) }
+                .flatMap { assetInfo ->
+                    Observable.zip(Observable.just(assetInfo),
+                            dataServiceManager.loadPairs(searchByAsset = assetInfo.id),
+                            BiFunction { t1: AssetInfoResponse, t2: SearchPairResponse ->
+                                return@BiFunction Pair(t1, t2)
+                            })
+                }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ result ->
-                    pairList.add(result.data[0])
+                .subscribe({ pair ->
+                    tokenPairList.add(TokenAdapter.TokenPair(pair.first, pair.second.data[0]))
                 }, {
                     afterFailGetMarkets()
                     it.printStackTrace()
                     skeletonScreen?.hide()
                 }, {
-                    adapter.setNewData(pairList)
+                    adapter.setNewData(tokenPairList)
+                    checkCanAddPair()
                     adapter.emptyView = getEmptyView()
                     skeletonScreen?.hide()
-
-                    pairList.forEach {
-                        val assetInfo = adapter.allData.firstOrNull()
-                        // todo something
-                        MarketWidgetActiveAsset(
-                                assetInfo?.name ?: "-",
-                                widgetId.toString(),
-                                it.amountAsset ?: "",
-                                it.priceAsset ?: "")
-                    }
-
-
-
+                    updateWidgetAssetPairs()
                 }))
     }
+
+    private fun checkCanAddPair() {
+        canAddPair = adapter.data.size < 10
+        val addTab = tab_navigation.getTabAt(ADD_TAB)
+        val imageTab = addTab?.customView?.findViewById<ImageView>(R.id.image_tab)
+        val textTab = addTab?.customView?.findViewById<TextView>(R.id.text_tab)
+
+        if (canAddPair) {
+            textTab?.setTextColor(ContextCompat.getColor(baseContext, R.color.black))
+            imageTab?.setImageDrawable(
+                    ContextCompat.getDrawable(baseContext, R.drawable.ic_widget_addtoken_22))
+        } else {
+            textTab?.setTextColor(ContextCompat.getColor(baseContext, R.color.basic500))
+            imageTab?.setImageDrawable(
+                    ContextCompat.getDrawable(baseContext, R.drawable.ic_widget_maxtoken_22))
+        }
+    }
+
+    private fun load(assetInfo: AssetInfoResponse) {
+        skeletonScreen?.show()
+        setSkeletonGradient()
+        eventSubscriptions.add(dataServiceManager.loadPairs(searchByAsset = assetInfo.id)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe(
+                        { result ->
+                            val data = adapter.data
+                            val mostValuablePair = result.data[0]
+                            data.add(TokenAdapter.TokenPair(assetInfo, mostValuablePair))
+                            adapter.setNewData(data)
+                            checkCanAddPair()
+                            adapter.emptyView = getEmptyView()
+                            skeletonScreen?.hide()
+                            updateWidgetAssetPairs()
+                        },
+                        {
+                            afterFailGetMarkets()
+                            it.printStackTrace()
+                            skeletonScreen?.hide()
+                        }))
+    }
+
 
     private fun getEmptyView(): View {
         val view = inflate(R.layout.content_address_book_empty_state)
@@ -318,24 +359,33 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showAssetsDialog() {
-        val assetsDialog = AssetsBottomSheetFragment.newInstance(assets)
+        if (!canAddPair) {
+            return
+        }
+
+        val assetsDialog = AssetsBottomSheetFragment.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.add(assetsDialog, assetsDialog::class.java.simpleName)
         ft.commitAllowingStateLoss()
         assetsDialog.onChooseListener = object : AssetsBottomSheetFragment.OnChooseListener {
-            override fun onChoose(assets: ArrayList<String>) {
-                this@MarketWidgetConfigureActivity.assets = assets
-                loadAssets(assets)
+            override fun onChoose(asset: AssetInfoResponse) {
+                this@MarketWidgetConfigureActivity.assets.add(asset.id)
+                val token = adapter.data.firstOrNull { it.assetInfo.id == asset.id }
+                if (token == null) {
+                    load(asset)
+                } else {
+                    showError(R.string.market_widget_config_error_add_asset, R.id.root)
+                }
             }
         }
     }
 
     private fun setSkeletonGradient() {
-        recycle_markets?.post {
-            recycle_markets?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
-            recycle_markets?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
-            recycle_markets?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
-            recycle_markets?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        tokensList?.post {
+            tokensList?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            tokensList?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            tokensList?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            tokensList?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
     }
 

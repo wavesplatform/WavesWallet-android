@@ -7,10 +7,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.EditDrawableText
+import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
@@ -19,10 +23,8 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.widget.adapters.AssetsAdapter
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
@@ -41,11 +43,11 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     var onChooseListener: OnChooseListener? = null
 
     init {
-        EnvironmentManager.defaultAssets.forEach {
-            if (it.assetId.isWavesId()) {
+        Constants.defaultCrypto().forEach {
+            if (it.isWavesId()) {
                 defaultAssets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
             } else {
-                defaultAssets.add(it.assetId)
+                defaultAssets.add(it)
             }
         }
         defaultAssets.add(Constants.VstGeneralAsset.assetId)
@@ -58,7 +60,6 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        adapter.chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
 
         val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout, container, false)
 
@@ -67,6 +68,24 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
         recycleAssets.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycleAssets)
+
+        adapter.onItemChildClickListener =
+                BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+                    when (view.id) {
+                        R.id.asset_root -> {
+                            onChooseListener?.onChoose(adapter.getItem(position) as AssetInfoResponse)
+                            dismiss()
+                        }
+                    }
+                }
+
+        editSearch.setDrawableClickListener(object : OnDrawableClickListener {
+            override fun onClick(target: DrawablePosition) {
+                if (target == DrawablePosition.RIGHT) {
+                    editSearch.text = null
+                }
+            }
+        })
 
         eventSubscriptions.add(RxTextView.textChanges(editSearch)
                 .skipInitialValue()
@@ -103,16 +122,11 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
         return rootView
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-        onChooseListener?.onChoose(adapter.chosenAssets)
-    }
-
     private fun search(query: String) {
         skeletonScreen?.show()
         setSkeletonGradient()
 
-        if (query.isEmpty()) {
+        if (query.trim().isEmpty()) {
             initLoad()
             return
         }
@@ -121,7 +135,6 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     skeletonScreen?.hide()
-                    adapter.allData = ArrayList(result)
                     adapter.setNewData(result)
                     adapter.emptyView = getEmptyView()
                 }, {
@@ -131,17 +144,10 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun initLoad() {
-        val initAssets = if (adapter.chosenAssets.isEmpty()) {
-            defaultAssets
-        } else {
-            adapter.chosenAssets
-        }
-
-        eventSubscriptions.add(dataServiceManager.assets(ids = initAssets)
+        eventSubscriptions.add(dataServiceManager.assets(ids = defaultAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     skeletonScreen?.hide()
-                    adapter.allData = ArrayList(result)
                     adapter.setNewData(result)
                     adapter.emptyView = getEmptyView()
                 }, {
@@ -162,28 +168,24 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun setSkeletonGradient() {
-        recycle_markets?.post {
-            recycle_markets?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
-            recycle_markets?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
-            recycle_markets?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
-            recycle_markets?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        recycleAssets.post {
+            recycleAssets.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycleAssets.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycleAssets.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycleAssets.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
     }
 
     interface OnChooseListener {
-        fun onChoose(assets: ArrayList<String>)
+        fun onChoose(asset: AssetInfoResponse)
     }
 
     companion object {
 
         private const val ASSETS = "assets"
 
-        fun newInstance(assets: ArrayList<String> = arrayListOf()): AssetsBottomSheetFragment {
-            val fragment = AssetsBottomSheetFragment()
-            val args = Bundle()
-            args.putStringArrayList(ASSETS, assets)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): AssetsBottomSheetFragment {
+            return AssetsBottomSheetFragment()
         }
     }
 }

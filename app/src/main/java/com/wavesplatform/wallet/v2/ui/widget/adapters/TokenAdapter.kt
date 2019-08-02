@@ -7,15 +7,13 @@ import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.wallet.R
 import javax.inject.Inject
 
-class TokenAdapter
-@Inject constructor() : BaseItemDraggableAdapter<SearchPairResponse.Pair,
+class TokenAdapter @Inject constructor() : BaseItemDraggableAdapter<TokenAdapter.TokenPair,
         BaseViewHolder>(R.layout.widget_drag_asset_item, null) {
 
-    var allData: List<AssetInfoResponse> = arrayListOf()
-
-    override fun convert(helper: BaseViewHolder, item: SearchPairResponse.Pair) {
-        val assetInfo = allData.firstOrNull { it.id == item.amountAsset}
-        helper.setText(R.id.text_market_name, assetInfo?.name)
+    override fun convert(helper: BaseViewHolder, item: TokenPair) {
+        helper.setText(R.id.text_market_name, item.assetInfo.name)
                 .addOnClickListener(R.id.image_delete)
     }
+
+    data class TokenPair(var assetInfo: AssetInfoResponse, var pair: SearchPairResponse.Pair)
 }

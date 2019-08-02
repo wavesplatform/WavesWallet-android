@@ -696,4 +696,6 @@
     <string name="market_widget_config_interval">Interval</string>
     <string name="market_widget_config_add_token">Add token</string>
     <string name="market_widget_config_style">Style</string>
+
+    <string name="market_widget_config_error_add_asset">This asset already added</string>
 </resources>
