@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -22,8 +23,11 @@ class MarketWidgetDataManager @Inject constructor() {
 
     @Inject
     lateinit var dataServiceManager: DataServiceManager
+    @Inject
+    lateinit var activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset>
+    @Inject
+    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
 
-    private val activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset> by lazy { MarketWidgetActiveAssetMockStore }
     private val compositeDisposable = CompositeDisposable()
 
     fun loadMarketsPrices(context: Context,
@@ -45,7 +49,7 @@ class MarketWidgetDataManager @Inject constructor() {
                 }
                 .map { activeMarkets ->
                     val prices = calculatePrice(activeMarkets)
-                    MarketWidgetActiveMarketStore.saveAll(context, widgetId, prices)
+                    activeMarketStore.saveAll(context, widgetId, prices)
                 }
                 .subscribe({
                     successListener.invoke()

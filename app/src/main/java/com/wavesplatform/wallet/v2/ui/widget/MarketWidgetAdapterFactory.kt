@@ -26,11 +26,10 @@ import pers.victor.ext.dp
 import pers.victor.ext.sp
 
 
-class MarketWidgetAdapterFactory constructor(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
+class MarketWidgetAdapterFactory(var context: Context, intent: Intent, var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>) : RemoteViewsService.RemoteViewsFactory {
 
     var data: MutableList<MarketWidgetActiveMarket.UI> = mutableListOf()
     private var widgetID: Int = AppWidgetManager.INVALID_APPWIDGET_ID
-    private val activeAssetsStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> by lazy { MarketWidgetActiveMarketStore }
 
     init {
         widgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -125,7 +124,7 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
 
     override fun onDataSetChanged() {
         data.clear()
-        data.addAll(activeAssetsStore.queryAll(context, widgetID))
+        data.addAll(activeMarketStore.queryAll(context, widgetID))
     }
 
     override fun onDestroy() {

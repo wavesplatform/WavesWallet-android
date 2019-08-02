@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.widget.model
 
 import android.content.Context
 
-object MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
+class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
     override fun save(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -24,6 +24,7 @@ import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
 import dagger.android.AndroidInjection
 import javax.inject.Inject
+import javax.inject.Named
 
 
 /**
@@ -34,7 +35,11 @@ class MarketWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
-    private val activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset> by lazy { MarketWidgetActiveAssetMockStore }
+    @Inject
+    @Named("Mock")
+    lateinit var activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset>
+    @Inject
+    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -57,7 +62,7 @@ class MarketWidget : AppWidgetProvider() {
         MarketWidgetStyle.removeTheme(context, appWidgetId)
         MarketWidgetCurrency.removeCurrency(context, appWidgetId)
         MarketWidgetUpdateInterval.removeInterval(context, appWidgetId)
-        MarketWidgetActiveMarketStore.clear(context, appWidgetId)
+        activeMarketStore.clear(context, appWidgetId)
         activeAssetStore.clear(context, appWidgetId)
     }
 
