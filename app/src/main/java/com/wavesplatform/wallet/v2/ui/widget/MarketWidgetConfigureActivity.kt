@@ -28,6 +28,7 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
+import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.RxUtil
@@ -42,6 +43,7 @@ import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -152,7 +154,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
-        Constants.defaultGateways().toList().forEach {
+        Constants.defaultCrypto().toList().forEach {
             if (it.isWavesId()) {
                 assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
             } else {
@@ -192,34 +194,72 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun loadAssets(assets: List<String>) {
+
+        fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>)
+                : MutableList<SearchPairResponse.Pair> {
+            val filledResult = mutableListOf<SearchPairResponse.Pair>()
+            for (index in 0 until pairs.data.size) {
+                if (pairs.data[index].data != null) {
+                    val pair = assets[index].split("/")
+                    pairs.data[index].amountAsset = pair[0]
+                    pairs.data[index].priceAsset = pair[1]
+                    filledResult.add(pairs.data[index])
+                }
+            }
+            return filledResult
+        }
+
+        fun createPairs(assets: List<String>): MutableList<String> {
+            val initPairsList = mutableListOf<String>()
+
+            val usdAsset = EnvironmentManager.defaultAssets.firstOrNull {
+                it.issueTransaction?.name == "US Dollar"
+            }
+
+            for (priceAssetId in assets) {
+                if (priceAssetId.isWavesId()) {
+                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${usdAsset?.assetId}")
+                    continue
+                } else {
+                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
+                    initPairsList.add("$priceAssetId/${WavesConstants.WAVES_ASSET_ID_FILLED}")
+                }
+            }
+            return initPairsList
+        }
+
         skeletonScreen?.show()
         setSkeletonGradient()
-        val tokenPairList = arrayListOf<TokenAdapter.TokenPair>()
-        eventSubscriptions.add(dataServiceManager.assets(ids = assets)
-                .flatMap {
-                    Observable.fromIterable(it)
-                }
-                .flatMap { assetInfo ->
-                    Observable.zip(Observable.just(assetInfo),
-                            dataServiceManager.loadPairs(searchByAsset = assetInfo.id),
-                            BiFunction { t1: AssetInfoResponse, t2: SearchPairResponse ->
-                                return@BiFunction Pair(t1, t2)
-                            })
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ pair ->
-                    tokenPairList.add(TokenAdapter.TokenPair(pair.first, pair.second.data[0]))
-                }, {
-                    afterFailGetMarkets()
-                    it.printStackTrace()
-                    skeletonScreen?.hide()
-                }, {
-                    adapter.setNewData(tokenPairList)
-                    checkCanAddPair()
-                    adapter.emptyView = getEmptyView()
-                    skeletonScreen?.hide()
-                    updateWidgetAssetPairs()
-                }))
+        val pairsList = createPairs(assets)
+        eventSubscriptions.add(
+                Observable.zip(dataServiceManager.assets(ids = assets),
+                        dataServiceManager.loadPairs(PairRequest(pairs = pairsList, limit = 200))
+                                .flatMap { pairs ->
+                                    Observable.just(getFilledPairs(pairs, pairsList))
+                                },
+                        BiFunction { t1: List<AssetInfoResponse>, t2: List<SearchPairResponse.Pair> ->
+                            return@BiFunction Pair(t1, t2)
+                        })
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe({ pair ->
+                            val tokenPairList
+                                    = arrayListOf<TokenAdapter.TokenPair>()
+                            pair.second.forEach { assetPair ->
+                                tokenPairList.add(TokenAdapter.TokenPair(
+                                        pair.first.first { it.id == assetPair.amountAsset },
+                                        assetPair))
+                            }
+                            adapter.setNewData(tokenPairList)
+                            checkCanAddPair()
+                            adapter.emptyView = getEmptyView()
+                            skeletonScreen?.hide()
+                            updateWidgetAssetPairs()
+                        }, {
+                            afterFailGetMarkets()
+                            it.printStackTrace()
+                            skeletonScreen?.hide()
+                        })
+        )
     }
 
     private fun checkCanAddPair() {
