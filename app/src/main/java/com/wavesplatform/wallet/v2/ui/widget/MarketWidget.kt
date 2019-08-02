@@ -34,6 +34,7 @@ class MarketWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
+    private val activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset> by lazy { MarketWidgetActiveAssetMockStore }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -47,13 +48,17 @@ class MarketWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
-            MarketWidgetStyle.removeTheme(context, appWidgetId)
-            MarketWidgetCurrency.removeCurrency(context, appWidgetId)
-            MarketWidgetUpdateInterval.removeInterval(context, appWidgetId)
-            MarketWidgetActiveMarketStore.clear(context, appWidgetId)
-            MarketWidgetActiveAssetPrefStore.clear(context, appWidgetId)
+            clearWidgetData(context, appWidgetId)
         }
+    }
+
+    private fun clearWidgetData(context: Context, appWidgetId: Int) {
+        context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
+        MarketWidgetStyle.removeTheme(context, appWidgetId)
+        MarketWidgetCurrency.removeCurrency(context, appWidgetId)
+        MarketWidgetUpdateInterval.removeInterval(context, appWidgetId)
+        MarketWidgetActiveMarketStore.clear(context, appWidgetId)
+        activeAssetStore.clear(context, appWidgetId)
     }
 
     override fun onEnabled(context: Context) {
@@ -77,10 +82,7 @@ class MarketWidget : AppWidgetProvider() {
                     MarketWidgetCurrency.switchCurrency(context, widgetId)
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
-                ACTION_UPDATE -> {
-                    loadPrice(context, widgetId)
-                }
-                ACTION_AUTO_UPDATE_WIDGET -> {
+                ACTION_UPDATE, ACTION_AUTO_UPDATE_WIDGET -> {
                     loadPrice(context, widgetId)
                 }
             }
