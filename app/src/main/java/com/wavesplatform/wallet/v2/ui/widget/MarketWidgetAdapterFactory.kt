@@ -24,7 +24,6 @@ import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import pers.victor.ext.dp
 import pers.victor.ext.sp
-import kotlin.random.Random
 
 
 class MarketWidgetAdapterFactory constructor(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
@@ -58,46 +57,46 @@ class MarketWidgetAdapterFactory constructor(var context: Context, intent: Inten
         val marketViewRv = RemoteViews(context.packageName, theme.marketItemLayout)
         val data = data[position]
 
+        val currentCurrency = MarketWidgetCurrency.getCurrency(context, widgetID)
+
+        val priceData = when (currentCurrency) {
+            MarketWidgetCurrency.USD -> data.usdData
+            MarketWidgetCurrency.EUR -> data.eurData
+        }
+
         marketViewRv.setImageViewBitmap(R.id.image_asset_icon, createAvatarViewBitmap(data))
         marketViewRv.setTextViewText(R.id.text_asset_name, data.name)
-        marketViewRv.setTextViewText(R.id.text_market_value, formatPrice(data))
+        marketViewRv.setTextViewText(R.id.text_market_value, formatPrice(currentCurrency, priceData))
 
         when {
-            position < 0 -> {
+            priceData.isPriceDrop() -> {
                 marketViewRv.setTextColor(R.id.text_market_percent,
                         ContextCompat.getColor(context, theme.colors.percentDropTextColor))
                 marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
                         theme.colors.percentDropBackground)
-                marketViewRv.setTextViewText(R.id.text_market_percent, "$position%")
+                marketViewRv.setTextViewText(R.id.text_market_percent, "${formatForWidgetPrice(priceData.percent)}%")
             }
-            position > 0 -> {
+            priceData.isPriceIncrease() -> {
                 marketViewRv.setTextColor(R.id.text_market_percent,
                         ContextCompat.getColor(context, theme.colors.percentIncreaseTextColor))
                 marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
                         theme.colors.percentIncreaseBackground)
-                marketViewRv.setTextViewText(R.id.text_market_percent, "+$position%")
+                marketViewRv.setTextViewText(R.id.text_market_percent, "+${formatForWidgetPrice(priceData.percent)}%")
             }
-            position == 0 -> {
+            priceData.isPriceWithoutChange() -> {
                 marketViewRv.setTextColor(R.id.text_market_percent,
                         ContextCompat.getColor(context, theme.colors.percentWithoutChangeTextColor))
                 marketViewRv.setInt(R.id.text_market_percent, "setBackgroundResource",
                         theme.colors.percentWithoutChangeBackground)
-                marketViewRv.setTextViewText(R.id.text_market_percent, "$position%")
+                marketViewRv.setTextViewText(R.id.text_market_percent, "${formatForWidgetPrice(priceData.percent)}%")
             }
         }
 
         return marketViewRv
     }
 
-    private fun formatPrice(data: MarketWidgetActiveMarket.UI): SpannableString {
-        val currentCurrency = MarketWidgetCurrency.getCurrency(context, widgetID)
-
-        val price = when (currentCurrency) {
-            MarketWidgetCurrency.USD -> data.usdData.price
-            MarketWidgetCurrency.EUR -> data.eurData.price
-        }
-
-        val formattedPrice = formatForWidgetPrice(price)
+    private fun formatPrice(currentCurrency: MarketWidgetCurrency, priceData: MarketWidgetActiveMarket.UI.PriceData): SpannableString {
+        val formattedPrice = formatForWidgetPrice(priceData.price)
         val currencySymbol = currentCurrency.symbol
 
         val result = SpannableString("$currencySymbol$formattedPrice")
