@@ -14,13 +14,14 @@ data class MarketWidgetActiveMarket(
     data class UI(
             var id: String,
             var name: String,
-            var usdData: USDData,
-            var eurData: EURData
+            var usdData: PriceData,
+            var eurData: PriceData
     ) {
-        data class USDData(var price: Double,
-                           var percent: Double)
-
-        data class EURData(var price: Double,
-                           var percent: Double)
+        data class PriceData(var price: Double,
+                             var percent: Double) {
+            fun isPriceIncrease() = percent > 0
+            fun isPriceDrop() = percent < 0
+            fun isPriceWithoutChange() = percent == 0.0
+        }
     }
 }

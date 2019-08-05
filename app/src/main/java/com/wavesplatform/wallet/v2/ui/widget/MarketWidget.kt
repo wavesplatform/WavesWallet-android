@@ -18,14 +18,13 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetCurrency
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
 import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
 import dagger.android.AndroidInjection
 import javax.inject.Inject
+import javax.inject.Named
 
 
 /**
@@ -36,6 +35,11 @@ class MarketWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
+    @Inject
+    @Named("Mock")
+    lateinit var activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset>
+    @Inject
+    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -49,10 +53,17 @@ class MarketWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
-            MarketWidgetStyle.removeTheme(context, appWidgetId)
-            MarketWidgetCurrency.removeCurrency(context, appWidgetId)
+            clearWidgetData(context, appWidgetId)
         }
+    }
+
+    private fun clearWidgetData(context: Context, appWidgetId: Int) {
+        context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
+        MarketWidgetStyle.removeTheme(context, appWidgetId)
+        MarketWidgetCurrency.removeCurrency(context, appWidgetId)
+        MarketWidgetUpdateInterval.removeInterval(context, appWidgetId)
+        activeMarketStore.clear(context, appWidgetId)
+        activeAssetStore.clear(context, appWidgetId)
     }
 
     override fun onEnabled(context: Context) {
@@ -76,10 +87,7 @@ class MarketWidget : AppWidgetProvider() {
                     MarketWidgetCurrency.switchCurrency(context, widgetId)
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
-                ACTION_UPDATE -> {
-                    loadPrice(context, widgetId)
-                }
-                ACTION_AUTO_UPDATE_WIDGET -> {
+                ACTION_UPDATE, ACTION_AUTO_UPDATE_WIDGET -> {
                     loadPrice(context, widgetId)
                 }
             }

@@ -9,9 +9,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-object MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
-
-    private const val PREF_ASSET_KEY = "appwidget_asset_"
+class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
 
     override fun save(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
         val assets = queryAll(context, widgetId)
@@ -59,5 +57,9 @@ object MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetAc
         val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
         prefs.remove(PREF_ASSET_KEY + widgetId)
         prefs.apply()
+    }
+
+    companion object {
+        private const val PREF_ASSET_KEY = "appwidget_asset_"
     }
 }

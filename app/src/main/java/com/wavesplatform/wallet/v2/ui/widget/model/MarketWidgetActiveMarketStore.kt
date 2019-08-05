@@ -10,10 +10,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-object MarketWidgetActiveMarketStore : MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> {
+class MarketWidgetActiveMarketStore constructor(val gson: Gson) : MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> {
 
-    private const val PREF_ACTIVE_MARKET_KEY = "appwidget_active_markets_"
-    private val gson: Gson = Gson()
+    private val PREF_ACTIVE_MARKET_KEY = "appwidget_active_markets_"
 
     override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveMarket.UI> {
         val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)

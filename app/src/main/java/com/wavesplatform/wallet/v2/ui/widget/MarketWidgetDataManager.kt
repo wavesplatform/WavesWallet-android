@@ -14,8 +14,8 @@ import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.disposables.CompositeDisposable
-import java.math.BigDecimal
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -23,6 +23,10 @@ class MarketWidgetDataManager @Inject constructor() {
 
     @Inject
     lateinit var dataServiceManager: DataServiceManager
+    @Inject
+    lateinit var activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset>
+    @Inject
+    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -30,8 +34,10 @@ class MarketWidgetDataManager @Inject constructor() {
                           widgetId: Int,
                           successListener: () -> Unit,
                           errorListener: () -> Unit) {
-        val activeAssets = withDefaultPair(MarketWidgetActiveAssetPrefStore.queryAll(context, widgetId))
+
+        val activeAssets = withDefaultPair(activeAssetStore.queryAll(context, widgetId))
         val activeAssetsIds = activeAssets.map { it.amountAsset + "/" + it.priceAsset }
+
         compositeDisposable.add(dataServiceManager.loadPairs(PairRequest(pairs = activeAssetsIds))
                 .executeInBackground()
                 .map { response ->
@@ -43,7 +49,7 @@ class MarketWidgetDataManager @Inject constructor() {
                 }
                 .map { activeMarkets ->
                     val prices = calculatePrice(activeMarkets)
-                    MarketWidgetActiveMarketStore.saveAll(context, widgetId, prices)
+                    activeMarketStore.saveAll(context, widgetId, prices)
                 }
                 .subscribe({
                     successListener.invoke()
@@ -63,32 +69,15 @@ class MarketWidgetDataManager @Inject constructor() {
 
         return filteredMarkets.mapTo(mutableListOf(), { marketWidgetActiveMarket ->
 
-            val usdData: MarketWidgetActiveMarket.UI.USDData
-            val eurData: MarketWidgetActiveMarket.UI.EURData
+            val usdData: MarketWidgetActiveMarket.UI.PriceData
+            val eurData: MarketWidgetActiveMarket.UI.PriceData
 
             if (marketWidgetActiveMarket.assetInfo.id.isWavesId()) {
-                val deltaPercentUsd = (wavesUSDAsset.data.lastPrice / wavesUSDAsset.data.firstPrice) * BigDecimal(100)
-                val percentUsd = deltaPercentUsd / wavesUSDAsset.data.firstPrice
-                val priceUsd = wavesUSDAsset.data.lastPrice
-                usdData = MarketWidgetActiveMarket.UI.USDData(priceUsd.toDouble(), percentUsd.toDouble())
-
-                val deltaPercentEur = (wavesEURAsset.data.lastPrice / wavesEURAsset.data.firstPrice) * BigDecimal(100)
-                val percentEur = deltaPercentEur / wavesEURAsset.data.firstPrice
-                val priceEur = wavesEURAsset.data.lastPrice
-                eurData = MarketWidgetActiveMarket.UI.EURData(priceEur.toDouble(), percentEur.toDouble())
+                usdData = calculateWavesPriceFor(wavesUSDAsset)
+                eurData = calculateWavesPriceFor(wavesEURAsset)
             } else {
-                val deltaPercentUsd = (marketWidgetActiveMarket.data.lastPrice / marketWidgetActiveMarket.data.firstPrice) * BigDecimal(100)
-                val percentUsd = deltaPercentUsd / marketWidgetActiveMarket.data.firstPrice
-                val priceUsd = (marketWidgetActiveMarket.data.volumeWaves?.div(marketWidgetActiveMarket.data.volume))?.times(wavesUSDAsset.data.lastPrice)
-                        ?: BigDecimal.ZERO
-                usdData = MarketWidgetActiveMarket.UI.USDData(priceUsd.toDouble(), percentUsd.toDouble())
-
-                val deltaPercentEur = (marketWidgetActiveMarket.data.lastPrice / marketWidgetActiveMarket.data.firstPrice) * BigDecimal(100)
-                val percentEur = deltaPercentEur / marketWidgetActiveMarket.data.firstPrice
-                val priceEur =
-                        (marketWidgetActiveMarket.data.volumeWaves?.div(marketWidgetActiveMarket.data.volume))?.times(wavesEURAsset.data.lastPrice)
-                        ?: BigDecimal.ZERO
-                eurData = MarketWidgetActiveMarket.UI.EURData(priceEur.toDouble(), percentEur.toDouble())
+                usdData = calculateTokenPriceFor(marketWidgetActiveMarket, wavesUSDAsset)
+                eurData = calculateTokenPriceFor(marketWidgetActiveMarket, wavesEURAsset)
             }
 
             return@mapTo MarketWidgetActiveMarket.UI(marketWidgetActiveMarket.assetInfo.id,
@@ -96,6 +85,22 @@ class MarketWidgetDataManager @Inject constructor() {
                     usdData,
                     eurData)
         })
+    }
+
+    private fun calculateTokenPriceFor(activeMarket: MarketWidgetActiveMarket,
+                                       wavesUSDAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
+        val deltaPercentUsd = (activeMarket.data.lastPrice - activeMarket.data.firstPrice) * 100
+        val percentUsd = deltaPercentUsd / activeMarket.data.lastPrice
+        val priceUsd = (activeMarket.data.volumeWaves?.div(activeMarket.data.volume))?.times(wavesUSDAsset.data.lastPrice)
+                ?: 0.0
+        return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)
+    }
+
+    private fun calculateWavesPriceFor(wavesCurrencyAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
+        val deltaPercentUsd = (wavesCurrencyAsset.data.lastPrice - wavesCurrencyAsset.data.firstPrice) * 100
+        val percentUsd = deltaPercentUsd / wavesCurrencyAsset.data.lastPrice
+        val priceUsd = wavesCurrencyAsset.data.lastPrice
+        return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)
     }
 
     private fun withDefaultPair(assets: MutableList<MarketWidgetActiveAsset>): MutableList<MarketWidgetActiveAsset> {

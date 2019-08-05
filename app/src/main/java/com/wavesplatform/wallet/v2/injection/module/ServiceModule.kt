@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
+import com.wavesplatform.wallet.v2.ui.widget.MarketWidgetAdapterService
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -14,4 +15,7 @@ abstract class ServiceModule {
 
     @ContributesAndroidInjector
     internal abstract fun updateHistoryService(): UpdateApiDataService
+
+    @ContributesAndroidInjector
+    internal abstract fun marketWidgetAdapterService(): MarketWidgetAdapterService
 }

@@ -20,7 +20,8 @@ import javax.inject.Singleton
     (ActivityModule::class),
     (FragmentModule::class),
     (ServiceModule::class),
-    (BroadcastReceiverModule::class)
+    (BroadcastReceiverModule::class),
+    (WidgetModule::class)
 ])
 internal interface ApplicationV2Component : AndroidInjector<App> {
     @Component.Builder
