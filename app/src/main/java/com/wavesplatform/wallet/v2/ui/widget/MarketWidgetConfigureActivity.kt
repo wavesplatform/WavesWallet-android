@@ -23,15 +23,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
-import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
-import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.R
@@ -44,10 +44,7 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefStore
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.showError
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
@@ -58,7 +55,12 @@ import javax.inject.Inject
 /**
  * The configuration screen for the [MarketWidget] AppWidget.
  */
-class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedListener {
+class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedListener,
+        MarketWidgetConfigureView {
+
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: MarketWidgetConfigurePresenter
 
     @Inject
     lateinit var dataServiceManager: DataServiceManager
@@ -70,6 +72,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
     private var canAddPair = false
+
+    @ProvidePresenter
+    fun providePresenter(): MarketWidgetConfigurePresenter = presenter
 
     private val widgetId: Int by lazy {
         intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -156,15 +161,26 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
-        Constants.defaultCrypto().toList().forEach {
-            if (it.isWavesId()) {
-                assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
-            } else {
-                assets.add(it)
+        val assetsList =
+                MarketWidgetActiveAssetPrefStore.queryAll(this, widgetId)
+
+        if (assetsList.isEmpty()) {
+            Constants.defaultCrypto().toList().forEach {
+                if (it.isWavesId()) {
+                    assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
+                } else {
+                    assets.add(it)
+                }
+            }
+        } else {
+            assetsList.forEach {
+                assets.add(it.amountAsset)
             }
         }
 
-        loadAssets(assets)
+        skeletonScreen?.show()
+        setSkeletonGradient()
+        presenter.loadAssets(assets)
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -194,73 +210,33 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    private fun loadAssets(assets: List<String>) {
+    override fun updatePairs(assetPairList: ArrayList<TokenAdapter.TokenPair>) {
+        adapter.setNewData(assetPairList)
+        checkCanAddPair()
+        adapter.emptyView = getEmptyView()
+        skeletonScreen?.hide()
+        updateWidgetAssetPairs()
+    }
 
-        fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>)
-                : MutableList<SearchPairResponse.Pair> {
-            val filledResult = mutableListOf<SearchPairResponse.Pair>()
-            for (index in 0 until pairs.data.size) {
-                if (pairs.data[index].data != null) {
-                    val pair = assets[index].split("/")
-                    pairs.data[index].amountAsset = pair[0]
-                    pairs.data[index].priceAsset = pair[1]
-                    filledResult.add(pairs.data[index])
-                }
-            }
-            return filledResult
+    override fun updatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse) {
+        if (searchPairResponse.data.isEmpty()) {
+            skeletonScreen?.hide()
+            showError(R.string.market_widget_config_cant_find_currency_pair, R.id.root)
         }
 
-        fun createPairs(assets: List<String>): MutableList<String> {
-            val initPairsList = mutableListOf<String>()
+        val data = adapter.data
+        val mostValuablePair = searchPairResponse.data[0]
+        data.add(TokenAdapter.TokenPair(assetInfo, mostValuablePair))
+        adapter.setNewData(data)
+        checkCanAddPair()
+        adapter.emptyView = getEmptyView()
+        skeletonScreen?.hide()
+        updateWidgetAssetPairs()
+    }
 
-            val usdAsset = EnvironmentManager.defaultAssets.firstOrNull {
-                it.issueTransaction?.name == "US Dollar"
-            }
-
-            for (priceAssetId in assets) {
-                if (priceAssetId.isWavesId()) {
-                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${usdAsset?.assetId}")
-                    continue
-                } else {
-                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
-                    initPairsList.add("$priceAssetId/${WavesConstants.WAVES_ASSET_ID_FILLED}")
-                }
-            }
-            return initPairsList
-        }
-
-        skeletonScreen?.show()
-        setSkeletonGradient()
-        val pairsList = createPairs(assets)
-        eventSubscriptions.add(
-                Observable.zip(dataServiceManager.assets(ids = assets),
-                        dataServiceManager.loadPairs(PairRequest(pairs = pairsList, limit = 200))
-                                .flatMap { pairs ->
-                                    Observable.just(getFilledPairs(pairs, pairsList))
-                                },
-                        BiFunction { t1: List<AssetInfoResponse>, t2: List<SearchPairResponse.Pair> ->
-                            return@BiFunction Pair(t1, t2)
-                        })
-                        .compose(RxUtil.applyObservableDefaultSchedulers())
-                        .subscribe({ pair ->
-                            val tokenPairList
-                                    = arrayListOf<TokenAdapter.TokenPair>()
-                            pair.second.forEach { assetPair ->
-                                tokenPairList.add(TokenAdapter.TokenPair(
-                                        pair.first.first { it.id == assetPair.amountAsset },
-                                        assetPair))
-                            }
-                            adapter.setNewData(tokenPairList)
-                            checkCanAddPair()
-                            adapter.emptyView = getEmptyView()
-                            skeletonScreen?.hide()
-                            updateWidgetAssetPairs()
-                        }, {
-                            afterFailGetMarkets()
-                            it.printStackTrace()
-                            skeletonScreen?.hide()
-                        })
-        )
+    override fun fail() {
+        afterFailGetMarkets()
+        skeletonScreen?.hide()
     }
 
     private fun checkCanAddPair() {
@@ -283,35 +259,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
             imageTab?.setImageDrawable(
                     ContextCompat.getDrawable(baseContext, R.drawable.ic_widget_maxtoken_22))
         }
-    }
-
-    private fun loadPair(assetInfo: AssetInfoResponse) {
-        skeletonScreen?.show()
-        setSkeletonGradient()
-        eventSubscriptions.add(dataServiceManager.loadPairs(searchByAsset = assetInfo.id)
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe(
-                        { result ->
-                            if (result.data.isEmpty()) {
-                                skeletonScreen?.hide()
-                                showError(R.string.market_widget_config_cant_find_currency_pair, R.id.root)
-                                return@subscribe
-                            }
-
-                            val data = adapter.data
-                            val mostValuablePair = result.data[0]
-                            data.add(TokenAdapter.TokenPair(assetInfo, mostValuablePair))
-                            adapter.setNewData(data)
-                            checkCanAddPair()
-                            adapter.emptyView = getEmptyView()
-                            skeletonScreen?.hide()
-                            updateWidgetAssetPairs()
-                        },
-                        {
-                            afterFailGetMarkets()
-                            it.printStackTrace()
-                            skeletonScreen?.hide()
-                        }))
     }
 
 
@@ -428,7 +375,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 this@MarketWidgetConfigureActivity.assets.add(asset.id)
                 val token = adapter.data.firstOrNull { it.assetInfo.id == asset.id }
                 if (token == null) {
-                    loadPair(asset)
+                    skeletonScreen?.show()
+                    setSkeletonGradient()
+                    presenter.loadPair(asset)
                 } else {
                     showError(R.string.market_widget_config_error_add_asset, R.id.root)
                 }
