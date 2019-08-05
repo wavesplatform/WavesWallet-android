@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.widget.model
 
 import android.content.Context
 
-class MarketWidgetActiveAssetMockStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
+object MarketWidgetActiveAssetMockStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
 
     private var activeAssets = mutableListOf<MarketWidgetActiveAsset>()
 

@@ -35,11 +35,6 @@ class MarketWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
-    @Inject
-    @Named("Mock")
-    lateinit var activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset>
-    @Inject
-    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -53,17 +48,8 @@ class MarketWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            clearWidgetData(context, appWidgetId)
+            MarketWidgetSettings.clearSettings(context, appWidgetId)
         }
-    }
-
-    private fun clearWidgetData(context: Context, appWidgetId: Int) {
-        context.cancelAlarmUpdate<MarketWidget>(appWidgetId)
-        MarketWidgetStyle.removeTheme(context, appWidgetId)
-        MarketWidgetCurrency.removeCurrency(context, appWidgetId)
-        MarketWidgetUpdateInterval.removeInterval(context, appWidgetId)
-        activeMarketStore.clear(context, appWidgetId)
-        activeAssetStore.clear(context, appWidgetId)
     }
 
     override fun onEnabled(context: Context) {
@@ -84,7 +70,7 @@ class MarketWidget : AppWidgetProvider() {
         if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
             when (intent.action) {
                 ACTION_CURRENCY_CHANGE -> {
-                    MarketWidgetCurrency.switchCurrency(context, widgetId)
+                    MarketWidgetSettings.currencySettings().switchCurrency(context, widgetId)
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
                 }
                 ACTION_UPDATE, ACTION_AUTO_UPDATE_WIDGET -> {
@@ -111,7 +97,7 @@ class MarketWidget : AppWidgetProvider() {
         internal fun updateWidget(context: Context, appWidgetManager: AppWidgetManager,
                                   appWidgetId: Int, progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             // Construct the RemoteViews object
-            val theme = MarketWidgetStyle.getTheme(context, appWidgetId)
+            val theme = MarketWidgetSettings.themeSettings().getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureClicks(context, appWidgetId, views)
@@ -127,7 +113,7 @@ class MarketWidget : AppWidgetProvider() {
         internal fun updateWidgetProgress(context: Context, appWidgetId: Int,
                                           progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
-            val theme = MarketWidgetStyle.getTheme(context, appWidgetId)
+            val theme = MarketWidgetSettings.themeSettings().getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
             configureProgressState(context, appWidgetId, progressState, views)
@@ -163,7 +149,7 @@ class MarketWidget : AppWidgetProvider() {
         }
 
         private fun highLightCurrency(context: Context, theme: MarketWidgetStyle, appWidgetId: Int): SpannableString {
-            val currency = MarketWidgetCurrency.getCurrency(context, appWidgetId).name
+            val currency = MarketWidgetSettings.currencySettings().getCurrency(context, appWidgetId).name
             val highLightString = SpannableString(context.getString(R.string.market_widget_currency_text))
 
             val activeSpan = ForegroundColorSpan(ContextCompat.getColor(context, theme.colors.currencyActiveColor))
