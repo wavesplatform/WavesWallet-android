@@ -18,5 +18,7 @@ data class MarketWidgetActiveAsset(
         @SerializedName("amountAsset")
         var amountAsset: String,
         @SerializedName("priceAsset")
-        var priceAsset: String
+        var priceAsset: String,
+        @SerializedName("order")
+        var order: Int = 0
 ) : Parcelable

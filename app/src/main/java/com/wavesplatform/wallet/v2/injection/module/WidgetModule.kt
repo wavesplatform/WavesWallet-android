@@ -23,7 +23,7 @@ class WidgetModule {
     @Provides
     @Singleton
     internal fun provideWidgetActiveAssetMockStore(): MarketWidgetActiveStore<MarketWidgetActiveAsset> {
-        return MarketWidgetActiveAssetMockStore() // TODO: Change to PrefStore
+        return MarketWidgetActiveAssetPrefStore
     }
 
 }

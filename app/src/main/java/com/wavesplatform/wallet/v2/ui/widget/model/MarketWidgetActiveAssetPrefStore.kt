@@ -9,7 +9,9 @@ import android.content.Context
 import com.google.gson.Gson
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
+object MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
+
+    private const val PREF_ASSET_KEY = "appwidget_asset_"
 
     override fun save(context: Context, widgetId: Int, data: MarketWidgetActiveAsset) {
         val assets = queryAll(context, widgetId)
@@ -17,6 +19,7 @@ class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetAct
             it.id == data.id
         }
         if (assetPair == null) {
+            data.order = assets.size
             assets.add(data)
         }
         saveAll(context, widgetId, assets)
@@ -29,8 +32,8 @@ class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetAct
         }
         if (assetPair != null) {
             assets.remove(assetPair)
+            saveAll(context, widgetId, assets)
         }
-        saveAll(context, widgetId, assets)
     }
 
     override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveAsset> {
@@ -40,14 +43,18 @@ class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetAct
         assets?.forEach {
             assetsList.add(Gson().fromJson(it, MarketWidgetActiveAsset::class.java))
         }
+        assetsList.sortBy { it.order }
         return assetsList
     }
 
     override fun saveAll(context: Context, widgetId: Int, dataList: MutableList<MarketWidgetActiveAsset>) {
         val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
         val assets = hashSetOf<String>()
+        var orderIndex = 0
         dataList.forEach {
+            it.order = orderIndex
             assets.add(Gson().toJson(it))
+            orderIndex++
         }
         prefs.putStringSet(PREF_ASSET_KEY + widgetId, assets)
         prefs.apply()
@@ -57,9 +64,5 @@ class MarketWidgetActiveAssetPrefStore : MarketWidgetActiveStore<MarketWidgetAct
         val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
         prefs.remove(PREF_ASSET_KEY + widgetId)
         prefs.apply()
-    }
-
-    companion object {
-        private const val PREF_ASSET_KEY = "appwidget_asset_"
     }
 }

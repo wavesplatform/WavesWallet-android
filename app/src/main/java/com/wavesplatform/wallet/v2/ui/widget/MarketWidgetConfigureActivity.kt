@@ -103,16 +103,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tab_navigation.addOnTabSelectedListener(this)
 
         toolbar_close.click {
-            MarketWidgetActiveAssetPrefStore.saveAll(this, widgetId, widgetAssetPairs)
-            // It is the responsibility of the configuration activity to update the app widget
-            val appWidgetManager = AppWidgetManager.getInstance(this)
-            MarketWidget.updateWidget(this, appWidgetManager, widgetId)
-
-            // Make sure we pass back the original appWidgetId
-            val resultValue = Intent()
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-            setResult(Activity.RESULT_OK, resultValue)
-            finish()
+            saveAppWidget()
         }
 
 
@@ -183,6 +174,24 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         presenter.loadAssets(assets)
     }
 
+    private fun saveAppWidget() {
+        MarketWidgetActiveAssetPrefStore.saveAll(this, widgetId, widgetAssetPairs)
+        // It is the responsibility of the configuration activity to update the app widget
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        MarketWidget.updateWidget(this, appWidgetManager, widgetId)
+
+        // Make sure we pass back the original appWidgetId
+        val resultValue = Intent()
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        setResult(Activity.RESULT_OK, resultValue)
+        finish()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        saveAppWidget()
+    }
+
     override fun onTabReselected(tab: TabLayout.Tab?) {
         onTabSelected(tab)
     }
@@ -196,17 +205,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
             INTERVAL_TAB -> showIntervalDialog()
             ADD_TAB -> showAssetsDialog()
             THEME_TAB -> showThemeDialog()
-        }
-    }
-
-    private fun updateWidgetAssetPairs() {
-        widgetAssetPairs.clear()
-        adapter.data.forEach {
-            widgetAssetPairs.add(MarketWidgetActiveAsset(
-                    it.assetInfo.name,
-                    widgetId.toString() + (it.pair.amountAsset ?: "") + (it.pair.priceAsset ?: ""),
-                    it.pair.amountAsset ?: "",
-                    it.pair.priceAsset ?: ""))
         }
     }
 
@@ -237,6 +235,17 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     override fun fail() {
         afterFailGetMarkets()
         skeletonScreen?.hide()
+    }
+
+    private fun updateWidgetAssetPairs() {
+        widgetAssetPairs.clear()
+        adapter.data.forEach {
+            widgetAssetPairs.add(MarketWidgetActiveAsset(
+                    it.assetInfo.name,
+                    widgetId.toString() + (it.pair.amountAsset ?: "") + (it.pair.priceAsset ?: ""),
+                    it.pair.amountAsset ?: "",
+                    it.pair.priceAsset ?: ""))
+        }
     }
 
     private fun checkCanAddPair() {
