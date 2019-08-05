@@ -46,7 +46,6 @@
             android:layout_marginBottom="8dp"
             android:layout_toEndOf="@+id/image_delete"
             android:text="WAVES / BTC"
-            android:textAllCaps="true"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:fontFamily="@font/roboto_bold"

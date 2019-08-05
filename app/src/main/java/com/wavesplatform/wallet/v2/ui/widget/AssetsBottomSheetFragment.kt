@@ -41,6 +41,7 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     @Inject
     lateinit var adapter: AssetsAdapter
     var onChooseListener: OnChooseListener? = null
+    var chosenAssets = arrayListOf<String>()
 
     init {
         Constants.defaultCrypto().forEach {
@@ -61,7 +62,10 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
             savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout, container, false)
+        chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
+
+        val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout,
+                container, false)
 
         editSearch = rootView.findViewById(R.id.edit_search)
         recycleAssets = rootView.findViewById(R.id.recycle_assets)
@@ -147,8 +151,10 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
         eventSubscriptions.add(dataServiceManager.assets(ids = defaultAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
+                    adapter.setNewData(result.filter {
+                        items -> chosenAssets.any { it == items.id }
+                    })
                     skeletonScreen?.hide()
-                    adapter.setNewData(result)
                     adapter.emptyView = getEmptyView()
                 }, {
                     afterFailGetMarkets()
@@ -184,8 +190,12 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
         private const val ASSETS = "assets"
 
-        fun newInstance(): AssetsBottomSheetFragment {
-            return AssetsBottomSheetFragment()
+        fun newInstance(assets: ArrayList<String>): AssetsBottomSheetFragment {
+            val fragment = AssetsBottomSheetFragment()
+            val args = Bundle()
+            args.putStringArrayList(ASSETS, assets)
+            fragment.arguments = args
+            return fragment
         }
     }
 }

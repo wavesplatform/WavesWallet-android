@@ -61,17 +61,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     @Inject
     @InjectPresenter
     lateinit var presenter: MarketWidgetConfigurePresenter
-
-    @Inject
-    lateinit var dataServiceManager: DataServiceManager
     @Inject
     lateinit var adapter: TokenAdapter
-    private var themeName = MarketWidgetStyle.CLASSIC
-    private var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
-    private var assets = arrayListOf<String>()
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
-    private var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
-    private var canAddPair = false
 
     @ProvidePresenter
     fun providePresenter(): MarketWidgetConfigurePresenter = presenter
@@ -110,14 +102,17 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tokensList.layoutManager = LinearLayoutManager(this)
         tokensList.itemAnimator = FadeInWithoutDelayAnimator()
         adapter.bindToRecyclerView(tokensList)
-
         adapter.onItemChildClickListener =
                 BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
                     when (view.id) {
                         R.id.image_delete -> {
-                            adapter.remove(position)
-                            updateWidgetAssetPairs()
-                            checkCanAddPair()
+                            if (adapter.data.size > 1) {
+                                adapter.remove(position)
+                                updateWidgetAssetPairs()
+                                checkCanAddPair()
+                            } else if (adapter.data.size == 1) {
+                                adapter.notifyItemChanged(0)
+                            }
                         }
                     }
                 }
@@ -152,30 +147,11 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
-        val assetsList =
-                MarketWidgetActiveAssetPrefStore.queryAll(this, widgetId)
-
-        if (assetsList.isEmpty()) {
-            Constants.defaultCrypto().toList().forEach {
-                if (it.isWavesId()) {
-                    assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
-                } else {
-                    assets.add(it)
-                }
-            }
-        } else {
-            assetsList.forEach {
-                assets.add(it.amountAsset)
-            }
-        }
-
-        skeletonScreen?.show()
-        setSkeletonGradient()
-        presenter.loadAssets(assets)
+        presenter.loadAssets(this, widgetId)
     }
 
     private fun saveAppWidget() {
-        MarketWidgetActiveAssetPrefStore.saveAll(this, widgetId, widgetAssetPairs)
+        MarketWidgetActiveAssetPrefStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(this)
         MarketWidget.updateWidget(this, appWidgetManager, widgetId)
@@ -188,7 +164,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         saveAppWidget()
     }
 
@@ -208,7 +183,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    override fun updatePairs(assetPairList: ArrayList<TokenAdapter.TokenPair>) {
+    override fun onUpdatePairs(assetPairList: ArrayList<TokenAdapter.TokenPair>) {
         adapter.setNewData(assetPairList)
         checkCanAddPair()
         adapter.emptyView = getEmptyView()
@@ -216,7 +191,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         updateWidgetAssetPairs()
     }
 
-    override fun updatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse) {
+    override fun onUpdatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse) {
         if (searchPairResponse.data.isEmpty()) {
             skeletonScreen?.hide()
             showError(R.string.market_widget_config_cant_find_currency_pair, R.id.root)
@@ -232,26 +207,26 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         updateWidgetAssetPairs()
     }
 
-    override fun fail() {
+    override fun onFailGetMarkets() {
         afterFailGetMarkets()
         skeletonScreen?.hide()
     }
 
     private fun updateWidgetAssetPairs() {
-        widgetAssetPairs.clear()
+        presenter.widgetAssetPairs.clear()
         adapter.data.forEach {
-            widgetAssetPairs.add(MarketWidgetActiveAsset(
+            presenter.widgetAssetPairs.add(MarketWidgetActiveAsset(
                     it.assetInfo.name,
-                    widgetId.toString() + (it.pair.amountAsset ?: "") + (it.pair.priceAsset ?: ""),
+                    it.pair.amountAsset ?: "",
                     it.pair.amountAsset ?: "",
                     it.pair.priceAsset ?: ""))
         }
     }
 
     private fun checkCanAddPair() {
-        canAddPair = adapter.data.size < 10
+        presenter.canAddPair = adapter.data.size < 10
 
-        val count = SpannableStringBuilder("${adapter.data.size}/10")
+        val count = SpannableStringBuilder("${adapter.data.size} / 10")
         count.setSpan(StyleSpan(Typeface.BOLD), 0, count.length - 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         tokensCounter.text = count
 
@@ -259,7 +234,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         val imageTab = addTab?.customView?.findViewById<ImageView>(R.id.image_tab)
         val textTab = addTab?.customView?.findViewById<TextView>(R.id.text_tab)
 
-        if (canAddPair) {
+        if (presenter.canAddPair) {
             textTab?.setTextColor(ContextCompat.getColor(baseContext, R.color.black))
             imageTab?.setImageDrawable(
                     ContextCompat.getDrawable(baseContext, R.drawable.ic_widget_addtoken_22))
@@ -307,7 +282,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showIntervalDialog() {
-        val position = when (intervalUpdate) {
+        val position = when (presenter.intervalUpdate) {
             MarketWidgetUpdateInterval.MIN_1 -> 0
             MarketWidgetUpdateInterval.MIN_5 -> 1
             MarketWidgetUpdateInterval.MIN_10 -> 2
@@ -325,7 +300,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         )
         optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
             override fun onChange(optionPosition: Int) {
-                intervalUpdate = when (optionPosition) {
+                presenter.intervalUpdate = when (optionPosition) {
                     0 -> MarketWidgetUpdateInterval.MIN_1
                     1 -> MarketWidgetUpdateInterval.MIN_5
                     2 -> MarketWidgetUpdateInterval.MIN_10
@@ -333,7 +308,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                     else -> MarketWidgetUpdateInterval.MIN_10
                 }
                 MarketWidgetUpdateInterval.setInterval(
-                        this@MarketWidgetConfigureActivity, widgetId, intervalUpdate)
+                        this@MarketWidgetConfigureActivity, widgetId, presenter.intervalUpdate)
             }
         }
         val ft = supportFragmentManager.beginTransaction()
@@ -342,7 +317,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showThemeDialog() {
-        val position = when (themeName) {
+        val position = when (presenter.themeName) {
             MarketWidgetStyle.CLASSIC -> 0
             MarketWidgetStyle.DARK -> 1
         }
@@ -356,13 +331,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         )
         optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
             override fun onChange(optionPosition: Int) {
-                themeName = when (optionPosition) {
+                presenter.themeName = when (optionPosition) {
                     0 -> MarketWidgetStyle.CLASSIC
                     1 -> MarketWidgetStyle.DARK
                     else -> MarketWidgetStyle.CLASSIC
                 }
                 MarketWidgetStyle.setTheme(
-                        this@MarketWidgetConfigureActivity, widgetId, themeName)
+                        this@MarketWidgetConfigureActivity, widgetId, presenter.themeName)
             }
         }
         val ft = supportFragmentManager.beginTransaction()
@@ -371,17 +346,17 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showAssetsDialog() {
-        if (!canAddPair) {
+        if (!presenter.canAddPair) {
             return
         }
 
-        val assetsDialog = AssetsBottomSheetFragment.newInstance()
+        val assetsDialog = AssetsBottomSheetFragment.newInstance(presenter.assets)
         val ft = supportFragmentManager.beginTransaction()
         ft.add(assetsDialog, assetsDialog::class.java.simpleName)
         ft.commitAllowingStateLoss()
         assetsDialog.onChooseListener = object : AssetsBottomSheetFragment.OnChooseListener {
             override fun onChoose(asset: AssetInfoResponse) {
-                this@MarketWidgetConfigureActivity.assets.add(asset.id)
+                presenter.assets.add(asset.id)
                 val token = adapter.data.firstOrNull { it.assetInfo.id == asset.id }
                 if (token == null) {
                     skeletonScreen?.show()

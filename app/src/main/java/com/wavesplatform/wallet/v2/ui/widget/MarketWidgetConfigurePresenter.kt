@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.widget
 
+import android.content.Context
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
@@ -7,8 +8,13 @@ import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWavesId
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefStore
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -18,7 +24,13 @@ import javax.inject.Inject
 @InjectViewState
 class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<MarketWidgetConfigureView>() {
 
-    fun loadAssets(assets: List<String>) {
+    var assets = arrayListOf<String>()
+    var themeName = MarketWidgetStyle.CLASSIC
+    var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
+    var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
+    var canAddPair = false
+
+    fun loadAssets(context: Context, widgetId: Int) {
 
         fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>)
                 : MutableList<SearchPairResponse.Pair> {
@@ -53,6 +65,8 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
             return initPairsList
         }
 
+        setInitAppWidgetConfig(context, widgetId)
+
         val pairsList = createPairs(assets)
         addSubscription(
                 Observable.zip(dataServiceManager.assets(ids = assets),
@@ -60,21 +74,21 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                                 .flatMap { pairs ->
                                     Observable.just(getFilledPairs(pairs, pairsList))
                                 },
-                        BiFunction { t1: List<AssetInfoResponse>, t2: List<SearchPairResponse.Pair> ->
-                            return@BiFunction Pair(t1, t2)
+                        BiFunction { assetInfoList: List<AssetInfoResponse>, searchPair: List<SearchPairResponse.Pair> ->
+                            return@BiFunction Pair(assetInfoList, searchPair)
                         })
                         .compose(RxUtil.applyObservableDefaultSchedulers())
-                        .subscribe({ pair ->
+                        .subscribe({ (assetInfoList, searchPair) ->
                             val tokenPairList = arrayListOf<TokenAdapter.TokenPair>()
-                            pair.second.forEach { assetPair ->
+                            searchPair.forEach { assetPair ->
                                 tokenPairList.add(TokenAdapter.TokenPair(
-                                        pair.first.first { it.id == assetPair.amountAsset },
+                                        assetInfoList.first { it.id == assetPair.amountAsset },
                                         assetPair))
                             }
-                            viewState.updatePairs(tokenPairList)
+                            viewState.onUpdatePairs(tokenPairList)
                         }, {
                             it.printStackTrace()
-                            viewState.fail()
+                            viewState.onFailGetMarkets()
                         })
         )
     }
@@ -84,11 +98,33 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe(
                         { result ->
-                            viewState.updatePair(assetInfo, result)
+                            viewState.onUpdatePair(assetInfo, result)
                         },
                         {
                             it.printStackTrace()
-                            viewState.fail()
+                            viewState.onFailGetMarkets()
                         }))
+    }
+
+    private fun setInitAppWidgetConfig(context: Context, widgetId: Int) {
+        val assetsList =
+                MarketWidgetActiveAssetPrefStore.queryAll(context, widgetId)
+
+        if (assetsList.isEmpty()) {
+            Constants.defaultCrypto().toList().forEach {
+                if (it.isWavesId()) {
+                    assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
+                } else {
+                    assets.add(it)
+                }
+            }
+        } else {
+            assetsList.forEach {
+                assets.add(it.amountAsset)
+            }
+        }
+
+        intervalUpdate = MarketWidgetUpdateInterval.getInterval(context, widgetId)
+        themeName = MarketWidgetStyle.getTheme(context, widgetId)
     }
 }

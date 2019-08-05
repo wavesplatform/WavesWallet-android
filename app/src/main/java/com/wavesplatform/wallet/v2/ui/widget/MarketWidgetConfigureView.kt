@@ -6,7 +6,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
 
 interface MarketWidgetConfigureView : BaseMvpView {
-    fun updatePairs(assetPairList: ArrayList<TokenAdapter.TokenPair>)
-    fun updatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse)
-    fun fail()
+    fun onUpdatePairs(assetPairList: ArrayList<TokenAdapter.TokenPair>)
+    fun onUpdatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse)
+    fun onFailGetMarkets()
 }

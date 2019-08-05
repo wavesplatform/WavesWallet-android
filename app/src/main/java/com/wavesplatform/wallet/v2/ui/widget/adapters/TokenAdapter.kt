@@ -11,8 +11,14 @@ class TokenAdapter @Inject constructor() : BaseItemDraggableAdapter<TokenAdapter
         BaseViewHolder>(R.layout.widget_drag_asset_item, null) {
 
     override fun convert(helper: BaseViewHolder, item: TokenPair) {
-        helper.setText(R.id.text_market_name, item.assetInfo.name)
-                .addOnClickListener(R.id.image_delete)
+        if (data.size == 1) {
+            helper.setText(R.id.text_market_name, item.assetInfo.name)
+                    .setImageResource(R.id.image_delete, R.drawable.ic_draglock_22_disabled_400)
+        } else {
+            helper.setText(R.id.text_market_name, item.assetInfo.name)
+                    .setImageResource(R.id.image_delete, R.drawable.ic_delete_22_error_500)
+                    .addOnClickListener(R.id.image_delete)
+        }
     }
 
     data class TokenPair(var assetInfo: AssetInfoResponse, var pair: SearchPairResponse.Pair)
