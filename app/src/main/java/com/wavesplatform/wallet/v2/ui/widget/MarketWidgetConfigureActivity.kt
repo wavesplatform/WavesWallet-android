@@ -32,18 +32,15 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.utils.isWavesId
+import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefStore
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
@@ -95,7 +92,11 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tab_navigation.addOnTabSelectedListener(this)
 
         toolbar_close.click {
-            saveAppWidget()
+            presenter.saveAppWidget(this, widgetId)
+            val resultValue = Intent()
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            setResult(Activity.RESULT_OK, resultValue)
+            finish()
         }
 
 
@@ -150,23 +151,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         presenter.loadAssets(this, widgetId)
     }
 
-    private fun saveAppWidget() {
-        MarketWidgetActiveAssetPrefStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
-        // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(this)
-        MarketWidget.updateWidget(this, appWidgetManager, widgetId)
-
-        // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        setResult(Activity.RESULT_OK, resultValue)
-        finish()
-    }
-
-    override fun onBackPressed() {
-        saveAppWidget()
-    }
-
     override fun onTabReselected(tab: TabLayout.Tab?) {
         onTabSelected(tab)
     }
@@ -214,10 +198,21 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private fun updateWidgetAssetPairs() {
         presenter.widgetAssetPairs.clear()
+
         adapter.data.forEach {
+
+            val id = when {
+                it.pair.priceAsset?.isWaves() == true ->
+                    it.pair.amountAsset
+                isFiat(it.pair.priceAsset ?: "") ->
+                    it.pair.amountAsset
+                else ->
+                    it.pair.priceAsset
+            }
+
             presenter.widgetAssetPairs.add(MarketWidgetActiveAsset(
                     it.assetInfo.name,
-                    it.pair.amountAsset ?: "",
+                    id ?: "",
                     it.pair.amountAsset ?: "",
                     it.pair.priceAsset ?: ""))
         }

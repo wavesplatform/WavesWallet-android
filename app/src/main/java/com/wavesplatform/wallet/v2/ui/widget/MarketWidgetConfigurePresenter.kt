@@ -1,12 +1,13 @@
 package com.wavesplatform.wallet.v2.ui.widget
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -16,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefSt
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.isFiat
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
@@ -30,6 +32,13 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
     var canAddPair = false
 
+    fun saveAppWidget(context: Context, widgetId: Int) {
+        MarketWidgetActiveAssetPrefStore.saveAll(context, widgetId, widgetAssetPairs)
+        // It is the responsibility of the configuration activity to update the app widget
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        MarketWidget.updateWidget(context, appWidgetManager, widgetId)
+    }
+
     fun loadAssets(context: Context, widgetId: Int) {
 
         fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>)
@@ -43,7 +52,12 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                     filledResult.add(pairs.data[index])
                 }
             }
-            return filledResult
+
+            return if (filledResult.size > 10) {
+                filledResult.subList(0, 10)
+            } else {
+                filledResult
+            }
         }
 
         fun createPairs(assets: List<String>): MutableList<String> {
@@ -54,8 +68,9 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
             }
 
             for (priceAssetId in assets) {
-                if (priceAssetId.isWavesId()) {
+                if (priceAssetId.isWaves()) {
                     initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${usdAsset?.assetId}")
+                    initPairsList.add("${usdAsset?.assetId}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
                     continue
                 } else {
                     initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
@@ -70,7 +85,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
         val pairsList = createPairs(assets)
         addSubscription(
                 Observable.zip(dataServiceManager.assets(ids = assets),
-                        dataServiceManager.loadPairs(PairRequest(pairs = pairsList, limit = 200))
+                        dataServiceManager.loadPairs(pairs = pairsList)
                                 .flatMap { pairs ->
                                     Observable.just(getFilledPairs(pairs, pairsList))
                                 },
@@ -81,8 +96,18 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                         .subscribe({ (assetInfoList, searchPair) ->
                             val tokenPairList = arrayListOf<TokenAdapter.TokenPair>()
                             searchPair.forEach { assetPair ->
+
+                                val id = when {
+                                    assetPair.priceAsset?.isWaves() == true ->
+                                        assetPair.amountAsset
+                                    isFiat(assetPair.priceAsset ?: "") ->
+                                        assetPair.amountAsset
+                                    else ->
+                                        assetPair.priceAsset
+                                }
+
                                 tokenPairList.add(TokenAdapter.TokenPair(
-                                        assetInfoList.first { it.id == assetPair.amountAsset },
+                                        assetInfoList.first { it.id == id },
                                         assetPair))
                             }
                             viewState.onUpdatePairs(tokenPairList)
