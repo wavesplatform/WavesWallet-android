@@ -278,28 +278,24 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showIntervalDialog() {
-        val position = when (presenter.intervalUpdate) {
-            MarketWidgetUpdateInterval.MIN_1 -> 0
-            MarketWidgetUpdateInterval.MIN_5 -> 1
-            MarketWidgetUpdateInterval.MIN_10 -> 2
-            MarketWidgetUpdateInterval.MANUALLY -> 3
-        }
-
         val optionDialog = OptionBottomSheetFragment.newInstance(
-                arrayListOf(
-                        getString(R.string.market_widget_config_interval_1_min),
-                        getString(R.string.market_widget_config_interval_5_min),
-                        getString(R.string.market_widget_config_interval_10_min),
-                        getString(R.string.market_widget_config_interval_manually)),
-                getString(R.string.market_widget_config_update_interval),
-                position
+                R.string.market_widget_config_update_interval,
+                arrayListOf(R.string.market_widget_config_interval_1_min,
+                        R.string.market_widget_config_interval_5_min,
+                        R.string.market_widget_config_interval_10_min,
+                        R.string.market_widget_config_interval_manually),
+                when (presenter.intervalUpdate) {
+                    MarketWidgetUpdateInterval.MIN_1 -> 0
+                    MarketWidgetUpdateInterval.MIN_5 -> 1
+                    MarketWidgetUpdateInterval.MIN_10 -> 2
+                    MarketWidgetUpdateInterval.MANUALLY -> 3
+                }
         )
         optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
             override fun onChange(optionPosition: Int) {
                 presenter.intervalUpdate = when (optionPosition) {
                     0 -> MarketWidgetUpdateInterval.MIN_1
                     1 -> MarketWidgetUpdateInterval.MIN_5
-                    2 -> MarketWidgetUpdateInterval.MIN_10
                     3 -> MarketWidgetUpdateInterval.MANUALLY
                     else -> MarketWidgetUpdateInterval.MIN_10
                 }
@@ -313,22 +309,18 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showThemeDialog() {
-        val position = when (presenter.themeName) {
-            MarketWidgetStyle.CLASSIC -> 0
-            MarketWidgetStyle.DARK -> 1
-        }
-
         val optionDialog = OptionBottomSheetFragment.newInstance(
-                arrayListOf(
-                        getString(R.string.market_widget_config_classic),
-                        getString(R.string.market_widget_config_dark)),
-                getString(R.string.market_widget_config_widget_style),
-                position
+                R.string.market_widget_config_widget_style,
+                arrayListOf(MarketWidgetStyle.CLASSIC.styleName,
+                        MarketWidgetStyle.DARK.styleName),
+                when (presenter.themeName) {
+                    MarketWidgetStyle.CLASSIC -> 0
+                    MarketWidgetStyle.DARK -> 1
+                }
         )
         optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
             override fun onChange(optionPosition: Int) {
                 presenter.themeName = when (optionPosition) {
-                    0 -> MarketWidgetStyle.CLASSIC
                     1 -> MarketWidgetStyle.DARK
                     else -> MarketWidgetStyle.CLASSIC
                 }
