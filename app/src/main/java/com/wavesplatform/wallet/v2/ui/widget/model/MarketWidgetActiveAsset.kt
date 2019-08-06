@@ -7,6 +7,8 @@ package com.wavesplatform.wallet.v2.ui.widget.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.utils.isWaves
+import com.wavesplatform.wallet.v2.util.isFiat
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -21,4 +23,19 @@ data class MarketWidgetActiveAsset(
         var priceAsset: String,
         @SerializedName("order")
         var order: Int = 0
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+
+        fun getMainAssetId(asset: MarketWidgetActiveAsset): String {
+            return when {
+                asset.priceAsset.isWaves() ->
+                    asset.amountAsset
+                isFiat(asset.priceAsset) ->
+                    asset.amountAsset
+                else ->
+                    asset.priceAsset
+            }
+        }
+    }
+}

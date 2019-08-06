@@ -63,14 +63,10 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
         fun createPairs(assets: List<String>): MutableList<String> {
             val initPairsList = mutableListOf<String>()
 
-            val usdAsset = EnvironmentManager.defaultAssets.firstOrNull {
-                it.issueTransaction?.name == "US Dollar"
-            }
-
             for (priceAssetId in assets) {
                 if (priceAssetId.isWaves()) {
-                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${usdAsset?.assetId}")
-                    initPairsList.add("${usdAsset?.assetId}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
+                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${Constants.Fiat.USD_ID}")
+                    initPairsList.add("${Constants.Fiat.USD_ID}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
                     continue
                 } else {
                     initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
@@ -145,7 +141,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
             }
         } else {
             assetsList.forEach {
-                assets.add(it.amountAsset)
+                assets.add(MarketWidgetActiveAsset.getMainAssetId(it))
             }
         }
 
