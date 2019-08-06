@@ -18,13 +18,15 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
-import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
+import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
 import dagger.android.AndroidInjection
+import pers.victor.ext.app
+import java.util.*
 import javax.inject.Inject
-import javax.inject.Named
 
 
 /**
@@ -35,12 +37,15 @@ class MarketWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
             loadPrice(context, appWidgetId)
+            preferencesHelper.saveActiveWidget(appWidgetId)
             context.startAlarmUpdate<MarketWidget>(appWidgetId)
         }
     }
@@ -49,6 +54,7 @@ class MarketWidget : AppWidgetProvider() {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
             MarketWidgetSettings.clearSettings(context, appWidgetId)
+            preferencesHelper.removeWidgetFromActive(appWidgetId)
         }
     }
 
@@ -103,6 +109,7 @@ class MarketWidget : AppWidgetProvider() {
             configureClicks(context, appWidgetId, views)
             configureProgressState(context, appWidgetId, progressState, views)
             configureMarketList(context, appWidgetId, views)
+
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
             // Instruct the widget manager to update the widget
@@ -111,14 +118,25 @@ class MarketWidget : AppWidgetProvider() {
         }
 
         internal fun updateWidgetProgress(context: Context, appWidgetId: Int,
-                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
+                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE,
+                                          locale: Locale = Locale.getDefault()) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val theme = MarketWidgetSettings.themeSettings().getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
-            configureProgressState(context, appWidgetId, progressState, views)
+            configureProgressState(context, appWidgetId, progressState, views, locale)
 
             appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
+        }
+
+
+        fun reConfigActiveWidgets(context: Context, preferencesHelper: PreferencesHelper, locale: Locale) {
+            val widgets = preferencesHelper.activeWidgets
+            if (widgets.isNotEmpty()) {
+                widgets.forEach { widgetId ->
+                    updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE, locale)
+                }
+            }
         }
 
         private fun configureMarketList(context: Context, appWidgetId: Int, views: RemoteViews) {
@@ -128,18 +146,20 @@ class MarketWidget : AppWidgetProvider() {
             views.setRemoteAdapter(R.id.list_markets, adapter)
         }
 
-        private fun configureProgressState(context: Context, appWidgetId: Int, progressState: MarketWidgetProgressState, views: RemoteViews) {
+        private fun configureProgressState(context: Context, appWidgetId: Int,
+                                           progressState: MarketWidgetProgressState, views: RemoteViews,
+                                           locale: Locale = Locale.getDefault()) {
             when (progressState) {
                 MarketWidgetProgressState.IDLE -> {
                     views.setViewVisibility(R.id.image_update, View.VISIBLE)
                     views.setViewVisibility(R.id.progress_updating, View.GONE)
-                    views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_update))
+                    views.setTextViewText(R.id.text_update, context.getLocalizedString(R.string.market_widget_update, locale))
                     configureClicks(context, appWidgetId, views)
                 }
                 MarketWidgetProgressState.PROGRESS -> {
                     views.setViewVisibility(R.id.image_update, View.GONE)
                     views.setViewVisibility(R.id.progress_updating, View.VISIBLE)
-                    views.setTextViewText(R.id.text_update, context.getText(R.string.market_widget_updating))
+                    views.setTextViewText(R.id.text_update, context.getLocalizedString(R.string.market_widget_updating, locale))
                     views.setOnClickPendingIntent(R.id.linear_update, null)
                 }
                 else -> {
