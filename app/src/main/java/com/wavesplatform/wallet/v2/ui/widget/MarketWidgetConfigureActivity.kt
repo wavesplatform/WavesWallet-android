@@ -111,8 +111,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                                 adapter.remove(position)
                                 updateWidgetAssetPairs()
                                 checkCanAddPair()
-                            } else if (adapter.data.size == 1) {
-                                adapter.notifyItemChanged(0)
+                                if (adapter.data.size == 1) {
+                                    adapter.notifyItemChanged(0)
+                                }
                             }
                         }
                     }

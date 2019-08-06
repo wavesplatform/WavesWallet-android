@@ -14,6 +14,7 @@ class TokenAdapter @Inject constructor() : BaseItemDraggableAdapter<TokenAdapter
         if (data.size == 1) {
             helper.setText(R.id.text_market_name, item.assetInfo.name)
                     .setImageResource(R.id.image_delete, R.drawable.ic_draglock_22_disabled_400)
+                    .addOnClickListener(R.id.image_delete)
         } else {
             helper.setText(R.id.text_market_name, item.assetInfo.name)
                     .setImageResource(R.id.image_delete, R.drawable.ic_delete_22_error_500)
