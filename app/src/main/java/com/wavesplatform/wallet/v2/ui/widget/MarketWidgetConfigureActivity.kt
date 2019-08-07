@@ -40,6 +40,7 @@ import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.ui.widget.option.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -278,59 +279,41 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun showIntervalDialog() {
-        val optionDialog = OptionBottomSheetFragment.newInstance(
-                R.string.market_widget_config_update_interval,
-                arrayListOf(R.string.market_widget_config_interval_1_min,
-                        R.string.market_widget_config_interval_5_min,
-                        R.string.market_widget_config_interval_10_min,
-                        R.string.market_widget_config_interval_manually),
-                when (presenter.intervalUpdate) {
-                    MarketWidgetUpdateInterval.MIN_1 -> 0
-                    MarketWidgetUpdateInterval.MIN_5 -> 1
-                    MarketWidgetUpdateInterval.MIN_10 -> 2
-                    MarketWidgetUpdateInterval.MANUALLY -> 3
-                }
-        )
-        optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
-            override fun onChange(optionPosition: Int) {
-                presenter.intervalUpdate = when (optionPosition) {
-                    0 -> MarketWidgetUpdateInterval.MIN_1
-                    1 -> MarketWidgetUpdateInterval.MIN_5
-                    3 -> MarketWidgetUpdateInterval.MANUALLY
-                    else -> MarketWidgetUpdateInterval.MIN_10
-                }
-                MarketWidgetUpdateInterval.setInterval(
-                        this@MarketWidgetConfigureActivity, widgetId, presenter.intervalUpdate)
+        val optionBottomSheetFragment = OptionsBottomSheetFragment<MarketWidgetUpdateInterval>()
+
+        val options = MarketWidgetUpdateInterval.values().toMutableList()
+        val defaultPosition = options.indexOf(MarketWidgetUpdateInterval.getInterval(this, widgetId))
+
+        optionBottomSheetFragment.configureDialog(options,
+                getString(R.string.market_widget_config_update_interval),
+                defaultPosition)
+
+        optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetUpdateInterval> {
+            override fun onSelected(data: MarketWidgetUpdateInterval) {
+                MarketWidgetUpdateInterval.setInterval(this@MarketWidgetConfigureActivity, widgetId, data)
             }
         }
-        val ft = supportFragmentManager.beginTransaction()
-        ft.add(optionDialog, optionDialog::class.java.simpleName)
-        ft.commitAllowingStateLoss()
+
+        optionBottomSheetFragment.show(supportFragmentManager, optionBottomSheetFragment::class.java.simpleName)
     }
 
     private fun showThemeDialog() {
-        val optionDialog = OptionBottomSheetFragment.newInstance(
-                R.string.market_widget_config_widget_style,
-                arrayListOf(MarketWidgetStyle.CLASSIC.styleName,
-                        MarketWidgetStyle.DARK.styleName),
-                when (presenter.themeName) {
-                    MarketWidgetStyle.CLASSIC -> 0
-                    MarketWidgetStyle.DARK -> 1
-                }
-        )
-        optionDialog.onChangeListener = object : OptionBottomSheetFragment.OnChangeListener {
-            override fun onChange(optionPosition: Int) {
-                presenter.themeName = when (optionPosition) {
-                    1 -> MarketWidgetStyle.DARK
-                    else -> MarketWidgetStyle.CLASSIC
-                }
-                MarketWidgetStyle.setTheme(
-                        this@MarketWidgetConfigureActivity, widgetId, presenter.themeName)
+        val optionBottomSheetFragment = OptionsBottomSheetFragment<MarketWidgetStyle>()
+
+        val options = MarketWidgetStyle.values().toMutableList()
+        val defaultPosition = options.indexOf(MarketWidgetStyle.getTheme(this, widgetId))
+
+        optionBottomSheetFragment.configureDialog(options,
+                getString(R.string.market_widget_config_widget_style),
+                defaultPosition)
+
+        optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetStyle> {
+            override fun onSelected(data: MarketWidgetStyle) {
+                MarketWidgetStyle.setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
             }
         }
-        val ft = supportFragmentManager.beginTransaction()
-        ft.add(optionDialog, optionDialog::class.java.simpleName)
-        ft.commitAllowingStateLoss()
+
+        optionBottomSheetFragment.show(supportFragmentManager, optionBottomSheetFragment::class.java.simpleName)
     }
 
     private fun showAssetsDialog() {
