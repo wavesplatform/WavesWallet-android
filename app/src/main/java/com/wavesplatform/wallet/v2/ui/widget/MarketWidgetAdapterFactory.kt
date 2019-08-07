@@ -26,7 +26,7 @@ import pers.victor.ext.dp
 import pers.victor.ext.sp
 
 
-class MarketWidgetAdapterFactory(var context: Context, intent: Intent, var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>) : RemoteViewsService.RemoteViewsFactory {
+class MarketWidgetAdapterFactory(var context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
     var data: MutableList<MarketWidgetActiveMarket.UI> = mutableListOf()
     private var widgetID: Int = AppWidgetManager.INVALID_APPWIDGET_ID
@@ -52,11 +52,11 @@ class MarketWidgetAdapterFactory(var context: Context, intent: Intent, var activ
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val theme = MarketWidgetStyle.getTheme(context, widgetID)
+        val theme = MarketWidgetSettings.themeSettings().getTheme(context, widgetID)
         val marketViewRv = RemoteViews(context.packageName, theme.marketItemLayout)
         val data = data[position]
 
-        val currentCurrency = MarketWidgetCurrency.getCurrency(context, widgetID)
+        val currentCurrency = MarketWidgetSettings.currencySettings().getCurrency(context, widgetID)
 
         val priceData = when (currentCurrency) {
             MarketWidgetCurrency.USD -> data.usdData
@@ -124,7 +124,7 @@ class MarketWidgetAdapterFactory(var context: Context, intent: Intent, var activ
 
     override fun onDataSetChanged() {
         data.clear()
-        data.addAll(activeMarketStore.queryAll(context, widgetID))
+        data.addAll(MarketWidgetSettings.marketsSettings().queryAll(context, widgetID))
     }
 
     override fun onDestroy() {

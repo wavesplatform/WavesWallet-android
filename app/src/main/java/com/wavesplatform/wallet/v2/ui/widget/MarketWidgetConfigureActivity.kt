@@ -38,6 +38,8 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetSettings
+import kotlinx.android.synthetic.main.market_widget_configure.*
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.ui.widget.option.OptionsBottomSheetFragment
@@ -309,7 +311,8 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetStyle> {
             override fun onSelected(data: MarketWidgetStyle) {
-                MarketWidgetStyle.setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
+                // todo check MarketWidgetStyle.setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
+                MarketWidgetSettings.themeSettings().setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
             }
         }
 
@@ -355,4 +358,3 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         const val THEME_TAB = 2
     }
 }
-

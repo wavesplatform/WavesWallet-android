@@ -10,14 +10,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
-class MarketWidgetActiveMarketStore constructor(val gson: Gson) : MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> {
+object MarketWidgetActiveMarketStore : MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> {
 
     private val PREF_ACTIVE_MARKET_KEY = "appwidget_active_markets_"
 
     override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveMarket.UI> {
         val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
         val listType = object : TypeToken<MutableList<MarketWidgetActiveMarket.UI>>() {}.type
-        return gson.fromJson<MutableList<MarketWidgetActiveMarket.UI>>(
+        return Gson().fromJson<MutableList<MarketWidgetActiveMarket.UI>>(
                 prefs.getString(PREF_ACTIVE_MARKET_KEY + widgetId, ""), listType)
                 ?: mutableListOf()
     }
@@ -29,7 +29,7 @@ class MarketWidgetActiveMarketStore constructor(val gson: Gson) : MarketWidgetAc
     override fun saveAll(context: Context, widgetId: Int, dataList: MutableList<MarketWidgetActiveMarket.UI>) {
         val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
         prefs.edit()
-                .putString(PREF_ACTIVE_MARKET_KEY + widgetId, gson.toJson(dataList))
+                .putString(PREF_ACTIVE_MARKET_KEY + widgetId, Gson().toJson(dataList))
                 .apply()
     }
 

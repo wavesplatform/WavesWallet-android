@@ -6,10 +6,17 @@
 package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
-import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.BuildConfig
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
+import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
+import com.wavesplatform.wallet.v2.util.PrefsUtil
+import pers.victor.ext.app
+import java.util.*
 import javax.inject.Inject
 
 class PreferencesHelper @Inject constructor(@ApplicationContext context: Context) {
@@ -29,6 +36,19 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         get() = mPref.getInt(KEY_CURRENT_BLOCKS_HEIGHT, 0)
         set(value) = mPref.edit().putInt(KEY_CURRENT_BLOCKS_HEIGHT, value).apply()
 
+    var activeWidgets: MutableList<Int>
+        get() {
+            val listType = object : TypeToken<MutableList<Int>>() {}.type
+            return Gson().fromJson<MutableList<Int>>(
+                    mPref.getString(KEY_ACTIVE_WIDGETS_IDS, ""), listType)
+                    ?: mutableListOf()
+        }
+        set(value) {
+            mPref.edit()
+                    .putString(KEY_ACTIVE_WIDGETS_IDS, Gson().toJson(value))
+                    .apply()
+        }
+
     var lastAppVersion: String
         get() = mPref.getString(KEY_LAST_APP_VERSION, BuildConfig.VERSION_NAME)
         set(value) = mPref.edit().putString(KEY_LAST_APP_VERSION, value).apply()
@@ -47,6 +67,22 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun setLanguage(lang: String) {
         mPref.edit().putString(KEY_LANGUAGE, lang).apply()
+    }
+
+    fun saveActiveWidget(id: Int) {
+        val widgets = activeWidgets
+        if (widgets.contains(id).not()) {
+            widgets.add(id)
+            activeWidgets = widgets
+        }
+    }
+
+    fun removeWidgetFromActive(id: Int) {
+        val widgets = activeWidgets
+        if (widgets.contains(id)) {
+            widgets.remove(id)
+            activeWidgets = widgets
+        }
     }
 
     fun getShowSaveSeedWarningTime(guid: String): Long {
@@ -69,5 +105,6 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         const val KEY_LANGUAGE = "keyLanguage"
         const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
         const val KEY_USE_TEST_NEWS = "key_use_test_news"
+        const val KEY_ACTIVE_WIDGETS_IDS = "key_active_widgets_ids"
     }
 }

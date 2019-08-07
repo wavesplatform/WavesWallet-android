@@ -14,12 +14,8 @@ import javax.inject.Inject
 
 class MarketWidgetAdapterService : RemoteViewsService() {
 
-    @Inject
-    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
-
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
-        AndroidInjection.inject(this)
-        return MarketWidgetAdapterFactory(applicationContext, intent, activeMarketStore)
+        return MarketWidgetAdapterFactory(applicationContext, intent)
     }
 
 }

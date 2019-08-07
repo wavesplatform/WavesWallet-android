@@ -23,10 +23,6 @@ class MarketWidgetDataManager @Inject constructor() {
 
     @Inject
     lateinit var dataServiceManager: DataServiceManager
-    @Inject
-    lateinit var activeAssetStore: MarketWidgetActiveStore<MarketWidgetActiveAsset>
-    @Inject
-    lateinit var activeMarketStore: MarketWidgetActiveStore<MarketWidgetActiveMarket.UI>
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -35,7 +31,7 @@ class MarketWidgetDataManager @Inject constructor() {
                           successListener: () -> Unit,
                           errorListener: () -> Unit) {
 
-        val activeAssets = withDefaultPair(activeAssetStore.queryAll(context, widgetId))
+        val activeAssets = withDefaultPair(MarketWidgetSettings.assetsSettings().queryAll(context, widgetId))
         val activeAssetsIds = activeAssets.map { it.amountAsset + "/" + it.priceAsset }
 
         compositeDisposable.add(dataServiceManager.loadPairs(PairRequest(pairs = activeAssetsIds))
@@ -49,7 +45,7 @@ class MarketWidgetDataManager @Inject constructor() {
                 }
                 .map { activeMarkets ->
                     val prices = calculatePrice(activeMarkets)
-                    activeMarketStore.saveAll(context, widgetId, prices)
+                    MarketWidgetSettings.marketsSettings().saveAll(context, widgetId, prices)
                 }
                 .subscribe({
                     successListener.invoke()
