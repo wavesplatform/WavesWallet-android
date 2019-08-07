@@ -8,13 +8,12 @@ package com.wavesplatform.wallet.v2.ui.widget
 import android.content.Context
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
-import com.wavesplatform.sdk.utils.isWavesId
+import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.disposables.CompositeDisposable
-import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,7 +67,7 @@ class MarketWidgetDataManager @Inject constructor() {
             val usdData: MarketWidgetActiveMarket.UI.PriceData
             val eurData: MarketWidgetActiveMarket.UI.PriceData
 
-            if (marketWidgetActiveMarket.assetInfo.id.isWavesId()) {
+            if (marketWidgetActiveMarket.assetInfo.id.isWaves()) {
                 usdData = calculateWavesPriceFor(wavesUSDAsset)
                 eurData = calculateWavesPriceFor(wavesEURAsset)
             } else {
@@ -87,8 +86,14 @@ class MarketWidgetDataManager @Inject constructor() {
                                        wavesUSDAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
         val deltaPercentUsd = (activeMarket.data.lastPrice - activeMarket.data.firstPrice) * 100
         val percentUsd = deltaPercentUsd / activeMarket.data.lastPrice
-        val priceUsd = (activeMarket.data.volumeWaves?.div(activeMarket.data.volume))?.times(wavesUSDAsset.data.lastPrice)
-                ?: 0.0
+
+        val priceUsd = if (activeMarket.assetInfo.amountAsset.isWaves()) {
+            (activeMarket.data.volume.div(activeMarket.data.quoteVolume ?: 1.0)).times(wavesUSDAsset.data.lastPrice)
+        } else {
+            (activeMarket.data.volumeWaves?.div(activeMarket.data.volume))?.times(wavesUSDAsset.data.lastPrice)
+                    ?: 0.0
+        }
+
         return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)
     }
 

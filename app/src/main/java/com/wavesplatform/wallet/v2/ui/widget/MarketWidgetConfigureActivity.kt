@@ -311,7 +311,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetStyle> {
             override fun onSelected(data: MarketWidgetStyle) {
-                // todo check MarketWidgetStyle.setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
                 MarketWidgetSettings.themeSettings().setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
             }
         }
