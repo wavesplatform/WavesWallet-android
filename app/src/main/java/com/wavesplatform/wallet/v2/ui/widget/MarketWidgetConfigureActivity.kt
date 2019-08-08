@@ -148,6 +148,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
+        presenter.intervalUpdate = MarketWidgetUpdateInterval.getInterval(this, widgetId)
+        presenter.themeName = MarketWidgetStyle.getTheme(this, widgetId)
+
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
