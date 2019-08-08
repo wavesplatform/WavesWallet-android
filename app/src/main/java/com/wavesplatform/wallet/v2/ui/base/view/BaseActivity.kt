@@ -6,7 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.ProgressDialog
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.os.Build
@@ -335,8 +338,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     fun setLanguage(locale: Locale) {
-        MarketWidget.reConfigActiveWidgets(this, preferencesHelper, locale)
         localizationDelegate.setLanguage(this, locale)
+        MarketWidget.updateAllWidgetsByBroadcast(this)
     }
 
     fun setDefaultLanguage(language: String) {
