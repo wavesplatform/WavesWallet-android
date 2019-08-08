@@ -46,7 +46,6 @@ import com.wavesplatform.wallet.v2.ui.widget.option.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_empty_data.view.*
-import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
 import javax.inject.Inject
@@ -95,11 +94,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         tab_navigation.addOnTabSelectedListener(this)
 
         toolbar_close.click {
-            presenter.saveAppWidget(this, widgetId)
-            val resultValue = Intent()
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-            setResult(Activity.RESULT_OK, resultValue)
-            finish()
+            saveAppWidget()
         }
 
 
@@ -155,6 +150,18 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         presenter.loadAssets(this, widgetId)
     }
 
+    override fun onBackPressed() {
+        saveAppWidget()
+    }
+
+    private fun saveAppWidget() {
+        presenter.saveAppWidget(this, widgetId)
+        val resultValue = Intent()
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        setResult(Activity.RESULT_OK, resultValue)
+        finish()
+    }
+
     override fun onTabReselected(tab: TabLayout.Tab?) {
         onTabSelected(tab)
     }
@@ -182,7 +189,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     override fun onUpdatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse) {
         if (searchPairResponse.data.isEmpty()) {
             skeletonScreen?.hide()
-            showError(R.string.market_widget_config_cant_find_currency_pair, R.id.root)
+            showError(R.string.market_widget_config_cant_find_currency_pair, R.id.errorSnackBarRoot)
         }
 
         val data = adapter.data
@@ -253,7 +260,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private fun afterFailGetMarkets() {
         skeletonScreen?.hide()
-        showError(R.string.common_server_error, R.id.root)
+        showError(R.string.common_server_error, R.id.errorSnackBarRoot)
     }
 
     private fun getCustomView(tabIcon: Int, tabText: Int): View? {
@@ -336,7 +343,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                     setSkeletonGradient()
                     presenter.loadPair(asset)
                 } else {
-                    showError(R.string.market_widget_config_error_add_asset, R.id.root)
+                    showError(R.string.market_widget_config_error_add_asset, R.id.errorSnackBarRoot)
                 }
             }
         }

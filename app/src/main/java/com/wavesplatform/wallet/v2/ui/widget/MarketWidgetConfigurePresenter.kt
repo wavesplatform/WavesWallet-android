@@ -31,6 +31,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
     var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
     var canAddPair = false
+    private val initAssetsMaxCount = 9
 
     fun saveAppWidget(context: Context, widgetId: Int) {
         MarketWidgetActiveAssetPrefStore.saveAll(context, widgetId, widgetAssetPairs)
@@ -53,8 +54,8 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                 }
             }
 
-            return if (filledResult.size > 10) {
-                filledResult.subList(0, 10)
+            return if (filledResult.size > initAssetsMaxCount) {
+                filledResult.subList(0, initAssetsMaxCount)
             } else {
                 filledResult
             }

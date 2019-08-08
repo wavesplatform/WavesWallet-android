@@ -28,6 +28,8 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
 
 class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
@@ -121,6 +123,10 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 .show()
         setSkeletonGradient()
         initLoad()
+
+        editSearch.requestFocus()
+        val imm = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
         return rootView
     }
