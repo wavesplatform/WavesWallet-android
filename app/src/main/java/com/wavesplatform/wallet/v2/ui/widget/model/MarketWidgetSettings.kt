@@ -14,7 +14,7 @@ object MarketWidgetSettings {
     fun themeSettings(): MarketWidgetStyle.Companion = MarketWidgetStyle
     fun intervalSettings(): MarketWidgetUpdateInterval.Companion = MarketWidgetUpdateInterval
     fun currencySettings(): MarketWidgetCurrency.Companion = MarketWidgetCurrency
-    fun assetsSettings(): MarketWidgetActiveStore<MarketWidgetActiveAsset> = MarketWidgetActiveAssetMockStore
+    fun assetsSettings(): MarketWidgetActiveStore<MarketWidgetActiveAsset> = MarketWidgetActiveAssetPrefStore
     fun marketsSettings(): MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> = MarketWidgetActiveMarketStore
 
     fun clearSettings(context: Context, widgetId: Int) {

@@ -219,7 +219,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }
-                            .flatMap { dataService.assets(it) }
+                            .flatMap { dataService.assets(ids = it) }
                             .map { info ->
                                 setDefaultAssets(info)
                                 instance!!.configurationDisposable!!.dispose()

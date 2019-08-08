@@ -3,67 +3,107 @@
   ~ Copyright © 2019 Waves Platform. All rights reserved.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/configure" />
+        android:fontFamily="sans-serif-medium"
+        android:padding="16dp"
+        android:text="@string/market_widget_config_title"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
-        android:id="@+id/til_theme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/basic500"
-        app:errorEnabled="true"
-        app:hintTextAppearance="@style/TextLabel">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/edit_theme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/accent50"
-            android:editable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="Theme"
-            android:inputType="text"
-            android:paddingBottom="20dp"
-            android:singleLine="true"
-            android:textColorHint="@color/basic500" />
-    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
-
-    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
-        android:id="@+id/til_interval"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/basic500"
-        app:errorEnabled="true"
-        app:hintTextAppearance="@style/TextLabel">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/edit_interval"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/accent50"
-            android:hint="Interval"
-            android:inputType="text"
-            android:paddingBottom="20dp"
-            android:singleLine="true"
-            android:textColorHint="@color/basic500" />
-    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
-
-    <Button
-        android:id="@+id/add_button"
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/toolbar_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/add_widget" />
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_toolbar_close" />
 
-</LinearLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/tokensCountLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="16dp"
+            android:text="@string/market_widget_config_token_list"
+            android:textColor="@color/basic500"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tokensCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="9/10" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/errorSnackBarRoot"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tab_navigation"
+        app:layout_constraintTop_toBottomOf="@+id/tokensCountLayout">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tokensList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="24dp"
+            tools:listitem="@layout/widget_drag_asset_item" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed" />
+
+</android.support.constraint.ConstraintLayout>

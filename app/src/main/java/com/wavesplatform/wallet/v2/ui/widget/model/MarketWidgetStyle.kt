@@ -10,16 +10,21 @@ import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.option.OptionsDialogModel
 
 enum class MarketWidgetStyle(@StringRes var styleName: Int,
                              @LayoutRes var themeLayout: Int, // base layout for theme
                              @LayoutRes var marketItemLayout: Int, // layout for item of market,
                              var colors: MarketWidgetStyleColors
-) {
-    CLASSIC(R.string.widget_style_classic, R.layout.market_widget_classic,
+) : OptionsDialogModel {
+    CLASSIC(R.string.market_widget_config_classic, R.layout.market_widget_classic,
             R.layout.item_market_widget_classic, MarketWidgetStyleColors.CLASSIC),
-    DARK(R.string.widget_style_dark, R.layout.market_widget_dark,
+    DARK(R.string.market_widget_config_dark, R.layout.market_widget_dark,
             R.layout.item_market_widget_dark, MarketWidgetStyleColors.DARK);
+
+    override fun itemTitle(): Int {
+        return styleName
+    }
 
     companion object {
         private const val PREF_THEME_KEY = "appwidget_theme_"
