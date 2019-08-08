@@ -19,13 +19,13 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.ui.widget.model.*
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetSettings
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
 import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
 import dagger.android.AndroidInjection
-import pers.victor.ext.app
 import java.util.*
 import javax.inject.Inject
 
@@ -106,7 +106,6 @@ class MarketWidget : AppWidgetProvider() {
             configureClicks(context, appWidgetId, views)
             configureProgressState(context, appWidgetId, progressState, views)
             configureMarketList(context, appWidgetId, views)
-
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
             // Instruct the widget manager to update the widget
@@ -115,13 +114,12 @@ class MarketWidget : AppWidgetProvider() {
         }
 
         internal fun updateWidgetProgress(context: Context, appWidgetId: Int,
-                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE,
-                                          locale: Locale = Locale.getDefault()) {
+                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val theme = MarketWidgetSettings.themeSettings().getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
-            configureProgressState(context, appWidgetId, progressState, views, locale)
+            configureProgressState(context, appWidgetId, progressState, views)
 
             appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
         }
