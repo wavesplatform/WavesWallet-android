@@ -9,11 +9,13 @@ import android.content.Context
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.isWaves
+import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.widget.model.*
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.disposables.CompositeDisposable
+import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -67,7 +69,7 @@ class MarketWidgetDataManager @Inject constructor() {
             val usdData: MarketWidgetActiveMarket.UI.PriceData
             val eurData: MarketWidgetActiveMarket.UI.PriceData
 
-            if (marketWidgetActiveMarket.assetInfo.id.isWaves()) {
+            if (marketWidgetActiveMarket.assetInfo.id.isWavesId() || marketWidgetActiveMarket.assetInfo.id.isWaves()) {
                 usdData = calculateWavesPriceFor(wavesUSDAsset)
                 eurData = calculateWavesPriceFor(wavesEURAsset)
             } else {
@@ -83,22 +85,33 @@ class MarketWidgetDataManager @Inject constructor() {
     }
 
     private fun calculateTokenPriceFor(activeMarket: MarketWidgetActiveMarket,
-                                       wavesUSDAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
-        val deltaPercentUsd = (activeMarket.data.lastPrice - activeMarket.data.firstPrice) * 100
-        val percentUsd = deltaPercentUsd / activeMarket.data.lastPrice
+                                       wavesCurrencyAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
+        val deltaPercentUsd = (activeMarket.data.lastPrice - activeMarket.data.firstPrice) * BigDecimal(100)
+        val percentUsd =
+                if (activeMarket.data.lastPrice != BigDecimal.ZERO) deltaPercentUsd / activeMarket.data.lastPrice
+                else BigDecimal.ZERO
 
-        val priceUsd = if (activeMarket.assetInfo.amountAsset.isWaves()) {
-            (activeMarket.data.volume.div(activeMarket.data.quoteVolume ?: 1.0)).times(wavesUSDAsset.data.lastPrice)
-        } else {
-            (activeMarket.data.volumeWaves?.div(activeMarket.data.volume))?.times(wavesUSDAsset.data.lastPrice)
-                    ?: 0.0
-        }
+        val priceUsd =
+                if (activeMarket.assetInfo.amountAsset.isWavesId() || activeMarket.assetInfo.amountAsset.isWaves()) {
+                    if (activeMarket.data.quoteVolume != null && activeMarket.data.quoteVolume != BigDecimal.ZERO)
+                        (activeMarket.data.volume.div(activeMarket.data.quoteVolume!!)).times(wavesCurrencyAsset.data.lastPrice)
+                    else {
+                        BigDecimal.ZERO
+                    }
+                } else {
+                    if (activeMarket.data.volumeWaves != null && activeMarket.data.volume != BigDecimal.ZERO)
+                        (activeMarket.data.volumeWaves!!.div(activeMarket.data.volume)).times(wavesCurrencyAsset.data.lastPrice)
+                    else {
+                        BigDecimal.ZERO
+                    }
+                }
+
 
         return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)
     }
 
     private fun calculateWavesPriceFor(wavesCurrencyAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
-        val deltaPercentUsd = (wavesCurrencyAsset.data.lastPrice - wavesCurrencyAsset.data.firstPrice) * 100
+        val deltaPercentUsd = (wavesCurrencyAsset.data.lastPrice - wavesCurrencyAsset.data.firstPrice) * BigDecimal(100)
         val percentUsd = deltaPercentUsd / wavesCurrencyAsset.data.lastPrice
         val priceUsd = wavesCurrencyAsset.data.lastPrice
         return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)

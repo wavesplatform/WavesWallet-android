@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.widget.model
 
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
+import java.math.BigDecimal
 
 data class MarketWidgetActiveMarket(
         var assetInfo: MarketWidgetActiveAsset,
@@ -17,11 +18,11 @@ data class MarketWidgetActiveMarket(
             var usdData: PriceData,
             var eurData: PriceData
     ) {
-        data class PriceData(var price: Double,
-                             var percent: Double) {
-            fun isPriceIncrease() = percent > 0
-            fun isPriceDrop() = percent < 0
-            fun isPriceWithoutChange() = percent == 0.0
+        data class PriceData(var price: BigDecimal,
+                             var percent: BigDecimal) {
+            fun isPriceIncrease() = percent > BigDecimal.ZERO
+            fun isPriceDrop() = percent < BigDecimal.ZERO
+            fun isPriceWithoutChange() = percent == BigDecimal.ZERO
         }
     }
 }

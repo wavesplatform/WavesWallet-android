@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.widget
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -18,13 +19,13 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.ui.widget.model.*
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetSettings
+import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
 import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
 import dagger.android.AndroidInjection
-import pers.victor.ext.app
 import java.util.*
 import javax.inject.Inject
 
@@ -37,15 +38,12 @@ class MarketWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
-    @Inject
-    lateinit var preferencesHelper: PreferencesHelper
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
             loadPrice(context, appWidgetId)
-            preferencesHelper.saveActiveWidget(appWidgetId)
             context.startAlarmUpdate<MarketWidget>(appWidgetId)
         }
     }
@@ -54,7 +52,6 @@ class MarketWidget : AppWidgetProvider() {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
             MarketWidgetSettings.clearSettings(context, appWidgetId)
-            preferencesHelper.removeWidgetFromActive(appWidgetId)
         }
     }
 
@@ -109,7 +106,6 @@ class MarketWidget : AppWidgetProvider() {
             configureClicks(context, appWidgetId, views)
             configureProgressState(context, appWidgetId, progressState, views)
             configureMarketList(context, appWidgetId, views)
-
             views.setTextViewText(R.id.text_currency, highLightCurrency(context, theme, appWidgetId))
 
             // Instruct the widget manager to update the widget
@@ -118,25 +114,35 @@ class MarketWidget : AppWidgetProvider() {
         }
 
         internal fun updateWidgetProgress(context: Context, appWidgetId: Int,
-                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE,
-                                          locale: Locale = Locale.getDefault()) {
+                                          progressState: MarketWidgetProgressState = MarketWidgetProgressState.NONE) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val theme = MarketWidgetSettings.themeSettings().getTheme(context, appWidgetId)
             val views = RemoteViews(context.packageName, theme.themeLayout)
 
-            configureProgressState(context, appWidgetId, progressState, views, locale)
+            configureProgressState(context, appWidgetId, progressState, views)
 
             appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
         }
 
+        fun updateAllWidgetsByBroadcast(context: Context) {
+            val intent = Intent(context, MarketWidget::class.java)
+            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
 
-        fun reConfigActiveWidgets(context: Context, preferencesHelper: PreferencesHelper, locale: Locale) {
-            val widgets = preferencesHelper.activeWidgets
-            if (widgets.isNotEmpty()) {
-                widgets.forEach { widgetId ->
-                    updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE, locale)
-                }
-            }
+            val widgetManager = AppWidgetManager.getInstance(context)
+            val ids = widgetManager.getAppWidgetIds(ComponentName(context, MarketWidget::class.java))
+
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            context.sendBroadcast(intent)
+        }
+
+        fun updateWidgetByBroadcast(context: Context, widgetId: Int) {
+            val intent = Intent(context, MarketWidget::class.java)
+            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+
+            val ids = intArrayOf(widgetId)
+
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            context.sendBroadcast(intent)
         }
 
         private fun configureMarketList(context: Context, appWidgetId: Int, views: RemoteViews) {
