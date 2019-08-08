@@ -201,15 +201,12 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         if (searchPairResponse.data.isEmpty()) {
             skeletonScreen?.hide()
             showError(R.string.market_widget_config_cant_find_currency_pair, R.id.errorSnackBarRoot)
+            return
         }
 
         val data = adapter.data
-        if (searchPairResponse.data.isNotEmpty()) {
-            val mostValuablePair = searchPairResponse.data[0]
-            data.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(assetInfo, mostValuablePair))
-        } else {
-            afterFailGetMarkets()
-        }
+        val mostValuablePair = searchPairResponse.data[0]
+        data.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(assetInfo, mostValuablePair))
         adapter.setNewData(data)
         checkCanAddPair()
         adapter.emptyView = getEmptyView()
