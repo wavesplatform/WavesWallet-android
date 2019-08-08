@@ -1,7 +1,9 @@
 package com.wavesplatform.wallet.v2.ui.widget
 
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
@@ -9,6 +11,7 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
@@ -16,7 +19,6 @@ import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefStore
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.isFiat
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -35,9 +37,13 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
 
     fun saveAppWidget(context: Context, widgetId: Int) {
         MarketWidgetActiveAssetPrefStore.saveAll(context, widgetId, widgetAssetPairs)
-        // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        MarketWidget.updateWidget(context, appWidgetManager, widgetId)
+
+        val intent = Intent(context, MarketWidget::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids = AppWidgetManager.getInstance(App.getAppContext()).getAppWidgetIds(
+                ComponentName(App.getAppContext(), MarketWidget::class.java))
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        context.sendBroadcast(intent)
     }
 
     fun loadAssets(context: Context, widgetId: Int) {
