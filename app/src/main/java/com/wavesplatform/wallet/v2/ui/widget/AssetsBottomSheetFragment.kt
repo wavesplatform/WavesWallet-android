@@ -150,9 +150,7 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
         eventSubscriptions.add(dataServiceManager.assets(ids = defaultAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
-                    adapter.setNewData(result.filter {
-                        items -> chosenAssets.any { it == items.id }
-                    })
+                    adapter.setNewData(result)
                     skeletonScreen?.hide()
                     adapter.emptyView = getEmptyView()
                 }, {
