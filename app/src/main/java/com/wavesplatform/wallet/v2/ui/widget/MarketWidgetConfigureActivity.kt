@@ -10,6 +10,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
@@ -147,6 +148,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
+        setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
+        setTabText(THEME_TAB, presenter.themeName.itemTitle())
+
         presenter.loadAssets(this, widgetId)
     }
 
@@ -251,6 +255,12 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
+    private fun setTabText(tabPosition: Int, @StringRes textRes: Int) {
+        val tab = tab_navigation.getTabAt(tabPosition)
+        val textTab = tab?.customView?.findViewById<TextView>(R.id.text_tab)
+        textTab?.text = getString(textRes)
+    }
+
 
     private fun getEmptyView(): View {
         val view = inflate(R.layout.content_address_book_empty_state)
@@ -299,7 +309,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetUpdateInterval> {
             override fun onSelected(data: MarketWidgetUpdateInterval) {
-                MarketWidgetUpdateInterval.setInterval(this@MarketWidgetConfigureActivity, widgetId, data)
+                presenter.intervalUpdate = data
+                MarketWidgetUpdateInterval.setInterval(
+                        this@MarketWidgetConfigureActivity, widgetId, presenter.intervalUpdate)
+                setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
             }
         }
 
@@ -318,7 +331,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetStyle> {
             override fun onSelected(data: MarketWidgetStyle) {
-                MarketWidgetSettings.themeSettings().setTheme(this@MarketWidgetConfigureActivity, widgetId, data)
+                presenter.themeName = data
+                MarketWidgetSettings.themeSettings().setTheme(
+                        this@MarketWidgetConfigureActivity, widgetId, presenter.themeName)
+                setTabText(THEME_TAB, presenter.themeName.itemTitle())
             }
         }
 
