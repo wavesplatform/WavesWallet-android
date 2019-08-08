@@ -32,7 +32,7 @@ enum class MarketWidgetUpdateInterval(@StringRes var title: Int, var interval: I
             val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
             val interval = prefs.getString(PREF_INTERVAL_KEY + appWidgetId, null)
             return values().firstOrNull { it.name == interval }
-                    ?: MIN_10
+                    ?: MIN_5
         }
 
         fun setInterval(context: Context, appWidgetId: Int, interval: MarketWidgetUpdateInterval) {
