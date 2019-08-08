@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget.model
+package com.wavesplatform.wallet.v2.data.manager.widget
 
 import android.content.Context
 

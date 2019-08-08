@@ -1,15 +1,15 @@
 /*
- * Created by Eduard Zaydel on 24/7/2019
+ * Created by Eduard Zaydel on 8/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget.model
+package com.wavesplatform.wallet.v2.data.model.local.widget
 
 import android.content.Context
 import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
-import com.wavesplatform.wallet.v2.ui.widget.option.OptionsDialogModel
+import com.wavesplatform.wallet.v2.data.model.local.OptionsDialogModel
 
 enum class MarketWidgetUpdateInterval(@StringRes var title: Int, var interval: Int) : OptionsDialogModel {
     MIN_1(R.string.market_widget_config_interval_1_min, 1),

@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget.option
+package com.wavesplatform.wallet.v2.ui.widget.configuration.options
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
@@ -13,6 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.OptionsDialogItem
+import com.wavesplatform.wallet.v2.data.model.local.OptionsDialogModel
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_options_layout.view.*
 
 class OptionsBottomSheetFragment<T : OptionsDialogModel> : BottomSheetDialogFragment() {

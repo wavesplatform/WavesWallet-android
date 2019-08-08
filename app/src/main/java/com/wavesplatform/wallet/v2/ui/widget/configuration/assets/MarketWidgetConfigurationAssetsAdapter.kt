@@ -1,4 +1,9 @@
-package com.wavesplatform.wallet.v2.ui.widget.adapters
+/*
+ * Created by Eduard Zaydel on 8/8/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
+package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -7,7 +12,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import javax.inject.Inject
 
-class AssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetInfoResponse,
+class MarketWidgetConfigurationAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetInfoResponse,
         BaseViewHolder>(R.layout.bottom_sheet_dialog_search_asset_item, null) {
 
     override fun convert(helper: BaseViewHolder, item: AssetInfoResponse) {

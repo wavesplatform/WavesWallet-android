@@ -1,9 +1,11 @@
-package com.wavesplatform.wallet.v2.ui.widget
+/*
+ * Created by Eduard Zaydel on 8/8/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
+package com.wavesplatform.wallet.v2.ui.widget.configuration
+
 import android.content.Context
-import android.content.Intent
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
@@ -11,14 +13,12 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAssetPrefStore
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
+import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveAssetStore
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.util.isFiat
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -34,17 +34,6 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
     var canAddPair = false
     private val initAssetsMaxCount = 9
-
-    fun saveAppWidget(context: Context, widgetId: Int) {
-        MarketWidgetActiveAssetPrefStore.saveAll(context, widgetId, widgetAssetPairs)
-
-        val intent = Intent(context, MarketWidget::class.java)
-        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        val ids = AppWidgetManager.getInstance(App.getAppContext()).getAppWidgetIds(
-                ComponentName(App.getAppContext(), MarketWidget::class.java))
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-        context.sendBroadcast(intent)
-    }
 
     fun loadAssets(context: Context, widgetId: Int) {
 
@@ -97,7 +86,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                         })
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe({ (assetInfoList, searchPair) ->
-                            val tokenPairList = arrayListOf<TokenAdapter.TokenPair>()
+                            val tokenPairList = arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
                             searchPair.forEach { assetPair ->
 
                                 val id = when {
@@ -109,7 +98,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                                         assetPair.priceAsset
                                 }
 
-                                tokenPairList.add(TokenAdapter.TokenPair(
+                                tokenPairList.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(
                                         assetInfoList.first { it.id == id },
                                         assetPair))
                             }
@@ -136,7 +125,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
 
     private fun setInitAppWidgetConfig(context: Context, widgetId: Int) {
         val assetsList =
-                MarketWidgetActiveAssetPrefStore.queryAll(context, widgetId)
+                MarketWidgetActiveAssetStore.queryAll(context, widgetId)
 
         if (assetsList.isEmpty()) {
             Constants.defaultCrypto().toList().forEach {

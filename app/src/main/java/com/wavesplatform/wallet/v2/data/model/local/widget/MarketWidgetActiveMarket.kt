@@ -1,9 +1,9 @@
 /*
- * Created by Eduard Zaydel on 26/7/2019
+ * Created by Eduard Zaydel on 8/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget.model
+package com.wavesplatform.wallet.v2.data.model.local.widget
 
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import java.math.BigDecimal

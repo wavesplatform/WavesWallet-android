@@ -1,9 +1,9 @@
 /*
- * Created by Eduard Zaydel on 18/7/2019
+ * Created by Eduard Zaydel on 8/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget
+package com.wavesplatform.wallet.v2.ui.widget.configuration
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
@@ -35,15 +35,17 @@ import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveAssetStore
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
-import com.wavesplatform.wallet.v2.ui.widget.adapters.TokenAdapter
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetSettings
+import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 import kotlinx.android.synthetic.main.market_widget_configure.*
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetStyle
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
-import com.wavesplatform.wallet.v2.ui.widget.option.OptionsBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -62,7 +64,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     @InjectPresenter
     lateinit var presenter: MarketWidgetConfigurePresenter
     @Inject
-    lateinit var adapter: TokenAdapter
+    lateinit var adapter: MarketWidgetConfigurationMarketsAdapter
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
 
     @ProvidePresenter
@@ -162,7 +164,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun saveAppWidget() {
-        presenter.saveAppWidget(this, widgetId)
+        MarketWidgetActiveAssetStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
+        MarketWidget.updateWidgetByBroadcast(this, widgetId)
+
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         setResult(Activity.RESULT_OK, resultValue)
@@ -185,7 +189,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    override fun onUpdatePairs(assetPairList: ArrayList<TokenAdapter.TokenPair>) {
+    override fun onUpdatePairs(assetPairList: ArrayList<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
         adapter.setNewData(assetPairList)
         checkCanAddPair()
         adapter.emptyView = getEmptyView()
@@ -201,7 +205,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         val data = adapter.data
         val mostValuablePair = searchPairResponse.data[0]
-        data.add(TokenAdapter.TokenPair(assetInfo, mostValuablePair))
+        data.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(assetInfo, mostValuablePair))
         adapter.setNewData(data)
         checkCanAddPair()
         adapter.emptyView = getEmptyView()
@@ -313,8 +317,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetUpdateInterval> {
             override fun onSelected(data: MarketWidgetUpdateInterval) {
                 presenter.intervalUpdate = data
-                MarketWidgetUpdateInterval.setInterval(
-                        this@MarketWidgetConfigureActivity, widgetId, presenter.intervalUpdate)
+                MarketWidgetSettings
+                        .intervalSettings()
+                        .setInterval(this@MarketWidgetConfigureActivity, widgetId, presenter.intervalUpdate)
                 setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
             }
         }
@@ -335,8 +340,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<MarketWidgetStyle> {
             override fun onSelected(data: MarketWidgetStyle) {
                 presenter.themeName = data
-                MarketWidgetSettings.themeSettings().setTheme(
-                        this@MarketWidgetConfigureActivity, widgetId, presenter.themeName)
+                MarketWidgetSettings
+                        .themeSettings()
+                        .setTheme(this@MarketWidgetConfigureActivity, widgetId, presenter.themeName)
                 setTabText(THEME_TAB, presenter.themeName.itemTitle())
             }
         }
@@ -349,11 +355,11 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
             return
         }
 
-        val assetsDialog = AssetsBottomSheetFragment.newInstance(presenter.assets)
+        val assetsDialog = MarketWidgetConfigurationAssetsBottomSheetFragment.newInstance(presenter.assets)
         val ft = supportFragmentManager.beginTransaction()
         ft.add(assetsDialog, assetsDialog::class.java.simpleName)
         ft.commitAllowingStateLoss()
-        assetsDialog.onChooseListener = object : AssetsBottomSheetFragment.OnChooseListener {
+        assetsDialog.onChooseListener = object : MarketWidgetConfigurationAssetsBottomSheetFragment.OnChooseListener {
             override fun onChoose(asset: AssetInfoResponse) {
                 presenter.assets.add(asset.id)
                 val token = adapter.data.firstOrNull { it.assetInfo.id == asset.id }

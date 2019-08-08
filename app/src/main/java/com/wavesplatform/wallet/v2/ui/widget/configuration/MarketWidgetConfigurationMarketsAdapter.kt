@@ -1,4 +1,9 @@
-package com.wavesplatform.wallet.v2.ui.widget.adapters
+/*
+ * Created by Eduard Zaydel on 8/8/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
+package com.wavesplatform.wallet.v2.ui.widget.configuration
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -7,7 +12,7 @@ import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.wallet.R
 import javax.inject.Inject
 
-class TokenAdapter @Inject constructor() : BaseItemDraggableAdapter<TokenAdapter.TokenPair,
+class MarketWidgetConfigurationMarketsAdapter @Inject constructor() : BaseItemDraggableAdapter<MarketWidgetConfigurationMarketsAdapter.TokenPair,
         BaseViewHolder>(R.layout.widget_drag_asset_item, null) {
 
     override fun convert(helper: BaseViewHolder, item: TokenPair) {

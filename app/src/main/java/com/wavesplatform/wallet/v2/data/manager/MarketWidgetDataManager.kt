@@ -1,9 +1,9 @@
 /*
- * Created by Eduard Zaydel on 30/7/2019
+ * Created by Eduard Zaydel on 8/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget
+package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
 import com.wavesplatform.sdk.model.request.data.PairRequest
@@ -11,8 +11,9 @@ import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
-import com.wavesplatform.wallet.v2.ui.widget.model.*
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal

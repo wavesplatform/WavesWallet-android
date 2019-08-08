@@ -43,7 +43,7 @@
         </receiver>
 
         <activity
-            android:name=".v2.ui.widget.MarketWidgetConfigureActivity"
+            android:name=".v2.ui.widget.configuration.MarketWidgetConfigureActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">

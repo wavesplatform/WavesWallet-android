@@ -34,7 +34,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.widget.AssetsBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -155,7 +155,7 @@ abstract class FragmentModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun assetsBottomSheetFragment(): AssetsBottomSheetFragment
+    internal abstract fun assetsBottomSheetFragment(): MarketWidgetConfigurationAssetsBottomSheetFragment
 
 
 }

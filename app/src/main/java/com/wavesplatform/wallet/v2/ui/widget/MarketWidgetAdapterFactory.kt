@@ -20,8 +20,10 @@ import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetCurrency
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
-import com.wavesplatform.wallet.v2.ui.widget.model.*
 import pers.victor.ext.dp
 import pers.victor.ext.sp
 

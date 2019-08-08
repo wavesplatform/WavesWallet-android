@@ -1,4 +1,9 @@
-package com.wavesplatform.wallet.v2.ui.widget
+/*
+ * Created by Eduard Zaydel on 8/8/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
+package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -21,7 +26,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
-import com.wavesplatform.wallet.v2.ui.widget.adapters.AssetsAdapter
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -31,7 +35,7 @@ import javax.inject.Inject
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.view.inputmethod.InputMethodManager
 
-class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
+class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private lateinit var editSearch: EditDrawableText
@@ -40,7 +44,7 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     @Inject
     lateinit var dataServiceManager: DataServiceManager
     @Inject
-    lateinit var adapter: AssetsAdapter
+    lateinit var adapter: MarketWidgetConfigurationAssetsAdapter
     var onChooseListener: OnChooseListener? = null
     var chosenAssets = arrayListOf<String>()
 
@@ -193,8 +197,8 @@ class AssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
         private const val ASSETS = "assets"
 
-        fun newInstance(assets: ArrayList<String>): AssetsBottomSheetFragment {
-            val fragment = AssetsBottomSheetFragment()
+        fun newInstance(assets: ArrayList<String>): MarketWidgetConfigurationAssetsBottomSheetFragment {
+            val fragment = MarketWidgetConfigurationAssetsBottomSheetFragment()
             val args = Bundle()
             args.putStringArrayList(ASSETS, assets)
             fragment.arguments = args

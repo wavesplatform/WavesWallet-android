@@ -22,8 +22,7 @@ import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.defaultAssetsAvatar
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveMarket
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap

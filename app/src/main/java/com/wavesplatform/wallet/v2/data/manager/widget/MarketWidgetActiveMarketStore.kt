@@ -1,13 +1,14 @@
 /*
- * Created by Eduard Zaydel on 31/7/2019
+ * Created by Eduard Zaydel on 8/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget.model
+package com.wavesplatform.wallet.v2.data.manager.widget
 
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
 
 object MarketWidgetActiveMarketStore : MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> {

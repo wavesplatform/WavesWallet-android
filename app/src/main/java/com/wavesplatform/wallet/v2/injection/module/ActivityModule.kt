@@ -55,7 +55,7 @@ import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.ui.whats_new.WhatsNewActivity
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidgetConfigureActivity
+import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

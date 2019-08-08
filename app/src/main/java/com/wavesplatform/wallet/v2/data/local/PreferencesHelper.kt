@@ -6,17 +6,10 @@
 package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetProgressState
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import pers.victor.ext.app
-import java.util.*
 import javax.inject.Inject
 
 class PreferencesHelper @Inject constructor(@ApplicationContext context: Context) {

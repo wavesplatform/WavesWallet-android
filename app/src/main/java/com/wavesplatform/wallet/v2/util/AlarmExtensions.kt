@@ -10,7 +10,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 
 
 const val ACTION_AUTO_UPDATE_WIDGET = "ACTION_AUTO_UPDATE_WIDGET"

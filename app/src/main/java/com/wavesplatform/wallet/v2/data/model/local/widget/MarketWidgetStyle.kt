@@ -1,16 +1,16 @@
 /*
- * Created by Eduard Zaydel on 19/7/2019
+ * Created by Eduard Zaydel on 8/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.widget.model
+package com.wavesplatform.wallet.v2.data.model.local.widget
 
 import android.content.Context
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
-import com.wavesplatform.wallet.v2.ui.widget.option.OptionsDialogModel
+import com.wavesplatform.wallet.v2.data.model.local.OptionsDialogModel
 
 enum class MarketWidgetStyle(@StringRes var styleName: Int,
                              @LayoutRes var themeLayout: Int, // base layout for theme

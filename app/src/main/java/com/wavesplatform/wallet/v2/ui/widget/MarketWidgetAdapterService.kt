@@ -7,10 +7,6 @@ package com.wavesplatform.wallet.v2.ui.widget
 
 import android.content.Intent
 import android.widget.RemoteViewsService
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveMarket
-import com.wavesplatform.wallet.v2.ui.widget.model.MarketWidgetActiveStore
-import dagger.android.AndroidInjection
-import javax.inject.Inject
 
 class MarketWidgetAdapterService : RemoteViewsService() {
 

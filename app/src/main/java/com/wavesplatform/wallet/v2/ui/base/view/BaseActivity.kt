@@ -6,10 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.ProgressDialog
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.os.Build
@@ -43,7 +40,6 @@ import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidgetConfigureActivity
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
