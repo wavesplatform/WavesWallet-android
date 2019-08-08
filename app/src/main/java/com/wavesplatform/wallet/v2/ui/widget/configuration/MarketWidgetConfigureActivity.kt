@@ -204,8 +204,12 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
 
         val data = adapter.data
-        val mostValuablePair = searchPairResponse.data[0]
-        data.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(assetInfo, mostValuablePair))
+        if (searchPairResponse.data.isNotEmpty()) {
+            val mostValuablePair = searchPairResponse.data[0]
+            data.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(assetInfo, mostValuablePair))
+        } else {
+            afterFailGetMarkets()
+        }
         adapter.setNewData(data)
         checkCanAddPair()
         adapter.emptyView = getEmptyView()
