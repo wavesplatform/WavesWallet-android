@@ -22,9 +22,9 @@ object MarketWidgetSettings {
 
     fun clearSettings(context: Context, widgetId: Int) {
         context.cancelAlarmUpdate<MarketWidget>(widgetId)
-        MarketWidgetStyle.removeTheme(context, widgetId)
-        MarketWidgetCurrency.removeCurrency(context, widgetId)
-        MarketWidgetUpdateInterval.removeInterval(context, widgetId)
+        themeSettings().removeTheme(context, widgetId)
+        currencySettings().removeCurrency(context, widgetId)
+        intervalSettings().removeInterval(context, widgetId)
         marketsSettings().clear(context, widgetId)
         assetsSettings().clear(context, widgetId)
     }

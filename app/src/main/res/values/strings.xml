@@ -676,8 +676,6 @@
     <string name="trade_order_dialog_subtitle_proceed">Do you want to proceed?</string>
 
 
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
     <string name="market_widget_update">Update</string>
     <string name="market_widget_updating">Updating</string>
     <string name="market_widget_currency_text">USD / EUR</string>

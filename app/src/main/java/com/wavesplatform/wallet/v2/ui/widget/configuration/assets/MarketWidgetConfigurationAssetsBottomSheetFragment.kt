@@ -5,12 +5,14 @@
 
 package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
@@ -32,8 +34,6 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.inputmethod.InputMethodManager
 
 class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 

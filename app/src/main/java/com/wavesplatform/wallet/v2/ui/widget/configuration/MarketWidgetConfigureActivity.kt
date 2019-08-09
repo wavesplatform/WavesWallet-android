@@ -42,13 +42,13 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
-import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
-import kotlinx.android.synthetic.main.market_widget_configure.*
+import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_empty_data.view.*
+import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
 import javax.inject.Inject
@@ -150,9 +150,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
-        presenter.intervalUpdate = MarketWidgetUpdateInterval.getInterval(this, widgetId)
-        presenter.themeName = MarketWidgetStyle.getTheme(this, widgetId)
-
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
@@ -201,6 +198,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         if (searchPairResponse.data.isEmpty()) {
             skeletonScreen?.hide()
             showError(R.string.market_widget_config_cant_find_currency_pair, R.id.errorSnackBarRoot)
+            return
         }
 
         val data = adapter.data
@@ -308,7 +306,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         val optionBottomSheetFragment = OptionsBottomSheetFragment<MarketWidgetUpdateInterval>()
 
         val options = MarketWidgetUpdateInterval.values().toMutableList()
-        val defaultPosition = options.indexOf(MarketWidgetUpdateInterval.getInterval(this, widgetId))
+        val defaultPosition = options.indexOf(MarketWidgetSettings.intervalSettings().getInterval(this, widgetId))
 
         optionBottomSheetFragment.configureDialog(options,
                 getString(R.string.market_widget_config_update_interval),
@@ -331,7 +329,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         val optionBottomSheetFragment = OptionsBottomSheetFragment<MarketWidgetStyle>()
 
         val options = MarketWidgetStyle.values().toMutableList()
-        val defaultPosition = options.indexOf(MarketWidgetStyle.getTheme(this, widgetId))
+        val defaultPosition = options.indexOf(MarketWidgetSettings.themeSettings().getTheme(this, widgetId))
 
         optionBottomSheetFragment.configureDialog(options,
                 getString(R.string.market_widget_config_widget_style),
