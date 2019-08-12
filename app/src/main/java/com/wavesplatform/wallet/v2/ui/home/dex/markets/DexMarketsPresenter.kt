@@ -31,7 +31,6 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         EnvironmentManager.defaultAssets.forEach {
             defaultAssets.add(it.assetId)
         }
-        defaultAssets.add(Constants.VstGeneralAsset.assetId)
         defaultAssets.add(Constants.MrtGeneralAsset.assetId)
         defaultAssets.add(Constants.WctGeneralAsset.assetId)
     }
