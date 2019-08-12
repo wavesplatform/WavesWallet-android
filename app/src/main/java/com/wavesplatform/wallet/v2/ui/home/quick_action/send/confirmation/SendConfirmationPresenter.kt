@@ -94,7 +94,9 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
 
         val totalAmount =
-                if (type == SendPresenter.Type.GATEWAY || type == SendPresenter.Type.VOSTOK) amount + gatewayCommission
+                if (type == SendPresenter.Type.GATEWAY
+                        || type == SendPresenter.Type.VOSTOK
+                        || type == SendPresenter.Type.ERGO) amount + gatewayCommission
                 else amount
 
         return TransferTransaction(

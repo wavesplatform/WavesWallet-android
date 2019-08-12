@@ -115,7 +115,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun isGatewayAmountError(): Boolean {
-        if ((type == Type.VOSTOK || type == Type.GATEWAY) && selectedAsset != null && gatewayMetadata.maxLimit.toFloat() > 0) {
+        if ((type == Type.ERGO || type == Type.VOSTOK || type == Type.GATEWAY)
+                && selectedAsset != null && gatewayMetadata.maxLimit.toFloat() > 0) {
             val totalAmount = amount + gatewayMetadata.fee
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
                     selectedAsset!!.getDecimals())
@@ -181,6 +182,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         if (type == Type.VOSTOK && recipient.isValidVostokAddress() && selectedAsset!!.assetId == recipientAssetId) {
+            return true
+        }
+
+        if (type == Type.ERGO && recipient.isValidErgoAddress() && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
@@ -273,6 +278,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         ALIAS,
         WAVES,
         VOSTOK,
+        ERGO,
         GATEWAY,
         UNKNOWN
     }
