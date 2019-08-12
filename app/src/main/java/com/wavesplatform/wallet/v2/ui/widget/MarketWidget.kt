@@ -20,10 +20,10 @@ import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.MarketWidgetDataManager
-import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetProgressState
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
+import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
 import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate

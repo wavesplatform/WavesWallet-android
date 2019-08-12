@@ -14,11 +14,11 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveAssetStore
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.isFiat
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -125,7 +125,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
 
     private fun setInitAppWidgetConfig(context: Context, widgetId: Int) {
         val assetsList =
-                MarketWidgetActiveAssetStore.queryAll(context, widgetId)
+                MarketWidgetSettings.assetsSettings().queryAll(context, widgetId)
 
         if (assetsList.isEmpty()) {
             Constants.defaultCrypto().toList().forEach {
@@ -141,7 +141,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
             }
         }
 
-        intervalUpdate = MarketWidgetUpdateInterval.getInterval(context, widgetId)
-        themeName = MarketWidgetStyle.getTheme(context, widgetId)
+        intervalUpdate = MarketWidgetSettings.intervalSettings().getInterval(context, widgetId)
+        themeName = MarketWidgetSettings.themeSettings().getTheme(context, widgetId)
     }
 }

@@ -10,6 +10,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 
 
@@ -21,7 +22,7 @@ inline fun <reified T> Context.startAlarmUpdate(id: Int, action: String = ACTION
     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
     val pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_CANCEL_CURRENT)
     (getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-            MarketWidgetUpdateInterval.getInterval(this, id).getIntervalOnMillis(), pendingIntent)
+            MarketWidgetSettings.intervalSettings().getInterval(this, id).getIntervalOnMillis(), pendingIntent)
 }
 
 inline fun <reified T> Context.cancelAlarmUpdate(id: Int, action: String = ACTION_AUTO_UPDATE_WIDGET) {
