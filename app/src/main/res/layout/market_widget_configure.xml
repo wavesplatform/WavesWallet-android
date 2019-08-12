@@ -9,6 +9,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/basic50"
     android:orientation="vertical">
 
     <TextView
@@ -50,7 +51,7 @@
             android:layout_gravity="center_vertical|start"
             android:fontFamily="@font/roboto_medium"
             android:padding="16dp"
-            android:text="@string/market_widget_config_token_list"
+            android:text="@string/market_widget_config_added"
             android:textColor="@color/basic500"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
