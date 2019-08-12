@@ -42,7 +42,7 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.isFiat
@@ -55,7 +55,7 @@ import javax.inject.Inject
 
 
 /**
- * The configuration screen for the [MarketWidget] AppWidget.
+ * The configuration screen for the [MarketPulseAppWidgetProvider] AppWidget.
  */
 class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedListener,
         MarketWidgetConfigureView {
@@ -162,7 +162,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private fun saveAppWidget() {
         MarketWidgetActiveAssetStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
-        MarketWidget.updateWidgetByBroadcast(this, widgetId)
+        MarketPulseAppWidgetProvider.updateWidgetByBroadcast(this, widgetId)
 
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)

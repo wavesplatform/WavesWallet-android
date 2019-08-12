@@ -39,6 +39,7 @@ class MarketWidgetAdapterFactory(var context: Context, intent: Intent) : RemoteV
     }
 
     override fun onCreate() {
+        // do nothing
     }
 
     override fun getCount(): Int {
@@ -130,7 +131,7 @@ class MarketWidgetAdapterFactory(var context: Context, intent: Intent) : RemoteV
     }
 
     override fun onDestroy() {
-
+        // do nothing
     }
 
     private fun createAvatarViewBitmap(data: MarketWidgetActiveMarket.UI): Bitmap? {

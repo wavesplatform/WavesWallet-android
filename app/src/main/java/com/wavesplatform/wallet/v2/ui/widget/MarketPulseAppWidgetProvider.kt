@@ -36,7 +36,7 @@ import javax.inject.Inject
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in [MarketWidgetConfigureActivity]
  */
-class MarketWidget : AppWidgetProvider() {
+class MarketPulseAppWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
@@ -46,7 +46,7 @@ class MarketWidget : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
             loadPrice(context, appWidgetId)
-            context.startAlarmUpdate<MarketWidget>(appWidgetId)
+            context.startAlarmUpdate<MarketPulseAppWidgetProvider>(appWidgetId)
         }
     }
 
@@ -127,18 +127,18 @@ class MarketWidget : AppWidgetProvider() {
         }
 
         fun updateAllWidgetsByBroadcast(context: Context) {
-            val intent = Intent(context, MarketWidget::class.java)
+            val intent = Intent(context, MarketPulseAppWidgetProvider::class.java)
             intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
 
             val widgetManager = AppWidgetManager.getInstance(context)
-            val ids = widgetManager.getAppWidgetIds(ComponentName(context, MarketWidget::class.java))
+            val ids = widgetManager.getAppWidgetIds(ComponentName(context, MarketPulseAppWidgetProvider::class.java))
 
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
             context.sendBroadcast(intent)
         }
 
         fun updateWidgetByBroadcast(context: Context, widgetId: Int) {
-            val intent = Intent(context, MarketWidget::class.java)
+            val intent = Intent(context, MarketPulseAppWidgetProvider::class.java)
             intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
 
             val ids = intArrayOf(widgetId)
@@ -200,14 +200,14 @@ class MarketWidget : AppWidgetProvider() {
             views.setOnClickPendingIntent(R.id.image_configuration, pIntent)
 
             // set on click intent to 'currency switch' button
-            val currencySwitcherIntent = Intent(context, MarketWidget::class.java)
+            val currencySwitcherIntent = Intent(context, MarketPulseAppWidgetProvider::class.java)
             currencySwitcherIntent.action = ACTION_CURRENCY_CHANGE
             currencySwitcherIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             pIntent = PendingIntent.getBroadcast(context, appWidgetId, currencySwitcherIntent, 0)
             views.setOnClickPendingIntent(R.id.text_currency, pIntent)
 
             // set on click intent to 'update' button
-            val updateIntent = Intent(context, MarketWidget::class.java)
+            val updateIntent = Intent(context, MarketPulseAppWidgetProvider::class.java)
             updateIntent.action = ACTION_UPDATE
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             pIntent = PendingIntent.getBroadcast(context, appWidgetId, updateIntent, 0)

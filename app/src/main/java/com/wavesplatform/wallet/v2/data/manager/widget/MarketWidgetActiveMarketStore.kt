@@ -9,14 +9,14 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 
 object MarketWidgetActiveMarketStore : MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> {
 
     private val PREF_ACTIVE_MARKET_KEY = "appwidget_active_markets_"
 
     override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveMarket.UI> {
-        val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
+        val prefs = context.getSharedPreferences(MarketPulseAppWidgetProvider.PREFS_NAME, 0)
         val listType = object : TypeToken<MutableList<MarketWidgetActiveMarket.UI>>() {}.type
         return Gson().fromJson<MutableList<MarketWidgetActiveMarket.UI>>(
                 prefs.getString(PREF_ACTIVE_MARKET_KEY + widgetId, ""), listType)
@@ -28,7 +28,7 @@ object MarketWidgetActiveMarketStore : MarketWidgetActiveStore<MarketWidgetActiv
     }
 
     override fun saveAll(context: Context, widgetId: Int, dataList: MutableList<MarketWidgetActiveMarket.UI>) {
-        val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
+        val prefs = context.getSharedPreferences(MarketPulseAppWidgetProvider.PREFS_NAME, 0)
         prefs.edit()
                 .putString(PREF_ACTIVE_MARKET_KEY + widgetId, Gson().toJson(dataList))
                 .apply()
@@ -39,7 +39,7 @@ object MarketWidgetActiveMarketStore : MarketWidgetActiveStore<MarketWidgetActiv
     }
 
     override fun clear(context: Context, widgetId: Int) {
-        val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
+        val prefs = context.getSharedPreferences(MarketPulseAppWidgetProvider.PREFS_NAME, 0).edit()
         prefs.remove(PREF_ACTIVE_MARKET_KEY + widgetId)
         prefs.apply()
     }

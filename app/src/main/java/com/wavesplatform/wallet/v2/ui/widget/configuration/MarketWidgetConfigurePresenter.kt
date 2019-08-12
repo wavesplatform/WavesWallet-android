@@ -19,6 +19,7 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.isFiat
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -61,8 +62,8 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
 
             for (priceAssetId in assets) {
                 if (priceAssetId.isWaves()) {
-                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${Constants.Fiat.USD_ID}")
-                    initPairsList.add("${Constants.Fiat.USD_ID}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
+                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${EnvironmentManager.environment.externalProperties.usdId}")
+                    initPairsList.add("${EnvironmentManager.environment.externalProperties.usdId}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
                     continue
                 } else {
                     initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
