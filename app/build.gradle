@@ -47,7 +47,7 @@ android {
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
         buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
-        buildConfigField "Stricdng", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
+        buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
         buildConfigField "String", "MONKEY_TEST_SEED", "\"\""
         manifestPlaceholders = [
                 appIcon     : "@mipmap/ic_launcher",
