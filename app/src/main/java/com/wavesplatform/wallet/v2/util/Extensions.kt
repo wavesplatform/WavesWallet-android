@@ -957,3 +957,10 @@ fun String?.isValidVostokAddress(): Boolean {
         false
     }
 }
+
+fun String?.isValidErgoAddress(): Boolean {
+    if (this.isNullOrEmpty()) {
+        return false
+    }
+    return this.matches(Regex("^9[a-km-zA-HJ-NP-Z1-9]{5,}"))
+}

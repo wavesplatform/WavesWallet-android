@@ -75,7 +75,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
                 ?: find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 
-        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
+        if (presenter.type == SendPresenter.Type.GATEWAY
+                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.ERGO) {
             presenter.gatewayCommission = BigDecimal(
                     intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
             text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
@@ -107,7 +109,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset.getDecimals())} " +
                 presenter.feeAsset.getName()
 
-        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
+        if (presenter.type == SendPresenter.Type.GATEWAY
+                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.ERGO) {
             attachment_layout.gone()
         } else {
             attachment_layout.visiable()

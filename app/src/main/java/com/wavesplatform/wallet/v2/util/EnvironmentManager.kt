@@ -47,7 +47,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         private const val BASE_PROXY_CONFIG_URL = "https://github-proxy.wvservices.com/"
         private const val BASE_RAW_CONFIG_URL = "https://raw.githubusercontent.com/"
 
-        private const val BRANCH = "mobile/v2.5"
+        private const val BRANCH = "mobile/v2.6"
 
         private const val KEY_ENV_TEST_NET = "env_testnet"
         private const val KEY_ENV_MAIN_NET = "env_prod"
