@@ -55,12 +55,16 @@ enum class Language(
             return values().firstOrNull { it.code == code || it.oldCode == code } ?: ENGLISH
         }
 
-        fun getLocale(code: String): Locale {
-            return if (code.contains("_")) {
-                val locale = code.split("_")
-                Locale(locale[0], locale[1])
+        fun getLocale(code: String?): Locale {
+            return if (code != null) {
+                if (code.contains("_")) {
+                    val locale = code.split("_")
+                    Locale(locale[0], locale[1])
+                } else {
+                    Locale(code)
+                }
             } else {
-                Locale(code)
+                Locale(ENGLISH.code)
             }
         }
     }
