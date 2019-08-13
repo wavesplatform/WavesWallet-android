@@ -225,7 +225,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }
-                            .flatMap { WavesSdk.service().getDataService().assets(it) }
+                            .flatMap { WavesSdk.service().getDataService().assets(ids = it) }
                             .map { info ->
                                 setDefaultAssets(info)
                             }

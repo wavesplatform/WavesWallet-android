@@ -72,11 +72,10 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfoResponse>> {
-        if (ids.isEmpty()) {
-            return Observable.just(listOf())
-        } else {
-            return dataService.assets(ids)
+    fun assets(ids: List<String?>? = null, search: String? = null): Observable<List<AssetInfoResponse>> {
+        if (ids != null && ids.isNotEmpty()
+                || search != null && search.isNotEmpty()) {
+            return dataService.assets(ids = ids, search = search)
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
@@ -94,6 +93,8 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                         AssetInfoDb.convertToDb(assetsInfo).saveAll()
                         return@map assetsInfo
                     }
+        } else {
+            return Observable.just(listOf())
         }
     }
 
