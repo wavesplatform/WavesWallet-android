@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 19/7/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_redirection_message">सत्यापन के माध्यम से जाने के बाद आपको आगे के निर्देशों के साथ एक ईमेल प्राप्त होगा</string>
   <string name="about_redirection_okay">ठीक है</string>

@@ -54,6 +54,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
@@ -156,11 +157,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
-
-        if (this is SplashActivity) {
-            return
-        }
-
         localizationDelegate.onResume(this)
 
         askPassCodeIfNeed()
@@ -339,6 +335,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     fun setLanguage(locale: Locale) {
         localizationDelegate.setLanguage(this, locale)
+        MarketPulseAppWidgetProvider.updateAllWidgetsByBroadcast(this)
     }
 
     fun setDefaultLanguage(language: String) {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Eduard Zaydel on 18/7/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity"
+    android:initialKeyguardLayout="@layout/market_widget_classic"
+    android:initialLayout="@layout/market_widget_classic"
+    android:minWidth="320dp"
+    android:minHeight="180dp"
+    android:minResizeWidth="250dp"
+    android:minResizeHeight="40dp"
+    android:previewImage="@drawable/widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen" />

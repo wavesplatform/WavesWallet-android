@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Eduard Zaydel on 19/7/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/widget_progress_animation_classic"
+    android:pivotX="50%"
+    android:pivotY="50%" />
