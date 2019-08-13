@@ -6,14 +6,17 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
+import android.util.Log
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
@@ -58,11 +61,11 @@ class MarketWidgetDataManager @Inject constructor() {
     }
 
     private fun calculatePrice(activeMarkets: MutableList<MarketWidgetActiveMarket>): MutableList<MarketWidgetActiveMarket.UI> {
-        val wavesUSDAsset = activeMarkets.first { it.assetInfo.id == Constants.Fiat.USD_ID }
-        val wavesEURAsset = activeMarkets.first { it.assetInfo.id == Constants.Fiat.EUR_ID }
+        val wavesUSDAsset = activeMarkets.first { it.assetInfo.id == EnvironmentManager.environment.externalProperties.usdId }
+        val wavesEURAsset = activeMarkets.first { it.assetInfo.id == EnvironmentManager.environment.externalProperties.eurId }
 
         val filteredMarkets = activeMarkets
-                .filter { it.assetInfo.id != Constants.Fiat.USD_ID && it.assetInfo.id != Constants.Fiat.EUR_ID }
+                .filter { it.assetInfo.id != EnvironmentManager.environment.externalProperties.usdId && it.assetInfo.id != EnvironmentManager.environment.externalProperties.eurId }
                 .toMutableList()
 
         return filteredMarkets.mapTo(mutableListOf(), { marketWidgetActiveMarket ->
@@ -120,14 +123,21 @@ class MarketWidgetDataManager @Inject constructor() {
 
     private fun withDefaultPair(assets: MutableList<MarketWidgetActiveAsset>): MutableList<MarketWidgetActiveAsset> {
         val result = mutableListOf<MarketWidgetActiveAsset>()
-        result.add(MarketWidgetActiveAsset("Dollar", Constants.Fiat.USD_ID, "WAVES", Constants.Fiat.USD_ID))
-        result.add(MarketWidgetActiveAsset("Euro", Constants.Fiat.EUR_ID, "WAVES", Constants.Fiat.EUR_ID))
+        result.add(MarketWidgetActiveAsset(USD_NAME, EnvironmentManager.environment.externalProperties.usdId,
+                WavesConstants.WAVES_ASSET_ID_FILLED, EnvironmentManager.environment.externalProperties.usdId))
+        result.add(MarketWidgetActiveAsset(EUR_NAME, EnvironmentManager.environment.externalProperties.eurId,
+                WavesConstants.WAVES_ASSET_ID_FILLED, EnvironmentManager.environment.externalProperties.eurId))
         result.addAll(assets)
         return result
     }
 
     fun clearSubscription() {
         compositeDisposable.clear()
+    }
+
+    companion object {
+        const val USD_NAME = "Dollar"
+        const val EUR_NAME = "Euro"
     }
 
 }

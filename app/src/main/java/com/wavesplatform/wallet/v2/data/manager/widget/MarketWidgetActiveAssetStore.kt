@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.data.manager.widget
 import android.content.Context
 import com.google.gson.Gson
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 
 object MarketWidgetActiveAssetStore : MarketWidgetActiveStore<MarketWidgetActiveAsset> {
 
@@ -38,7 +38,7 @@ object MarketWidgetActiveAssetStore : MarketWidgetActiveStore<MarketWidgetActive
     }
 
     override fun queryAll(context: Context, widgetId: Int): MutableList<MarketWidgetActiveAsset> {
-        val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0)
+        val prefs = context.getSharedPreferences(MarketPulseAppWidgetProvider.PREFS_NAME, 0)
         val assets = prefs.getStringSet(PREF_ASSET_KEY + widgetId, null)
         val assetsList = mutableListOf<MarketWidgetActiveAsset>()
         assets?.forEach {
@@ -49,7 +49,7 @@ object MarketWidgetActiveAssetStore : MarketWidgetActiveStore<MarketWidgetActive
     }
 
     override fun saveAll(context: Context, widgetId: Int, dataList: MutableList<MarketWidgetActiveAsset>) {
-        val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
+        val prefs = context.getSharedPreferences(MarketPulseAppWidgetProvider.PREFS_NAME, 0).edit()
         val assets = hashSetOf<String>()
         var orderIndex = 0
         dataList.forEach {
@@ -62,7 +62,7 @@ object MarketWidgetActiveAssetStore : MarketWidgetActiveStore<MarketWidgetActive
     }
 
     override fun clear(context: Context, widgetId: Int) {
-        val prefs = context.getSharedPreferences(MarketWidget.PREFS_NAME, 0).edit()
+        val prefs = context.getSharedPreferences(MarketPulseAppWidgetProvider.PREFS_NAME, 0).edit()
         prefs.remove(PREF_ASSET_KEY + widgetId)
         prefs.apply()
     }

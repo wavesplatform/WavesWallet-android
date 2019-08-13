@@ -9,7 +9,7 @@ import android.content.Context
 import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveAssetStore
 import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveMarketStore
 import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveStore
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import com.wavesplatform.wallet.v2.util.cancelAlarmUpdate
 
 object MarketWidgetSettings {
@@ -21,7 +21,7 @@ object MarketWidgetSettings {
     fun marketsSettings(): MarketWidgetActiveStore<MarketWidgetActiveMarket.UI> = MarketWidgetActiveMarketStore
 
     fun clearSettings(context: Context, widgetId: Int) {
-        context.cancelAlarmUpdate<MarketWidget>(widgetId)
+        context.cancelAlarmUpdate<MarketPulseAppWidgetProvider>(widgetId)
         themeSettings().removeTheme(context, widgetId)
         currencySettings().removeCurrency(context, widgetId)
         intervalSettings().removeInterval(context, widgetId)

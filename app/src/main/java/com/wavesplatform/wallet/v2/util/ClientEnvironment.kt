@@ -42,10 +42,10 @@ class ClientEnvironment internal constructor(
 
         var TEST_NET = ClientEnvironment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET,
                 URL_RAW_CONFIG_MAIN_NET, FILENAME_TEST_NET,
-                EnvironmentExternalProperties(Constants.Vostok.TEST_NET_CODE))
+                EnvironmentExternalProperties(Constants.Vostok.TEST_NET_CODE, Constants.Fiat.TestNet.USD_ID, Constants.Fiat.TestNet.EUR_ID))
         var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET,
                 URL_RAW_CONFIG_TEST_NET, FILENAME_MAIN_NET,
-                EnvironmentExternalProperties(Constants.Vostok.MAIN_NET_CODE))
+                EnvironmentExternalProperties(Constants.Vostok.MAIN_NET_CODE, Constants.Fiat.MainNet.USD_ID, Constants.Fiat.MainNet.EUR_ID))
 
 
         internal var environments: MutableList<ClientEnvironment> = mutableListOf()

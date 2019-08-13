@@ -66,11 +66,18 @@ object Constants {
     }
 
     object Fiat {
-        const val USD_ID = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck"
         const val USD_SYMBOL = "$"
-
-        const val EUR_ID = "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU"
         const val EUR_SYMBOL = "€"
+
+        object MainNet {
+            const val USD_ID = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck"
+            const val EUR_ID = "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU"
+        }
+
+        object TestNet {
+            const val USD_ID = "D6N2rAqWN6ZCWnCeNFWLGqqjS6nJLeK4m19XiuhdDenr"
+            const val EUR_ID = "AsuWyM9MUUsMmWkK7jS48L3ky6gA1pxx7QtEYPbfLjAJ"
+        }
     }
 
     val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)

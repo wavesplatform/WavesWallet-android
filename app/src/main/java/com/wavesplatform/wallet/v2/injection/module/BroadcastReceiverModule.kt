@@ -5,12 +5,12 @@
 
 package com.wavesplatform.wallet.v2.injection.module
 
-import com.wavesplatform.wallet.v2.ui.widget.MarketWidget
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class BroadcastReceiverModule {
     @ContributesAndroidInjector
-    abstract fun marketWidgetReceiver(): MarketWidget
+    abstract fun marketWidgetReceiver(): MarketPulseAppWidgetProvider
 }
