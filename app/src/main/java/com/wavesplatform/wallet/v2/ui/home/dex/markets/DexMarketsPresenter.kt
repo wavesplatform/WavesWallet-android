@@ -40,7 +40,11 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         var requestResult: SearchPairResponse? = null
         val assetIds = hashSetOf<String>()
 
-        addSubscription(dataServiceManager.loadPairs(PairRequest(pairs = initPairsList, limit = 200))
+        addSubscription(dataServiceManager.loadPairs(
+                PairRequest(
+                        pairs = initPairsList,
+                        limit = 200,
+                        matcher = EnvironmentManager.getMatcherAddress()))
                 .flatMap { result ->
                     for (index in 0 until result.data.size) {
                         if (result.data[index].data != null) {
@@ -205,8 +209,8 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
         val market = MarketResponse()
 
-        val amountAsset = assets.firstOrNull { it.id == data.amountAsset}
-        val priceAsset = assets.firstOrNull { it.id == data.priceAsset}
+        val amountAsset = assets.firstOrNull { it.id == data.amountAsset }
+        val priceAsset = assets.firstOrNull { it.id == data.priceAsset }
 
         market.id = data.amountAsset + data.priceAsset
 

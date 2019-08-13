@@ -141,7 +141,8 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 searchByAsset,
                 searchByAssets,
                 matchExactly,
-                limit)
+                limit,
+                EnvironmentManager.getMatcherAddress())
     }
 
     fun loadPairs(request: PairRequest): Observable<SearchPairResponse> {
