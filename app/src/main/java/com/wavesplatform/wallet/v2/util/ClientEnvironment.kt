@@ -46,7 +46,7 @@ class ClientEnvironment internal constructor(
                         Constants.Vostok.TEST_NET_CODE,
                         Constants.Fiat.TestNet.USD_ID,
                         Constants.Fiat.TestNet.EUR_ID,
-                        "3N8aZG6ZDfnh8YxS6aNcteobN8eXTWHaBBd"))
+                        Constants.MatcherAddress.TEST_NET))
 
         var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET,
                 URL_RAW_CONFIG_TEST_NET, FILENAME_MAIN_NET,
@@ -54,7 +54,7 @@ class ClientEnvironment internal constructor(
                         Constants.Vostok.MAIN_NET_CODE,
                         Constants.Fiat.MainNet.USD_ID,
                         Constants.Fiat.MainNet.EUR_ID,
-                        "3PJaDyprvekvPXPuAtxrapacuDJopgJRaU3"))
+                        Constants.MatcherAddress.MAIN_NET))
 
 
         internal var environments: MutableList<ClientEnvironment> = mutableListOf()

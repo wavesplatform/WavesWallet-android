@@ -80,6 +80,11 @@ object Constants {
         }
     }
 
+    object MatcherAddress {
+        const val MAIN_NET = "3PJaDyprvekvPXPuAtxrapacuDJopgJRaU3"
+        const val TEST_NET = "3N8aZG6ZDfnh8YxS6aNcteobN8eXTWHaBBd"
+    }
+
     val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
 
     fun defaultAssetsAvatar(): MutableMap<String, String> {
