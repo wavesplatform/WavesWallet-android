@@ -54,7 +54,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                         }
                     }
                     requestResult = result
-                    dataServiceManager.assetsInfoByIds(assetIds.toList())
+                    dataServiceManager.assets(ids = assetIds.toList())
                 }
                 .flatMap {
                     Observable.just(createMarkets(requestResult, it))
@@ -104,7 +104,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                             assetIds.add(assetId)
                         }
                     }
-                    dataServiceManager.assetsInfoByIds(assetIds.toList())
+                    dataServiceManager.assets(ids = assetIds.toList())
                 }
                 .flatMap {
                     Observable.just(createMarkets(searchResult, it))

@@ -12,8 +12,8 @@ import android.os.Handler
 
 class AppLifecycleObserver : LifecycleObserver {
 
-    var handler: Handler = Handler()
-    var resetWalletTask = Runnable {
+    private var handler: Handler = Handler()
+    private var resetWalletTask = Runnable {
         App.getAccessManager().resetWallet()
     }
 

@@ -17,11 +17,12 @@ import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.defaultAssetsAvatar
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
@@ -47,6 +48,8 @@ class AssetAvatarView : AppCompatImageView {
     * Used as background of the initials with asset specific color
     * */
     internal lateinit var paint: Paint
+
+    private var workWithWidget: Boolean = false
 
     /*
     * Text size for asset letter
@@ -103,6 +106,14 @@ class AssetAvatarView : AppCompatImageView {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
+    fun setAsset(asset: MarketWidgetActiveMarket.UI) {
+        setValues(asset.id, asset.name, isSponsoredAsset = false, isScriptAsset = false)
+    }
+
+    fun configureForWidget() {
+        this.workWithWidget = true
+    }
+
     /*
     * Get initials for asset drawable
     * */
@@ -141,13 +152,25 @@ class AssetAvatarView : AppCompatImageView {
         setDrawable(isSponsoredAsset, isScriptAsset)
 
         if (avatar != null) {
-            Glide.with(context)
-                    .load(avatar)
-                    .apply(RequestOptions()
-                            .placeholder(drawable)
-                            .centerCrop()
-                            .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
-                    .into(this)
+            if (workWithWidget) {
+                setImageBitmap(Glide.with(context)
+                        .asBitmap()
+                        .load(avatar)
+                        .apply(RequestOptions()
+                                .placeholder(drawable)
+                                .centerCrop()
+                                .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
+                        .submit()
+                        .get())
+            } else {
+                Glide.with(context)
+                        .load(avatar)
+                        .apply(RequestOptions()
+                                .placeholder(drawable)
+                                .centerCrop()
+                                .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
+                        .into(this)
+            }
         }
     }
 
