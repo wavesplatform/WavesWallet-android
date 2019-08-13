@@ -35,6 +35,8 @@ import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveAssetStore
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
@@ -154,6 +156,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
         presenter.loadAssets(this, widgetId)
+
+        if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
+            analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
+        }
     }
 
     override fun onBackPressed() {
@@ -161,6 +167,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun saveAppWidget() {
+        if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
+            analytics.trackEvent(AnalyticEvents.MarketPulseSettingsChangedEvent)
+        }
+
         MarketWidgetActiveAssetStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
         MarketPulseAppWidgetProvider.updateWidgetByBroadcast(this, widgetId)
 
@@ -385,5 +395,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         const val INTERVAL_TAB = 0
         const val ADD_TAB = 1
         const val THEME_TAB = 2
+        const val EXTRA_APPWIDGET_CHANGE = "com.wavesplatform.wallet.EXTRA_APPWIDGET_CHANGE"
     }
 }

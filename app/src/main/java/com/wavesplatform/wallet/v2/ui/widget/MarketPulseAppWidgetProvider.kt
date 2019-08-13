@@ -19,6 +19,8 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.RemoteViews
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.MarketWidgetDataManager
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetProgressState
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
@@ -58,11 +60,13 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
+        analytics.trackEvent(AnalyticEvents.MarketPulseAddedEvent)
         // Enter relevant functionality for when the first widget is created
     }
 
     override fun onDisabled(context: Context) {
         marketWidgetDataManager.clearSubscription()
+        analytics.trackEvent(AnalyticEvents.MarketPulseRemovedEvent)
         // Enter relevant functionality for when the last widget is disabled
     }
 
@@ -77,8 +81,13 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
                 ACTION_CURRENCY_CHANGE -> {
                     MarketWidgetSettings.currencySettings().switchCurrency(context, widgetId)
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId)
+                    analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
                 }
-                ACTION_UPDATE, ACTION_AUTO_UPDATE_WIDGET -> {
+                ACTION_UPDATE -> {
+                    loadPrice(context, widgetId)
+                    analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
+                }
+                ACTION_AUTO_UPDATE_WIDGET -> {
                     loadPrice(context, widgetId)
                 }
             }
@@ -195,6 +204,7 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
             val configIntent = Intent(context, MarketWidgetConfigureActivity::class.java)
             configIntent.action = AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
             configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            configIntent.putExtra(MarketWidgetConfigureActivity.EXTRA_APPWIDGET_CHANGE, true)
             var pIntent = PendingIntent.getActivity(context, appWidgetId,
                     configIntent, 0)
             views.setOnClickPendingIntent(R.id.image_configuration, pIntent)

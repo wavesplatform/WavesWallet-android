@@ -190,6 +190,18 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     // Считаем количество сохраненных аккаунтов у пользователя
     class StartAccountCounter(var count: Int) : AnalyticEvents("Start Account Counter")
 
+    // Добавление первого AppWidget с курсами асетов
+    object MarketPulseAddedEvent : AnalyticEvents("Market Pulse Added")
+
+    // Удаление последнего AppWidget с курсами асетов
+    object MarketPulseRemovedEvent : AnalyticEvents("Market Pulse Removed")
+
+    // Изменение настроек AppWidget с курсами асетов
+    object MarketPulseSettingsChangedEvent : AnalyticEvents("Market Pulse Settings Changed")
+
+    // Любая активность AppWidget с курсами асетов, нажата кнопка "update" или "смена курса валюты" или "настройки"
+    object MarketPulseActiveEvent : AnalyticEvents("Market Pulse Active")
+
     override fun provideName(provider: ProviderType): String? {
         // rewrite eventName if need for different analytics with when(this) conditions
         return this.eventName
