@@ -40,14 +40,14 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 427
-        versionName "2.5.0"
+        versionCode 428
+        versionName "2.6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
         buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
-        buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
+        buildConfigField "Stricdng", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
         buildConfigField "String", "MONKEY_TEST_SEED", "\"\""
         manifestPlaceholders = [
                 appIcon     : "@mipmap/ic_launcher",
