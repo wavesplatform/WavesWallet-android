@@ -12,22 +12,21 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
 import com.wavesplatform.sdk.model.response.node.UtilsTimeResponse
-import com.wavesplatform.sdk.net.service.DataService
-import com.wavesplatform.sdk.net.service.NodeService
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.remote.GithubService
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.remote.GithubService
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
@@ -115,6 +114,10 @@ class EnvironmentManager(var current: ClientEnvironment) {
             return currentTimeMillis + timeCorrection
         }
 
+        fun getMatcherAddress(): String {
+            return instance!!.current.externalProperties.matcherAddress
+        }
+
         fun setCurrentEnvironment(current: ClientEnvironment) {
             PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
                     .edit()
@@ -153,10 +156,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
             WavesSdk.setEnvironment(environment)
 
-            loadConfiguration(
-                    WavesSdk.service().getDataService(),
-                    WavesSdk.service().getNode(),
-                    GithubServiceManager.create(null))
+            loadConfiguration(GithubServiceManager.create(null))
         }
 
         fun getDefaultConfig(): GlobalConfiguration? {
@@ -184,13 +184,11 @@ class EnvironmentManager(var current: ClientEnvironment) {
             return instance!!.gateWayHostInterceptor!!
         }
 
-        private fun loadConfiguration(dataService: DataService,
-                                      nodeService: NodeService,
-                                      githubService: GithubService) {
+        private fun loadConfiguration(githubService: GithubService) {
             instance!!.configurationDisposable =
                     Observable.zip(
                             githubService.globalConfiguration(environment.url),
-                            nodeService.utilsTime(),
+                            WavesSdk.service().getNode().utilsTime(),
                             BiFunction { conf: GlobalConfigurationResponse, time: UtilsTimeResponse ->
                                 return@BiFunction Pair(conf, time)
                             })
@@ -219,10 +217,19 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }
-                            .flatMap { dataService.assets(ids = it) }
+                            .flatMap { WavesSdk.service().getDataService().assets(ids = it) }
                             .map { info ->
                                 setDefaultAssets(info)
-                                instance!!.configurationDisposable!!.dispose()
+                            }
+                            .flatMap {
+                                WavesSdk.service().getMatcher().matcherPublicKey()
+                            }
+                            .map { matcherPublicKey ->
+                                instance!!.current.externalProperties
+                                        .matcherAddress = WavesCrypto.addressFromPublicKey(
+                                        WavesCrypto.base58decode(matcherPublicKey
+                                                .replace("\"", "")),
+                                        netCode)
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({

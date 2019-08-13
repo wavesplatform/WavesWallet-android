@@ -6,13 +6,11 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
-import android.util.Log
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.sdk.utils.isWavesId
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMarket
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
@@ -39,7 +37,10 @@ class MarketWidgetDataManager @Inject constructor() {
         val activeAssets = withDefaultPair(MarketWidgetSettings.assetsSettings().queryAll(context, widgetId))
         val activeAssetsIds = activeAssets.map { it.amountAsset + "/" + it.priceAsset }
 
-        compositeDisposable.add(dataServiceManager.loadPairs(PairRequest(pairs = activeAssetsIds))
+        compositeDisposable.add(dataServiceManager.loadPairs(
+                PairRequest(
+                        pairs = activeAssetsIds,
+                        matcher = EnvironmentManager.getMatcherAddress()))
                 .executeInBackground()
                 .map { response ->
                     return@map activeAssets

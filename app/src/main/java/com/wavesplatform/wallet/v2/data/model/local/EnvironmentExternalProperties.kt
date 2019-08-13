@@ -8,5 +8,6 @@ package com.wavesplatform.wallet.v2.data.model.local
 data class EnvironmentExternalProperties(
         var vostokNetCode: Char,
         var usdId: String,
-        var eurId: String
+        var eurId: String,
+        var matcherAddress: String
 )

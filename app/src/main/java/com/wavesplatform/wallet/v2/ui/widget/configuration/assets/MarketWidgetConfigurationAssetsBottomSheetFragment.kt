@@ -56,7 +56,6 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
                 defaultAssets.add(it)
             }
         }
-        defaultAssets.add(Constants.VstGeneralAsset.assetId)
         defaultAssets.add(Constants.MrtGeneralAsset.assetId)
         defaultAssets.add(Constants.WctGeneralAsset.assetId)
     }
