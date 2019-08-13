@@ -72,8 +72,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         }?.convertFromDb()
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
         presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
-        presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
-                ?: find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
+        presenter.feeAsset = intent?.extras?.getParcelable(KEY_INTENT_FEE_ASSET)
+                ?: find(WavesConstants.WAVES_ASSET_ID_EMPTY)
 
         if (presenter.type == SendPresenter.Type.GATEWAY
                 || presenter.type == SendPresenter.Type.VOSTOK
@@ -106,8 +106,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
-        text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset.getDecimals())} " +
-                presenter.feeAsset.getName()
+        text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset?.getDecimals()
+                ?: 8)} " +
+                presenter.feeAsset?.getName()
 
         if (presenter.type == SendPresenter.Type.GATEWAY
                 || presenter.type == SendPresenter.Type.VOSTOK

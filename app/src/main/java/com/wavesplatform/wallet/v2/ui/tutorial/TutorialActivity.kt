@@ -42,7 +42,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setLanguage(Language.getLocale(intent.getStringExtra(BUNDLE_LANG)))
+        setLanguage(Language.getLocale(intent?.getStringExtra(BUNDLE_LANG)))
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
