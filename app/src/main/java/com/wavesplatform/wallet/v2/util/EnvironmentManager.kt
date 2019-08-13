@@ -17,9 +17,6 @@ import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
 import com.wavesplatform.sdk.model.response.node.UtilsTimeResponse
-import com.wavesplatform.sdk.net.service.DataService
-import com.wavesplatform.sdk.net.service.MatcherService
-import com.wavesplatform.sdk.net.service.NodeService
 import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
@@ -43,11 +40,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
     private var configurationDisposable: Disposable? = null
     private var versionDisposable: Disposable? = null
     private var gateWayHostInterceptor: HostInterceptor? = null
-    private var matcherAddress = if (current == ClientEnvironment.MAIN_NET) {
-        "3PJaDyprvekvPXPuAtxrapacuDJopgJRaU3"
-    } else {
-        "3N8aZG6ZDfnh8YxS6aNcteobN8eXTWHaBBd"
-    }
 
     companion object {
 
@@ -123,7 +115,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         fun getMatcherAddress(): String {
-            return instance!!.matcherAddress
+            return instance!!.current.externalProperties.matcherAddress
         }
 
         fun setCurrentEnvironment(current: ClientEnvironment) {
@@ -233,9 +225,10 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 WavesSdk.service().getMatcher().matcherPublicKey()
                             }
                             .map { matcherPublicKey ->
-                                instance!!.matcherAddress = WavesCrypto.addressFromPublicKey(
+                                instance!!.current.externalProperties
+                                        .matcherAddress = WavesCrypto.addressFromPublicKey(
                                         WavesCrypto.base58decode(matcherPublicKey
-                                                        .replace("\"", "")),
+                                                .replace("\"", "")),
                                         netCode)
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
