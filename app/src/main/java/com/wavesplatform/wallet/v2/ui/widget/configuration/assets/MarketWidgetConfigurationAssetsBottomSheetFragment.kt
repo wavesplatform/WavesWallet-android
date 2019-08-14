@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -37,6 +38,11 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v4.os.HandlerCompat.postDelayed
+
+
 
 class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
@@ -51,6 +57,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     var onChooseListener: OnChooseListener? = null
     var chosenAssets = arrayListOf<String>()
     private var spams = mapOf<String?, SpamAssetDb>()
+    private val imm = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
     init {
         Constants.defaultCrypto().forEach {
@@ -131,11 +138,15 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         setSkeletonGradient()
         initLoad()
 
+        editSearch.postDelayed({ imm.showSoftInput(editSearch, 0) }, 50)
         editSearch.requestFocus()
-        val imm = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
         return rootView
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
+        imm.hideSoftInputFromWindow(editSearch.windowToken, 0)
     }
 
     private fun search(query: String) {

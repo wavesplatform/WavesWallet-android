@@ -53,6 +53,7 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
 
@@ -152,14 +153,16 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
+        if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
+            analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
+            presenter.themeName = MarketWidgetStyle.getTheme(this, widgetId)
+            presenter.intervalUpdate = MarketWidgetUpdateInterval.getInterval(this, widgetId)
+        }
+
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
         presenter.loadAssets(this, widgetId)
-
-        if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
-            analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
-        }
     }
 
     override fun onBackPressed() {
