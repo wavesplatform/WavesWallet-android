@@ -187,7 +187,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
     fun setWallet(guid: String, password: String) {
         WavesWallet.createWallet(getWalletData(guid), password, guid)
         setLastLoggedInGuid(guid)
-        authHelper.configureDB(getWallet().address, guid)
+        authHelper.configureDB(getWallet()?.address, guid)
         MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
@@ -195,8 +195,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         return WavesWallet.isAuthenticated()
     }
 
-    fun getWallet(): WavesWallet {
-        return WavesWallet.getWallet()!!
+    fun getWallet(): WavesWallet? {
+        return WavesWallet.getWallet()
     }
 
     private fun createAddressBookCurrentAccount(): AddressBookUserDb? {
