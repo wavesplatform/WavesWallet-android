@@ -20,6 +20,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.EditDrawableText
 import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
@@ -27,8 +28,10 @@ import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.showError
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
@@ -47,6 +50,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     lateinit var adapter: MarketWidgetConfigurationAssetsAdapter
     var onChooseListener: OnChooseListener? = null
     var chosenAssets = arrayListOf<String>()
+    private var spams = mapOf<String?, SpamAssetDb>()
 
     init {
         Constants.defaultCrypto().forEach {
@@ -144,6 +148,9 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         }
 
         eventSubscriptions.add(dataServiceManager.assets(search = query.trim())
+                .flatMap {
+                    Observable.fromArray(it.filter { !spams.containsKey(it.id) })
+                }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     skeletonScreen?.hide()
@@ -157,6 +164,10 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
 
     private fun initLoad() {
         eventSubscriptions.add(dataServiceManager.assets(ids = defaultAssets)
+                .flatMap {
+                    spams = queryAll<SpamAssetDb>().associateBy { it.assetId }
+                    Observable.fromArray(it)
+                }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     adapter.setNewData(result)
