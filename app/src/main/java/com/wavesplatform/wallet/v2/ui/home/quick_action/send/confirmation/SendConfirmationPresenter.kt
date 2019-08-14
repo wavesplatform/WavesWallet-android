@@ -39,7 +39,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalanceResponse = find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalanceResponse? = find(WavesConstants.WAVES_ASSET_ID_EMPTY)
 
     var success = false
 
@@ -94,7 +94,9 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
 
         val totalAmount =
-                if (type == SendPresenter.Type.GATEWAY || type == SendPresenter.Type.VOSTOK) amount + gatewayCommission
+                if (type == SendPresenter.Type.GATEWAY
+                        || type == SendPresenter.Type.VOSTOK
+                        || type == SendPresenter.Type.ERGO) amount + gatewayCommission
                 else amount
 
         return TransferTransaction(
@@ -103,7 +105,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 amount = MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
                 attachment = SignUtil.textToBase58(attachment),
                 fee = blockchainCommission,
-                feeAssetId = feeAsset.assetId)
+                feeAssetId = feeAsset?.assetId ?: "")
     }
 
     fun getAddressName(address: String) {

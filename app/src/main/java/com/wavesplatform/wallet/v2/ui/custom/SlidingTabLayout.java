@@ -1,4 +1,9 @@
-package com.wavesplatform.wallet.v2.util.customviews;
+/*
+ * Created by Eduard Zaydel on 29/7/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
+package com.wavesplatform.wallet.v2.ui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;

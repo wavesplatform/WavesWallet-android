@@ -41,8 +41,8 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun askPassCode() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setLanguage(Language.getLocale(intent.getStringExtra(BUNDLE_LANG)))
         super.onCreate(savedInstanceState)
+        setLanguage(Language.getLocale(intent?.getStringExtra(BUNDLE_LANG)))
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {

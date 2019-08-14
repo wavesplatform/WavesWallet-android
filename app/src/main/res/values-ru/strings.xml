@@ -10,7 +10,7 @@
   <string name="address_book_add">Добавить</string>
   <string name="address_book_address_validation_already_use_error">Уже используется</string>
   <string name="address_book_address_validation_required_error">Требуется адрес</string>
-  <string name="address_book_empty_state">Пока ничего нет… \nВы сохранить адрес</string>
+  <string name="address_book_empty_state">Пока ничего нет… \nВы можете добавить адрес</string>
   <string name="address_book_name_validation_already_use_error">Уже используется</string>
   <string name="address_book_name_validation_max_length_error">Максимум 24</string>
   <string name="address_book_name_validation_min_length_error">Минимум 2 символа</string>
@@ -674,4 +674,7 @@
   <string name="trade_order_dialog_positive_place_order">Поставить ордер</string>
   <string name="trade_order_dialog_negative_cancel">Отмена</string>
   <string name="trade_order_dialog_subtitle_proceed">Вы действительно хотите продолжить?</string>
+
+  <string name="market_widget_update">Обновить</string>
+  <string name="market_widget_updating">Обновление…</string>
 </resources>

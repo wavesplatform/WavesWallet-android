@@ -36,7 +36,6 @@ import javax.inject.Singleton
 
 @Singleton
 class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
-    private var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = EnvironmentManager.getTime()
@@ -98,112 +97,11 @@ class MatcherServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
-        if (allMarketsList.isEmpty()) {
-            return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
-                    .map {
-                        val globalAssets = it.generalAssets.toMutableList()
-                        globalAssets.add(Constants.VstGeneralAsset)
-                        globalAssets.add(Constants.MrtGeneralAsset)
-                        globalAssets.add(Constants.WctGeneralAsset)
-                        return@map globalAssets.associateBy { it.assetId }
-                    },
-                    matcherService.orderBook()
-                            .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfigurationResponse.ConfigAsset>, netMarkets: List<MarketResponse> ->
-                        return@BiFunction Pair(configure, netMarkets)
-                    })
-                    .flatMap {
-                        // configure hash groups
-                        val hashGroup = linkedMapOf<String, MutableList<MarketResponse>>()
-
-                        it.first.keys.forEach {
-                            hashGroup[it] = mutableListOf()
-                        }
-                        hashGroup[OTHER_GROUP] = mutableListOf()
-
-                        // fill information and sort by group
-                        it.second.forEach { market ->
-                            market.id = market.amountAsset + market.priceAsset
-
-                            market.amountAssetLongName = it.first[market.amountAsset]?.displayName
-                                    ?: market.amountAssetName
-                            market.priceAssetLongName = it.first[market.priceAsset]?.displayName
-                                    ?: market.priceAssetName
-
-                            market.amountAssetShortName =
-                                    if (!it.first[market.amountAsset]?.gatewayId.isNullOrEmpty()) it.first[market.amountAsset]?.gatewayId
-                                    else market.amountAssetName
-
-                            market.priceAssetShortName =
-                                    if (!it.first[market.priceAsset]?.gatewayId.isNullOrEmpty()) it.first[market.priceAsset]?.gatewayId
-                                    else market.priceAssetName
-
-                            market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
-
-                            market.amountAssetDecimals = if (market.amountAssetInfo == null) {
-                                8
-                            } else {
-                                market.amountAssetInfo.decimals
-                            }
-                            market.priceAssetDecimals = if (market.priceAssetInfo == null) {
-                                8
-                            } else {
-                                market.priceAssetInfo.decimals
-                            }
-
-                            val group = hashGroup[market.amountAsset]
-                            if (group != null) {
-                                group.add(market)
-                            } else {
-                                hashGroup[OTHER_GROUP]?.add(market)
-                            }
-                        }
-
-                        hashGroup.values.forEach {
-                            allMarketsList.addAll(it)
-                        }
-
-                        return@flatMap filterMarketsBySpamAndSelect(allMarketsList)
-                    }
-        } else {
-            return filterMarketsBySpamAndSelect(allMarketsList)
-        }
-    }
-
-    private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
-        return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAssetDb>().toObservable()
-                .map {
-                    return@map SpamAssetDb.convertFromDb(it).associateBy { it.assetId }
-                },
-                queryAllAsSingle<MarketResponseDb>().toObservable()
-                        .map {
-                            return@map MarketResponseDb.convertFromDb(it).associateBy { it.id }
-                        }
-                , Function3 { netMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAssetResponse>, dbMarkets: Map<String?, MarketResponse> ->
-            val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                netMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
-            } else {
-                netMarkets.toMutableList()
-            }.toMutableList()
-
-            filteredSpamList.forEach { market ->
-                market.checked = dbMarkets[market.id] != null
-            }
-
-            return@Function3 filteredSpamList
-        })
-    }
-
     fun getSettings(): Observable<MatcherSettingsResponse> {
         return matcherService.getMatcherSettings()
     }
 
     fun getSettingsRates(): Observable<MutableMap<String, Double>> {
         return matcherService.getMatcherSettingsRates()
-    }
-
-    companion object {
-        var OTHER_GROUP = "other"
     }
 }

@@ -8,18 +8,16 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.request.data.PairRequest
+import com.wavesplatform.sdk.model.response.data.*
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
-import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.data.CandlesResponse
-import com.wavesplatform.sdk.model.response.data.LastTradesResponse
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -74,11 +72,10 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfoResponse>> {
-        if (ids.isEmpty()) {
-            return Observable.just(listOf())
-        } else {
-            return dataService.assets(ids)
+    fun assets(ids: List<String?>? = null, search: String? = null): Observable<List<AssetInfoResponse>> {
+        if (ids != null && ids.isNotEmpty()
+                || search != null && search.isNotEmpty()) {
+            return dataService.assets(ids = ids, search = search)
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
@@ -96,6 +93,8 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                         AssetInfoDb.convertToDb(assetsInfo).saveAll()
                         return@map assetsInfo
                     }
+        } else {
+            return Observable.just(listOf())
         }
     }
 
@@ -122,11 +121,31 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
     ): Observable<List<CandlesResponse.Data.CandleResponse>> {
         val interval = ChartTimeFrame.findByServerTime(timeFrame) ?: ChartTimeFrame.THIRTY_MINUTES
         return dataService.candles(watchMarket?.market?.amountAsset,
-                watchMarket?.market?.priceAsset, interval.interval, from, to)
+                watchMarket?.market?.priceAsset, interval.interval, from, to,
+                EnvironmentManager.getMatcherAddress())
                 .map { response ->
                     val candles = mutableListOf<CandlesResponse.Data.CandleResponse>()
                     response.data.forEach { candles.add(it.data) }
                     return@map candles.sortedBy { it.time }
                 }
+    }
+
+    fun loadPairs(pairs: List<String>? = null,
+                  searchByAsset: String? = null,
+                  searchByAssets: List<String>? = null,
+                  matchExactly: Boolean? = null,
+                  limit: Int = 30
+    ): Observable<SearchPairResponse> {
+        return dataService.pairs(
+                pairs,
+                searchByAsset,
+                searchByAssets,
+                matchExactly,
+                limit,
+                EnvironmentManager.getMatcherAddress())
+    }
+
+    fun loadPairs(request: PairRequest): Observable<SearchPairResponse> {
+        return dataService.pairs(request)
     }
 }

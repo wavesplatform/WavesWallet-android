@@ -281,7 +281,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalanceResponse) {
-        if (presenter.type == SendPresenter.Type.GATEWAY || presenter.type == SendPresenter.Type.VOSTOK) {
+        if (presenter.type == SendPresenter.Type.GATEWAY
+                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.ERGO) {
             val total = BigDecimal.valueOf(amount,
                     assetBalance.getDecimals())
                     .minus(presenter.gatewayMetadata.fee)
@@ -380,6 +382,17 @@ class SendActivity : BaseActivity(), SendView {
                         onNotValidAssetForAddress()
                     } else {
                         presenter.type = SendPresenter.Type.VOSTOK
+                        setRecipientValid(true)
+                        loadGatewayXRate(presenter.recipientAssetId!!)
+                    }
+                }
+                recipient.isValidErgoAddress() -> {
+                    presenter.recipientAssetId = EnvironmentManager.globalConfiguration.generalAssets
+                            .firstOrNull { it.assetId == presenter.selectedAsset?.assetId }?.assetId
+                    if (presenter.recipientAssetId.isNullOrEmpty()) {
+                        onNotValidAssetForAddress()
+                    } else {
+                        presenter.type = SendPresenter.Type.ERGO
                         setRecipientValid(true)
                         loadGatewayXRate(presenter.recipientAssetId!!)
                     }

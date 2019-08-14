@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 18/7/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="6dp"/>
+    <solid android:color="@color/disabled900" />
+</shape>
