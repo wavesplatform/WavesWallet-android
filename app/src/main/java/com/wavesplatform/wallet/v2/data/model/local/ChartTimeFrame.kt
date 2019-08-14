@@ -15,14 +15,14 @@ enum class ChartTimeFrame(val timeUI: Int, val timeServer: Int, val interval: St
     THREE_HOURS(R.string.chart_time_frame_3_hours, 180, "3h"),
     TWENTY_FOUR_HOURS(R.string.chart_time_frame_24_hours, 1440, "1d");
 
-    companion object {
-        fun findByServerTime(time: Int?): ChartTimeFrame? {
-            return values().firstOrNull { it.timeServer == time }
+    val position: Int
+        get() {
+            return values().indexOfFirst { it.timeServer == this.timeServer }
         }
 
-        fun findPositionByServerTime(time: Int?): Int {
-            if (time == null) return 0
-            return values().indexOfFirst { it.timeServer == time }
+    companion object {
+        fun findByServerTime(time: Int?): ChartTimeFrame {
+            return values().firstOrNull { it.timeServer == time } ?: THIRTY_MINUTES
         }
     }
 }

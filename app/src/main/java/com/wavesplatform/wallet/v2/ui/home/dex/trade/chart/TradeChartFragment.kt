@@ -70,16 +70,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable(TradeActivity.BUNDLE_MARKET)
 
-        val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
-        val position = ChartTimeFrame.findPositionByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
-
-        timeFrame.notNull {
-            presenter.selectedTimeFrame = position
-            presenter.newSelectedTimeFrame = position
-
-            text_change_time.text = getString(it.timeUI)
-            presenter.currentTimeFrame = it.timeServer
-        }
+        setMarketTimeFrameOrDefault()
 
         text_empty.text = getString(com.wavesplatform.wallet.R.string.chart_empty)
 
@@ -113,6 +104,16 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         setUpChart()
         presenter.chartModel.pairModel = presenter.watchMarket
         presenter.startLoad()
+    }
+
+    private fun setMarketTimeFrameOrDefault() {
+        val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
+
+        presenter.selectedTimeFrame = timeFrame.position
+        presenter.newSelectedTimeFrame = timeFrame.position
+
+        text_change_time.text = getString(timeFrame.timeUI)
+        presenter.currentTimeFrame = timeFrame.timeServer
     }
 
     private fun showTimeFrameDialog() {
