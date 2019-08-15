@@ -307,7 +307,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = EnvironmentManager.getTime()
             if (now > lastTime + MIN_15) {
-                analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup)
+                logBackUpAnalyticEvent()
 
                 implementSwipeToDismiss()
 
@@ -330,6 +330,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
         }
+    }
+
+    private fun logBackUpAnalyticEvent() {
+        analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup(prefsUtil.backUpAlertCount()))
+        prefsUtil.incrementBackUpAlertCount()
     }
 
     private fun implementSwipeToDismiss() {
