@@ -21,7 +21,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.EditDrawableText
 import com.mindorks.editdrawabletext.OnDrawableClickListener
-import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
@@ -29,11 +28,13 @@ import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
-import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
@@ -49,9 +50,10 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     @Inject
     lateinit var dataServiceManager: DataServiceManager
     @Inject
+    lateinit var nodeDataManager: NodeServiceManager
+    @Inject
     lateinit var adapter: MarketWidgetConfigurationAssetsAdapter
     var onChooseListener: OnChooseListener? = null
-    private var spams = mapOf<String?, SpamAssetDb>()
     private var inputMethodManager: InputMethodManager? = null
 
     init {
@@ -170,20 +172,33 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     }
 
     private fun initLoad() {
-        eventSubscriptions.add(dataServiceManager.assets(ids = defaultAssets)
-                .flatMap {
-                    spams = queryAll<SpamAssetDb>().associateBy { it.assetId }
-                    Observable.fromArray(it)
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ result ->
-                    adapter.setNewData(result)
-                    skeletonScreen?.hide()
-                    adapter.emptyView = getEmptyView()
-                }, {
-                    afterFailGetMarkets()
-                    it.printStackTrace()
-                }))
+        eventSubscriptions.add(
+                Observable.zip(dataServiceManager.assets(ids = defaultAssets),
+                        if (spams.isEmpty()) {
+                            nodeDataManager.loadSpamAssets()
+                        } else {
+                            Observable.fromArray(spams.values.toList())
+                        },
+                        BiFunction { assets: List<AssetInfoResponse>, spams: List<SpamAssetResponse> ->
+                            return@BiFunction Pair(assets, spams)
+                        })
+                        .flatMap { (assets, spams) ->
+                            if (spams.isNotEmpty()) {
+                                MarketWidgetConfigurationAssetsBottomSheetFragment.spams = spams.associateBy {
+                                    it.assetId
+                                }
+                            }
+                            Observable.fromArray(assets)
+                        }
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe({ result ->
+                            adapter.setNewData(result)
+                            skeletonScreen?.hide()
+                            adapter.emptyView = getEmptyView()
+                        }, {
+                            afterFailGetMarkets()
+                            it.printStackTrace()
+                        }))
     }
 
     private fun afterFailGetMarkets() {
@@ -211,6 +226,8 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     }
 
     companion object {
+
+        private var spams = mapOf<String?, SpamAssetResponse>()
 
         private const val ASSETS = "assets"
 
