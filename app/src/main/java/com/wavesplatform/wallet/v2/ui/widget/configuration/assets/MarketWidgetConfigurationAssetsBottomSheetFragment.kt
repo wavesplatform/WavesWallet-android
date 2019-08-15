@@ -51,7 +51,6 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     @Inject
     lateinit var adapter: MarketWidgetConfigurationAssetsAdapter
     var onChooseListener: OnChooseListener? = null
-    var chosenAssets = arrayListOf<String>()
     private var spams = mapOf<String?, SpamAssetDb>()
     private var inputMethodManager: InputMethodManager? = null
 
@@ -73,7 +72,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
             savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
+        adapter.chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
         inputMethodManager = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout,
