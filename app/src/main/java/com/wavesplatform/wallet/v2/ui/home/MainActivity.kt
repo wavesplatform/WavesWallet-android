@@ -419,7 +419,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
         private const val TAG_CENTRAL_TAB = "central_tab"
 
-        private const val MIN_15 = 54_000_000L
+        private const val MIN_15 = 900000L
     }
 
     interface OnElevationAppBarChangeListener {
