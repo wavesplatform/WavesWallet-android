@@ -53,6 +53,7 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
+import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
 
@@ -80,6 +81,15 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     override fun configLayoutRes(): Int = R.layout.market_widget_configure
 
     override fun askPassCode() = false
+
+    override fun needToShowNetworkMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            presenter.loadAssets(this, widgetId)
+        }
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -152,13 +162,17 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 .show()
         setSkeletonGradient()
 
+        if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
+            analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
+            presenter.themeName = MarketWidgetStyle.getTheme(this, widgetId)
+            presenter.intervalUpdate = MarketWidgetUpdateInterval.getInterval(this, widgetId)
+        }
+
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
-        presenter.loadAssets(this, widgetId)
-
-        if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
-            analytics.trackEvent(AnalyticEvents.MarketPulseActiveEvent)
+        if (isNetworkConnected()) {
+            presenter.loadAssets(this, widgetId)
         }
     }
 
@@ -167,8 +181,15 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun saveAppWidget() {
+        if (!isNetworkConnected()) {
+            finish()
+        }
+
         if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
-            analytics.trackEvent(AnalyticEvents.MarketPulseSettingsChangedEvent)
+            analytics.trackEvent(AnalyticEvents.MarketPulseSettingsChangedEvent(
+                    presenter.themeName.toString().toLowerCase().capitalize(),
+                    "${presenter.intervalUpdate.interval}m",
+                    presenter.assets))
         }
 
         MarketWidgetActiveAssetStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
@@ -189,6 +210,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
+        if (!isNetworkConnected()) {
+            return
+        }
+
         when (tab?.position) {
             INTERVAL_TAB -> showIntervalDialog()
             ADD_TAB -> showAssetsDialog()

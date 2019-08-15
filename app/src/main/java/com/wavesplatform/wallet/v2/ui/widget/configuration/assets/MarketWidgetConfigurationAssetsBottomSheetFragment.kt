@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -27,13 +28,18 @@ import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.showError
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
@@ -44,9 +50,11 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     @Inject
     lateinit var dataServiceManager: DataServiceManager
     @Inject
+    lateinit var nodeDataManager: NodeServiceManager
+    @Inject
     lateinit var adapter: MarketWidgetConfigurationAssetsAdapter
     var onChooseListener: OnChooseListener? = null
-    var chosenAssets = arrayListOf<String>()
+    private var inputMethodManager: InputMethodManager? = null
 
     init {
         Constants.defaultCrypto().forEach {
@@ -66,7 +74,8 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
             savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
+        adapter.chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
+        inputMethodManager = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout,
                 container, false)
@@ -127,11 +136,15 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         setSkeletonGradient()
         initLoad()
 
+        editSearch.postDelayed({ inputMethodManager?.showSoftInput(editSearch, 0) }, 50)
         editSearch.requestFocus()
-        val imm = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
         return rootView
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        eventSubscriptions.clear()
+        inputMethodManager?.hideSoftInputFromWindow(editSearch.windowToken, 0)
     }
 
     private fun search(query: String) {
@@ -144,6 +157,9 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         }
 
         eventSubscriptions.add(dataServiceManager.assets(search = query.trim())
+                .flatMap {
+                    Observable.fromArray(it.filter { !spams.containsKey(it.id) })
+                }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
                     skeletonScreen?.hide()
@@ -156,16 +172,33 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     }
 
     private fun initLoad() {
-        eventSubscriptions.add(dataServiceManager.assets(ids = defaultAssets)
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ result ->
-                    adapter.setNewData(result)
-                    skeletonScreen?.hide()
-                    adapter.emptyView = getEmptyView()
-                }, {
-                    afterFailGetMarkets()
-                    it.printStackTrace()
-                }))
+        eventSubscriptions.add(
+                Observable.zip(dataServiceManager.assets(ids = defaultAssets),
+                        if (spams.isEmpty()) {
+                            nodeDataManager.loadSpamAssets()
+                        } else {
+                            Observable.fromArray(spams.values.toList())
+                        },
+                        BiFunction { assets: List<AssetInfoResponse>, spams: List<SpamAssetResponse> ->
+                            return@BiFunction Pair(assets, spams)
+                        })
+                        .flatMap { (assets, spams) ->
+                            if (spams.isNotEmpty()) {
+                                MarketWidgetConfigurationAssetsBottomSheetFragment.spams = spams.associateBy {
+                                    it.assetId
+                                }
+                            }
+                            Observable.fromArray(assets)
+                        }
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe({ result ->
+                            adapter.setNewData(result)
+                            skeletonScreen?.hide()
+                            adapter.emptyView = getEmptyView()
+                        }, {
+                            afterFailGetMarkets()
+                            it.printStackTrace()
+                        }))
     }
 
     private fun afterFailGetMarkets() {
@@ -193,6 +226,8 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     }
 
     companion object {
+
+        private var spams = mapOf<String?, SpamAssetResponse>()
 
         private const val ASSETS = "assets"
 
