@@ -53,7 +53,7 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import kotlinx.android.synthetic.main.market_widget_configure.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
-import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
 
@@ -81,6 +81,8 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     override fun configLayoutRes(): Int = R.layout.market_widget_configure
 
     override fun askPassCode() = false
+
+    override fun needToShowNetworkMessage() = true
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -162,7 +164,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
-        presenter.loadAssets(this, widgetId)
+        if (isNetworkConnected()) {
+            presenter.loadAssets(this, widgetId)
+        }
     }
 
     override fun onBackPressed() {
@@ -170,6 +174,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun saveAppWidget() {
+        if (!isNetworkConnected()) {
+            finish()
+        }
+
         if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
             analytics.trackEvent(AnalyticEvents.MarketPulseSettingsChangedEvent)
         }
@@ -192,6 +200,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
+        if (!isNetworkConnected()) {
+            return
+        }
+
         when (tab?.position) {
             INTERVAL_TAB -> showIntervalDialog()
             ADD_TAB -> showAssetsDialog()
