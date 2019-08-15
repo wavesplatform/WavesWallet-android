@@ -143,7 +143,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     }
 
     override fun onCancel(dialog: DialogInterface?) {
-        super.onCancel(dialog)
+        eventSubscriptions.clear()
         inputMethodManager?.hideSoftInputFromWindow(editSearch.windowToken, 0)
     }
 
