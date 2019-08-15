@@ -230,6 +230,15 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         return dexNotShownAlertAboutPairList.firstOrNull { it == uniqueId } != null
     }
 
+    fun backUpAlertCount(): Int {
+        return getValue(KEY_BACKUP_ALERT_COUNT, 1L).toInt()
+    }
+
+    fun incrementBackUpAlertCount() {
+        val count = backUpAlertCount() + 1
+        setValue(KEY_BACKUP_ALERT_COUNT, count.toLong())
+    }
+
     companion object {
         const val SHOWED_NEWS_IDS = "showed_news_ids"
         const val GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid"
@@ -259,5 +268,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_IS_CLEARED_ASSETS = "is_cleared_assets"
         const val KEY_IS_CLEARED_ALERT_ALREADY_SHOWN = "is_cleared_alert_already_shown"
         const val KEY_IS_NEED_TO_SHOW_CLEARED_ALERT = "is_need_to_show_cleared_alert"
+        const val KEY_BACKUP_ALERT_COUNT = "backup_alert_count"
     }
 }

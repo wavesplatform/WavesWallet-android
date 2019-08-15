@@ -185,10 +185,10 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object StartAccountDeleteEvent : AnalyticEvents("Start Account Delete")
 
     // При появлении у пользователя сообщения "Нужно забэкапить SEED"
-    object NewUserWithoutBackup : AnalyticEvents("New User Without Backup")
+    class NewUserWithoutBackup(count: Int) : CountEvent("New User Without Backup", count)
 
     // Считаем количество сохраненных аккаунтов у пользователя
-    class StartAccountCounter(var count: Int) : AnalyticEvents("Start Account Counter")
+    class StartAccountCounter(count: Int) : CountEvent("Start Account Counter", count)
 
     // Добавление первого AppWidget с курсами асетов
     object MarketPulseAddedEvent : AnalyticEvents("Market Pulse Added")
@@ -217,7 +217,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
             is CurrencyEvent -> {
                 hashMapOf(CURRENCY_KEY to currency)
             }
-            is StartAccountCounter -> {
+            is CountEvent -> {
                 hashMapOf(COUNT_KEY to count)
             }
             is MarketPulseSettingsChangedEvent -> {
@@ -231,6 +231,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
 
     abstract class DexEvent(eventName: String, var amountAssetName: String, var priceAssetName: String) : AnalyticEvents(eventName)
     abstract class CurrencyEvent(eventName: String, var currency: String) : AnalyticEvents(eventName)
+    abstract class CountEvent(eventName: String, var count: Int) : AnalyticEvents(eventName)
 
     companion object {
         const val PAIR_KEY = "Pair"
