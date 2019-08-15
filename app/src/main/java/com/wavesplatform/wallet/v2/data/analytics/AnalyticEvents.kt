@@ -197,7 +197,9 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object MarketPulseRemovedEvent : AnalyticEvents("Market Pulse Removed")
 
     // Изменение настроек AppWidget с курсами асетов
-    object MarketPulseSettingsChangedEvent : AnalyticEvents("Market Pulse Settings Changed")
+    class MarketPulseSettingsChangedEvent(var style: String,
+                                          var interval: String,
+                                          var assets: List<String>) : AnalyticEvents("Market Pulse Settings Changed")
 
     // Любая активность AppWidget с курсами асетов, нажата кнопка "update" или "смена курса валюты" или "настройки"
     object MarketPulseActiveEvent : AnalyticEvents("Market Pulse Active")
@@ -218,6 +220,9 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
             is StartAccountCounter -> {
                 hashMapOf(COUNT_KEY to count)
             }
+            is MarketPulseSettingsChangedEvent -> {
+                hashMapOf(STYLE_KEY to style, INTERVAL_KEY to interval, ASSETS_KEY to assets)
+            }
             else -> {
                 hashMapOf()
             }
@@ -231,5 +236,9 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
         const val PAIR_KEY = "Pair"
         const val CURRENCY_KEY = "Currency"
         const val COUNT_KEY = "Count"
+
+        const val STYLE_KEY = "Style"
+        const val INTERVAL_KEY = "Interval"
+        const val ASSETS_KEY = "Assets"
     }
 }

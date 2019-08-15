@@ -84,6 +84,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     override fun needToShowNetworkMessage() = true
 
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            presenter.loadAssets(this, widgetId)
+        }
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
 
@@ -179,7 +186,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
 
         if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
-            analytics.trackEvent(AnalyticEvents.MarketPulseSettingsChangedEvent)
+            analytics.trackEvent(AnalyticEvents.MarketPulseSettingsChangedEvent(
+                    presenter.themeName.toString().toLowerCase().capitalize(),
+                    "${presenter.intervalUpdate.interval}m",
+                    presenter.assets))
         }
 
         MarketWidgetActiveAssetStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
