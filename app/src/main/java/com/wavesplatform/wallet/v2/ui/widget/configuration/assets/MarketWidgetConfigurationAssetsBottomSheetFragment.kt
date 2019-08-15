@@ -38,10 +38,6 @@ import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
-import android.support.v4.os.HandlerCompat.postDelayed
-
 
 
 class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialogFragment() {
@@ -57,7 +53,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     var onChooseListener: OnChooseListener? = null
     var chosenAssets = arrayListOf<String>()
     private var spams = mapOf<String?, SpamAssetDb>()
-    private val imm = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    private var inputMethodManager: InputMethodManager? = null
 
     init {
         Constants.defaultCrypto().forEach {
@@ -78,6 +74,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         super.onCreateView(inflater, container, savedInstanceState)
 
         chosenAssets = arguments?.getStringArrayList(ASSETS) ?: arrayListOf()
+        inputMethodManager = baseActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_assets_layout,
                 container, false)
@@ -138,7 +135,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         setSkeletonGradient()
         initLoad()
 
-        editSearch.postDelayed({ imm.showSoftInput(editSearch, 0) }, 50)
+        editSearch.postDelayed({ inputMethodManager?.showSoftInput(editSearch, 0) }, 50)
         editSearch.requestFocus()
 
         return rootView
@@ -146,7 +143,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
 
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
-        imm.hideSoftInputFromWindow(editSearch.windowToken, 0)
+        inputMethodManager?.hideSoftInputFromWindow(editSearch.windowToken, 0)
     }
 
     private fun search(query: String) {
