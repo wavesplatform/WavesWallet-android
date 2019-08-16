@@ -126,10 +126,11 @@ jobs:
       - store_test_results:
           path: app/build/test-results
       - run:
-          name: Upload to Slack
+          name: Upload apk to Slack
           command: |
-            export GIT_COMMIT_DESC=$(git log --format=oneline -n 1 | sed -E 's/^[^ ]+ (.*)$/\1/g')
-            curl -F file=@app/build/outputs/apk/release/app-release.apk -F channels=$SLACK_CHANNEL -F token=$SLACK_API_TOKEN -F title="${CIRCLE_PROJECT_REPONAME} | branch -> ${CIRCLE_BRANCH} | commit -> ${GIT_COMMIT_DESC}"  https://slack.com/api/files.upload
+            FILEPATH=$(find ./app/build/outputs/apk/dev/debug/ -maxdepth 1 -name "*universal*" -print)
+            FILENAME=$(basename "${FILEPATH}")
+            curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="${SLACK_CHANNEL}" -F title="${FILENAME}" -F filename="${FILENAME}" -F file=@"${FILEPATH}"
 workflows:
   version: 2
   CIBuilds:
@@ -138,10 +139,11 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                - CHANGE_IT_AFTER_TEST
       - build:
           filters:
             branches:
               only:
                 - master
+                - develop
                 - /^release/v.*/
