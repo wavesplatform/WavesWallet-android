@@ -135,12 +135,12 @@ workflows:
   version: 2
   CIBuilds:
     jobs:
-      - build:
+      - dev-build:
           filters:
             branches:
               only:
                 - CHANGE_IT_AFTER_TEST
-      - build:
+      - prod-build:
           filters:
             branches:
               only:
