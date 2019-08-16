@@ -137,6 +137,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                 }
             }
         } else {
+            assets.clear()
             assetsList.forEach {
                 assets.add(MarketWidgetActiveAsset.getMainAssetId(it))
             }
