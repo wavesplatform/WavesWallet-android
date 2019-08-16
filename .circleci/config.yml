@@ -139,11 +139,9 @@ workflows:
           filters:
             branches:
               only:
-                - CHANGE_IT_AFTER_TEST
+                - develop
       - prod-build:
           filters:
             branches:
               only:
-                - master
-                - develop
                 - /^release/v.*/
