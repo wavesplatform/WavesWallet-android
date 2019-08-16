@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  dev-build:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-28-alpha
@@ -9,17 +9,17 @@ jobs:
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
       - run:
-            name: Update Licenses
-            command: yes | sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;  #Captures SIGPIPE 141 error but still allow repeating "y" to accept all licenses
+          name: Update Licenses
+          command: yes | sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;  #Captures SIGPIPE 141 error but still allow repeating "y" to accept all licenses
       - checkout
       - run:
           name: Install Submodules
           command: git submodule sync && git submodule update --init
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-#      - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-#         command: sudo chmod +x ./gradlew
+      #      - run:
+      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+      #         command: sudo chmod +x ./gradlew
       - run:
           name: Add Sentry SDK sentry.properties
           command: |
@@ -63,6 +63,74 @@ jobs:
       - store_test_results:
           path: app/build/test-results
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+  prod-build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-28-alpha
+    environment:
+      JVM_OPTS: -Xmx4g -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+      - run:
+          name: Update Licenses
+          command: yes | sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;  #Captures SIGPIPE 141 error but still allow repeating "y" to accept all licenses
+      - checkout
+      - run:
+          name: Install Submodules
+          command: git submodule sync && git submodule update --init
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      #      - run:
+      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+      #         command: sudo chmod +x ./gradlew
+      - run:
+          name: Add Sentry SDK sentry.properties
+          command: |
+            mkdir -p app/src/main/resources
+            touch app/src/main/resources/sentry.properties
+            echo $SENTRY_DSN | base64 -di > app/src/main/resources/sentry.properties
+      - run:
+          name: Add Api-keys file
+          command: |
+            echo $API_KEYS_FILE | base64 -di > app/api-keys.properties
+      - run:
+          name: Add Sentry cli sentry.properties
+          command: |
+            touch sentry.properties
+            echo $SENTRY_CLI_CONFIGS | base64 -di > sentry.properties
+      - run:
+          name: Add google-services.json
+          command: echo $GOOGLE_SERVICES_KEY | base64 -di > app/google-services.json
+      - run:
+          name: Add android.jks
+          command: echo $KEYSTORE_FILE | base64 -di > app/android.jks
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run clean
+          command: ./gradlew clean
+      - run:
+          name: Run assembleProdRelease
+          command: ./gradlew --no-daemon assembleProdRelease
+      - store_artifacts:
+          path: app/build/outputs/apk/prod/release
+          destination: reports
+      - store_artifacts:
+          path: app/build/outputs/mapping/prod/release
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+      - run:
+          name: Upload apk to Slack
+          command: |
+            FILEPATH=$(find ./app/build/outputs/apk/dev/debug/ -maxdepth 1 -name "*universal*" -print)
+            FILENAME=$(basename "${FILEPATH}")
+            curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="${SLACK_CHANNEL}" -F title="${FILENAME}" -F filename="${FILENAME}" -F file=@"${FILEPATH}"
 workflows:
   version: 2
   CIBuilds:
@@ -71,7 +139,11 @@ workflows:
           filters:
             branches:
               only:
+                - CHANGE_IT_AFTER_TEST
+      - build:
+          filters:
+            branches:
+              only:
                 - master
                 - develop
-                - feature/circle-ci
                 - /^release/v.*/
