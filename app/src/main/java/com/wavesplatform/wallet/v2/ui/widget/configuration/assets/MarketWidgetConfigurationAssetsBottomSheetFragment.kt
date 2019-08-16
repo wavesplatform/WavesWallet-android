@@ -87,10 +87,13 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         adapter.bindToRecyclerView(recycleAssets)
 
         adapter.onItemChildClickListener =
-                BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+                BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                     when (view.id) {
                         R.id.asset_root -> {
-                            onChooseListener?.onChoose(adapter.getItem(position) as AssetInfoResponse)
+                            val item = this.adapter.getItem(position)
+                            if (item != null) {
+                                onChooseListener?.onChoose(item)
+                            }
                             dismiss()
                         }
                     }
