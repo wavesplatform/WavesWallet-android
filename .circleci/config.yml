@@ -126,7 +126,7 @@ jobs:
       - store_test_results:
           path: app/build/test-results
       - run:
-          name: Upload apk to Slack
+          name: Upload build artifact (apk) to Slack
           command: |
             FILEPATH=$(find ./app/build/outputs/apk/prod/release/ -maxdepth 1 -name "*universal*" -print)
             FILENAME=$(basename "${FILEPATH}")
