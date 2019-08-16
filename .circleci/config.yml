@@ -128,7 +128,7 @@ jobs:
       - run:
           name: Upload apk to Slack
           command: |
-            FILEPATH=$(find ./app/build/outputs/apk/dev/debug/ -maxdepth 1 -name "*universal*" -print)
+            FILEPATH=$(find ./app/build/outputs/apk/prod/release/ -maxdepth 1 -name "*universal*" -print)
             FILENAME=$(basename "${FILEPATH}")
             curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="${SLACK_CHANNEL}" -F title="${FILENAME}" -F filename="${FILENAME}" -F file=@"${FILEPATH}"
 workflows:
