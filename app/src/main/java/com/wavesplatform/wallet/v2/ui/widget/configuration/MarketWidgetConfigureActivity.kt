@@ -32,7 +32,6 @@ import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
@@ -47,6 +46,7 @@ import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -78,6 +78,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
 
+    private val onUpdateCompleteListener =
+            object : EnvironmentManager.Companion.OnUpdateCompleteListener {
+                override fun onComplete() {
+                    loadAssetsPairs()
+                }
+            }
+
     override fun configLayoutRes(): Int = R.layout.market_widget_configure
 
     override fun askPassCode() = false
@@ -87,7 +94,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
-            presenter.loadAssets(this, widgetId)
+            presenter.loadAssetsPairs(this, widgetId)
         }
     }
 
@@ -171,8 +178,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
 
-        if (isNetworkConnected()) {
-            presenter.loadAssets(this, widgetId)
+        if (EnvironmentManager.isUpdateCompleted()) {
+            presenter.loadAssetsPairs(this, widgetId)
+        } else {
+            EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener)
         }
     }
 
@@ -180,8 +189,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         saveAppWidget()
     }
 
+    override fun onPause() {
+        super.onPause()
+        EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener)
+    }
+
     private fun saveAppWidget() {
-        if (!isNetworkConnected()) {
+        if (!isNetworkConnected() || presenter.assets.size == 0) {
             finish()
         }
 
@@ -199,6 +213,12 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         setResult(Activity.RESULT_OK, resultValue)
         finish()
+    }
+
+    private fun loadAssetsPairs() {
+        if (isNetworkConnected()) {
+            presenter.loadAssetsPairs(this, widgetId)
+        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -221,7 +241,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    override fun onUpdatePairs(assetPairList: ArrayList<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
+    override fun onUpdatePairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
         adapter.setNewData(assetPairList)
         checkCanAddPair()
         adapter.emptyView = getEmptyView()
@@ -229,21 +249,16 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         updateWidgetAssetPairs()
     }
 
-    override fun onUpdatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse) {
-        if (searchPairResponse.data.isEmpty()) {
+    override fun onAddPairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
+        if (assetPairList.isEmpty()) {
             skeletonScreen?.hide()
             showError(R.string.market_widget_config_cant_find_currency_pair, R.id.errorSnackBarRoot)
             return
         }
 
         val data = adapter.data
-        val mostValuablePair = searchPairResponse.data[0]
-        data.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(assetInfo, mostValuablePair))
-        adapter.setNewData(data)
-        checkCanAddPair()
-        adapter.emptyView = getEmptyView()
-        skeletonScreen?.hide()
-        updateWidgetAssetPairs()
+        data.addAll(assetPairList)
+        onUpdatePairs(data)
     }
 
     override fun onFailGetMarkets() {
@@ -399,7 +414,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                 if (token == null) {
                     skeletonScreen?.show()
                     setSkeletonGradient()
-                    presenter.loadPair(asset)
+                    presenter.loadAssetPair(asset)
                 } else {
                     showError(R.string.market_widget_config_error_add_asset, R.id.errorSnackBarRoot)
                 }
