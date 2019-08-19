@@ -93,9 +93,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
-        if (networkConnected) {
-            presenter.loadAssetsPairs(this, widgetId)
-        }
+        loadAssetsPairs()
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -217,7 +215,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private fun loadAssetsPairs() {
         if (isNetworkConnected()) {
-            presenter.loadAssetsPairs(this, widgetId)
+            if (EnvironmentManager.isUpdateCompleted()) {
+                if (adapter.data.isEmpty()) {
+                    presenter.loadAssetsPairs(this, widgetId)
+                }
+            } else {
+                EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener)
+            }
         }
     }
 
@@ -241,14 +245,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    override fun onUpdatePairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
-        adapter.setNewData(assetPairList)
-        checkCanAddPair()
-        adapter.emptyView = getEmptyView()
-        skeletonScreen?.hide()
-        updateWidgetAssetPairs()
-    }
-
     override fun onAddPairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
         if (assetPairList.isEmpty()) {
             skeletonScreen?.hide()
@@ -259,6 +255,14 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         val data = adapter.data
         data.addAll(assetPairList)
         onUpdatePairs(data)
+    }
+
+    override fun onUpdatePairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>) {
+        adapter.setNewData(assetPairList)
+        checkCanAddPair()
+        adapter.emptyView = getEmptyView()
+        skeletonScreen?.hide()
+        updateWidgetAssetPairs()
     }
 
     override fun onFailGetMarkets() {
