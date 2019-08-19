@@ -155,9 +155,9 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
         }
 
         val assetsMaxCount = if (initAssetsMaxCount) {
-            9
+            INIT_WIDGET_VIEW_ASSETS_MAX_COUNT
         } else {
-            10
+            WIDGET_VIEW_ASSETS_MAX_COUNT
         }
 
         return if (filledResult.size > assetsMaxCount) {
@@ -165,5 +165,10 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
         } else {
             filledResult
         }
+    }
+
+    companion object {
+        private const val INIT_WIDGET_VIEW_ASSETS_MAX_COUNT = 9
+        private const val WIDGET_VIEW_ASSETS_MAX_COUNT = 10
     }
 }
