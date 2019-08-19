@@ -142,7 +142,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     }
 
     private fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>,
-                               init: Boolean = true)
+                               initAssetsMaxCount: Boolean = true)
             : MutableList<SearchPairResponse.Pair> {
         val filledResult = mutableListOf<SearchPairResponse.Pair>()
         pairs.data.forEachIndexed { index, item ->
@@ -154,7 +154,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
             }
         }
 
-        val assetsMaxCount = if (init) {
+        val assetsMaxCount = if (initAssetsMaxCount) {
             9
         } else {
             10
