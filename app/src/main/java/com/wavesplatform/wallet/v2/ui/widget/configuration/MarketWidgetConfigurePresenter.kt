@@ -9,10 +9,7 @@ import android.content.Context
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
-import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.utils.isWaves
-import com.wavesplatform.sdk.utils.isWavesId
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
@@ -34,44 +31,10 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
     var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
     var canAddPair = false
-    private val initAssetsMaxCount = 9
 
-    fun loadAssets(context: Context, widgetId: Int) {
+    fun loadAssetsPairs(context: Context, widgetId: Int) {
 
-        fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>)
-                : MutableList<SearchPairResponse.Pair> {
-            val filledResult = mutableListOf<SearchPairResponse.Pair>()
-            for (index in 0 until pairs.data.size) {
-                if (pairs.data[index].data != null) {
-                    val pair = assets[index].split("/")
-                    pairs.data[index].amountAsset = pair[0]
-                    pairs.data[index].priceAsset = pair[1]
-                    filledResult.add(pairs.data[index])
-                }
-            }
-
-            return if (filledResult.size > initAssetsMaxCount) {
-                filledResult.subList(0, initAssetsMaxCount)
-            } else {
-                filledResult
-            }
-        }
-
-        fun createPairs(assets: List<String>): MutableList<String> {
-            val initPairsList = mutableListOf<String>()
-
-            for (priceAssetId in assets) {
-                if (priceAssetId.isWaves()) {
-                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${EnvironmentManager.environment.externalProperties.usdId}")
-                    initPairsList.add("${EnvironmentManager.environment.externalProperties.usdId}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
-                    continue
-                } else {
-                    initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
-                    initPairsList.add("$priceAssetId/${WavesConstants.WAVES_ASSET_ID_FILLED}")
-                }
-            }
-            return initPairsList
-        }
+        val initAssetList = MarketWidgetSettings.assetsSettings().queryAll(context, widgetId).isEmpty()
 
         setInitAppWidgetConfig(context, widgetId)
 
@@ -80,7 +43,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                 Observable.zip(dataServiceManager.assets(ids = assets),
                         dataServiceManager.loadPairs(pairs = pairsList)
                                 .flatMap { pairs ->
-                                    Observable.just(getFilledPairs(pairs, pairsList))
+                                    Observable.just(getFilledPairs(pairs, pairsList, initAssetList))
                                 },
                         BiFunction { assetInfoList: List<AssetInfoResponse>, searchPair: List<SearchPairResponse.Pair> ->
                             return@BiFunction Pair(assetInfoList, searchPair)
@@ -99,9 +62,12 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                                         assetPair.priceAsset
                                 }
 
-                                tokenPairList.add(MarketWidgetConfigurationMarketsAdapter.TokenPair(
-                                        assetInfoList.first { it.id == id },
-                                        assetPair))
+                                val assetInfo = assetInfoList.firstOrNull { it.id == id }
+                                assetInfo.notNull {
+                                    tokenPairList.add(
+                                            MarketWidgetConfigurationMarketsAdapter.TokenPair(
+                                                    it, assetPair))
+                                }
                             }
                             viewState.onUpdatePairs(tokenPairList)
                         }, {
@@ -111,12 +77,24 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
         )
     }
 
-    fun loadPair(assetInfo: AssetInfoResponse) {
-        addSubscription(dataServiceManager.loadPairs(searchByAsset = assetInfo.id)
+    fun loadAssetPair(assetInfo: AssetInfoResponse) {
+        val pairsList = createPairs(mutableListOf(assetInfo.id))
+        addSubscription(dataServiceManager.loadPairs(pairs = pairsList)
+                .flatMap { pairs ->
+                    Observable.just(getFilledPairs(pairs, pairsList, false))
+                }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe(
-                        { result ->
-                            viewState.onUpdatePair(assetInfo, result)
+                        { searchPair ->
+                            val tokenPairList = arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
+                            searchPair.forEach { assetPair ->
+                                assetInfo.notNull {
+                                    tokenPairList.add(
+                                            MarketWidgetConfigurationMarketsAdapter.TokenPair(
+                                                    it, assetPair))
+                                }
+                            }
+                            viewState.onAddPairs(tokenPairList)
                         },
                         {
                             it.printStackTrace()
@@ -145,5 +123,52 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
 
         intervalUpdate = MarketWidgetSettings.intervalSettings().getInterval(context, widgetId)
         themeName = MarketWidgetSettings.themeSettings().getTheme(context, widgetId)
+    }
+
+    private fun createPairs(assets: List<String>): MutableList<String> {
+        val initPairsList = mutableListOf<String>()
+
+        for (priceAssetId in assets) {
+            if (priceAssetId.isWaves()) {
+                initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${EnvironmentManager.environment.externalProperties.usdId}")
+                initPairsList.add("${EnvironmentManager.environment.externalProperties.usdId}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
+                continue
+            } else {
+                initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
+                initPairsList.add("$priceAssetId/${WavesConstants.WAVES_ASSET_ID_FILLED}")
+            }
+        }
+        return initPairsList
+    }
+
+    private fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>,
+                               initAssetsMaxCount: Boolean = true)
+            : MutableList<SearchPairResponse.Pair> {
+        val filledResult = mutableListOf<SearchPairResponse.Pair>()
+        pairs.data.forEachIndexed { index, item ->
+            if (item.data != null && index < assets.size) {
+                val pair = assets[index].split("/")
+                item.amountAsset = pair[0]
+                item.priceAsset = pair[1]
+                filledResult.add(item)
+            }
+        }
+
+        val assetsMaxCount = if (initAssetsMaxCount) {
+            INIT_WIDGET_VIEW_ASSETS_MAX_COUNT
+        } else {
+            WIDGET_VIEW_ASSETS_MAX_COUNT
+        }
+
+        return if (filledResult.size > assetsMaxCount) {
+            filledResult.subList(0, assetsMaxCount)
+        } else {
+            filledResult
+        }
+    }
+
+    companion object {
+        private const val INIT_WIDGET_VIEW_ASSETS_MAX_COUNT = 9
+        private const val WIDGET_VIEW_ASSETS_MAX_COUNT = 10
     }
 }
