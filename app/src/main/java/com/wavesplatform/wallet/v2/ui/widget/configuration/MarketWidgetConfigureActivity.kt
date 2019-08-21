@@ -175,12 +175,6 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
         setTabText(THEME_TAB, presenter.themeName.itemTitle())
-
-        if (EnvironmentManager.isUpdateCompleted()) {
-            presenter.loadAssetsPairs(this, widgetId)
-        } else {
-            EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener)
-        }
     }
 
     override fun onBackPressed() {
@@ -195,6 +189,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     private fun saveAppWidget() {
         if (!isNetworkConnected() || presenter.assets.size == 0) {
             finish()
+            return
         }
 
         if (intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
@@ -220,6 +215,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                     presenter.loadAssetsPairs(this, widgetId)
                 }
             } else {
+                EnvironmentManager.update()
                 EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener)
             }
         }

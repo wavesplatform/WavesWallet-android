@@ -265,7 +265,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         fun addOnUpdateCompleteListener(listener: OnUpdateCompleteListener) {
-            instance?.onUpdateCompleteListeners?.add(listener)
+            if (instance?.onUpdateCompleteListeners?.contains(listener) != true) {
+                instance?.onUpdateCompleteListeners?.add(listener)
+            }
         }
 
         fun removeOnUpdateCompleteListener(listener: OnUpdateCompleteListener) {
