@@ -31,6 +31,7 @@ import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -161,7 +162,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
 
         eventSubscriptions.add(dataServiceManager.assets(search = query.trim())
                 .flatMap {
-                    Observable.fromArray(it.filter { !spams.containsKey(it.id) })
+                    Observable.fromArray(it.filter { !spams.containsKey(it.id) && !isFiat(it.id) })
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ result ->
