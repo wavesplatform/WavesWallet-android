@@ -16,18 +16,15 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.showSuccess
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -50,11 +47,19 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun askPassCode() = false
 
+    private var link = ""
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
+
+        val action = intent.action
+        val data = intent.data
+        if (data != null) {
+            link = data.toString()
+        }
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -86,10 +91,17 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         if (MonkeyTest.isTurnedOn()) {
             MonkeyTest.startIfNeed()
         } else {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
-                putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-                putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
+            if (link.isEmpty()) {
+                launchActivity<EnterPassCodeActivity>(
+                        requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                    putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+                    putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
+                }
+            } else {
+                launchActivity<KeeperTransactionActivity>(
+                        requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                    putExtra(KeeperTransactionActivity.KEY_INTENT_LINK, link)
+                }
             }
         }
     }

@@ -238,7 +238,14 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
     private fun createInitPairs(): MutableList<String> {
         val initPairsList = mutableListOf<String>()
-        for (amountAssetId in defaultAssets.subList(0, FIRST_MAIN_ASSETS_ID)) {
+
+        val firstMainAssets = if (FIRST_MAIN_ASSETS_ID < defaultAssets.size) {
+            defaultAssets.subList(0, FIRST_MAIN_ASSETS_ID)
+        } else {
+            defaultAssets
+        }
+
+        for (amountAssetId in firstMainAssets) {
             for (priceAssetId in defaultAssets) {
 
                 var price = priceAssetId

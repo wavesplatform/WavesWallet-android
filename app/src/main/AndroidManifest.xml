@@ -73,14 +73,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <data android:scheme="waves" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".v2.ui.home.MainActivity"
@@ -190,7 +182,25 @@
             android:name=".v2.ui.auth.choose_account.ChooseAccountActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "https://client.wavesplatform.com/wallet” -->
+                <data
+                    android:host="client.wavesplatform.com"
+                    android:pathPrefix="/wallet"
+                    android:scheme="https" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "waves://keeper” -->
+                <data
+                    android:scheme="waves"
+                    android:host="keeper" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity"
             android:screenOrientation="portrait"
@@ -291,6 +301,10 @@
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".v2.ui.home.profile.settings.DevOptionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.keeper.KeeperTransactionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
 
