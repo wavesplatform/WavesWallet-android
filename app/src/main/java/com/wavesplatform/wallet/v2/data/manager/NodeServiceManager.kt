@@ -27,8 +27,8 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction

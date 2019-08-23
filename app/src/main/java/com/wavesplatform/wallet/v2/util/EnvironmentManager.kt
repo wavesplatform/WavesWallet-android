@@ -25,7 +25,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.data.remote.GithubService
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
