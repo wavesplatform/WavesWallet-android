@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/basic50"
+        android:stateListAnimator="@animator/toolbar_elevation">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@color/basic50"
+            android:fitsSystemWindows="true"
+            android:fontFamily="@font/roboto"
+            app:titleTextAppearance="@style/Toolbar.Title" />
+    </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -72,25 +90,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
+                app:layout_constraintWidth_percent="0.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_address_from"
-                    android:layout_width="@dimen/asset_icon_size"
-                    android:layout_height="@dimen/asset_icon_size"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_centerVertical="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_t_startlease_48" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:textColor="@color/basic500"
+                    android:text="@string/keeper_from"
+                    android:textSize="12sp"
+                    app:autoSizeMaxTextSize="12sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/image_address_from"
+                    app:layout_constraintStart_toStartOf="@+id/image_address_from" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_address_from"
@@ -98,32 +130,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:autoSizeMaxTextSize="12sp"
                     app:autoSizeMinTextSize="10sp"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeTextType="uniform"
+                    android:layout_marginStart="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/image_address_from"
                     app:layout_constraintStart_toEndOf="@+id/image_address_from"
                     app:layout_constraintTop_toTopOf="@+id/image_address_from"
-                    tools:text="Started Leasing" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp"
-                    app:autoSizeMaxTextSize="12sp"
-                    app:autoSizeMinTextSize="10sp"
-                    app:autoSizeStepGranularity="1sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toTopOf="@+id/image_address_from"
-                    app:layout_constraintStart_toStartOf="@+id/image_address_from"
-                    tools:text="Fuck Leasingkgjas" />
-
+                    tools:text="My Wallet"/>
 
             </android.support.constraint.ConstraintLayout>
 
@@ -131,19 +148,35 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
+                app:layout_constraintWidth_percent="0.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_address_to"
-                    android:layout_width="@dimen/asset_icon_size"
-                    android:layout_height="@dimen/asset_icon_size"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_centerVertical="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_t_startlease_48" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:textColor="@color/basic500"
+                    android:text="@string/keeper_to"
+                    android:textSize="12sp"
+                    app:autoSizeMaxTextSize="12sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/image_address_to"
+                    app:layout_constraintStart_toStartOf="@+id/image_address_to" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_address_to"
@@ -151,32 +184,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:autoSizeMaxTextSize="12sp"
                     app:autoSizeMinTextSize="10sp"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeTextType="uniform"
+                    android:layout_marginStart="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/image_address_to"
                     app:layout_constraintStart_toEndOf="@+id/image_address_to"
                     app:layout_constraintTop_toTopOf="@+id/image_address_to"
-                    tools:text="Started Leasing" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp"
-                    app:autoSizeMaxTextSize="12sp"
-                    app:autoSizeMinTextSize="10sp"
-                    app:autoSizeStepGranularity="1sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toTopOf="@+id/image_address_to"
-                    app:layout_constraintStart_toStartOf="@+id/image_address_to"
-                    tools:text="Fuck Leasingkgjas" />
-
+                    tools:text="Crypto Marvel"/>
 
             </android.support.constraint.ConstraintLayout>
 
@@ -187,11 +205,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="16dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_transaction_txid_label"
@@ -226,7 +240,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
 
             <android.support.constraint.ConstraintLayout
@@ -318,28 +333,46 @@
 
             </android.support.constraint.ConstraintLayout>
 
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            >
+
+            <android.support.v7.widget.AppCompatImageView
+                style="@style/DashedLine"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/button_reject"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/button_reject"
+                style="@style/WavesButton.Red"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/keeper_reject"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_approve"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <Button
+                android:id="@+id/button_approve"
+                style="@style/WavesButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/keeper_approve"
+                app:layout_constraintStart_toEndOf="@+id/button_reject"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </android.support.constraint.ConstraintLayout>
 
-
     </LinearLayout>
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/basic50"
-        android:stateListAnimator="@animator/toolbar_elevation">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@color/basic50"
-            android:fitsSystemWindows="true"
-            android:fontFamily="@font/roboto"
-            app:titleTextAppearance="@style/Toolbar.Title" />
-    </android.support.design.widget.AppBarLayout>
 
 </RelativeLayout>
