@@ -245,6 +245,10 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
                                 error.printStackTrace()
                                 setConfiguration(environment.configuration)
+                                instance?.updateCompleted = true
+                                instance?.onUpdateCompleteListeners?.forEach {
+                                    it.onError()
+                                }
                                 instance!!.configurationDisposable!!.dispose()
                             })
 
@@ -373,6 +377,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
         interface OnUpdateCompleteListener {
             fun onComplete()
+            fun onError()
         }
     }
 }

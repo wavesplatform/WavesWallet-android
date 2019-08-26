@@ -80,8 +80,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private val onUpdateCompleteListener =
             object : EnvironmentManager.Companion.OnUpdateCompleteListener {
+
                 override fun onComplete() {
                     loadAssetsPairs()
+                }
+
+                override fun onError() {
+                    showNetworkError()
                 }
             }
 
