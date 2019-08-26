@@ -307,6 +307,11 @@
             android:name=".v2.ui.keeper.KeeperTransactionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.keeper.KeeperConfirmTransactionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <service
             android:name=".v2.data.service.UpdateApiDataService"
