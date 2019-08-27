@@ -706,6 +706,8 @@
     <string name="keeper_tx_time">TX time</string>
     <string name="keeper_reject">Reject</string>
     <string name="keeper_approve">Approve</string>
+    <string name="keeper_sign">Sign</string>
+    <string name="keeper_send">Send</string>
 
 
 </resources>
