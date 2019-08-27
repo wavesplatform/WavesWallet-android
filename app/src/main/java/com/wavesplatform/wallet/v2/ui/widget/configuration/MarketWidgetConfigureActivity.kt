@@ -192,7 +192,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     private fun saveAppWidget() {
-        if (!isNetworkConnected() || presenter.assets.size == 0) {
+        if (!isNetworkConnected() || presenter.assets.size == 0 || adapter.data.size == 0) {
             finish()
             return
         }
