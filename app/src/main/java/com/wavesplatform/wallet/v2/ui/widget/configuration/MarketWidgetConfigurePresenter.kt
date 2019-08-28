@@ -69,7 +69,11 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                                                     it, assetPair))
                                 }
                             }
-                            viewState.onUpdatePairs(tokenPairList)
+                            if (tokenPairList.isEmpty()) {
+                                viewState.onFailGetMarkets()
+                            } else {
+                                viewState.onUpdatePairs(tokenPairList)
+                            }
                         }, {
                             it.printStackTrace()
                             viewState.onFailGetMarkets()
