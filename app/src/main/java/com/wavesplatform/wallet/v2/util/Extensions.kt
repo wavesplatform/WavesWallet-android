@@ -829,7 +829,7 @@ fun addressByPublicKey(publicKey: String): String {
             WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
 }
 
-fun getTransactionType(transaction: BaseTransaction, address: String, spam: Set<String>): Int {
+fun getTransactionType(transaction: BaseTransaction, address: String, spam: Set<String>?): Int {
     val sender = addressByPublicKey(transaction.senderPublicKey)
     when {
         transaction.type == BaseTransaction.TRANSFER -> {
@@ -840,7 +840,7 @@ fun getTransactionType(transaction: BaseTransaction, address: String, spam: Set<
                 }
                 return Constants.ID_SENT_TYPE
             } else {
-                if (spam.contains(transaction.assetId)) {
+                if (spam != null && spam.isNotEmpty() && spam.contains(transaction.assetId)) {
                     return Constants.ID_SPAM_RECEIVE_TYPE
                 }
                 if (transaction.recipient != address) {
@@ -854,7 +854,7 @@ fun getTransactionType(transaction: BaseTransaction, address: String, spam: Set<
             return if (sender == address) {
                 Constants.ID_MASS_SEND_TYPE
             } else {
-                if (spam.contains(transaction.assetId)) {
+                if (spam != null && spam.isNotEmpty() && spam.contains(transaction.assetId)) {
                     Constants.ID_MASS_SPAM_RECEIVE_TYPE
                 } else {
                     Constants.ID_MASS_RECEIVE_TYPE

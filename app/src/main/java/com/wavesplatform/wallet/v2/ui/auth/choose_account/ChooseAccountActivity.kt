@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -99,7 +100,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 }
             } else {
                 launchActivity<KeeperTransactionActivity>(
-                        requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                        requestCode = KeeperTransactionActivity.REQUEST_KEEPER_TX_ACTION) {
                     putExtra(KeeperTransactionActivity.KEY_INTENT_LINK, link)
                 }
             }
@@ -163,6 +164,15 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     launchActivity<MainActivity>(clear = true)
+                }
+            }
+            KeeperTransactionActivity.REQUEST_KEEPER_TX_ACTION -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                } else {
+                    setResult(Activity.RESULT_CANCELED)
+                    finish()
                 }
             }
         }

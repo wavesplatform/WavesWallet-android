@@ -15,6 +15,17 @@ import javax.inject.Inject
 class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTransactionView>() {
 
 
+    fun receiveAsset(assetId: String) {
+        addSubscription(nodeServiceManager.assetDetails(assetId)
+                .executeInBackground()
+                .subscribe({ asset ->
+                    viewState.onReceivedAsset(asset)
+                }, {
+                    viewState.onError(it)
+                }))
+    }
+
+
     fun sendTransaction(transaction: BaseTransaction) {
 
         when {

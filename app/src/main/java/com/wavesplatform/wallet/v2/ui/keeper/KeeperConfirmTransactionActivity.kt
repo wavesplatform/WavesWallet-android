@@ -29,11 +29,7 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        /*setupToolbar(toolbar_view, true,
-                getString(R.string.send_confirmation_toolbar_title),
-                R.drawable.ic_toolbar_back_white)*/
 
-        //link = intent.getStringExtra(KEY_INTENT_LINK)
 
         val callback = "myapp"
         val appName = "My B Application"
