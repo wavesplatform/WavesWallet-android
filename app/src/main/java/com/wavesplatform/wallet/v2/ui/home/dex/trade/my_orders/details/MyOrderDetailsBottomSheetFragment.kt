@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.MatcherServiceManager
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
@@ -126,7 +127,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             setFee(data, view)
 
             // fill time field
-            view.text_timestamp?.text = data.orderResponse.timestamp.date("dd.MM.yyyy HH:mm")
+            view.text_timestamp?.text = data.orderResponse.timestamp.date(Constants.DATE_TIME_PATTERN)
         }
 
         return view

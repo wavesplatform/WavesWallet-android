@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.keeper
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Typeface
 import android.os.Bundle
@@ -9,6 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.vicpin.krealmextensions.queryAll
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.*
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
@@ -20,14 +20,16 @@ import com.wavesplatform.sdk.model.response.node.transaction.TransferTransaction
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.activity_keeper_transaction.*
 import kotlinx.android.synthetic.main.view_keeper_transaction.*
-
 import pers.victor.ext.click
+import pers.victor.ext.date
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
@@ -83,7 +85,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         }
 
 
-        presenter.receiveAsset(transaction!!.assetId)
+        presenter.receiveAsset(transaction!!, WavesWallet.getAddress())
 
 
 
@@ -139,7 +141,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     private fun getTransaction() {
         transaction = TransferTransaction(
                 assetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
-                recipient = "3PNaua1fMrQm4TArqeTuakmY1u985CgMRk6",
+                recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
                 amount = 1,
                 fee = WavesConstants.WAVES_MIN_FEE,
                 attachment = SignUtil.textToBase58("Hello-!"),
@@ -183,6 +185,15 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     override fun onReceivedAsset(asset: AssetsDetailsResponse) {
         setTransactionView(transaction!!, asset, spam)
+        text_tag.visiable()
+        text_transaction_value.text = MoneyUtil.getScaledText(presenter.fee, asset.decimals).stripZeros()
+        text_transaction_time.text = transaction!!.timestamp.date(Constants.DATE_TIME_PATTERN)
+
+        val tempTransaction = transaction
+        tempTransaction!!.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        val id = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTransaction.toBytes()))
+
+        text_transaction_txid.text = id
     }
 
     override fun onSuccessSign(transaction: BaseTransaction) {
@@ -193,13 +204,10 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     override fun onError(error: Throwable) {
         showError(error.localizedMessage, R.id.content)
     }
-    
+
     private fun setTransactionView(transaction: BaseTransaction,
                                    asset: AssetsDetailsResponse? = null,
                                    spams: HashSet<String>? = null) {
-        image_transaction
-        text_transaction_name
-        text_transaction_title
 
         val transactionType = getTransactionType(transaction, WavesWallet.getAddress(), spams)
         val txType = TransactionType.getTypeById(transactionType)
@@ -208,7 +216,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
 
         val decimals = 8
-        
+
         when (txType) {
             TransactionType.SENT_TYPE -> {
                 transaction as TransferTransaction
@@ -264,7 +272,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             TransactionType.CANCELED_LEASING_TYPE -> {
                 transaction as LeaseCancelTransaction
                 asset.notNull {
-                   // text_transaction_title.text = getScaledAmount(transaction., it.decimals)
+                    // text_transaction_title.text = getScaledAmount(transaction., it.decimals)
                 }
             }
             TransactionType.TOKEN_BURN_TYPE -> {
