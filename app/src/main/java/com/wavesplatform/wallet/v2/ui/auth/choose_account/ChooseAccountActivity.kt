@@ -13,26 +13,25 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.showSuccess
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.keeper.KeeperIntentHelper
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
+
 
 class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOnClickListener {
 
@@ -55,6 +54,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
+
+        presenter.checkKeeperIntent(intent)
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -142,17 +143,28 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
-                        App
-                                .getAccessManager()
+                        App.getAccessManager()
                                 .storeWalletName(item!!.address, item.name)
                     }
                 }
             }
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    launchActivity<MainActivity>(clear = true)
+                    if (WavesSdk.keeper().isKeeperIntent(intent)) {
+                        // TODO: Open keeper activity
+                    } else {
+                        launchActivity<MainActivity>(clear = true)
+                    }
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val keeperIntentResult = KeeperIntentHelper.parseIntentResult(intent)
+        if (keeperIntentResult != null) {
+            KeeperIntentHelper.exitToDAppWithResult(this, keeperIntentResult, WavesSdk.keeper())
         }
     }
 

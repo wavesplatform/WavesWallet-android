@@ -5,7 +5,9 @@
 
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
+import android.content.Intent
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -31,5 +33,9 @@ class ChooseAccountPresenter @Inject constructor() : BasePresenter<ChooseAccount
             list.add(AddressBookUserDb(address, name))
         }
         viewState.afterSuccessGetAddress(list)
+    }
+
+    fun checkKeeperIntent(intent: Intent) {
+        WavesSdk.keeper().processData(intent)
     }
 }
