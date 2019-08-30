@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -27,10 +28,12 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
+
 
 class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOnClickListener {
 
@@ -56,11 +59,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         setupToolbar(toolbar_view, true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 
-        val action = intent.action
-        val data = intent.data
-        if (data != null) {
-            link = data.toString()
-        }
+        presenter.checkKeeperIntent(intent)
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -155,15 +154,18 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
-                        App
-                                .getAccessManager()
+                        App.getAccessManager()
                                 .storeWalletName(item!!.address, item.name)
                     }
                 }
             }
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    launchActivity<MainActivity>(clear = true)
+                    if (WavesSdk.keeper().isKeeperIntent(intent)) {
+                        // TODO: Open keeper activity
+                    } else {
+                        launchActivity<MainActivity>(clear = true)
+                    }
                 }
             }
             KeeperTransactionActivity.REQUEST_KEEPER_TX_ACTION -> {
@@ -175,6 +177,14 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     finish()
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val keeperIntentResult = KeeperIntentHelper.parseIntentResult(intent)
+        if (keeperIntentResult != null) {
+            KeeperIntentHelper.exitToDAppWithResult(this, keeperIntentResult, WavesSdk.keeper())
         }
     }
 

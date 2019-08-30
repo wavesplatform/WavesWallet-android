@@ -4,19 +4,6 @@
     package="com.wavesplatform.wallet"
     android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER" />
-    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <application
         android:name=".App"
         android:allowBackup="false"
@@ -28,20 +15,6 @@
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
 
-        <service
-            android:name=".v2.ui.widget.MarketWidgetAdapterService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
-
-        <receiver android:name=".v2.ui.widget.MarketPulseAppWidgetProvider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/market_widget_info" />
-        </receiver>
-
         <activity
             android:name=".v2.ui.widget.configuration.MarketWidgetConfigureActivity"
             android:noHistory="true"
@@ -51,16 +24,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="${fabricApiKey}" />
 
         <activity
             android:name=".v2.ui.splash.SplashActivity"
@@ -73,13 +36,24 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="waves" />
+            </intent-filter>
         </activity>
+
         <activity
             android:name=".v2.ui.home.MainActivity"
             android:configChanges="orientation|locale|layoutDirection"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".v2.ui.language.choose.ChooseLanguageActivity"
             android:noHistory="true"
@@ -96,6 +70,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+
         <activity
             android:name=".v2.ui.home.profile.addresses.AddressesAndKeysActivity"
             android:screenOrientation="portrait"
@@ -184,22 +159,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
+                <action android:name="com.wavesplatform.wallet.action.KEEPER" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "https://client.wavesplatform.com/wallet” -->
-                <data
-                    android:host="client.wavesplatform.com"
-                    android:pathPrefix="/wallet"
-                    android:scheme="https" />
-                <!-- note that the leading "/" is required for pathPrefix-->
-                <!-- Accepts URIs that begin with "waves://keeper” -->
-                <data
-                    android:scheme="waves"
-                    android:host="keeper" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity"
@@ -222,6 +184,7 @@
             android:name=".v2.ui.auth.import_account.ImportAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        /
         <activity
             android:name=".v2.ui.auth.qr_scanner.QrCodeScannerActivity"
             android:screenOrientation="portrait"
@@ -313,9 +276,15 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <service
-            android:name=".v2.data.service.UpdateApiDataService"
-            android:stopWithTask="true" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricApiKey}" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -327,6 +296,16 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <receiver android:name=".v2.ui.widget.MarketPulseAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/market_widget_info" />
+        </receiver>
+
         <receiver
             android:name="com.appsflyer.SingleInstallBroadcastReceiver"
             android:exported="true">
@@ -334,6 +313,27 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".v2.ui.widget.MarketWidgetAdapterService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service
+            android:name=".v2.data.service.UpdateApiDataService"
+            android:stopWithTask="true" />
     </application>
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER" />
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

@@ -20,6 +20,8 @@ import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.sdk.WavesSdk;
+import com.wavesplatform.sdk.keeper.WavesKeeper;
+import com.wavesplatform.sdk.keeper.model.DApp;
 import com.wavesplatform.wallet.v2.data.analytics.Analytics;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
@@ -77,6 +79,8 @@ public class App extends DaggerApplication {
         accessManager = new AccessManager(mPrefsUtil, authHelper);
 
         WavesSdk.init(this);
+        WavesSdk.keeper().configureDApp(this, "Waves", "test");
+
         EnvironmentManager.update();
 
         if (BuildConfig.DEBUG) {
