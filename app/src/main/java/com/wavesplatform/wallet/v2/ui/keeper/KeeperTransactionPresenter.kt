@@ -21,6 +21,18 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
 
     var fee = 0L
     var feeWaves = 0L
+    var assetsDetails:AssetsDetailsResponse? = null
+
+    fun receiveAsset(assetId: String) {
+        addSubscription(nodeServiceManager.assetDetails(assetId)
+                .executeInBackground()
+                .subscribe({ triple ->
+                    // viewState.onReceivedAsset(assetsDetails)
+                }, {
+                    it.printStackTrace()
+                    // viewState.onError(it)
+                }))
+    }
 
     fun receiveAsset(transaction: TransferTransaction, address: String) {
         //viewState.showCommissionLoading()
@@ -45,6 +57,7 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                     params.smartAsset = assetsDetails.scripted
                     fee = TransactionCommissionUtil.countCommission(commission, params)
                     feeWaves = fee
+                    this.assetsDetails = assetsDetails
                     viewState.onReceivedAsset(assetsDetails)
                 }, {
                     it.printStackTrace()

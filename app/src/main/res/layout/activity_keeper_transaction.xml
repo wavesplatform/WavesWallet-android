@@ -17,7 +17,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/view_keeper_transaction" />
+            <com.wavesplatform.wallet.v2.ui.custom.TransactionView
+                android:id="@+id/transaction_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"

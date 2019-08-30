@@ -15,8 +15,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp"
-        android:layout_gravity="center"
-        android:visibility="gone">
+        android:layout_gravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +40,10 @@
                 app:fontFamily="@font/roboto_medium"
                 android:layout_marginBottom="24dp"/>
 
-            <include layout="@layout/view_keeper_transaction" />
+            <com.wavesplatform.wallet.v2.ui.custom.TransactionView
+                android:id="@+id/transaction_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/button_okay"
@@ -68,7 +70,8 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"

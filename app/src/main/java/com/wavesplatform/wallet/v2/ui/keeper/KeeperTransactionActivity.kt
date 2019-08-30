@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.keeper
 
 import android.app.Activity
-import android.graphics.Typeface
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -9,10 +8,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.model.request.node.*
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
+import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
+import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
-import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
-import com.wavesplatform.sdk.model.response.node.TransferResponse
 import com.wavesplatform.sdk.model.response.node.transaction.BaseTransactionResponse
 import com.wavesplatform.sdk.model.response.node.transaction.DataTransactionResponse
 import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransactionResponse
@@ -22,11 +21,12 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
-import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.WavesWallet
+import com.wavesplatform.wallet.v2.util.getTransactionType
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_keeper_transaction.*
-import kotlinx.android.synthetic.main.view_keeper_transaction.*
 import pers.victor.ext.click
 import pers.victor.ext.date
 import pers.victor.ext.visiable
@@ -51,7 +51,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     var iconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png"
     var kind = "send"
 
-    var transaction: TransferTransaction? = null
+    var transaction: BaseTransaction? = null
     var spam: HashSet<String> = hashSetOf()
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -73,11 +73,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     private fun setTransaction() {
-        link = intent.getStringExtra(KEY_INTENT_LINK)
-
-
         getTransaction()
-
 
         if (transaction == null) {
             finish()
@@ -85,7 +81,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         }
 
 
-        presenter.receiveAsset(transaction!!, WavesWallet.getAddress())
+        // todo presenter.receiveAsset(transaction!!, WavesWallet.getAddress())
 
 
 
@@ -113,13 +109,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
         text_address_to.text = appName
 
-
-        val transactionType = getTransactionType(transaction!!, WavesWallet.getAddress(), spam)
-        val txType = TransactionType.getTypeById(transactionType)
-        image_transaction.setImageResource(txType.image)
-        text_transaction_name.text = getText(txType.title)
-
-
         if (kind == "sign") {
             button_approve.text = getText(R.string.keeper_sign)
             button_approve.click {
@@ -139,6 +128,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     private fun getTransaction() {
+        link = intent.getStringExtra(KEY_INTENT_LINK)
         transaction = TransferTransaction(
                 assetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
                 recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
@@ -152,11 +142,15 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     override fun onSuccessSend(transaction: BaseTransactionResponse) {
+        val transactionType = getTransactionType(
+                this@KeeperTransactionActivity.transaction!!, WavesWallet.getAddress(), spam)
         when {
             transaction.type == BaseTransaction.TRANSFER -> {
                 transaction as TransferTransactionResponse
                 launchActivity<KeeperConfirmTransactionActivity> {
+                    putExtra(KEY_INTENT_TRANSACTION_TYPE, transactionType)
                     putExtra(KEY_INTENT_TRANSACTION, transaction)
+                    putExtra(KEY_INTENT_ASSET_DETAILS, presenter.assetsDetails)
                     putExtra(KEY_INTENT_KIND, kind)
                     putExtra(KEY_INTENT_CALLBACK, callback)
                 }
@@ -164,7 +158,9 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             transaction.type == BaseTransaction.DATA -> {
                 transaction as DataTransactionResponse
                 launchActivity<KeeperConfirmTransactionActivity> {
+                    putExtra(KEY_INTENT_TRANSACTION_TYPE, transactionType)
                     putExtra(KEY_INTENT_TRANSACTION, transaction)
+                    putExtra(KEY_INTENT_ASSET_DETAILS, presenter.assetsDetails)
                     putExtra(KEY_INTENT_KIND, kind)
                     putExtra(KEY_INTENT_CALLBACK, callback)
                 }
@@ -172,7 +168,9 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             transaction.type == BaseTransaction.SCRIPT_INVOCATION -> {
                 transaction as InvokeScriptTransactionResponse
                 launchActivity<KeeperConfirmTransactionActivity> {
+                    putExtra(KEY_INTENT_TRANSACTION_TYPE, transactionType)
                     putExtra(KEY_INTENT_TRANSACTION, transaction)
+                    putExtra(KEY_INTENT_ASSET_DETAILS, presenter.assetsDetails)
                     putExtra(KEY_INTENT_KIND, kind)
                     putExtra(KEY_INTENT_CALLBACK, callback)
                 }
@@ -184,7 +182,17 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     override fun onReceivedAsset(asset: AssetsDetailsResponse) {
-        setTransactionView(transaction!!, asset, spam)
+        transaction_view.setTransaction(transaction!!, asset, spam)
+
+        if (transaction!!.type == BaseTransaction.SCRIPT_INVOCATION) {
+            val invokeTransaction = transaction as InvokeScriptTransaction
+            invokeTransaction.payment[0].amount
+
+
+            // todo setTransaction(transaction!!, asset, spam)
+        }
+
+
         text_tag.visiable()
         text_transaction_value.text = MoneyUtil.getScaledText(presenter.fee, asset.decimals).stripZeros()
         text_transaction_time.text = transaction!!.timestamp.date(Constants.DATE_TIME_PATTERN)
@@ -205,117 +213,12 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         showError(error.localizedMessage, R.id.content)
     }
 
-    private fun setTransactionView(transaction: BaseTransaction,
-                                   asset: AssetsDetailsResponse? = null,
-                                   spams: HashSet<String>? = null) {
-
-        val transactionType = getTransactionType(transaction, WavesWallet.getAddress(), spams)
-        val txType = TransactionType.getTypeById(transactionType)
-        image_transaction.setImageResource(txType.image)
-        text_transaction_name.text = getText(txType.title)
-
-
-        val decimals = 8
-
-        when (txType) {
-            TransactionType.SENT_TYPE -> {
-                transaction as TransferTransaction
-                transaction.amount.notNull {
-                    text_transaction_title.text =
-                            "-${getScaledAmount(it, decimals)}"
-                }
-            }
-            TransactionType.RECEIVED_TYPE -> {
-                transaction as TransferTransaction
-                transaction.amount.notNull {
-                    text_transaction_title.text =
-                            "+${getScaledAmount(it, decimals)}"
-                }
-            }
-            TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
-                transaction as SponsorshipTransaction
-                transaction.fee.notNull {
-                    asset.notNull { assetNonNull ->
-                        text_transaction_title.text =
-                                "+${getScaledAmount(it, assetNonNull.decimals)} ${assetNonNull.name}"
-                    }
-                }
-            }
-            TransactionType.MASS_SPAM_RECEIVE_TYPE,
-            TransactionType.MASS_RECEIVE_TYPE,
-            TransactionType.MASS_SEND_TYPE -> {
-                transaction as MassTransferTransaction
-
-                val list = mutableListOf<TransferResponse>()
-                transaction.transfers.forEach {
-                    list.add(TransferResponse(
-                            recipient = it.recipient,
-                            amount = it.amount))
-                }
-
-                val massTransaction = HistoryTransactionResponse(
-                        type = transaction.type,
-                        amount = transaction.totalAmount ?: 0,
-                        transfers = list)
-
-                text_transaction_title.text = getTransactionAmount(
-                        transaction = massTransaction, decimals = decimals)
-            }
-            TransactionType.CREATE_ALIAS_TYPE -> {
-                transaction as AliasTransaction
-                text_transaction_title.text = transaction.alias
-                text_transaction_title.setTypeface(null, Typeface.BOLD)
-            }
-            TransactionType.EXCHANGE_TYPE -> {
-                //setExchangeItem(item.data, view)
-            }
-            TransactionType.CANCELED_LEASING_TYPE -> {
-                transaction as LeaseCancelTransaction
-                asset.notNull {
-                    // text_transaction_title.text = getScaledAmount(transaction., it.decimals)
-                }
-            }
-            TransactionType.TOKEN_BURN_TYPE -> {
-                transaction as BurnTransaction
-                transaction.quantity.notNull {
-                    text_transaction_title.text =
-                            "-${getScaledAmount(transaction.quantity, decimals)}"
-                }
-            }
-            TransactionType.TOKEN_GENERATION_TYPE,
-            TransactionType.TOKEN_REISSUE_TYPE -> {
-                transaction as ReissueTransaction
-                val quantity = getScaledAmount(transaction.quantity, decimals)
-                text_transaction_title.text = "+$quantity"
-            }
-            TransactionType.DATA_TYPE,
-            TransactionType.SET_ADDRESS_SCRIPT_TYPE,
-            TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
-            TransactionType.SCRIPT_INVOCATION_TYPE,
-            TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
-                text_transaction_name.text = getString(R.string.history_data_type_title)
-                text_transaction_title.text = getString(txType.title)
-                text_transaction_title.setTypeface(null, Typeface.BOLD)
-            }
-            TransactionType.SET_SPONSORSHIP_TYPE,
-            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
-                transaction as SponsorshipTransaction
-                asset.notNull {
-                    text_transaction_title.text = it.name
-                }
-            }
-            else -> {
-                text_transaction_name.text = getString(R.string.history_data_type_title)
-                text_transaction_title.text = getString(txType.title)
-                text_transaction_title.setTypeface(null, Typeface.BOLD)
-            }
-        }
-    }
-
     companion object {
         const val REQUEST_KEEPER_TX_ACTION = 1000
         const val KEY_INTENT_LINK = "key_intent_link"
+        const val KEY_INTENT_TRANSACTION_TYPE = "key_intent_transaction_type"
         const val KEY_INTENT_TRANSACTION = "key_intent_transaction"
+        const val KEY_INTENT_ASSET_DETAILS = "key_intent_asset_details"
         const val KEY_INTENT_KIND = "key_intent_kind"
         const val KEY_INTENT_CALLBACK = "key_intent_callback"
     }
