@@ -22,4 +22,7 @@ sealed class KeeperIntentResult : Parcelable {
 
     @Parcelize
     data class ErrorSendResult(val error: String) : KeeperIntentResult()
+
+    @Parcelize
+    object RejectedResult : KeeperIntentResult()
 }

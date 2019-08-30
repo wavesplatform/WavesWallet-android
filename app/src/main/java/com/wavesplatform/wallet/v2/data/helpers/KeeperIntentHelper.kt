@@ -50,6 +50,9 @@ object KeeperIntentHelper {
             is KeeperIntentResult.ErrorSendResult -> {
                 keeper.finishSend(activity, keeperIntentResult.error)
             }
+            is KeeperIntentResult.RejectedResult -> {
+                keeper.finishRejected(activity)
+            }
         }
     }
 }
