@@ -113,10 +113,10 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                 .filter { candle -> candle.volume != null }
                 .filter { candle -> candle.volume!! > 0 }
                 .map { candle ->
-                    val e = CandleEntry((candle.time.time / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
+                    val e = CandleEntry((candle.getTimeInMillis() / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
                     entries.add(e)
 
-                    barEntries.add(BarEntry((candle.time.time / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
+                    barEntries.add(BarEntry((candle.getTimeInMillis() / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
 
                     candle
                 }
@@ -145,13 +145,13 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                     for (candle in candles) {
                         if (candle.volume != null) {
                             if (candle.volume!! > 0) {
-                                ces.add(CandleEntry((candle.time.time
+                                ces.add(CandleEntry((candle.getTimeInMillis()
                                         / (1000 * 60 * currentTimeFrame)).toFloat(),
                                         candle.high!!.toFloat(),
                                         candle.low!!.toFloat(),
                                         candle.openValue!!.toFloat(),
                                         candle.close!!.toFloat()))
-                                bes.add(BarEntry((candle.time.time
+                                bes.add(BarEntry((candle.getTimeInMillis()
                                         / (1000 * 60 * currentTimeFrame)).toFloat(),
                                         candle.volume!!.toFloat()))
                             }

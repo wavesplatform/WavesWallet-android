@@ -126,7 +126,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 .map { response ->
                     val candles = mutableListOf<CandlesResponse.Data.CandleResponse>()
                     response.data.forEach { candles.add(it.data) }
-                    return@map candles.sortedBy { it.time }
+                    return@map candles.sortedBy { it.getTimeInMillis() }
                 }
     }
 

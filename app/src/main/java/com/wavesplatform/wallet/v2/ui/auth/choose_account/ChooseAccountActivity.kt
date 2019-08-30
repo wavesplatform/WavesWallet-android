@@ -26,7 +26,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.keeper.KeeperIntentHelper
+import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate

@@ -1,9 +1,9 @@
 /*
- * Created by Eduard Zaydel on 29/8/2019
+ * Created by Eduard Zaydel on 30/8/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.util.keeper
+package com.wavesplatform.wallet.v2.data.helpers
 
 import android.app.Activity
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import com.wavesplatform.sdk.keeper.interfaces.Keeper
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
+import com.wavesplatform.wallet.v2.data.model.local.KeeperIntentResult
 import com.wavesplatform.wallet.v2.util.launchActivity
 
 object KeeperIntentHelper {
