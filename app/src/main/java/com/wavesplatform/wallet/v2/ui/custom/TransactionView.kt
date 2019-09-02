@@ -146,15 +146,15 @@ open class TransactionView : ConstraintLayout {
     }
 
     fun setTransaction(transaction: BaseTransaction,
-                       asset: AssetsDetailsResponse,
-                       spam: HashSet<String>? = null) {
+                       asset: AssetsDetailsResponse? = null,
+                       spam: HashSet<String>? = hashSetOf()) {
 
         val transactionType = getTransactionType(transaction, WavesWallet.getAddress(), spam)
         val txType = TransactionType.getTypeById(transactionType)
         image_transaction.setImageResource(txType.image)
         text_transaction_name.text = context.getText(txType.title)
 
-        val decimals = asset.decimals
+        val decimals = asset?.decimals ?: 8
 
         when (txType) {
             TransactionType.SENT_TYPE -> {

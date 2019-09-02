@@ -91,17 +91,10 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         if (MonkeyTest.isTurnedOn()) {
             MonkeyTest.startIfNeed()
         } else {
-            if (link.isEmpty()) {
-                launchActivity<EnterPassCodeActivity>(
-                        requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
-                    putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-                    putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
-                }
-            } else {
-                launchActivity<KeeperTransactionActivity>(
-                        requestCode = KeeperTransactionActivity.REQUEST_KEEPER_TX_ACTION) {
-                    putExtra(KeeperTransactionActivity.KEY_INTENT_LINK, link)
-                }
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+                putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
             }
         }
     }
@@ -162,7 +155,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     if (WavesSdk.keeper().isKeeperIntent(intent)) {
-                        // TODO: Open keeper activity
+                        launchActivity<KeeperTransactionActivity>()
                     } else {
                         launchActivity<MainActivity>(clear = true)
                     }

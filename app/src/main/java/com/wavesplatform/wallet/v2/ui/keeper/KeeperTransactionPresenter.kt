@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.keeper
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.WavesSdk
+import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
@@ -20,49 +21,82 @@ import javax.inject.Inject
 class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTransactionView>() {
 
     var fee = 0L
-    var feeWaves = 0L
-    var assetsDetails:AssetsDetailsResponse? = null
 
-    fun receiveAsset(assetId: String) {
-        addSubscription(nodeServiceManager.assetDetails(assetId)
-                .executeInBackground()
-                .subscribe({ triple ->
-                    // viewState.onReceivedAsset(assetsDetails)
-                }, {
-                    it.printStackTrace()
-                    // viewState.onError(it)
-                }))
-    }
-
-    fun receiveAsset(transaction: TransferTransaction, address: String) {
+    fun receiveTransactionData(transaction: KeeperTransaction, address: String) {
         //viewState.showCommissionLoading()
         fee = 0L
+
+        var bytesCount = 0
+        var dAppAddress = ""
+        var type = 0.toByte()
+
+        var observable: Observable<AssetsDetailsResponse>? = null
+
+        when (transaction) {
+            is TransferTransaction -> {
+                type = transaction.type
+                observable = nodeServiceManager.assetDetails(transaction.assetId)
+            }
+            is DataTransaction -> {
+                bytesCount = transaction.getDataSize()
+                type = transaction.type
+                observable = Observable.empty()
+            }
+            is InvokeScriptTransaction -> {
+                type = transaction.type
+                transaction.payment.forEach { paymentItem ->
+                    observable = if (observable == null) {
+                        nodeServiceManager.assetDetails(paymentItem.assetId)
+                    } else {
+                        observable!!.mergeWith(nodeServiceManager.assetDetails(paymentItem.assetId))
+                    }
+                }
+                dAppAddress = transaction.dApp
+            }
+        }
+
+        val assetDetails = hashMapOf<String, AssetsDetailsResponse>()
+        var commission: GlobalTransactionCommissionResponse? = null
+        var scriptInfo: ScriptInfoResponse? = null
+
         addSubscription(Observable.zip(
                 githubServiceManager.getGlobalCommission(),
                 nodeServiceManager.scriptAddressInfo(address),
-                nodeServiceManager.assetDetails(transaction.assetId),
-                io.reactivex.functions.Function3 { t1: GlobalTransactionCommissionResponse,
-                            t2: ScriptInfoResponse,
-                            t3: AssetsDetailsResponse ->
-                    return@Function3 Triple(t1, t2, t3)
+                io.reactivex.functions.BiFunction { t1: GlobalTransactionCommissionResponse,
+                                                    t2: ScriptInfoResponse ->
+                    return@BiFunction Pair(t1, t2)
                 })
+                .flatMap {
+                    commission = it.first
+                    scriptInfo = it.second
+                    observable!!
+                }
                 .executeInBackground()
-                .subscribe({ triple ->
-                    val commission = triple.first
-                    val scriptInfo = triple.second
-                    val assetsDetails = triple.third
-                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = transaction.type
-                    params.smartAccount = scriptInfo.extraFee != 0L
-                    params.smartAsset = assetsDetails.scripted
-                    fee = TransactionCommissionUtil.countCommission(commission, params)
-                    feeWaves = fee
-                    this.assetsDetails = assetsDetails
-                    viewState.onReceivedAsset(assetsDetails)
+                .subscribe({
+                    assetDetails[it.assetId] = it
                 }, {
                     it.printStackTrace()
-                    fee = 0L
-                    viewState.onError(it)
+                }, {
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = type
+                    params.smartAccount = scriptInfo!!.extraFee != 0L
+                    when (type) {
+                        BaseTransaction.TRANSFER -> {
+                            val assetDetail = assetDetails.values.toList()
+                            if (assetDetail.isNotEmpty()) {
+                                params.smartAsset = assetDetail[0].scripted
+                            }
+                        }
+                        BaseTransaction.DATA -> {
+                            params.bytesCount = bytesCount
+                        }
+                        BaseTransaction.SCRIPT_INVOCATION -> {
+                            // can't calculate
+                        }
+                    }
+                    fee = TransactionCommissionUtil.countCommission(commission!!, params)
+                    viewState.onReceiveTransactionData(
+                            type, transaction, fee, dAppAddress, assetDetails)
                 }))
     }
 
@@ -110,8 +144,6 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
         }
 
 
-
-
     }
 
     fun signTransaction(transaction: BaseTransaction) {
@@ -137,6 +169,4 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
             }
         }
     }
-
-
 }

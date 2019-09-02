@@ -140,7 +140,8 @@
                 android:id="@+id/scriptInvokeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/functionLayout"
@@ -304,7 +305,7 @@
                 android:padding="16dp">
 
                 <android.support.constraint.ConstraintLayout
-                    android:id="@+id/constraintLayout3"
+                    android:id="@+id/feeLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -314,7 +315,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_value_label"
+                        android:id="@+id/text_transaction_fee_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -330,24 +331,24 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_value"
+                        android:id="@+id/text_transaction_fee_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text_transaction_value_label"
-                        tools:text="1.99800118" />
+                        app:layout_constraintTop_toBottomOf="@+id/text_transaction_fee_label"
+                        tools:text="1.99fee" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
                         android:layout_gravity="center_vertical"
                         android:text="WAVES"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_transaction_value"
-                        app:layout_constraintStart_toEndOf="@+id/text_transaction_value"
-                        app:layout_constraintTop_toTopOf="@+id/text_transaction_value"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_transaction_fee_value"
+                        app:layout_constraintStart_toEndOf="@+id/text_transaction_fee_value"
+                        app:layout_constraintTop_toTopOf="@+id/text_transaction_fee_value"
                         tools:visibility="visible" />
 
                 </android.support.constraint.ConstraintLayout>
