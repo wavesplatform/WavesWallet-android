@@ -10,6 +10,7 @@ import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
@@ -21,10 +22,13 @@ import javax.inject.Inject
 class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTransactionView>() {
 
     var fee = 0L
+    lateinit var transaction: KeeperTransaction
+    var spam: HashSet<String> = hashSetOf()
+
 
     fun receiveTransactionData(transaction: KeeperTransaction, address: String) {
-        //viewState.showCommissionLoading()
         fee = 0L
+        this.transaction = transaction
 
         var bytesCount = 0
         var dAppAddress = ""
@@ -101,26 +105,23 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                 }))
     }
 
-    fun signTransaction(transaction: BaseTransaction) {
-
-        when {
-            transaction.type == BaseTransaction.TRANSFER -> {
-                transaction as TransferTransaction
+    fun signTransaction(transaction: KeeperTransaction) {
+        when (transaction) {
+            is TransferTransaction -> {
                 transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
                 viewState.onSuccessSign(transaction)
             }
-            transaction.type == BaseTransaction.DATA -> {
-                transaction as DataTransaction
+            is DataTransaction -> {
                 transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
                 viewState.onSuccessSign(transaction)
             }
-            transaction.type == BaseTransaction.SCRIPT_INVOCATION -> {
-                transaction as InvokeScriptTransaction
+            is InvokeScriptTransaction -> {
                 transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
                 viewState.onSuccessSign(transaction)
             }
             else -> {
-                // do nothing
+                viewState.onError(
+                        Throwable(App.getAppContext().getString(R.string.common_server_error)))
             }
         }
     }

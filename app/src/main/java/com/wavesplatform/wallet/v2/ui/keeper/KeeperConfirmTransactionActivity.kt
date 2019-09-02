@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.vicpin.krealmextensions.queryAll
-import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
+import com.google.gson.Gson
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
+import com.wavesplatform.sdk.model.request.node.DataTransaction
+import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
+import com.wavesplatform.sdk.model.request.node.TransferTransaction
+import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_keeper_confirm_transaction.*
 import pers.victor.ext.click
@@ -22,8 +24,6 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
     @Inject
     @InjectPresenter
     lateinit var presenter: KeeperConfirmTransactionPresenter
-    private var transaction: KeeperTransaction? = null
-    private var spam: HashSet<String> = hashSetOf()
 
     @ProvidePresenter
     fun providePresenter(): KeeperConfirmTransactionPresenter = presenter
@@ -44,20 +44,25 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
 
     override fun onResume() {
         super.onResume()
-        transaction = intent.getParcelableExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION)
-                as KeeperTransaction
+        image_loader.show()
+        presenter.getSpam()
 
-        queryAll<SpamAssetDb>().forEach {
-            spam.add(it.assetId ?: "")
-        }
+        presenter.transaction = Gson().fromJson(
+                intent.getStringExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION),
+                TransferTransaction::class.java)
 
-        if (transaction == null) {
-            onError(Throwable(getString(R.string.common_server_error)))
-        } else {
-            image_loader.show()
-            // transaction_view.setTransaction(transaction)
-            presenter.sendTransaction(transaction!!)
+        when (presenter.transaction) {
+            is TransferTransaction -> {
+                presenter.receiveAssetDetails((presenter.transaction as TransferTransaction).assetId)
+            }
+            is DataTransaction -> {
+                transaction_view.setTransaction(presenter.transaction!!)
+            }
+            is InvokeScriptTransaction -> {
+                transaction_view.setTransaction(presenter.transaction!!, null, presenter.spam)
+            }
         }
+        presenter.sendTransaction(presenter.transaction!!)
     }
 
     override fun onSuccessSend(transaction: KeeperTransactionResponse) {
@@ -74,5 +79,9 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
         Toast.makeText(this, error.localizedMessage, Toast.LENGTH_LONG).show()
         setResult(Activity.RESULT_CANCELED)
         finish()
+    }
+
+    override fun onReceiveAssetDetails(assetDetails: AssetsDetailsResponse) {
+        transaction_view.setTransaction(presenter.transaction!!, assetDetails, presenter.spam)
     }
 }
