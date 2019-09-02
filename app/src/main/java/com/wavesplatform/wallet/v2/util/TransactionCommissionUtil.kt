@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import kotlin.math.floor
 
 class TransactionCommissionUtil {
 
@@ -56,7 +57,7 @@ class TransactionCommissionUtil {
                 commission: GlobalTransactionCommissionResponse
         ): Long {
             var total = 0.0
-            total += Math.floor(1 + (params.bytesCount!!.toDouble() - 1) / 1024) * feeRules.fee
+            total += floor(1 + (params.bytesCount!!.toDouble() - 1) / 1024) * feeRules.fee
             if (params.smartAccount!!) {
                 total += commission.smartAccountExtraFee
             }

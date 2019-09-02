@@ -76,6 +76,7 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                     assetDetails[it.assetId] = it
                 }, {
                     it.printStackTrace()
+                    viewState.onError(it)
                 }, {
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
                     params.transactionType = type
@@ -91,7 +92,7 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                             params.bytesCount = bytesCount
                         }
                         BaseTransaction.SCRIPT_INVOCATION -> {
-                            // can't calculate
+                            // can't calculate fee
                         }
                     }
                     fee = TransactionCommissionUtil.countCommission(commission!!, params)
