@@ -298,8 +298,7 @@
                         android:text="WAVES"
                         app:layout_constraintBottom_toBottomOf="@+id/text_transaction_fee_value"
                         app:layout_constraintStart_toEndOf="@+id/text_transaction_fee_value"
-                        app:layout_constraintTop_toTopOf="@+id/text_transaction_fee_value"
-                        tools:visibility="visible" />
+                        app:layout_constraintTop_toTopOf="@+id/text_transaction_fee_value" />
 
                 </android.support.constraint.ConstraintLayout>
 

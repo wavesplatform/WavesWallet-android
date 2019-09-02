@@ -25,13 +25,8 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
 
     var fee = 0L
     lateinit var transaction: KeeperTransaction
-    var spam: HashSet<String> = hashSetOf()
 
     fun receiveTransactionData(transaction: KeeperTransaction, address: String) {
-        queryAll<SpamAssetDb>().forEach {
-            spam.add(it.assetId ?: "")
-        }
-
         fee = 0L
         this.transaction = transaction
 
@@ -71,9 +66,9 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
         addSubscription(Observable.zip(
                 githubServiceManager.getGlobalCommission(),
                 nodeServiceManager.scriptAddressInfo(address),
-                io.reactivex.functions.BiFunction { t1: GlobalTransactionCommissionResponse,
-                                                    t2: ScriptInfoResponse ->
-                    return@BiFunction Pair(t1, t2)
+                io.reactivex.functions.BiFunction { commission: GlobalTransactionCommissionResponse,
+                                                    scriptInfoResponse: ScriptInfoResponse ->
+                    return@BiFunction Pair(commission, scriptInfoResponse)
                 })
                 .flatMap {
                     commission = it.first
@@ -99,9 +94,6 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                         }
                         BaseTransaction.DATA -> {
                             params.bytesCount = bytesCount
-                        }
-                        BaseTransaction.SCRIPT_INVOCATION -> {
-                            // can't calculate fee
                         }
                     }
                     fee = TransactionCommissionUtil.countCommission(commission!!, params)

@@ -48,8 +48,6 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
     override fun onResume() {
         super.onResume()
         image_loader.show()
-        presenter.getSpam()
-
         presenter.transaction = Gson().fromJson(
                 intent.getStringExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION),
                 TransferTransaction::class.java)
@@ -58,11 +56,8 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
             is TransferTransaction -> {
                 presenter.receiveAssetDetails((presenter.transaction as TransferTransaction).assetId)
             }
-            is DataTransaction -> {
+            is DataTransaction, is InvokeScriptTransaction -> {
                 transaction_view.setTransaction(presenter.transaction!!)
-            }
-            is InvokeScriptTransaction -> {
-                transaction_view.setTransaction(presenter.transaction!!, null, presenter.spam)
             }
         }
         presenter.sendTransaction(presenter.transaction!!)
@@ -87,6 +82,6 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
     }
 
     override fun onReceiveAssetDetails(assetDetails: AssetsDetailsResponse) {
-        transaction_view.setTransaction(presenter.transaction!!, assetDetails, presenter.spam)
+        transaction_view.setTransaction(presenter.transaction!!, assetDetails)
     }
 }

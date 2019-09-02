@@ -38,10 +38,10 @@ import javax.inject.Inject
 class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     // todo temp
-    var callback = "myapp"
-    var appName = "My B Application"
-    var iconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png"
-    private var actionType = KeeperActionType.SIGN
+    private var callback = "myapp"
+    private var appName = "My B Application"
+    private var iconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png"
+    private var actionType = KeeperActionType.SEND
 
     @Inject
     @InjectPresenter
@@ -75,6 +75,16 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         }
     }
 
+    override fun onBackPressed() {
+        val errorResult = if (actionType == KeeperActionType.SIGN) {
+            KeeperIntentResult.ErrorSignResult("ErrorSignResult: User Reject")
+        } else {
+            KeeperIntentResult.ErrorSendResult("ErrorSendResult: User Reject")
+        }
+        KeeperIntentHelper.exitToDAppWithResult(this, errorResult, wavesKeeper)
+        finish()
+    }
+
     private fun failResult(): KeeperIntentResult {
         return if (actionType == KeeperActionType.SIGN) {
             KeeperIntentResult.ErrorSignResult("ErrorSignResult: Fail")
@@ -102,6 +112,36 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 finish()
             }
         }
+    }
+
+
+    override fun onSuccessSign(transaction: BaseTransaction) {
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
+    override fun onError(error: Throwable) {
+        showProgressBar(false)
+        showError(error.localizedMessage, R.id.content)
+        setResult(Activity.RESULT_CANCELED)
+    }
+
+    override fun onReceiveTransactionData(type: Byte, transaction: KeeperTransaction, fee: Long,
+                                          dAppAddress: String,
+                                          assetDetails: HashMap<String, AssetsDetailsResponse>) {
+        when (transaction) {
+            is InvokeScriptTransaction -> {
+                setInvokeTransaction(transaction, dAppAddress, assetDetails)
+            }
+            is DataTransaction -> {
+                setDataTransaction(transaction)
+            }
+            is TransferTransaction -> {
+                setTransferTransaction(assetDetails, transaction)
+            }
+        }
+        button_approve.isEnabled = true
+        showProgressBar(false)
     }
 
     private fun init(transaction: KeeperTransaction) {
@@ -140,101 +180,71 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             }
         }
 
-        button_reject.click {
-            val errorResult = if (actionType == KeeperActionType.SIGN) {
-                KeeperIntentResult.ErrorSignResult("ErrorSignResult: User Reject")
-            } else {
-                KeeperIntentResult.ErrorSendResult("ErrorSendResult: User Reject")
-            }
-            KeeperIntentHelper.exitToDAppWithResult(this, errorResult, wavesKeeper)
-            finish()
+        button_reject.click { onBackPressed() }
+    }
+
+    private fun setInvokeTransaction(transaction: InvokeScriptTransaction, dAppAddress: String, assetDetails: HashMap<String, AssetsDetailsResponse>) {
+        transaction_view.setTransaction(transaction)
+        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
+        text_transaction_txid.text = txId
+
+        text_transaction_fee_value.text = ">=" + MoneyUtil.getScaledText(
+                transaction.fee, WavesConstants.WAVES_ASSET_INFO).stripZeros()
+
+        text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
+
+        scriptInvokeLayout.visiable()
+        text_transaction_scriptAddress.text = dAppAddress
+        text_transaction_function.text = transaction.call!!.function
+        transaction.payment.forEach {
+            val view = inflate(R.layout.item_invoke_script_payment)
+            val payment = view.findViewById<TextView>(R.id.text_transaction_payment)
+            val assetId = view.findViewById<TextView>(R.id.payment_text_tag)
+
+            val assetDetail = assetDetails[it.assetId]
+
+            payment.text = MoneyUtil.getScaledText(
+                    it.amount, assetDetail?.decimals ?: 8).stripZeros()
+            assetId.text = assetDetail?.name ?: WavesConstants.WAVES_ASSET_INFO.name
+
+            scriptInvokeLayout.addView(view)
         }
     }
 
-    override fun onReceiveTransactionData(type: Byte, transaction: KeeperTransaction, fee: Long,
-                                          dAppAddress: String,
-                                          assetDetails: HashMap<String, AssetsDetailsResponse>) {
-        when (type) {
-            BaseTransaction.SCRIPT_INVOCATION -> {
-                scriptInvokeLayout.visiable()
-                val invokeTransaction = transaction as InvokeScriptTransaction
+    private fun setDataTransaction(transaction: DataTransaction) {
+        transaction_view.setTransaction(transaction)
+        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-                invokeTransaction.payment.forEach {
-                    val view = inflate(R.layout.item_invoke_script_payment)
-                    val payment = view.findViewById<TextView>(R.id.text_transaction_payment)
-                    val assetId = view.findViewById<TextView>(R.id.payment_text_tag)
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
+        text_transaction_txid.text = txId
 
-                    val assetDetail = assetDetails[it.assetId]
+        text_transaction_fee_value.text = MoneyUtil.getScaledText(
+                presenter.fee, WavesConstants.WAVES_ASSET_INFO).stripZeros()
 
-                    payment.text = MoneyUtil.getScaledText(
-                            it.amount, assetDetail?.decimals ?: 8).stripZeros()
-                    assetId.text = assetDetail?.name ?: WavesConstants.WAVES_ASSET_INFO.name
-
-                    scriptInvokeLayout.addView(view)
-                }
-
-                text_transaction_scriptAddress.text = dAppAddress
-                text_transaction_function.text = invokeTransaction.call!!.function
-
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-
-                val id = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
-                text_transaction_txid.text = id
-
-                transaction_view.setTransaction(transaction, null, presenter.spam)
-
-                text_tag.visiable()
-                text_transaction_fee_value.text = ">=" + MoneyUtil.getScaledText(
-                        transaction.fee, WavesConstants.WAVES_ASSET_INFO).stripZeros()
-                text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
-            }
-            BaseTransaction.DATA -> {
-                transaction as DataTransaction
-                transaction_view.setTransaction(transaction = transaction)
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                val id = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
-                text_transaction_txid.text = id
-
-                text_tag.visiable()
-                text_transaction_fee_value.text = MoneyUtil.getScaledText(
-                        presenter.fee, WavesConstants.WAVES_ASSET_INFO).stripZeros()
-                text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
-            }
-            BaseTransaction.TRANSFER -> {
-                transaction as TransferTransaction
-
-                val assetDetail = assetDetails.values.toList()[0]
-
-                transaction_view.setTransaction(transaction, assetDetail, presenter.spam)
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                val id = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
-                text_transaction_txid.text = id
-
-                text_tag.visiable()
-                text_transaction_fee_value.text = MoneyUtil.getScaledText(
-                        presenter.fee, assetDetail.decimals).stripZeros()
-                text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
-            }
-        }
-        button_approve.isEnabled = true
-        showProgressBar(false)
+        text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
     }
 
-    override fun onSuccessSign(transaction: BaseTransaction) {
-        setResult(Activity.RESULT_OK)
-        finish()
-    }
+    private fun setTransferTransaction(assetDetails: HashMap<String, AssetsDetailsResponse>, transaction: TransferTransaction) {
+        val assetDetail = assetDetails.values.firstOrNull()
 
-    override fun onError(error: Throwable) {
-        showProgressBar(false)
-        showError(error.localizedMessage, R.id.content)
-        setResult(Activity.RESULT_CANCELED)
+        transaction_view.setTransaction(transaction, assetDetail)
+        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
+        text_transaction_txid.text = txId
+
+        text_transaction_fee_value.text = MoneyUtil.getScaledText(
+                presenter.fee, assetDetail?.decimals ?: 8).stripZeros()
+
+        text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
     }
 
     private fun takeTransaction(): KeeperTransaction {
         // todo get from intent
         val tx = TransferTransaction(
-                assetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
+                assetId = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck",
                 recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
                 amount = 1,
                 fee = WavesConstants.WAVES_MIN_FEE,
