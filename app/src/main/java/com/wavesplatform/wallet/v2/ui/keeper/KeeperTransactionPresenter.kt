@@ -101,52 +101,6 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                 }))
     }
 
-
-    fun sendTransaction(transaction: BaseTransaction) {
-
-        when {
-            transaction.type == BaseTransaction.TRANSFER -> {
-                transaction as TransferTransaction
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                addSubscription(WavesSdk.service().getNode().transactionsBroadcast(transaction)
-                        .executeInBackground()
-                        .subscribe({ tx ->
-                            viewState.onSuccessSend(tx)
-                        }, {
-                            viewState.onError(it)
-                        }))
-
-            }
-            transaction.type == BaseTransaction.DATA -> {
-                transaction as DataTransaction
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                addSubscription(WavesSdk.service().getNode().transactionsBroadcast(transaction)
-                        .executeInBackground()
-                        .subscribe({ tx ->
-                            viewState.onSuccessSend(tx)
-                        }, {
-                            viewState.onError(it)
-                        }))
-            }
-            transaction.type == BaseTransaction.SCRIPT_INVOCATION -> {
-                transaction as InvokeScriptTransaction
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                addSubscription(WavesSdk.service().getNode().transactionsBroadcast(transaction)
-                        .executeInBackground()
-                        .subscribe({ tx ->
-                            viewState.onSuccessSend(tx)
-                        }, {
-                            viewState.onError(it)
-                        }))
-            }
-            else -> {
-                // do nothing
-            }
-        }
-
-
-    }
-
     fun signTransaction(transaction: BaseTransaction) {
 
         when {

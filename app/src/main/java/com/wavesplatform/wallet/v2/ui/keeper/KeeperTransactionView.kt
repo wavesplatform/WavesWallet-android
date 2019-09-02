@@ -7,7 +7,6 @@ import com.wavesplatform.sdk.model.response.node.transaction.BaseTransactionResp
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface KeeperTransactionView : BaseMvpView {
-    fun onSuccessSend(transaction: BaseTransactionResponse)
     fun onError(error: Throwable)
     fun onSuccessSign(transaction: BaseTransaction)
     fun onReceiveTransactionData(type: Byte, transaction: KeeperTransaction, fee: Long,

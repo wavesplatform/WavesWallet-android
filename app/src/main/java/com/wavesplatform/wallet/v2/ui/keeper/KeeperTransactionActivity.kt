@@ -9,15 +9,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
-import com.wavesplatform.sdk.model.response.node.transaction.BaseTransactionResponse
-import com.wavesplatform.sdk.model.response.node.transaction.DataTransactionResponse
-import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransactionResponse
-import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -25,7 +22,6 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.WavesWallet
-import com.wavesplatform.wallet.v2.util.getTransactionType
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_keeper_transaction.*
@@ -34,7 +30,6 @@ import pers.victor.ext.date
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
-import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction as KeeperTransaction
 
 class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
@@ -73,6 +68,8 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         super.onResume()
         if (App.getAccessManager().isAuthenticated()) {
             setTransaction()
+        } else {
+
         }
     }
 
@@ -121,7 +118,9 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         } else {
             button_approve.text = getText(R.string.keeper_send)
             button_approve.click {
-                presenter.sendTransaction(transaction!! as BaseTransaction)
+                launchActivity<KeeperConfirmTransactionActivity> {
+                    putExtra(KEY_INTENT_TRANSACTION, transaction)
+                }
             }
         }
 
@@ -132,7 +131,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     private fun takeTransaction(): KeeperTransaction {
-        /*val tx = TransferTransaction(
+        val tx = TransferTransaction(
                 assetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
                 recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
                 amount = 1,
@@ -141,7 +140,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 feeAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY
         )
         tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()*/
+        tx.timestamp = System.currentTimeMillis()
 
 
         /*val tx = DataTransaction(mutableListOf(
@@ -156,7 +155,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         tx.timestamp = System.currentTimeMillis()*/
 
 
-        val args = mutableListOf(
+        /*val args = mutableListOf(
                 InvokeScriptTransaction.Arg("string", "Some string!"),
                 InvokeScriptTransaction.Arg("integer", 128L),
                 InvokeScriptTransaction.Arg("integer", -127L),
@@ -184,49 +183,9 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
         tx.fee = 500000L
         tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()
+        tx.timestamp = System.currentTimeMillis()*/
 
         return tx
-    }
-
-    override fun onSuccessSend(transaction: BaseTransactionResponse) {
-        val transactionType = getTransactionType(
-                this@KeeperTransactionActivity.transaction!! as BaseTransaction, WavesWallet.getAddress(), spam)
-        when {
-            transaction.type == BaseTransaction.TRANSFER -> {
-                transaction as TransferTransactionResponse
-                launchActivity<KeeperConfirmTransactionActivity> {
-                    putExtra(KEY_INTENT_TRANSACTION_TYPE, transactionType)
-                    putExtra(KEY_INTENT_TRANSACTION, transaction)
-                    // putExtra(KEY_INTENT_ASSET_DETAILS, presenter.assetsDetails)
-                    putExtra(KEY_INTENT_KIND, kind)
-                    putExtra(KEY_INTENT_CALLBACK, callback)
-                }
-            }
-            transaction.type == BaseTransaction.DATA -> {
-                transaction as DataTransactionResponse
-                launchActivity<KeeperConfirmTransactionActivity> {
-                    putExtra(KEY_INTENT_TRANSACTION_TYPE, transactionType)
-                    putExtra(KEY_INTENT_TRANSACTION, transaction)
-                    // putExtra(KEY_INTENT_ASSET_DETAILS, presenter.assetsDetails)
-                    putExtra(KEY_INTENT_KIND, kind)
-                    putExtra(KEY_INTENT_CALLBACK, callback)
-                }
-            }
-            transaction.type == BaseTransaction.SCRIPT_INVOCATION -> {
-                transaction as InvokeScriptTransactionResponse
-                launchActivity<KeeperConfirmTransactionActivity> {
-                    putExtra(KEY_INTENT_TRANSACTION_TYPE, transactionType)
-                    putExtra(KEY_INTENT_TRANSACTION, transaction)
-                   //  putExtra(KEY_INTENT_ASSET_DETAILS, presenter.assetsDetails)
-                    putExtra(KEY_INTENT_KIND, kind)
-                    putExtra(KEY_INTENT_CALLBACK, callback)
-                }
-            }
-            else -> {
-                // do nothing
-            }
-        }
     }
 
     override fun onReceiveTransactionData(type: Byte, transaction: KeeperTransaction, fee: Long,
@@ -308,15 +267,12 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     override fun onError(error: Throwable) {
         showError(error.localizedMessage, R.id.content)
         setResult(Activity.RESULT_CANCELED)
-        button_approve.isEnabled = false
     }
 
     companion object {
         const val REQUEST_KEEPER_TX_ACTION = 1000
-        const val KEY_INTENT_LINK = "key_intent_link"
         const val KEY_INTENT_TRANSACTION_TYPE = "key_intent_transaction_type"
         const val KEY_INTENT_TRANSACTION = "key_intent_transaction"
-        const val KEY_INTENT_ASSET_DETAILS = "key_intent_asset_details"
         const val KEY_INTENT_KIND = "key_intent_kind"
         const val KEY_INTENT_CALLBACK = "key_intent_callback"
     }

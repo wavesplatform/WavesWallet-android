@@ -15,7 +15,8 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,8 +71,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp"
-        android:layout_gravity="center"
-        android:visibility="gone">
+        android:layout_gravity="center">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -82,14 +82,14 @@
             android:layout_marginBottom="24dp"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatImageView
+            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
                 android:id="@+id/image_loader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:padding="28dp"
-                app:srcCompat="@drawable/ic_loader_24_submit_400" />
+                app:progress_image="@drawable/ic_loader_24_submit_400" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
