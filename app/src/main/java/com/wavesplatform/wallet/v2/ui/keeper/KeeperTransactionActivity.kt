@@ -8,9 +8,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.gson.Gson
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
-import com.wavesplatform.sdk.keeper.WavesKeeper
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
@@ -18,7 +17,10 @@ import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
-import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.sdk.utils.Identicon
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -46,7 +48,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     @Inject
     @InjectPresenter
     lateinit var presenter: KeeperTransactionPresenter
-    private lateinit var wavesKeeper: WavesKeeper
 
     @ProvidePresenter
     fun providePresenter(): KeeperTransactionPresenter = presenter
@@ -58,38 +59,30 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     override fun needToShowNetworkMessage() = true
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        wavesKeeper = WavesKeeper(this)
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.white)
         setupToolbar(toolbar_view, true,
                 getString(R.string.keeper_title_confirm_request), R.drawable.ic_toolbar_back_black)
-    }
 
-    override fun onResume() {
-        super.onResume()
         if (App.getAccessManager().isAuthenticated()) {
             init(takeTransaction())
         } else {
-            KeeperIntentHelper.exitToDAppWithResult(this, failResult(), wavesKeeper)
+            KeeperIntentHelper.exitToDAppWithResult(this, failResult(), WavesSdk.keeper())
             finish()
         }
     }
 
     override fun onBackPressed() {
-        val errorResult = if (actionType == KeeperActionType.SIGN) {
-            KeeperIntentResult.ErrorSignResult("ErrorSignResult: User Reject")
-        } else {
-            KeeperIntentResult.ErrorSendResult("ErrorSendResult: User Reject")
-        }
-        KeeperIntentHelper.exitToDAppWithResult(this, errorResult, wavesKeeper)
+        KeeperIntentHelper.exitToDAppWithResult(
+                this, failResult("User Reject"), WavesSdk.keeper())
         finish()
     }
 
-    private fun failResult(): KeeperIntentResult {
+    private fun failResult(message: String = "Fail"): KeeperIntentResult {
         return if (actionType == KeeperActionType.SIGN) {
-            KeeperIntentResult.ErrorSignResult("ErrorSignResult: Fail")
+            KeeperIntentResult.ErrorSignResult("ErrorSignResult: $message")
         } else {
-            KeeperIntentResult.ErrorSendResult("ErrorSendResult: Fail")
+            KeeperIntentResult.ErrorSendResult("ErrorSendResult: $message")
         }
     }
 
@@ -108,7 +101,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                     failResult()
                 }
 
-                KeeperIntentHelper.exitToDAppWithResult(this, result, wavesKeeper)
+                KeeperIntentHelper.exitToDAppWithResult(this, result, WavesSdk.keeper())
                 finish()
             }
         }
@@ -167,7 +160,17 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 button_approve.click {
                     launchActivity<KeeperConfirmTransactionActivity>(
                             requestCode = REQUEST_KEEPER_TX_ACTION) {
-                        putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(presenter.transaction))
+                        when (presenter.transaction) {
+                            is TransferTransaction -> {
+                                putExtra(KEY_INTENT_TRANSACTION, presenter.transaction as TransferTransaction)
+                            }
+                            is DataTransaction -> {
+                                putExtra(KEY_INTENT_TRANSACTION, presenter.transaction as DataTransaction)
+                            }
+                            is InvokeScriptTransaction -> {
+                                putExtra(KEY_INTENT_TRANSACTION, presenter.transaction as InvokeScriptTransaction)
+                            }
+                        }
                     }
                 }
             }
@@ -243,7 +246,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     private fun takeTransaction(): KeeperTransaction {
         // todo get from intent
-        val tx = TransferTransaction(
+        /*val tx = TransferTransaction(
                 assetId = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck",
                 recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
                 amount = 1,
@@ -252,9 +255,9 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 feeAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY
         )
         tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()
+        tx.timestamp = System.currentTimeMillis()*/
 
-        /*val tx = DataTransaction(mutableListOf(
+        val tx = DataTransaction(mutableListOf(
                 DataTransaction.Data("key0", "string", "This is Data TX"),
                 DataTransaction.Data("key1", "integer", 100),
                 DataTransaction.Data("key2", "integer", -100),
@@ -263,7 +266,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 DataTransaction.Data("key5", "binary", "SGVsbG8h") // base64 binary string
         ))
         tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()*/
+        tx.timestamp = System.currentTimeMillis()
 
 
         /*val args = mutableListOf(

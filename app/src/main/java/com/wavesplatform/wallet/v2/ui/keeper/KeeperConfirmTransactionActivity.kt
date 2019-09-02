@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.gson.Gson
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
+import com.wavesplatform.sdk.model.response.node.transaction.DataTransactionResponse
+import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransactionResponse
+import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_keeper_confirm_transaction.*
@@ -42,16 +44,8 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         image_loader.show()
-        presenter.transaction = Gson().fromJson(
-                intent.getStringExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION),
-                TransferTransaction::class.java)
-
+        presenter.transaction = intent.getParcelableExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION)
         when (presenter.transaction) {
             is TransferTransaction -> {
                 presenter.receiveAssetDetails((presenter.transaction as TransferTransaction).assetId)
@@ -69,7 +63,20 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
         image_loader.hide()
         button_okay.click {
             val data = Intent()
-            data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION, transaction)
+            when (transaction) {
+                is TransferTransactionResponse -> {
+                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,
+                            transaction)
+                }
+                is DataTransactionResponse -> {
+                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,
+                            transaction)
+                }
+                is InvokeScriptTransactionResponse -> {
+                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,
+                            transaction)
+                }
+            }
             setResult(Activity.RESULT_OK, data)
             finish()
         }
