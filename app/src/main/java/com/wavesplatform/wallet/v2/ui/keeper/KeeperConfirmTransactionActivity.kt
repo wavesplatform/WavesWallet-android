@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.keeper
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -72,7 +73,9 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
         card_success.visiable()
         image_loader.hide()
         button_okay.click {
-            setResult(Activity.RESULT_OK)
+            val data = Intent()
+            data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION, transaction)
+            setResult(Activity.RESULT_OK, data)
             finish()
         }
     }

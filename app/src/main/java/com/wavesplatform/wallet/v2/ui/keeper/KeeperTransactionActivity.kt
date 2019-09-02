@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.keeper.WavesKeeper
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
@@ -21,6 +22,8 @@ import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
+import com.wavesplatform.wallet.v2.data.model.local.KeeperIntentResult
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -43,6 +46,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     @Inject
     @InjectPresenter
     lateinit var presenter: KeeperTransactionPresenter
+    private lateinit var wavesKeeper: WavesKeeper
 
     @ProvidePresenter
     fun providePresenter(): KeeperTransactionPresenter = presenter
@@ -54,6 +58,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     override fun needToShowNetworkMessage() = true
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        wavesKeeper = WavesKeeper(this)
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.white)
         setupToolbar(toolbar_view, true,
@@ -65,8 +70,16 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         if (App.getAccessManager().isAuthenticated()) {
             init(takeTransaction())
         } else {
-            // todo result - cancel
+            KeeperIntentHelper.exitToDAppWithResult(this, failResult(), wavesKeeper)
             finish()
+        }
+    }
+
+    private fun failResult(): KeeperIntentResult {
+        return if (actionType == KeeperActionType.SIGN) {
+            KeeperIntentResult.ErrorSignResult("ErrorSignResult: Fail")
+        } else {
+            KeeperIntentResult.ErrorSendResult("ErrorSendResult: Fail")
         }
     }
 
@@ -74,11 +87,19 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_KEEPER_TX_ACTION -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    // todo result - success
+                val result = if (resultCode == Activity.RESULT_OK && data != null) {
+                    if (actionType == KeeperActionType.SIGN) {
+                        KeeperIntentResult.SuccessSignResult(presenter.transaction)
+                    } else {
+                        KeeperIntentResult.SuccessSendResult(
+                                data.getParcelableExtra(KEY_INTENT_RESPONSE_TRANSACTION))
+                    }
                 } else {
-                    // todo result - cancel
+                    failResult()
                 }
+
+                KeeperIntentHelper.exitToDAppWithResult(this, result, wavesKeeper)
+                finish()
             }
         }
     }
@@ -120,8 +141,12 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         }
 
         button_reject.click {
-            // todo result - reject
-            setResult(Activity.RESULT_CANCELED)
+            val errorResult = if (actionType == KeeperActionType.SIGN) {
+                KeeperIntentResult.ErrorSignResult("ErrorSignResult: User Reject")
+            } else {
+                KeeperIntentResult.ErrorSendResult("ErrorSendResult: User Reject")
+            }
+            KeeperIntentHelper.exitToDAppWithResult(this, errorResult, wavesKeeper)
             finish()
         }
     }
@@ -186,7 +211,8 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 text_transaction_txid.text = id
 
                 text_tag.visiable()
-                text_transaction_fee_value.text = MoneyUtil.getScaledText(presenter.fee, assetDetail.decimals).stripZeros()
+                text_transaction_fee_value.text = MoneyUtil.getScaledText(
+                        presenter.fee, assetDetail.decimals).stripZeros()
                 text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
             }
         }
@@ -263,5 +289,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     companion object {
         const val REQUEST_KEEPER_TX_ACTION = 1000
         const val KEY_INTENT_TRANSACTION = "key_intent_transaction"
+        const val KEY_INTENT_RESPONSE_TRANSACTION = "key_intent_response_transaction"
     }
 }

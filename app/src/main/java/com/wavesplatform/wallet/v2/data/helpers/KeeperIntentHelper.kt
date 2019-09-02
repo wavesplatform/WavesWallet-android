@@ -39,16 +39,16 @@ object KeeperIntentHelper {
                              keeper: Keeper) {
         when (keeperIntentResult) {
             is KeeperIntentResult.SuccessSignResult -> {
-                keeper.finishSign(activity, keeperIntentResult.transaction)
+                // keeper.finishSign(activity, keeperIntentResult.transaction)
             }
             is KeeperIntentResult.SuccessSendResult -> {
-                keeper.finishSend(activity, keeperIntentResult.transaction)
+                // keeper.finishSend(activity, keeperIntentResult.transaction)
             }
             is KeeperIntentResult.ErrorSignResult -> {
-                keeper.finishSign(activity, keeperIntentResult.error)
+                // keeper.finishSign(activity, keeperIntentResult.error)
             }
             is KeeperIntentResult.ErrorSendResult -> {
-                keeper.finishSend(activity, keeperIntentResult.error)
+                // keeper.finishSend(activity, keeperIntentResult.error)
             }
         }
     }
