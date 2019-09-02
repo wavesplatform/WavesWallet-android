@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import com.wavesplatform.sdk.keeper.interfaces.Keeper
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
-import com.wavesplatform.wallet.v2.data.model.local.KeeperIntentResult
+import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
 import com.wavesplatform.wallet.v2.util.launchActivity
 
 object KeeperIntentHelper {
@@ -35,24 +35,8 @@ object KeeperIntentHelper {
     }
 
     fun exitToDAppWithResult(activity: FragmentActivity,
-                             keeperIntentResult: KeeperIntentResult?,
+                             keeperIntentResult: KeeperIntentResult,
                              keeper: Keeper) {
-        when (keeperIntentResult) {
-            is KeeperIntentResult.SuccessSignResult -> {
-                keeper.finishSign(activity, keeperIntentResult.transaction)
-            }
-            is KeeperIntentResult.SuccessSendResult -> {
-                keeper.finishSend(activity, keeperIntentResult.transaction)
-            }
-            is KeeperIntentResult.ErrorSignResult -> {
-                keeper.finishSign(activity, keeperIntentResult.error)
-            }
-            is KeeperIntentResult.ErrorSendResult -> {
-                keeper.finishSend(activity, keeperIntentResult.error)
-            }
-            is KeeperIntentResult.RejectedResult -> {
-                keeper.finishRejected(activity)
-            }
-        }
+        keeper.finishProcess(activity, keeperIntentResult)
     }
 }
