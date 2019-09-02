@@ -32,6 +32,8 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
 
     override fun askPassCode() = true
 
+    override fun needToShowNetworkMessage() = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)

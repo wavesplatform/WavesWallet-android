@@ -9,7 +9,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
-import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
@@ -22,7 +21,6 @@ import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -36,6 +34,12 @@ import javax.inject.Inject
 
 class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
+    // todo temp
+    var callback = "myapp"
+    var appName = "My B Application"
+    var iconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png"
+    private var actionType = KeeperActionType.SIGN
+
     @Inject
     @InjectPresenter
     lateinit var presenter: KeeperTransactionPresenter
@@ -47,10 +51,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     override fun askPassCode() = true
 
-    var callback = "myapp"
-    var appName = "My B Application"
-    var iconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png"
-    private var actionType = KeeperActionType.SEND
+    override fun needToShowNetworkMessage() = true
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -85,10 +86,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     private fun init(transaction: KeeperTransaction) {
         showProgressBar(true)
         presenter.receiveTransactionData(transaction, WavesWallet.getAddress())
-
-        queryAll<SpamAssetDb>().forEach {
-            presenter.spam.add(it.assetId ?: "")
-        }
 
         Glide.with(this)
                 .load(Identicon().create(App.getAccessManager().getWallet()?.address ?: ""))
@@ -209,6 +206,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     private fun takeTransaction(): KeeperTransaction {
+        // todo get from intent
         val tx = TransferTransaction(
                 assetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
                 recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
