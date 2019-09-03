@@ -711,6 +711,5 @@
     <string name="keeper_approve">Approve</string>
     <string name="keeper_sign">Sign</string>
     <string name="keeper_send">Send</string>
-
-
+    <string name="choose_account_new_account_dialog_title">Please select</string>
 </resources>

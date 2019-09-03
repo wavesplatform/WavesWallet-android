@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -21,14 +23,19 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.local.NewAccountDialogItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
+import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
@@ -181,6 +188,47 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_choose_account, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add -> {
+                showCreateAccountDialog()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showCreateAccountDialog() {
+        val optionBottomSheetFragment = OptionsBottomSheetFragment<NewAccountDialogItem>()
+
+        val options = NewAccountDialogItem.values().toMutableList()
+
+        optionBottomSheetFragment.configureDialog(options,
+                getString(R.string.choose_account_new_account_dialog_title),
+                NO_POSITION)
+
+        optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<NewAccountDialogItem> {
+            override fun onSelected(data: NewAccountDialogItem) {
+                when (data) {
+                    NewAccountDialogItem.CREATE_ACCOUNT -> {
+                        launchActivity<NewAccountActivity>(requestCode = WelcomeActivity.REQUEST_NEW_ACCOUNT)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+                    }
+                    NewAccountDialogItem.IMPORT_ACCOUNT -> {
+                        launchActivity<ImportAccountActivity>(WelcomeActivity.REQUEST_IMPORT_ACC)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+                    }
+                }
+            }
+        }
+
+        optionBottomSheetFragment.show(supportFragmentManager, optionBottomSheetFragment::class.java.simpleName)
+    }
+
     override fun onBackPressed() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
@@ -188,6 +236,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     companion object {
         const val REQUEST_EDIT_ACCOUNT_NAME = 999
+        const val NO_POSITION = -1
         const val KEY_INTENT_ITEM_ADDRESS = "intent_item_address"
         const val KEY_INTENT_ITEM_POSITION = "intent_item_position"
     }

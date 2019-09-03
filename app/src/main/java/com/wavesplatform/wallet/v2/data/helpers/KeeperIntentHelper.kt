@@ -35,21 +35,8 @@ object KeeperIntentHelper {
     }
 
     fun exitToDAppWithResult(activity: FragmentActivity,
-                             keeperIntentResult: KeeperIntentResult?,
+                             keeperIntentResult: KeeperIntentResult,
                              keeper: Keeper) {
-        when (keeperIntentResult) {
-            is KeeperIntentResult.SuccessSignResult -> {
-                keeper.finishSign(activity, keeperIntentResult.transaction)
-            }
-            is KeeperIntentResult.SuccessSendResult -> {
-                keeper.finishSend(activity, keeperIntentResult.transaction)
-            }
-            is KeeperIntentResult.ErrorSignResult -> {
-                keeper.finishSign(activity, keeperIntentResult.error)
-            }
-            is KeeperIntentResult.ErrorSendResult -> {
-                keeper.finishSend(activity, keeperIntentResult.error)
-            }
-        }
+        keeper.finishProcess(activity, keeperIntentResult)
     }
 }
