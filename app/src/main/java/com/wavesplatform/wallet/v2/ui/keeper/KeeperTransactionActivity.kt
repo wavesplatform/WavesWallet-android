@@ -14,7 +14,6 @@ import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
 import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
-import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
@@ -29,10 +28,7 @@ import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_keeper_transaction.*
-import pers.victor.ext.click
-import pers.victor.ext.date
-import pers.victor.ext.inflate
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
@@ -86,12 +82,8 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             REQUEST_KEEPER_TX_ACTION -> {
                 val result = if (resultCode == Activity.RESULT_OK
                         && data != null && presenter.transaction != null) {
-                    if (presenter.actionType == KeeperActionType.SIGN) {
-                        KeeperIntentResult.SuccessSignResult(presenter.transaction!!)
-                    } else {
-                        KeeperIntentResult.SuccessSendResult(
-                                data.getParcelableExtra(KEY_INTENT_RESPONSE_TRANSACTION))
-                    }
+                    KeeperIntentResult.SuccessSendResult(
+                            data.getParcelableExtra(KEY_INTENT_RESPONSE_TRANSACTION))
                 } else {
                     failResult()
                 }
@@ -102,15 +94,13 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
 
-    override fun onSuccessSign(transaction: BaseTransaction) {
-        setResult(Activity.RESULT_OK)
-        finish()
+    override fun onSuccessSign(transaction: KeeperTransaction) {
+        KeeperIntentHelper.exitToRootWithResult(this, KeeperIntentResult.SuccessSignResult(transaction))
     }
 
     override fun onError(error: Throwable) {
         showProgressBar(false)
         showError(error.localizedMessage, R.id.content)
-        setResult(Activity.RESULT_CANCELED)
     }
 
     override fun onReceiveTransactionData(transaction: KeeperTransaction?,
@@ -191,12 +181,13 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     private fun setInvokeTransaction(transaction: InvokeScriptTransaction, dAppAddress: String, assetDetails: HashMap<String, AssetsDetailsResponse>) {
+        transaction.timestamp = currentTimeMillis
+
         transaction_view.setTransaction(transaction)
         
-        val tempTx = transaction.copy()
-        tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
         text_transaction_txid.text = txId
 
         text_transaction_fee_value.text = ">=" + MoneyUtil.getScaledText(
@@ -223,12 +214,13 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     }
 
     private fun setDataTransaction(transaction: DataTransaction) {
+        transaction.timestamp = currentTimeMillis
+
         transaction_view.setTransaction(transaction)
 
-        val tempTx = transaction.copy()
-        tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
         text_transaction_txid.text = txId
 
         text_transaction_fee_value.text = MoneyUtil.getScaledText(
@@ -240,12 +232,13 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     private fun setTransferTransaction(assetDetails: HashMap<String, AssetsDetailsResponse>, transaction: TransferTransaction) {
         val assetDetail = assetDetails.values.firstOrNull()
 
+        transaction.timestamp = currentTimeMillis
+
         transaction_view.setTransaction(transaction, assetDetail)
 
-        val tempTx = transaction // todo copy can't from non data
-        tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
         text_transaction_txid.text = txId
 
         text_transaction_fee_value.text = MoneyUtil.getScaledText(
