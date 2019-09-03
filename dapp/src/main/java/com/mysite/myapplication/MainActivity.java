@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.wavesplatform.sdk.WavesSdk;
+import com.wavesplatform.sdk.keeper.interfaces.KeeperCallback;
+import com.wavesplatform.sdk.model.response.node.transaction.DataTransactionResponse;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,9 +28,19 @@ public class MainActivity extends AppCompatActivity {
         browser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(
-                        "https://client.wavesplatform.com/wallet/callback=myapp&appName=My_B_Application&iconUrl=icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png&kind=sign&type=4"));
-                startActivity(browserIntent);
+                /*WavesSdk
+                        .keeper()
+                        .send(this,
+                                DataTransaction(mutableListOf()),
+                                object :KeeperCallback<DataTransactionResponse> {
+                    override fun onSuccess(result: KeeperResult.Success<DataTransactionResponse>) {
+                        Timber.tag("KEEPERTEST").i(result.toString())
+                    }
+
+                    override fun onFailed(result: KeeperResult.Error) {
+                        Timber.tag("KEEPERTEST").i(result.toString())
+                    }
+                })*/
             }
         });
     }
