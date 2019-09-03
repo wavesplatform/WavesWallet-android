@@ -698,6 +698,7 @@
     <string name="market_widget_config_error_add_asset">This asset already added</string>
     <string name="market_widget_config_added">Added</string>
     <string name="market_widget_config_cant_find_currency_pair">Can\'t find any currency pair</string>
+
     <string name="keeper_title_confirm_request">Confirm request</string>
     <string name="keeper_from">From</string>
     <string name="keeper_to">To</string>

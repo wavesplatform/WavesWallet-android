@@ -36,6 +36,9 @@ import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
+import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
