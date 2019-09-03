@@ -22,7 +22,6 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
-import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.*
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
@@ -180,9 +179,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
         App.getAccessManager().setWallet(getGuid(), password)
-        //exitFromScreen()
-
-        launchActivity<KeeperTransactionActivity>()
+        exitFromScreen()
     }
 
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {

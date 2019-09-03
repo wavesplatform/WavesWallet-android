@@ -61,8 +61,8 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         presenter.transaction = WavesSdk.keeper().keeperDataHolder()?.processData?.transaction
         presenter.dApp = WavesSdk.keeper().keeperDataHolder()?.processData?.dApp
 
-        if (App.getAccessManager().isAuthenticated()) {
-            init(takeTransaction())
+        if (App.getAccessManager().isAuthenticated() && presenter.transaction != null) {
+            init(presenter.transaction!!)
         } else {
             KeeperIntentHelper.exitToRootWithResult(this, failResult())
         }
@@ -252,59 +252,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 presenter.fee, assetDetail?.decimals ?: 8).stripZeros()
 
         text_transaction_time.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
-    }
-
-    private fun takeTransaction(): KeeperTransaction {
-        // todo get from intent
-        /*val tx = TransferTransaction(
-                assetId = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck",
-                recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
-                amount = 1,
-                attachment = SignUtil.textToBase58("Hello-!"),
-                feeAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY
-        )
-        tx.fee = WavesConstants.WAVES_MIN_FEE
-        tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()*/
-
-        /*val tx = DataTransaction(mutableListOf(
-                DataTransaction.Data("key0", "string", "This is Data TX"),
-                DataTransaction.Data("key1", "integer", 100),
-                DataTransaction.Data("key2", "integer", -100),
-                DataTransaction.Data("key3", "boolean", true),
-                DataTransaction.Data("key4", "boolean", false),
-                DataTransaction.Data("key5", "binary", "SGVsbG8h") // base64 binary string
-        ))
-        tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()*/
-
-
-        val args = mutableListOf(
-                InvokeScriptTransaction.Arg("string", "Some string!"),
-                InvokeScriptTransaction.Arg("integer", 128L),
-                InvokeScriptTransaction.Arg("integer", -127L),
-                InvokeScriptTransaction.Arg("boolean", true),
-                InvokeScriptTransaction.Arg("boolean", false),
-                InvokeScriptTransaction.Arg("binary", "base64:VGVzdA=="))
-
-        val call = InvokeScriptTransaction.Call(
-                function = "testarg",
-                args = args
-        )
-
-        val payment = mutableListOf(
-                InvokeScriptTransaction.Payment(
-                        assetId = null,
-                        amount = 1L))
-
-        val tx = InvokeScriptTransaction(
-                dApp = "3Mv9XDntij4ZRE1XiNZed6J74rncBpiYNDV",
-                call = call,
-                payment = payment)
-
-        tx.fee = 500000L
-
-        return tx
     }
 
     companion object {
