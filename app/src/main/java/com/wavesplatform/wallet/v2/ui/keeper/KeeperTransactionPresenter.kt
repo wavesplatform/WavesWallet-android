@@ -2,6 +2,8 @@ package com.wavesplatform.wallet.v2.ui.keeper
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
+import com.wavesplatform.sdk.keeper.model.DApp
+import com.wavesplatform.sdk.keeper.model.KeeperActionType
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
@@ -21,8 +23,10 @@ import javax.inject.Inject
 @InjectViewState
 class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTransactionView>() {
 
+    var actionType: KeeperActionType = KeeperActionType.SIGN
+    var dApp: DApp? = null
+    var transaction: KeeperTransaction? = null
     var fee = 0L
-    lateinit var transaction: KeeperTransaction
 
     fun receiveTransactionData(transaction: KeeperTransaction, address: String) {
         fee = 0L

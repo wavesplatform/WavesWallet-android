@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_use_fingerprint.*
@@ -71,7 +72,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     override fun onBackPressed() {
         App.getAccessManager().setUseFingerPrint(guid, false)
         if (WavesSdk.keeper().isKeeperIntent(intent)) {
-            // TODO: Open keeper activity
+            launchActivity<KeeperTransactionActivity>()
         } else {
             launchActivity<MainActivity>(clear = true)
         }

@@ -13,6 +13,7 @@ import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
+import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
@@ -23,7 +24,6 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
-import com.wavesplatform.wallet.v2.data.model.local.KeeperIntentResult
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -36,12 +36,6 @@ import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
-
-    // todo temp
-    private var callback = "myapp"
-    private var appName = "My B Application"
-    private var iconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/96/home-icon.png"
-    private var actionType = KeeperActionType.SEND
 
     @Inject
     @InjectPresenter
@@ -62,22 +56,24 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         setupToolbar(toolbar_view, true,
                 getString(R.string.keeper_title_confirm_request), R.drawable.ic_toolbar_back_black)
 
+        presenter.actionType = WavesSdk.keeper().keeperDataHolder()?.processData?.actionType
+                ?: KeeperActionType.SIGN
+        presenter.transaction = WavesSdk.keeper().keeperDataHolder()?.processData?.transaction
+        presenter.dApp = WavesSdk.keeper().keeperDataHolder()?.processData?.dApp
+
         if (App.getAccessManager().isAuthenticated()) {
             init(takeTransaction())
         } else {
-            KeeperIntentHelper.exitToDAppWithResult(this, failResult(), WavesSdk.keeper())
-            finish()
+            KeeperIntentHelper.exitToRootWithResult(this, failResult())
         }
     }
 
     override fun onBackPressed() {
-        KeeperIntentHelper.exitToDAppWithResult(
-                this, failResult("User Reject"), WavesSdk.keeper())
-        finish()
+        KeeperIntentHelper.exitToRootWithResult(this, KeeperIntentResult.RejectedResult)
     }
 
     private fun failResult(message: String = "Fail"): KeeperIntentResult {
-        return if (actionType == KeeperActionType.SIGN) {
+        return if (presenter.actionType == KeeperActionType.SIGN) {
             KeeperIntentResult.ErrorSignResult("ErrorSignResult: $message")
         } else {
             KeeperIntentResult.ErrorSendResult("ErrorSendResult: $message")
@@ -88,9 +84,10 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_KEEPER_TX_ACTION -> {
-                val result = if (resultCode == Activity.RESULT_OK && data != null) {
-                    if (actionType == KeeperActionType.SIGN) {
-                        KeeperIntentResult.SuccessSignResult(presenter.transaction)
+                val result = if (resultCode == Activity.RESULT_OK
+                        && data != null && presenter.transaction != null) {
+                    if (presenter.actionType == KeeperActionType.SIGN) {
+                        KeeperIntentResult.SuccessSignResult(presenter.transaction!!)
                     } else {
                         KeeperIntentResult.SuccessSendResult(
                                 data.getParcelableExtra(KEY_INTENT_RESPONSE_TRANSACTION))
@@ -99,8 +96,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                     failResult()
                 }
 
-                KeeperIntentHelper.exitToDAppWithResult(this, result, WavesSdk.keeper())
-                finish()
+                KeeperIntentHelper.exitToRootWithResult(this, result)
             }
         }
     }
@@ -117,7 +113,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         setResult(Activity.RESULT_CANCELED)
     }
 
-    override fun onReceiveTransactionData(transaction: KeeperTransaction,
+    override fun onReceiveTransactionData(transaction: KeeperTransaction?,
                                           dAppAddress: String,
                                           assetDetails: HashMap<String, AssetsDetailsResponse>) {
         when (transaction) {
@@ -146,13 +142,15 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         text_address_from.text = App.getAccessManager().getWalletName(
                 App.getAccessManager().getLoggedInGuid())
 
-        Glide.with(this)
-                .load(iconUrl)
-                .apply(RequestOptions().circleCrop())
-                .into(image_address_to)
-        text_address_to.text = appName
+        presenter.dApp.notNull {
+            Glide.with(this)
+                    .load(it.iconUrl)
+                    .apply(RequestOptions().circleCrop())
+                    .into(image_address_to)
+            text_address_to.text = it.name
+        }
 
-        when (actionType) {
+        when (presenter.actionType) {
             KeeperActionType.SEND -> {
                 button_approve.text = getText(R.string.keeper_send)
                 button_approve.click {
@@ -181,8 +179,10 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             KeeperActionType.SIGN -> {
                 button_approve.text = getText(R.string.keeper_sign)
                 button_approve.click {
-                    presenter.signTransaction(presenter.transaction)
-                    button_approve.isEnabled = true
+                    presenter.transaction.notNull {
+                        presenter.signTransaction(it)
+                        button_approve.isEnabled = true
+                    }
                 }
             }
         }

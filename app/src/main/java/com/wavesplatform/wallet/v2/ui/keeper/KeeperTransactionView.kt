@@ -8,7 +8,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface KeeperTransactionView : BaseMvpView {
     fun onError(error: Throwable)
     fun onSuccessSign(transaction: BaseTransaction)
-    fun onReceiveTransactionData(transaction: KeeperTransaction,
+    fun onReceiveTransactionData(transaction: KeeperTransaction?,
                                  dAppAddress: String,
                                  assetDetails: HashMap<String, AssetsDetailsResponse>)
 }
