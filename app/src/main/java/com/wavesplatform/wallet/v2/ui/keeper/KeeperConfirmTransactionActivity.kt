@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.gson.Gson
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
@@ -45,7 +47,25 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         image_loader.show()
-        presenter.transaction = intent.getParcelableExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION)
+
+        val type = intent.getByteExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION_TYPE, 0)
+        val tx = intent.getStringExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION)
+        when (type) {
+            BaseTransaction.TRANSFER -> {
+                presenter.transaction = Gson().fromJson(tx, TransferTransaction::class.java)
+            }
+            BaseTransaction.DATA -> {
+                presenter.transaction = Gson().fromJson(tx, DataTransaction::class.java)
+            }
+            BaseTransaction.SCRIPT_INVOCATION -> {
+                presenter.transaction = Gson().fromJson(tx, InvokeScriptTransaction::class.java)
+            }
+            else -> {
+                onError(Throwable("Wrong transaction type!"))
+            }
+        }
+
+
         when (presenter.transaction) {
             is TransferTransaction -> {
                 presenter.receiveAssetDetails((presenter.transaction as TransferTransaction).assetId)

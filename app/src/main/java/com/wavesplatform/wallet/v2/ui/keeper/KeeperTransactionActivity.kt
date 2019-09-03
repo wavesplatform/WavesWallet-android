@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
@@ -17,10 +18,7 @@ import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
-import com.wavesplatform.sdk.utils.Identicon
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.utils.WavesConstants
-import com.wavesplatform.sdk.utils.stripZeros
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -119,7 +117,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         setResult(Activity.RESULT_CANCELED)
     }
 
-    override fun onReceiveTransactionData(type: Byte, transaction: KeeperTransaction, fee: Long,
+    override fun onReceiveTransactionData(transaction: KeeperTransaction,
                                           dAppAddress: String,
                                           assetDetails: HashMap<String, AssetsDetailsResponse>) {
         when (transaction) {
@@ -162,13 +160,19 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                             requestCode = REQUEST_KEEPER_TX_ACTION) {
                         when (presenter.transaction) {
                             is TransferTransaction -> {
-                                putExtra(KEY_INTENT_TRANSACTION, presenter.transaction as TransferTransaction)
+                                val tx = presenter.transaction as TransferTransaction
+                                putExtra(KEY_INTENT_TRANSACTION_TYPE, tx.type)
+                                putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(tx))
                             }
                             is DataTransaction -> {
-                                putExtra(KEY_INTENT_TRANSACTION, presenter.transaction as DataTransaction)
+                                val tx = presenter.transaction as DataTransaction
+                                putExtra(KEY_INTENT_TRANSACTION_TYPE, tx.type)
+                                putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(tx))
                             }
                             is InvokeScriptTransaction -> {
-                                putExtra(KEY_INTENT_TRANSACTION, presenter.transaction as InvokeScriptTransaction)
+                                val tx = presenter.transaction as InvokeScriptTransaction
+                                putExtra(KEY_INTENT_TRANSACTION_TYPE, tx.type)
+                                putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(tx))
                             }
                         }
                     }
@@ -188,9 +192,11 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     private fun setInvokeTransaction(transaction: InvokeScriptTransaction, dAppAddress: String, assetDetails: HashMap<String, AssetsDetailsResponse>) {
         transaction_view.setTransaction(transaction)
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        
+        val tempTx = transaction.copy()
+        tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
         text_transaction_txid.text = txId
 
         text_transaction_fee_value.text = ">=" + MoneyUtil.getScaledText(
@@ -218,9 +224,11 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     private fun setDataTransaction(transaction: DataTransaction) {
         transaction_view.setTransaction(transaction)
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
+        val tempTx = transaction.copy()
+        tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
         text_transaction_txid.text = txId
 
         text_transaction_fee_value.text = MoneyUtil.getScaledText(
@@ -233,9 +241,11 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         val assetDetail = assetDetails.values.firstOrNull()
 
         transaction_view.setTransaction(transaction, assetDetail)
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
-        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
+        val tempTx = transaction
+        tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+
+        val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
         text_transaction_txid.text = txId
 
         text_transaction_fee_value.text = MoneyUtil.getScaledText(
@@ -250,14 +260,14 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 assetId = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck",
                 recipient = "3P8ys7s9r61Dapp8wZ94NBJjhmPHcBVBkMf",
                 amount = 1,
-                fee = WavesConstants.WAVES_MIN_FEE,
                 attachment = SignUtil.textToBase58("Hello-!"),
                 feeAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY
         )
+        tx.fee = WavesConstants.WAVES_MIN_FEE
         tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
         tx.timestamp = System.currentTimeMillis()*/
 
-        val tx = DataTransaction(mutableListOf(
+        /*val tx = DataTransaction(mutableListOf(
                 DataTransaction.Data("key0", "string", "This is Data TX"),
                 DataTransaction.Data("key1", "integer", 100),
                 DataTransaction.Data("key2", "integer", -100),
@@ -266,10 +276,10 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 DataTransaction.Data("key5", "binary", "SGVsbG8h") // base64 binary string
         ))
         tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()
+        tx.timestamp = System.currentTimeMillis()*/
 
 
-        /*val args = mutableListOf(
+        val args = mutableListOf(
                 InvokeScriptTransaction.Arg("string", "Some string!"),
                 InvokeScriptTransaction.Arg("integer", 128L),
                 InvokeScriptTransaction.Arg("integer", -127L),
@@ -293,8 +303,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 payment = payment)
 
         tx.fee = 500000L
-        tx.senderPublicKey = "B3f8VFh6T2NGT26U7rHk2grAxn5zi9iLkg4V9uxG6C8q"
-        tx.timestamp = System.currentTimeMillis()*/
 
         return tx
     }
@@ -302,6 +310,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     companion object {
         const val REQUEST_KEEPER_TX_ACTION = 1000
         const val KEY_INTENT_TRANSACTION = "key_intent_transaction"
+        const val KEY_INTENT_TRANSACTION_TYPE = "key_intent_transaction_type"
         const val KEY_INTENT_RESPONSE_TRANSACTION = "key_intent_response_transaction"
     }
 }

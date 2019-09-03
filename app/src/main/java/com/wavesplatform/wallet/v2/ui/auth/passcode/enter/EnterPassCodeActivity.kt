@@ -89,7 +89,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 })
 
         if (useFingerprint) {
-            if (!SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
+            if (!SecurePreferences.contains(guid + KEY_INTENT_PASS_CODE)) {
                 pass_keypad.isFingerprintAvailable(false)
             } else {
                 fingerprintDialog = FingerprintAuthDialogFragment.newInstance(getGuid())
@@ -167,8 +167,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        if (useFingerprint && !SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
-            SecurePreferences.setValue(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+        if (useFingerprint && !SecurePreferences.contains(guid + KEY_INTENT_PASS_CODE)) {
+            SecurePreferences.setValue(guid + KEY_INTENT_PASS_CODE, passCode)
             prefsUtil.removeValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN)
         }
 

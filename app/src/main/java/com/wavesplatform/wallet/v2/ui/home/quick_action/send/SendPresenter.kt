@@ -77,13 +77,14 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun getTxRequest(): TransferTransaction {
-        return TransferTransaction(
+        val transaction = TransferTransaction(
                 assetId = selectedAsset?.assetId ?: "",
                 recipient = recipient ?: "",
                 amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
-                fee = fee,
                 attachment = SignUtil.textToBase58(""),
                 feeAssetId = feeAsset?.assetId ?: "")
+        transaction.fee = fee
+        return transaction
     }
 
     private fun validateTransfer(): Int {

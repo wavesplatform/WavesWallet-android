@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 @InjectViewState
@@ -27,35 +28,6 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
         fee = 0L
         this.transaction = transaction
 
-        var bytesCount = 0
-        var dAppAddress = ""
-        var type = 0.toByte()
-
-        var observable: Observable<AssetsDetailsResponse>? = null
-
-        when (transaction) {
-            is TransferTransaction -> {
-                type = transaction.type
-                observable = nodeServiceManager.assetDetails(transaction.assetId)
-            }
-            is DataTransaction -> {
-                bytesCount = transaction.getDataSize()
-                type = transaction.type
-                observable = Observable.empty()
-            }
-            is InvokeScriptTransaction -> {
-                type = transaction.type
-                transaction.payment.forEach { paymentItem ->
-                    observable = if (observable == null) {
-                        nodeServiceManager.assetDetails(paymentItem.assetId)
-                    } else {
-                        observable!!.mergeWith(nodeServiceManager.assetDetails(paymentItem.assetId))
-                    }
-                }
-                dAppAddress = transaction.dApp
-            }
-        }
-
         val assetDetails = hashMapOf<String, AssetsDetailsResponse>()
         var commission: GlobalTransactionCommissionResponse? = null
         var scriptInfo: ScriptInfoResponse? = null
@@ -63,14 +35,14 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
         addSubscription(Observable.zip(
                 githubServiceManager.getGlobalCommission(),
                 nodeServiceManager.scriptAddressInfo(address),
-                io.reactivex.functions.BiFunction { commission: GlobalTransactionCommissionResponse,
-                                                    scriptInfoResponse: ScriptInfoResponse ->
-                    return@BiFunction Pair(commission, scriptInfoResponse)
+                BiFunction { commissionResponse: GlobalTransactionCommissionResponse,
+                             scriptInfoResponse: ScriptInfoResponse ->
+                    return@BiFunction Pair(commissionResponse, scriptInfoResponse)
                 })
                 .flatMap {
                     commission = it.first
                     scriptInfo = it.second
-                    observable!!
+                    createObservableAssetsDetailsResponse()
                 }
                 .executeInBackground()
                 .subscribe({
@@ -79,23 +51,15 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                     it.printStackTrace()
                     viewState.onError(it)
                 }, {
-                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
-                    params.transactionType = type
-                    params.smartAccount = scriptInfo!!.extraFee != 0L
-                    when (type) {
-                        BaseTransaction.TRANSFER -> {
-                            val assetDetail = assetDetails.values.toList()
-                            if (assetDetail.isNotEmpty()) {
-                                params.smartAsset = assetDetail[0].scripted
-                            }
-                        }
-                        BaseTransaction.DATA -> {
-                            params.bytesCount = bytesCount
-                        }
+                    val dAppAddress = if (this.transaction is InvokeScriptTransaction) {
+                        (this.transaction as InvokeScriptTransaction).dApp
+                    } else {
+                        ""
                     }
-                    fee = TransactionCommissionUtil.countCommission(commission!!, params)
-                    viewState.onReceiveTransactionData(
-                            type, transaction, fee, dAppAddress, assetDetails)
+                    if (commission != null && scriptInfo != null) {
+                        fee = countFee(transaction, commission!!, scriptInfo!!, assetDetails)
+                    }
+                    viewState.onReceiveTransactionData(this.transaction, dAppAddress, assetDetails)
                 }))
     }
 
@@ -116,6 +80,55 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
             else -> {
                 viewState.onError(
                         Throwable(App.getAppContext().getString(R.string.common_server_error)))
+            }
+        }
+    }
+
+    private fun countFee(transaction: KeeperTransaction,
+                         commission: GlobalTransactionCommissionResponse,
+                         scriptInfo: ScriptInfoResponse,
+                         assetDetails: HashMap<String, AssetsDetailsResponse> = hashMapOf()): Long {
+        val params = GlobalTransactionCommissionResponse.ParamsResponse()
+        params.smartAccount = scriptInfo.extraFee != 0L
+        return when (transaction) {
+            is TransferTransaction -> {
+                params.transactionType = transaction.type
+                val assetDetail = assetDetails.values.toList()
+                if (assetDetail.isNotEmpty()) {
+                    params.smartAsset = assetDetail[0].scripted
+                }
+                TransactionCommissionUtil.countCommission(commission, params)
+            }
+            is DataTransaction -> {
+                params.transactionType = transaction.type
+                params.bytesCount = transaction.getDataSize()
+                TransactionCommissionUtil.countCommission(commission, params)
+            }
+            else -> {
+                (transaction as BaseTransaction).fee // Can't count commission for InvokeScript
+            }
+        }
+    }
+
+    private fun createObservableAssetsDetailsResponse(): Observable<AssetsDetailsResponse> {
+        return when (transaction) {
+            is TransferTransaction -> {
+                nodeServiceManager.assetDetails((transaction as TransferTransaction).assetId)
+            }
+            is InvokeScriptTransaction -> {
+                var temp: Observable<AssetsDetailsResponse>? = null
+                val invokeTx = transaction as InvokeScriptTransaction
+                invokeTx.payment.forEach { paymentItem ->
+                    temp = if (temp == null) {
+                        nodeServiceManager.assetDetails(paymentItem.assetId)
+                    } else {
+                        temp!!.mergeWith(nodeServiceManager.assetDetails(paymentItem.assetId))
+                    }
+                }
+                return temp ?: Observable.empty()
+            }
+            else -> {
+                Observable.empty()
             }
         }
     }
