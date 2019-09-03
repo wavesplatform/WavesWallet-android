@@ -242,7 +242,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
         transaction_view.setTransaction(transaction, assetDetail)
 
-        val tempTx = transaction
+        val tempTx = transaction // todo copy can't from non data
         tempTx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
         val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(tempTx.toBytes()))
