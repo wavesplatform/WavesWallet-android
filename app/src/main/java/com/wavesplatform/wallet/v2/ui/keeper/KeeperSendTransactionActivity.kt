@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.gson.Gson
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
+import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
@@ -18,22 +19,23 @@ import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransac
 import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import kotlinx.android.synthetic.main.activity_keeper_confirm_transaction.*
+import kotlinx.android.synthetic.main.activity_keeper_send_transaction.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import java.io.Serializable
 import javax.inject.Inject
 
-class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactionView {
+class KeeperSendTransactionActivity : BaseActivity(), KeeperSendTransactionView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: KeeperConfirmTransactionPresenter
+    lateinit var presenter: KeeperSendTransactionPresenter
 
     @ProvidePresenter
-    fun providePresenter(): KeeperConfirmTransactionPresenter = presenter
+    fun providePresenter(): KeeperSendTransactionPresenter = presenter
 
-    override fun configLayoutRes() = R.layout.activity_keeper_confirm_transaction
+    override fun configLayoutRes() = R.layout.activity_keeper_send_transaction
 
     override fun askPassCode() = true
 
@@ -89,8 +91,7 @@ class KeeperConfirmTransactionActivity : BaseActivity(), KeeperConfirmTransactio
                             transaction)
                 }
                 is DataTransactionResponse -> {
-                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,
-                            transaction)
+                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION, transaction)
                 }
                 is InvokeScriptTransactionResponse -> {
                     data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,

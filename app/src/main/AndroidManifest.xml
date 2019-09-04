@@ -270,7 +270,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.keeper.KeeperConfirmTransactionActivity"
+            android:name=".v2.ui.keeper.KeeperSendTransactionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />

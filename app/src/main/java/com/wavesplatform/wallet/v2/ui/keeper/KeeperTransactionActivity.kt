@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
+import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
 import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
 import com.wavesplatform.sdk.model.request.node.DataTransaction
@@ -61,11 +62,13 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             init(presenter.transaction!!)
         } else {
             KeeperIntentHelper.exitToRootWithResult(this, failResult())
+            finish()
         }
     }
 
     override fun onBackPressed() {
         KeeperIntentHelper.exitToRootWithResult(this, KeeperIntentResult.RejectedResult)
+        finish()
     }
 
     private fun failResult(message: String = "Fail"): KeeperIntentResult {
@@ -89,6 +92,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 }
 
                 KeeperIntentHelper.exitToRootWithResult(this, result)
+                finish()
             }
         }
     }
@@ -96,6 +100,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
     override fun onSuccessSign(transaction: KeeperTransaction) {
         KeeperIntentHelper.exitToRootWithResult(this, KeeperIntentResult.SuccessSignResult(transaction))
+        finish()
     }
 
     override fun onError(error: Throwable) {
@@ -144,7 +149,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             KeeperActionType.SEND -> {
                 button_approve.text = getText(R.string.keeper_send)
                 button_approve.click {
-                    launchActivity<KeeperConfirmTransactionActivity>(
+                    launchActivity<KeeperSendTransactionActivity>(
                             requestCode = REQUEST_KEEPER_TX_ACTION) {
                         when (presenter.transaction) {
                             is TransferTransaction -> {

@@ -13,14 +13,13 @@ import com.wavesplatform.wallet.v2.util.executeInBackground
 import javax.inject.Inject
 
 @InjectViewState
-class KeeperConfirmTransactionPresenter @Inject constructor() : BasePresenter<KeeperConfirmTransactionView>() {
+class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<KeeperSendTransactionView>() {
 
     var transaction: KeeperTransaction? = null
 
     fun sendTransaction(transaction: KeeperTransaction) {
         when (transaction) {
             is TransferTransaction -> {
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
                 addSubscription(WavesSdk.service().getNode().transactionsBroadcast(transaction)
                         .executeInBackground()
                         .subscribe({ tx ->
@@ -31,7 +30,6 @@ class KeeperConfirmTransactionPresenter @Inject constructor() : BasePresenter<Ke
 
             }
             is DataTransaction -> {
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
                 addSubscription(WavesSdk.service().getNode().transactionsBroadcast(transaction)
                         .executeInBackground()
                         .subscribe({ tx ->
@@ -41,7 +39,6 @@ class KeeperConfirmTransactionPresenter @Inject constructor() : BasePresenter<Ke
                         }))
             }
             is InvokeScriptTransaction -> {
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
                 addSubscription(WavesSdk.service().getNode().transactionsBroadcast(transaction)
                         .executeInBackground()
                         .subscribe({ tx ->
