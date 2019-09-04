@@ -153,19 +153,13 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                             requestCode = REQUEST_KEEPER_TX_ACTION) {
                         when (presenter.transaction) {
                             is TransferTransaction -> {
-                                val tx = presenter.transaction as TransferTransaction
-                                putExtra(KEY_INTENT_TRANSACTION_TYPE, tx.type)
-                                putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(tx))
+                                putExtra(KEY_INTENT_TRANSACTION, transaction)
                             }
                             is DataTransaction -> {
-                                val tx = presenter.transaction as DataTransaction
-                                putExtra(KEY_INTENT_TRANSACTION_TYPE, tx.type)
-                                putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(tx))
+                                putExtra(KEY_INTENT_TRANSACTION, transaction)
                             }
                             is InvokeScriptTransaction -> {
-                                val tx = presenter.transaction as InvokeScriptTransaction
-                                putExtra(KEY_INTENT_TRANSACTION_TYPE, tx.type)
-                                putExtra(KEY_INTENT_TRANSACTION, Gson().toJson(tx))
+                                putExtra(KEY_INTENT_TRANSACTION, transaction)
                             }
                         }
                     }
@@ -255,7 +249,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     companion object {
         const val REQUEST_KEEPER_TX_ACTION = 1000
         const val KEY_INTENT_TRANSACTION = "key_intent_transaction"
-        const val KEY_INTENT_TRANSACTION_TYPE = "key_intent_transaction_type"
         const val KEY_INTENT_RESPONSE_TRANSACTION = "key_intent_response_transaction"
     }
 }

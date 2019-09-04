@@ -50,30 +50,16 @@ class KeeperSendTransactionActivity : BaseActivity(), KeeperSendTransactionView 
     override fun onViewReady(savedInstanceState: Bundle?) {
         image_loader.show()
 
-        val type = intent.getByteExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION_TYPE, 0)
-        val tx = intent.getStringExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION)
-        when (type) {
-            BaseTransaction.TRANSFER -> {
-                presenter.transaction = Gson().fromJson(tx, TransferTransaction::class.java)
-            }
-            BaseTransaction.DATA -> {
-                presenter.transaction = Gson().fromJson(tx, DataTransaction::class.java)
-            }
-            BaseTransaction.SCRIPT_INVOCATION -> {
-                presenter.transaction = Gson().fromJson(tx, InvokeScriptTransaction::class.java)
-            }
-            else -> {
-                onError(Throwable("Wrong transaction type!"))
-            }
-        }
-
-
+        presenter.transaction = intent.getParcelableExtra(KeeperTransactionActivity.KEY_INTENT_TRANSACTION)
         when (presenter.transaction) {
             is TransferTransaction -> {
                 presenter.receiveAssetDetails((presenter.transaction as TransferTransaction).assetId)
             }
             is DataTransaction, is InvokeScriptTransaction -> {
                 transaction_view.setTransaction(presenter.transaction!!)
+            }
+            else -> {
+                onError(Throwable("Wrong transaction type!"))
             }
         }
         presenter.sendTransaction(presenter.transaction!!)
