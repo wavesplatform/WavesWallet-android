@@ -77,8 +77,10 @@ class KeeperSendTransactionActivity : BaseActivity(), KeeperSendTransactionView 
     }
 
     override fun onError(error: Throwable) {
-        Toast.makeText(this, error.localizedMessage, Toast.LENGTH_LONG).show()
-        setResult(Activity.RESULT_CANCELED)
+        val errorMessage = error.localizedMessage
+        val data = Intent()
+        data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_ERROR, errorMessage)
+        setResult(Activity.RESULT_CANCELED, data)
         finish()
     }
 

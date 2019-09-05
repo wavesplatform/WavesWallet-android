@@ -71,7 +71,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         finish()
     }
 
-    private fun failResult(message: String = "Fail"): KeeperIntentResult {
+    private fun failResult(message: String? = "Fail"): KeeperIntentResult {
         return if (presenter.actionType == KeeperActionType.SIGN) {
             KeeperIntentResult.ErrorSignResult("ErrorSignResult: $message")
         } else {
@@ -88,7 +88,11 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                     KeeperIntentResult.SuccessSendResult(
                             data.getParcelableExtra(KEY_INTENT_RESPONSE_TRANSACTION))
                 } else {
-                    failResult()
+                    var errorMessage: String? = null
+                    if (resultCode == Activity.RESULT_CANCELED && data != null) {
+                        errorMessage = data.getStringExtra(KEY_INTENT_RESPONSE_ERROR)
+                    }
+                    failResult(errorMessage)
                 }
 
                 KeeperIntentHelper.exitToRootWithResult(this, result)
@@ -239,5 +243,6 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         const val REQUEST_KEEPER_TX_ACTION = 1000
         const val KEY_INTENT_TRANSACTION = "key_intent_transaction"
         const val KEY_INTENT_RESPONSE_TRANSACTION = "key_intent_response_transaction"
+        const val KEY_INTENT_RESPONSE_ERROR = "key_intent_response_error"
     }
 }
