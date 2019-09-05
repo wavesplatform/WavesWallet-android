@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.keeper
+package com.wavesplatform.wallet.v2.ui.keeper.send
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.WavesSdk

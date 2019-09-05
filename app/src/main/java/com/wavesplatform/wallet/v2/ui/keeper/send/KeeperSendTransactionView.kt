@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.keeper
+package com.wavesplatform.wallet.v2.ui.keeper.send
 
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse

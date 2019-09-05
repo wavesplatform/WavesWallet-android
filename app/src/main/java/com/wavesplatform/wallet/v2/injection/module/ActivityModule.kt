@@ -51,7 +51,7 @@ import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity
-import com.wavesplatform.wallet.v2.ui.keeper.KeeperSendTransactionActivity
+import com.wavesplatform.wallet.v2.ui.keeper.send.KeeperSendTransactionActivity
 import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.web.WebActivity

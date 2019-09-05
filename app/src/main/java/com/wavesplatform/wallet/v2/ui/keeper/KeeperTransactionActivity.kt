@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.keeper.send.KeeperSendTransactionActivity
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError

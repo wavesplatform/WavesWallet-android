@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.keeper
+package com.wavesplatform.wallet.v2.ui.keeper.send
 
 import android.app.Activity
 import android.content.Intent
@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import kotlinx.android.synthetic.main.activity_keeper_send_transaction.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
