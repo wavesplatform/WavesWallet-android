@@ -49,10 +49,10 @@ class GatewayDataManager @Inject constructor() : BaseServiceManager(), BaseGatew
                             metadata.gatewayProcessId ?: "")
                     args.transaction.recipient = metadata.gatewayRecipientAddress ?: args.transaction.recipient
 
-                    args.transaction.sign(App.getAccessManager().getWallet().seedStr)
+                    args.transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
                     val gatewayTransaction = GatewayWithdrawArgs.Transaction(
-                            args.transaction, App.getAccessManager().getWallet().address)
+                            args.transaction, App.getAccessManager().getWallet()?.address ?: "")
 
                     return@flatMap gatewayService.sendWithdrawTransaction(gatewayTransaction)
                             .map {

@@ -37,6 +37,7 @@ object Constants {
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
     const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
+    const val DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm"
 
 
     // Custom Result code
@@ -88,13 +89,13 @@ object Constants {
     val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
 
     fun defaultAssetsAvatar(): MutableMap<String, String> {
-        val allConfigAssets = com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
-                .plus(com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.assets)
+        val allConfigAssets = EnvironmentManager.globalConfiguration.generalAssets
+                .plus(EnvironmentManager.globalConfiguration.assets)
         return allConfigAssets.associateBy({ it.assetId }, { it.iconUrls.default }).toMutableMap()
     }
 
     fun coinomatCryptoCurrencies(): MutableMap<String, String> {
-        return com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
+        return EnvironmentManager.globalConfiguration.generalAssets
                 .associateBy({ it.assetId }, { it.gatewayId })
                 .toMutableMap()
     }

@@ -36,22 +36,17 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.view.Window
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.calcCheckSum
-import com.wavesplatform.sdk.model.request.node.BaseTransaction
+import com.wavesplatform.sdk.model.request.node.*
 import com.wavesplatform.sdk.model.response.ErrorResponse
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
@@ -642,7 +637,6 @@ fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
 }
 
 
-
 fun find(assetId: String): AssetBalanceResponse? {
     return (queryFirst<AssetBalanceDb> { equalTo("assetId", assetId) })?.convertFromDb()
 }
@@ -728,7 +722,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isSpam(assetId: String?): Boolean {
-    return (App.getAccessManager().getWallet() != null
+    return (App.getAccessManager().isAuthenticated()
             && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
@@ -827,6 +821,91 @@ fun String.getOrderType(): OrderType {
         WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
         WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
         else -> OrderType.BUY
+    }
+}
+
+fun addressByPublicKey(publicKey: String): String {
+    return WavesCrypto.addressFromPublicKey(
+            WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
+}
+
+fun getTransactionType(transaction: BaseTransaction, address: String, spam: Set<String>?): Int {
+    val sender = addressByPublicKey(transaction.senderPublicKey)
+    when {
+        transaction.type == BaseTransaction.TRANSFER -> {
+            transaction as TransferTransaction
+            if (sender == address) {
+                if (sender == transaction.recipient) {
+                    return Constants.ID_SELF_TRANSFER_TYPE
+                }
+                return Constants.ID_SENT_TYPE
+            } else {
+                if (spam != null && spam.isNotEmpty() && spam.contains(transaction.assetId)) {
+                    return Constants.ID_SPAM_RECEIVE_TYPE
+                }
+                if (transaction.recipient != address) {
+                    return Constants.ID_RECEIVE_SPONSORSHIP_TYPE
+                }
+                return Constants.ID_RECEIVED_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.MASS_TRANSFER -> {
+            transaction as MassTransferTransaction
+            return if (sender == address) {
+                Constants.ID_MASS_SEND_TYPE
+            } else {
+                if (spam != null && spam.isNotEmpty() && spam.contains(transaction.assetId)) {
+                    Constants.ID_MASS_SPAM_RECEIVE_TYPE
+                } else {
+                    Constants.ID_MASS_RECEIVE_TYPE
+                }
+            }
+        }
+        transaction.type == BaseTransaction.CANCEL_LEASING -> {
+            transaction as LeaseCancelTransaction
+            return if (sender == address) {
+                if (transaction.leaseId.isEmpty()) {
+                    Constants.ID_UNRECOGNISED_TYPE
+                } else {
+                    Constants.ID_CANCELED_LEASING_TYPE
+                }
+            } else {
+                Constants.ID_RECEIVED_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.EXCHANGE -> return Constants.ID_EXCHANGE_TYPE
+        transaction.type == BaseTransaction.ISSUE -> return Constants.ID_TOKEN_GENERATION_TYPE
+        transaction.type == BaseTransaction.BURN -> return Constants.ID_TOKEN_BURN_TYPE
+        transaction.type == BaseTransaction.REISSUE -> return Constants.ID_TOKEN_REISSUE_TYPE
+        transaction.type == BaseTransaction.CREATE_ALIAS -> return Constants.ID_CREATE_ALIAS_TYPE
+        transaction.type == BaseTransaction.CREATE_LEASING -> {
+            transaction as LeaseTransaction
+            return if (transaction.recipient == address) {
+                Constants.ID_INCOMING_LEASING_TYPE
+            } else {
+                Constants.ID_STARTED_LEASING_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.DATA -> return Constants.ID_DATA_TYPE
+        transaction.type == BaseTransaction.ADDRESS_SCRIPT -> {
+            transaction as SetScriptTransaction
+            return if (transaction.script == null) {
+                Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
+            } else {
+                Constants.ID_SET_ADDRESS_SCRIPT_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.SPONSORSHIP -> {
+            transaction as SponsorshipTransaction
+            return if (transaction.minSponsoredAssetFee == null) {
+                Constants.ID_CANCEL_SPONSORSHIP_TYPE
+            } else {
+                Constants.ID_SET_SPONSORSHIP_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.ASSET_SCRIPT -> return Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
+        transaction.type == BaseTransaction.SCRIPT_INVOCATION -> return Constants.ID_SCRIPT_INVOCATION_TYPE
+        else -> return Constants.ID_UNRECOGNISED_TYPE
     }
 }
 

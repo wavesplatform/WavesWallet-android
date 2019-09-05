@@ -119,7 +119,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
             from: Long,
             to: Long
     ): Observable<List<CandlesResponse.Data.CandleResponse>> {
-        val interval = ChartTimeFrame.findByServerTime(timeFrame) ?: ChartTimeFrame.THIRTY_MINUTES
+        val interval = ChartTimeFrame.findByServerTime(timeFrame)
         return dataService.candles(watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset, interval.interval, from, to,
                 EnvironmentManager.getMatcherAddress())

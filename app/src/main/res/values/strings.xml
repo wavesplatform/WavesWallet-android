@@ -699,6 +699,18 @@
     <string name="market_widget_config_added">Added</string>
     <string name="market_widget_config_cant_find_currency_pair">Can\'t find any currency pair</string>
 
+    <string name="keeper_title_confirm_request">Confirm request</string>
+    <string name="keeper_from">From</string>
+    <string name="keeper_to">To</string>
+    <string name="keeper_tx_id">TXID</string>
+    <string name="keeper_function">Function</string>
+    <string name="keeper_script_address">Script address</string>
+    <string name="keeper_fee">Fee</string>
+    <string name="keeper_payment">Payment</string>
+    <string name="keeper_tx_time">TX time</string>
+    <string name="keeper_reject">Reject</string>
+    <string name="keeper_approve">Approve</string>
+    <string name="keeper_sign">Sign</string>
+    <string name="keeper_send">Send</string>
     <string name="choose_account_new_account_dialog_title">Please select</string>
-
 </resources>

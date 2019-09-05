@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -22,21 +23,22 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.local.NewAccountDialogItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
+import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.data.helpers.KeeperIntentHelper
-import com.wavesplatform.wallet.v2.data.model.local.NewAccountDialogItem
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
-import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
-import com.wavesplatform.wallet.v2.ui.widget.configuration.options.OptionsBottomSheetFragment
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
@@ -58,6 +60,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     override fun configLayoutRes(): Int = R.layout.activity_choose_account
 
     override fun askPassCode() = false
+
+    private var link = ""
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -161,10 +165,19 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     if (WavesSdk.keeper().isKeeperIntent(intent)) {
-                        // TODO: Open keeper activity
+                        launchActivity<KeeperTransactionActivity>()
                     } else {
                         launchActivity<MainActivity>(clear = true)
                     }
+                }
+            }
+            KeeperTransactionActivity.REQUEST_KEEPER_TX_ACTION -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                } else {
+                    setResult(Activity.RESULT_CANCELED)
+                    finish()
                 }
             }
         }

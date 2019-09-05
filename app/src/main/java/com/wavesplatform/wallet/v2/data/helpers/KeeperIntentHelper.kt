@@ -10,8 +10,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import com.wavesplatform.sdk.keeper.interfaces.Keeper
-import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
+import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 
 object KeeperIntentHelper {

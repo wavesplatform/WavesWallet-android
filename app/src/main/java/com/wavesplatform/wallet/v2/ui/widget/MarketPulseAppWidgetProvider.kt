@@ -27,9 +27,11 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import com.wavesplatform.wallet.v2.util.ACTION_AUTO_UPDATE_WIDGET
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.startAlarmUpdate
 import dagger.android.AndroidInjection
+import pers.victor.ext.isNetworkConnected
 import java.util.*
 import javax.inject.Inject
 
@@ -42,6 +44,7 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var marketWidgetDataManager: MarketWidgetDataManager
+    private var onUpdateCompleteListener: EnvironmentManager.Companion.OnUpdateCompleteListener? = null
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -95,12 +98,31 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
     }
 
     private fun loadPrice(context: Context, widgetId: Int) {
-        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
-        marketWidgetDataManager.loadMarketsPrices(context, widgetId, successListener = {
-            updateWidget(context, AppWidgetManager.getInstance(context), widgetId, MarketWidgetProgressState.IDLE)
-        }, errorListener = {
-            updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
-        })
+        if (isNetworkConnected()) {
+            updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
+            if (EnvironmentManager.isUpdateCompleted()) {
+                marketWidgetDataManager.loadMarketsPrices(context, widgetId, successListener = {
+                    updateWidget(context, AppWidgetManager.getInstance(context), widgetId, MarketWidgetProgressState.IDLE)
+                }, errorListener = {
+                    updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+                })
+            } else {
+                EnvironmentManager.update()
+                onUpdateCompleteListener = object : EnvironmentManager.Companion.OnUpdateCompleteListener {
+
+                    override fun onComplete() {
+                        EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener!!)
+                        loadPrice(context, widgetId)
+                    }
+
+                    override fun onError() {
+                        EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener!!)
+                        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+                    }
+                }
+                EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener!!)
+            }
+        }
     }
 
     companion object {

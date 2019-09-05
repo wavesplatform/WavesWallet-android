@@ -120,7 +120,7 @@ class NetworkModule {
                 .setLenient()
                 .setPrettyPrinting()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) // if filed status_code need as statusCode
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                 .create()
     }
 
