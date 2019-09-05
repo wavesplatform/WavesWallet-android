@@ -295,7 +295,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".v2.ui.widget.MarketPulseAppWidgetProvider">
+        <receiver
+            android:name=".v2.ui.widget.MarketPulseAppWidgetProvider"
+            android:enabled="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
