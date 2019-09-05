@@ -8,11 +8,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
-import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
 import com.wavesplatform.sdk.keeper.model.KeeperActionType
 import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
 import com.wavesplatform.sdk.model.request.node.DataTransaction
@@ -53,10 +51,11 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         setupToolbar(toolbar_view, true,
                 getString(R.string.keeper_title_confirm_request), R.drawable.ic_toolbar_back_black)
 
-        presenter.actionType = WavesSdk.keeper().keeperDataHolder()?.processData?.actionType
-                ?: KeeperActionType.SIGN
-        presenter.transaction = WavesSdk.keeper().keeperDataHolder()?.processData?.transaction
-        presenter.dApp = WavesSdk.keeper().keeperDataHolder()?.processData?.dApp
+        WavesSdk.keeper().keeperDataHolder()?.let {
+            presenter.actionType = it.processData.actionType
+            presenter.transaction = it.processData.transaction
+            presenter.dApp = it.processData.dApp
+        }
 
         if (App.getAccessManager().isAuthenticated() && presenter.transaction != null) {
             init(presenter.transaction!!)
@@ -151,17 +150,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 button_approve.click {
                     launchActivity<KeeperSendTransactionActivity>(
                             requestCode = REQUEST_KEEPER_TX_ACTION) {
-                        when (presenter.transaction) {
-                            is TransferTransaction -> {
-                                putExtra(KEY_INTENT_TRANSACTION, transaction)
-                            }
-                            is DataTransaction -> {
-                                putExtra(KEY_INTENT_TRANSACTION, transaction)
-                            }
-                            is InvokeScriptTransaction -> {
-                                putExtra(KEY_INTENT_TRANSACTION, transaction)
-                            }
-                        }
+                        putExtra(KEY_INTENT_TRANSACTION, transaction)
                     }
                 }
             }
@@ -169,8 +158,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
                 button_approve.text = getText(R.string.keeper_sign)
                 button_approve.click {
                     presenter.transaction.notNull {
-                        presenter.signTransaction(it)
-                        button_approve.isEnabled = true
+                        onSuccessSign(transaction)
                     }
                 }
             }
@@ -183,7 +171,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         transaction.timestamp = currentTimeMillis
 
         transaction_view.setTransaction(transaction)
-        
+
         transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
         val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))

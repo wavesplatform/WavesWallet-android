@@ -6,24 +6,18 @@ import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.gson.Gson
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
-import com.wavesplatform.sdk.keeper.model.KeeperIntentResult
-import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
 import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
-import com.wavesplatform.sdk.model.response.node.transaction.DataTransactionResponse
-import com.wavesplatform.sdk.model.response.node.transaction.InvokeScriptTransactionResponse
-import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_keeper_send_transaction.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import java.io.Serializable
 import javax.inject.Inject
 
 class KeeperSendTransactionActivity : BaseActivity(), KeeperSendTransactionView {
@@ -65,27 +59,19 @@ class KeeperSendTransactionActivity : BaseActivity(), KeeperSendTransactionView 
         presenter.sendTransaction(presenter.transaction!!)
     }
 
+    override fun onBackPressed() {
+        presenter.transactionResponse.notNull {
+            success()
+        }
+    }
+
     override fun onSuccessSend(transaction: KeeperTransactionResponse) {
+        presenter.transactionResponse = transaction
         card_progress.gone()
         card_success.visiable()
         image_loader.hide()
         button_okay.click {
-            val data = Intent()
-            when (transaction) {
-                is TransferTransactionResponse -> {
-                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,
-                            transaction)
-                }
-                is DataTransactionResponse -> {
-                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION, transaction)
-                }
-                is InvokeScriptTransactionResponse -> {
-                    data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION,
-                            transaction)
-                }
-            }
-            setResult(Activity.RESULT_OK, data)
-            finish()
+            success()
         }
     }
 
@@ -97,5 +83,14 @@ class KeeperSendTransactionActivity : BaseActivity(), KeeperSendTransactionView 
 
     override fun onReceiveAssetDetails(assetDetails: AssetsDetailsResponse) {
         transaction_view.setTransaction(presenter.transaction!!, assetDetails)
+    }
+
+    private fun success() {
+        presenter.transactionResponse.notNull {
+            val data = Intent()
+            data.putExtra(KeeperTransactionActivity.KEY_INTENT_RESPONSE_TRANSACTION, it)
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
     }
 }

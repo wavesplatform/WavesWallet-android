@@ -67,27 +67,6 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                 }))
     }
 
-    fun signTransaction(transaction: KeeperTransaction) {
-        when (transaction) {
-            is TransferTransaction -> {
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                viewState.onSuccessSign(transaction)
-            }
-            is DataTransaction -> {
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                viewState.onSuccessSign(transaction)
-            }
-            is InvokeScriptTransaction -> {
-                transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
-                viewState.onSuccessSign(transaction)
-            }
-            else -> {
-                viewState.onError(
-                        Throwable(App.getAppContext().getString(R.string.common_server_error)))
-            }
-        }
-    }
-
     private fun countFee(transaction: KeeperTransaction,
                          commission: GlobalTransactionCommissionResponse,
                          scriptInfo: ScriptInfoResponse,
