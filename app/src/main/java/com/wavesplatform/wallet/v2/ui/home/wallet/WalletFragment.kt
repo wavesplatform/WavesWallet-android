@@ -13,6 +13,7 @@ import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
@@ -101,10 +102,12 @@ class WalletFragment : BaseFragment(), WalletView {
 
     private fun enableElevation(enable: Boolean) {
         onElevationAppBarChangeListener?.onChange(true)
-        if (enable) {
-            ViewCompat.setZ(wallet_appbar_layout, 8F)
-        } else {
-            ViewCompat.setZ(wallet_appbar_layout, 0F)
+        wallet_appbar_layout.notNull {
+            if (enable) {
+                ViewCompat.setZ(wallet_appbar_layout, 8F)
+            } else {
+                ViewCompat.setZ(wallet_appbar_layout, 0F)
+            }
         }
     }
 

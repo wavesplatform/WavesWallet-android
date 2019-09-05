@@ -26,6 +26,8 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMar
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
+import timber.log.Timber
+import java.util.concurrent.ExecutionException
 
 class AssetAvatarView : AppCompatImageView {
 
@@ -153,15 +155,19 @@ class AssetAvatarView : AppCompatImageView {
 
         if (avatar != null) {
             if (workWithWidget) {
-                setImageBitmap(Glide.with(context)
-                        .asBitmap()
-                        .load(avatar)
-                        .apply(RequestOptions()
-                                .placeholder(drawable)
-                                .centerCrop()
-                                .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
-                        .submit()
-                        .get())
+                try {
+                    setImageBitmap(Glide.with(context)
+                            .asBitmap()
+                            .load(avatar)
+                            .apply(RequestOptions()
+                                    .placeholder(drawable)
+                                    .centerCrop()
+                                    .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
+                            .submit()
+                            .get())
+                } catch (e: ExecutionException) {
+                    Timber.e(e)
+                }
             } else {
                 Glide.with(context)
                         .load(avatar)

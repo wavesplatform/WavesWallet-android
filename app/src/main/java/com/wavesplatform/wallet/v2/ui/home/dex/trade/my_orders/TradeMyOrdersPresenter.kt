@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import javax.inject.Inject

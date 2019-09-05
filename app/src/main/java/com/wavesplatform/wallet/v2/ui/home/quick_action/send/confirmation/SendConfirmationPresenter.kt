@@ -99,13 +99,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                         || type == SendPresenter.Type.ERGO) amount + gatewayCommission
                 else amount
 
-        return TransferTransaction(
+        val transaction = TransferTransaction(
                 assetId = selectedAsset!!.assetId,
                 recipient = recipient!!,
                 amount = MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
                 attachment = SignUtil.textToBase58(attachment),
-                fee = blockchainCommission,
                 feeAssetId = feeAsset?.assetId ?: "")
+        transaction.fee = blockchainCommission
+        return transaction
     }
 
     fun getAddressName(address: String) {

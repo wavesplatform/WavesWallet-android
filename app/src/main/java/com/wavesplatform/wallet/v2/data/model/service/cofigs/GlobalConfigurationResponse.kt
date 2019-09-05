@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.model.service.configs
+package com.wavesplatform.wallet.v2.data.model.service.cofigs
 
 import com.google.gson.annotations.SerializedName
 

@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.util
 
 import android.app.Application
 import com.google.gson.Gson
-import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.EnvironmentExternalProperties

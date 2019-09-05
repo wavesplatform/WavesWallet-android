@@ -185,10 +185,10 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object StartAccountDeleteEvent : AnalyticEvents("Start Account Delete")
 
     // При появлении у пользователя сообщения "Нужно забэкапить SEED"
-    object NewUserWithoutBackup : AnalyticEvents("New User Without Backup")
+    class NewUserWithoutBackup(count: Int) : CountEvent("New User Without Backup", count)
 
     // Считаем количество сохраненных аккаунтов у пользователя
-    class StartAccountCounter(var count: Int) : AnalyticEvents("Start Account Counter")
+    class StartAccountCounter(count: Int) : CountEvent("Start Account Counter", count)
 
     // Добавление первого AppWidget с курсами асетов
     object MarketPulseAddedEvent : AnalyticEvents("Market Pulse Added")
@@ -197,7 +197,9 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object MarketPulseRemovedEvent : AnalyticEvents("Market Pulse Removed")
 
     // Изменение настроек AppWidget с курсами асетов
-    object MarketPulseSettingsChangedEvent : AnalyticEvents("Market Pulse Settings Changed")
+    class MarketPulseSettingsChangedEvent(var style: String,
+                                          var interval: String,
+                                          var assets: List<String>) : AnalyticEvents("Market Pulse Settings Changed")
 
     // Любая активность AppWidget с курсами асетов, нажата кнопка "update" или "смена курса валюты" или "настройки"
     object MarketPulseActiveEvent : AnalyticEvents("Market Pulse Active")
@@ -215,8 +217,11 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
             is CurrencyEvent -> {
                 hashMapOf(CURRENCY_KEY to currency)
             }
-            is StartAccountCounter -> {
+            is CountEvent -> {
                 hashMapOf(COUNT_KEY to count)
+            }
+            is MarketPulseSettingsChangedEvent -> {
+                hashMapOf(STYLE_KEY to style, INTERVAL_KEY to interval, ASSETS_KEY to assets)
             }
             else -> {
                 hashMapOf()
@@ -226,10 +231,15 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
 
     abstract class DexEvent(eventName: String, var amountAssetName: String, var priceAssetName: String) : AnalyticEvents(eventName)
     abstract class CurrencyEvent(eventName: String, var currency: String) : AnalyticEvents(eventName)
+    abstract class CountEvent(eventName: String, var count: Int) : AnalyticEvents(eventName)
 
     companion object {
         const val PAIR_KEY = "Pair"
         const val CURRENCY_KEY = "Currency"
         const val COUNT_KEY = "Count"
+
+        const val STYLE_KEY = "Style"
+        const val INTERVAL_KEY = "Interval"
+        const val ASSETS_KEY = "Assets"
     }
 }

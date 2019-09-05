@@ -21,7 +21,7 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
-import com.wavesplatform.wallet.v2.data.model.service.configs.NewsResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -307,7 +307,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = EnvironmentManager.getTime()
             if (now > lastTime + MIN_15) {
-                analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup)
+                logBackUpAnalyticEvent()
 
                 implementSwipeToDismiss()
 
@@ -330,6 +330,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
         }
+    }
+
+    private fun logBackUpAnalyticEvent() {
+        analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup(prefsUtil.backUpAlertCount()))
+        prefsUtil.incrementBackUpAlertCount()
     }
 
     private fun implementSwipeToDismiss() {
@@ -414,7 +419,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
         private const val TAG_CENTRAL_TAB = "central_tab"
 
-        private const val MIN_15 = 54_000_000L
+        private const val MIN_15 = 900000L
     }
 
     interface OnElevationAppBarChangeListener {

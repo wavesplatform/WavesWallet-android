@@ -57,6 +57,11 @@ class MarketWidgetAdapterFactory(var context: Context, intent: Intent) : RemoteV
     override fun getViewAt(position: Int): RemoteViews {
         val theme = MarketWidgetSettings.themeSettings().getTheme(context, widgetID)
         val marketViewRv = RemoteViews(context.packageName, theme.marketItemLayout)
+
+        if (position >= data.size) {
+            return marketViewRv
+        }
+
         val data = data[position]
 
         val currentCurrency = MarketWidgetSettings.currencySettings().getCurrency(context, widgetID)

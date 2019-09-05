@@ -5,12 +5,10 @@
 
 package com.wavesplatform.wallet.v2.ui.widget.configuration
 
-import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
-import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface MarketWidgetConfigureView : BaseMvpView {
-    fun onUpdatePairs(assetPairList: ArrayList<MarketWidgetConfigurationMarketsAdapter.TokenPair>)
-    fun onUpdatePair(assetInfo: AssetInfoResponse, searchPairResponse: SearchPairResponse)
+    fun onUpdatePairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>)
+    fun onAddPairs(assetPairList: List<MarketWidgetConfigurationMarketsAdapter.TokenPair>)
     fun onFailGetMarkets()
 }

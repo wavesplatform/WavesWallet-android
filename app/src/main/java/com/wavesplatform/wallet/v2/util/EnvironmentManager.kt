@@ -25,7 +25,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.data.remote.GithubService
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -40,6 +40,8 @@ class EnvironmentManager(var current: ClientEnvironment) {
     private var configurationDisposable: Disposable? = null
     private var versionDisposable: Disposable? = null
     private var gateWayHostInterceptor: HostInterceptor? = null
+    private val onUpdateCompleteListeners: MutableList<OnUpdateCompleteListener> = mutableListOf()
+    private var updateCompleted = false
 
     companion object {
 
@@ -185,6 +187,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         private fun loadConfiguration(githubService: GithubService) {
+            instance?.updateCompleted = false
             instance!!.configurationDisposable =
                     Observable.zip(
                             githubService.globalConfiguration(environment.url),
@@ -233,11 +236,19 @@ class EnvironmentManager(var current: ClientEnvironment) {
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({
+                                instance?.updateCompleted = true
+                                instance?.onUpdateCompleteListeners?.forEach {
+                                    it.onComplete()
+                                }
                                 instance!!.configurationDisposable!!.dispose()
                             }, { error ->
                                 Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
                                 error.printStackTrace()
                                 setConfiguration(environment.configuration)
+                                instance?.updateCompleted = true
+                                instance?.onUpdateCompleteListeners?.forEach {
+                                    it.onError()
+                                }
                                 instance!!.configurationDisposable!!.dispose()
                             })
 
@@ -257,6 +268,19 @@ class EnvironmentManager(var current: ClientEnvironment) {
             return instance?.current?.configuration?.generalAssets?.firstOrNull { it.assetId == assetId }
         }
 
+        fun addOnUpdateCompleteListener(listener: OnUpdateCompleteListener) {
+            if (instance?.onUpdateCompleteListeners?.contains(listener) != true) {
+                instance?.onUpdateCompleteListeners?.add(listener)
+            }
+        }
+
+        fun removeOnUpdateCompleteListener(listener: OnUpdateCompleteListener) {
+            instance?.onUpdateCompleteListeners?.remove(listener)
+        }
+
+        fun isUpdateCompleted(): Boolean {
+            return instance?.updateCompleted ?: false
+        }
 
         private fun getLocalSavedConfig(): GlobalConfigurationResponse {
 
@@ -349,6 +373,11 @@ class EnvironmentManager(var current: ClientEnvironment) {
                     exitProcess(0)
                 }
             }, 300)
+        }
+
+        interface OnUpdateCompleteListener {
+            fun onComplete()
+            fun onError()
         }
     }
 }

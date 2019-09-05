@@ -5,10 +5,10 @@
 
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v2.data.model.service.configs.LastAppVersionResponse
-import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
-import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
-import com.wavesplatform.wallet.v2.data.model.service.configs.NewsResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.LastAppVersionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable

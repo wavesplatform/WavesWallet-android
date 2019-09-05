@@ -23,27 +23,27 @@ import com.github.mikephil.charting.listener.BarLineChartTouchListener
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.jakewharton.rxbinding2.view.RxView
+import com.wavesplatform.sdk.model.response.data.LastTradesResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
-import com.wavesplatform.sdk.model.response.data.LastTradesResponse
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
 import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.getType
+import com.wavesplatform.wallet.v2.util.makeStyled
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_trade.*
-import kotlinx.android.synthetic.main.fragment_trade_chart.*
-import kotlinx.android.synthetic.main.content_global_server_error_layout.*
 import kotlinx.android.synthetic.main.content_empty_data.*
+import kotlinx.android.synthetic.main.content_global_server_error_layout.*
+import kotlinx.android.synthetic.main.fragment_trade_chart.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import pers.victor.ext.gone
@@ -70,18 +70,9 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable(TradeActivity.BUNDLE_MARKET)
 
-        val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
-        val position = ChartTimeFrame.findPositionByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
+        setMarketTimeFrameOrDefault()
 
-        timeFrame.notNull {
-            presenter.selectedTimeFrame = position
-            presenter.newSelectedTimeFrame = position
-
-            text_change_time.text = getString(it.timeUI)
-            presenter.currentTimeFrame = it.timeServer
-        }
-
-        text_empty.text = getString(com.wavesplatform.wallet.R.string.chart_empty)
+        text_empty.text = getString(R.string.chart_empty)
 
         text_change_time.click {
             showTimeFrameDialog()
@@ -115,13 +106,23 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         presenter.startLoad()
     }
 
+    private fun setMarketTimeFrameOrDefault() {
+        val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
+
+        presenter.selectedTimeFrame = timeFrame.position
+        presenter.newSelectedTimeFrame = timeFrame.position
+
+        text_change_time.text = getString(timeFrame.timeUI)
+        presenter.currentTimeFrame = timeFrame.timeServer
+    }
+
     private fun showTimeFrameDialog() {
         val alt_bld = AlertDialog.Builder(baseActivity)
         alt_bld.setTitle(getString(com.wavesplatform.wallet.R.string.chart_change_interval_dialog_title))
-        alt_bld.setSingleChoiceItems(presenter.timeFrameList.map { getString(it.timeUI) }.toTypedArray(),
+        alt_bld.setSingleChoiceItems(ChartTimeFrame.values().map { getString(it.timeUI) }.toTypedArray(),
                 presenter.selectedTimeFrame) { dialog, item ->
             if (presenter.selectedTimeFrame == item) {
-                buttonPositive?.setTextColor(findColor(com.wavesplatform.wallet.R.color.basic300))
+                buttonPositive?.setTextColor(findColor(R.color.basic300))
                 buttonPositive?.isClickable = false
             } else {
                 buttonPositive?.setTextColor(findColor(R.color.submit400))
@@ -130,11 +131,11 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             presenter.newSelectedTimeFrame = item
         }
         alt_bld.setPositiveButton(getString(com.wavesplatform.wallet.R.string.chart_change_interval_dialog_ok)) { dialog, which ->
-            dialog.dismiss()
             presenter.selectedTimeFrame = presenter.newSelectedTimeFrame
+            val chartTimeFrame = ChartTimeFrame.values()[presenter.selectedTimeFrame]
 
-            text_change_time.text = getString(presenter.timeFrameList[presenter.selectedTimeFrame].timeUI)
-            presenter.currentTimeFrame = presenter.timeFrameList[presenter.selectedTimeFrame].timeServer
+            text_change_time.text = getString(chartTimeFrame.timeUI)
+            presenter.currentTimeFrame = chartTimeFrame.timeServer
 
             linear_charts.gone()
             progress_bar.show()
@@ -142,7 +143,10 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             presenter.loadCandles(EnvironmentManager.getTime(), true)
             presenter.getTradesByPair()
 
-            rxEventBus.post(Events.UpdateMarketAfterChangeChartTimeFrame(presenter.watchMarket?.market?.id, presenter.timeFrameList[presenter.selectedTimeFrame].timeServer))
+            rxEventBus.post(Events.UpdateMarketAfterChangeChartTimeFrame(presenter.watchMarket?.market?.id,
+                    chartTimeFrame.timeServer))
+
+            dialog.dismiss()
         }
         alt_bld.setNegativeButton(getString(com.wavesplatform.wallet.R.string.chart_change_interval_dialog_cancel)) { dialog, which -> dialog.dismiss() }
         val alert = alt_bld.create()
@@ -150,7 +154,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         alert.makeStyled()
 
         buttonPositive = alert?.findViewById<Button>(android.R.id.button1)
-        buttonPositive?.setTextColor(findColor(com.wavesplatform.wallet.R.color.basic300))
+        buttonPositive?.setTextColor(findColor(R.color.basic300))
         buttonPositive?.isClickable = false
     }
 

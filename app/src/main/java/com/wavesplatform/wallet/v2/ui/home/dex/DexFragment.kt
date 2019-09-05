@@ -16,7 +16,8 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.main.content_header_dex_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
 import pers.victor.ext.isNetworkConnected
+import java.util.*
 import javax.inject.Inject
 
 class DexFragment : BaseFragment(), DexView {
@@ -99,10 +101,13 @@ class DexFragment : BaseFragment(), DexView {
 
     private fun loadInfoForPairs() {
         presenter.clearOldPairsSubscriptions()
+
         if (adapter.data.isNotEmpty()) {
-            presenter.loadPricesWithInterval(adapter.data)
+            adapter.data.forEachIndexed { index, watchMarket ->
+                presenter.loadDexPairInfo(watchMarket, index)
+            }
         } else {
-            swipe_container?.isRefreshing = false
+            swipe_container.notNull { it.isRefreshing = false }
         }
     }
 
@@ -110,7 +115,7 @@ class DexFragment : BaseFragment(), DexView {
         menu.clear()
         inflater.inflate(R.menu.menu_dex, menu)
         this.menu = menu
-        menu.findItem(R.id.action_sorting)?.isVisible = adapter.data.isNotEmpty()
+        menu.findItem(R.id.action_sorting)?.isVisible = !adapter.data.isEmpty()
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -127,8 +132,9 @@ class DexFragment : BaseFragment(), DexView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: MutableList<WatchMarketResponse>) {
+    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarketResponse>) {
         swipe_container.isRefreshing = false
+        presenter.clearOldPairsSubscriptions()
 
         adapter.setNewData(list)
 
@@ -142,6 +148,11 @@ class DexFragment : BaseFragment(), DexView {
         } else {
             menu?.findItem(R.id.action_sorting)?.isVisible = true
             adapter.setHeaderView(getHeaderView())
+
+            // TODO: rewrite logic for request only for visible items
+            list.forEachIndexed { index, watchMarket ->
+                presenter.loadDexPairInfo(watchMarket, index)
+            }
         }
     }
 

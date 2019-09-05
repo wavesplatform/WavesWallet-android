@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -18,6 +19,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_create_passcode.*
@@ -142,7 +144,11 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
             setResult(RESULT_OK)
             finish()
         } else {
-            launchActivity<MainActivity>(clear = true)
+            if (WavesSdk.keeper().isKeeperIntent(intent)) {
+                launchActivity<KeeperTransactionActivity>()
+            } else {
+                launchActivity<MainActivity>(clear = true)
+            }
         }
     }
 
