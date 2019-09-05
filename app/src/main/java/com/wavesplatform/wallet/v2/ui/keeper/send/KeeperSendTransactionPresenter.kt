@@ -7,9 +7,11 @@ import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
 import com.wavesplatform.sdk.model.request.node.TransferTransaction
+import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.executeInBackground
 import javax.inject.Inject
 
@@ -27,7 +29,7 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
                         .subscribe({ tx ->
                             viewState.onSuccessSend(tx)
                         }, {
-                            viewState.onError(it)
+                            onError(it)
                         }))
 
             }
@@ -37,7 +39,7 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
                         .subscribe({ tx ->
                             viewState.onSuccessSend(tx)
                         }, {
-                            viewState.onError(it)
+                            onError(it)
                         }))
             }
             is InvokeScriptTransaction -> {
@@ -46,7 +48,7 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
                         .subscribe({ tx ->
                             viewState.onSuccessSend(tx)
                         }, {
-                            viewState.onError(it)
+                            onError(it)
                         }))
             }
             else -> {
@@ -63,5 +65,20 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
                 }, {
                     it.printStackTrace()
                 }))
+    }
+
+    private fun onError(error: Throwable) {
+        val errorBody = error.errorBody()
+        if (errorBody == null) {
+            viewState.onError(error)
+            return
+        }
+
+        val errorMessage = if (errorBody.isSmartError()) {
+            App.getAppContext().getString(R.string.scripted_account_error_dialog_title)
+        } else {
+            errorBody.message
+        }
+        viewState.onError(Throwable(errorMessage))
     }
 }
