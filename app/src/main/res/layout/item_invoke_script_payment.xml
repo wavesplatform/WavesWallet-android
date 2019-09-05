@@ -33,6 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_transaction_payment_label"
         tools:text="1.99800118"
+        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -42,6 +43,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/payment_text_tag"
         style="@style/TickerTag"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_transaction_payment"
         app:layout_constraintStart_toEndOf="@+id/text_transaction_payment"
         app:layout_constraintTop_toTopOf="@+id/text_transaction_payment"

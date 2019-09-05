@@ -239,6 +239,7 @@
                     android:id="@+id/text_transaction_txid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/black"
                     android:textSize="14sp"
@@ -284,6 +285,7 @@
                         android:id="@+id/text_transaction_fee_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/black"
                         android:textSize="14sp"
@@ -295,6 +297,7 @@
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="8dp"
                         android:text="WAVES"
                         app:layout_constraintBottom_toBottomOf="@+id/text_transaction_fee_value"
                         app:layout_constraintStart_toEndOf="@+id/text_transaction_fee_value"
@@ -332,6 +335,7 @@
                         android:id="@+id/text_transaction_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/black"
                         android:textSize="14sp"
@@ -377,7 +381,7 @@
 
         <android.support.v7.widget.AppCompatImageView
             style="@style/DashedLine"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toTopOf="@+id/button_reject"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -388,7 +392,7 @@
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/basic50"
+        android:background="@color/white"
         android:stateListAnimator="@animator/toolbar_elevation">
 
         <android.support.v7.widget.Toolbar
@@ -396,7 +400,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:background="@color/basic50"
+            android:background="@color/white"
             android:fitsSystemWindows="true"
             android:fontFamily="@font/roboto"
             app:titleTextAppearance="@style/Toolbar.Title" />

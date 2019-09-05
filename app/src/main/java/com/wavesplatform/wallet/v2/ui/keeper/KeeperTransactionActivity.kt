@@ -48,7 +48,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     override fun needToShowNetworkMessage() = true
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.basic50)
+        setStatusBarColor(R.color.white)
         setNavigationBarColor(R.color.white)
         setupToolbar(toolbar_view, true,
                 getString(R.string.keeper_title_confirm_request), R.drawable.ic_toolbar_back_black)
