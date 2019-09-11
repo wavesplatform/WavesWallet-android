@@ -12,15 +12,14 @@ import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -162,11 +161,17 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     fun getTradesByPair() {
-        addSubscription(dataServiceManager.getLastTradeByPair(watchMarket)
+        addSubscription(dataServiceManager.getLastExchangesByPair(watchMarket?.market?.amountAsset,
+                watchMarket?.market?.amountAsset,
+                DEFAULT_LIMIT)
                 .map { it.firstOrNull() }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ tradesMarket ->
                     viewState.successGetTrades(tradesMarket)
                 }, { it.printStackTrace() }))
+    }
+
+    companion object {
+        var DEFAULT_LIMIT = 1
     }
 }
