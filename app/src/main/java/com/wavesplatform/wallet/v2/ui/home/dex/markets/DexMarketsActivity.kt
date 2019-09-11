@@ -135,7 +135,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .frozen(false)
                 .show()
         setSkeletonGradient()
-        presenter.initLoad()
+        presenter.search("")
     }
 
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
@@ -145,9 +145,13 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         adapter.emptyView = getEmptyView()
     }
 
-    override fun afterFailGetMarkets() {
+    override fun afterFailGetMarkets(message: String?) {
         skeletonScreen?.hide()
-        showError(R.string.common_server_error, R.id.root)
+        if (message == null) {
+            showError(R.string.common_server_error, R.id.root)
+        } else {
+            showError(message, R.id.root)
+        }
     }
 
     private fun getEmptyView(): View {
