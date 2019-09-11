@@ -13,20 +13,20 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
-import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -65,12 +65,12 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
         }
 
-        image_view_recipient_action.click {
-            IntentIntegrator(this).setRequestCode(REQUEST_SCAN_QR_CODE)
-                    .setOrientationLocked(true)
-                    .setBeepEnabled(false)
-                    .setCaptureActivity(QrCodeScannerActivity::class.java)
-                    .initiateScan()
+        image_view_generator_action.click {
+            if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
+                edit_address.setText("")
+            } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
+                launchQrCodeScanner()
+            }
         }
 
         button_continue.click {
@@ -83,7 +83,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
         }
 
-        edit_amount.applyFilterStartWithDot()
+        edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                WavesConstants.WAVES_ASSET_INFO.getMaxDigitsBeforeZero(),
+                WavesConstants.WAVES_ASSET_INFO.precision,
+                Double.MAX_VALUE))
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .skipInitialValue()
@@ -94,9 +97,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     if (it.isNotEmpty()) {
                         text_address_error.text = ""
                         text_address_error.gone()
+                        image_view_generator_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
+                        edit_address.tag = R.drawable.ic_deladdress_24_error_400
                     } else {
+                        presenter.nodeAddressValidation = false
                         text_address_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_address_error.visiable()
+                        image_view_generator_action.setImageResource(R.drawable.ic_qrcode_24_basic_500)
+                        edit_address.tag = R.drawable.ic_qrcode_24_basic_500
                     }
                     makeButtonEnableIfValid()
                     return@map it
@@ -122,7 +130,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 .observeOn(Schedulers.io())
                 .flatMap {
                     if (it.second.matches(Regex(AliasRule.ALIAS_REGEX))) {
-                        return@flatMap presenter.apiDataManager.loadAlias(it.second)
+                        return@flatMap presenter.dataServiceManager.loadAlias(it.second)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .map {
                                     if (!it.own) {
@@ -150,7 +158,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         presenter.nodeAddressValidation = false
                         text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
                         text_address_error.visiable()
-                        return@flatMap Observable.empty<Alias>()
+                        return@flatMap Observable.empty<AliasTransactionResponse>()
                     }
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -180,9 +188,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 .map {
                     if (it.toDouble() != 0.0) {
-                        val feeValue = MoneyUtil.getScaledText(presenter.fee, Constants.wavesAssetInfo).toBigDecimal()
+                        val feeValue = MoneyUtil.getScaledText(presenter.fee, WavesConstants.WAVES_ASSET_INFO).toBigDecimal()
                         val currentValueWithFee = it.toBigDecimal() + feeValue
-                        val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.wavesAssetBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal() && currentValueWithFee > feeValue
+                        val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.wavesAssetBalance, WavesConstants.WAVES_ASSET_INFO).clearBalance().toBigDecimal() && currentValueWithFee > feeValue
                         presenter.amountValidation = isValid
 
                         if (isValid) {
@@ -207,8 +215,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }))
 
         presenter.wavesAssetBalance.notNull {
-            text_asset_value.text = MoneyUtil.getScaledText(it, Constants.wavesAssetInfo)
-            image_asset_icon.setAsset(Constants.wavesAssetInfo)
+            WavesConstants.WAVES_ASSET_INFO
+            text_asset_value.text = MoneyUtil.getScaledText(it, WavesConstants.WAVES_ASSET_INFO)
+            image_asset_icon.setAsset(WavesConstants.WAVES_ASSET_INFO)
 
             presenter.loadCommission(it)
         }
@@ -225,8 +234,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
-                    if (!address.isEmpty()) {
+                    val address = result.contents.replace(WAVES_PREFIX, "")
+                    if (address.isNotEmpty()) {
                         edit_address.setText(address)
                     } else {
                         showError(R.string.start_leasing_validation_address_is_invalid_error, R.id.root_view)
@@ -235,7 +244,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
             REQUEST_CHOOSE_ADDRESS -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val addressTestObject = data?.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
+                    val addressTestObject = data?.getParcelableExtra<AddressBookUserDb>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
                     addressTestObject?.address.notNull {
                         edit_address.setText(it)
                         edit_address.setSelection(it.length)
@@ -245,9 +254,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_LEASING_CONFIRMATION -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        finish()
+                        onBackPressed()
                     }
-                    Constants.RESULT_SMART_ERROR -> {
+                    com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()
                     }
                 }
@@ -266,14 +275,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         } else {
                             waves.minus(presenter.fee)
                         }
-                        edit_amount.setText(MoneyUtil.getScaledText(balance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
+                        edit_amount.setText(MoneyUtil.getScaledText(balance, WavesConstants.WAVES_ASSET_INFO).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
                 else -> {
                     val percentBalance = (waves.times((quickBalanceView.tag.toString().toDouble().div(100)))).toLong()
                     quickBalanceView.click {
-                        edit_amount.setText(MoneyUtil.getScaledText(percentBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
+                        edit_amount.setText(MoneyUtil.getScaledText(percentBalance, WavesConstants.WAVES_ASSET_INFO).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
@@ -300,7 +309,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
@@ -323,7 +332,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         var REQUEST_CHOOSE_ADDRESS = 57
         var REQUEST_LEASING_CONFIRMATION = 59
         var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
-        var REQUEST_SCAN_QR_CODE = 52
         var BUNDLE_WAVES = "waves_balance"
         var TOTAL_BALANCE = "100"
     }

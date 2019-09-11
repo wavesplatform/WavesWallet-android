@@ -6,24 +6,23 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.request.node.AliasTransaction
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
 import javax.inject.Inject
 
 @InjectViewState
 class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView>() {
 
-    var aliasRequest: AliasRequest = AliasRequest()
-    var wavesBalance: AssetBalance = AssetBalance()
+    var wavesBalance: AssetBalanceResponse = AssetBalanceResponse()
     var aliasValidation = false
     var fee = 0L
 
     fun loadAlias(alias: String) {
-        addSubscription(apiDataManager.loadAlias(alias)
+        addSubscription(dataServiceManager.loadAlias(alias)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.aliasIsNotAvailable()
@@ -33,7 +32,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
     }
 
     fun loadWavesBalance() {
-        addSubscription(nodeDataManager.loadWavesBalance()
+        addSubscription(nodeServiceManager.loadWavesBalance()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     wavesBalance = it
@@ -42,17 +41,15 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                 }))
     }
 
-    fun createAlias(alias: String?) {
-        aliasRequest.alias = alias
+    fun createAlias(alias: String) {
+        val aliasRequest = AliasTransaction(alias)
         aliasRequest.fee = fee
-
         viewState.showProgressBar(true)
-
-        addSubscription(nodeDataManager.createAlias(aliasRequest)
+        addSubscription(nodeServiceManager.createAlias(aliasRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
+                .subscribe({ alias ->
                     viewState.showProgressBar(false)
-                    viewState.successCreateAlias(it)
+                    viewState.successCreateAlias(alias)
                 }, {
                     it.printStackTrace()
                     viewState.showProgressBar(false)
@@ -61,7 +58,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                         if (error.isSmartError()) {
                             viewState.failedCreateAliasCauseSmart()
                         } else {
-                            viewState.failedCreateAlias(it.message)
+                            viewState.failedCreateAlias(error.message)
                         }
                     }
                 }))

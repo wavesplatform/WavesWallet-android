@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">Vous DEVEZ remplir le champ de détails de paiement avec les informations suivantes:</string>
-  <string name="about_fill_payment_info">CNM — votre adresse WAVES.\nSi vous ne le faites pas, nous ne pouvons pas créditer votre compte.</string>
   <string name="about_redirection_message">Après avoir effectué la vérification, vous recevrez un email contenant des instructions supplémentaires</string>
   <string name="about_redirection_okay">D\'accord</string>
   <string name="about_redirection_title">Vous avez été redirigé vers «IDNow»\npour vérification</string>
@@ -137,7 +135,7 @@
   <string name="chart_time_frame_1_hour">1 heure</string>
   <string name="chart_time_frame_24_hours">24 heures</string>
   <string name="chart_time_frame_30_min">30 minutes</string>
-  <string name="chart_time_frame_4_hours">4 heures</string>
+  <string name="chart_time_frame_3_hours">3 heures</string>
   <string name="chart_time_frame_5_min">5 minutes</string>
   <string name="check_connectivity_exit">Pas de connexion à Internet</string>
   <string name="choose_account">Choisir un compte</string>
@@ -208,7 +206,7 @@
   <string name="dex_markets_list_toolbar_title">Marchés</string>
   <string name="dex_sorting_empty">Il n\'y a rien ici…</string>
   <string name="dex_sorting_toolbar_title">Tri</string>
-  <string name="dex_toolbar_title">Plateforme d\'échange décentralisée</string>
+  <string name="dex_toolbar_title">DEX</string>
   <string name="dex_trade_buy">ACHETER</string>
   <string name="dex_trade_sell">VENDRE</string>
   <string name="dex_trade_tab_chart">Graphique</string>
@@ -468,8 +466,6 @@
   <string name="receive_amount_title">Montant en %1$s</string>
   <string name="receive_asset">Jeton</string>
   <string name="receive_card">Carte</string>
-  <string name="receive_contact_msg">En cas de problèmes avec la vérification ou le traitement des paiements, veuillez contacter l\'équipe de support Coinomat - support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Continuer</string>
   <string name="receive_cryptocurrency">Cryptomonnaie</string>
   <string name="receive_dont_accept_international">Nous n\'acceptons pas les virements internationaux de citoyens américains ou de banques américaines</string>
@@ -529,13 +525,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">Réessayez plus tard</string>
-  <string name="send_gateway_error_title">Service Coinomat temporairement indisponible</string>
+  <string name="send_gateway_error_title">Service temporairement indisponible</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Les frais sont de 1% du montant transféré.</string>
   <string name="send_gateway_info_gateway_fee">Les frais du portail sont %1$s %2$s</string>
-  <string name="send_gateway_info_gateway_limits">Nous avons détecté l\'adresse %1$s et enverrons votre argent via le portail Coinomat à cette adresse. Le montant minimum est %2$s %1$s, le montant maximum est %3$s %1$s.</string>
+  <string name="send_gateway_info_gateway_limits">Nous avons détecté l\'adresse %1$s et enverrons votre argent via le portail à cette adresse. Le montant minimum est %2$s %1$s, le montant maximum est %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Ne retirez pas %1$s vers une ICO. Nous ne créditerons pas votre compte avec les jetons de cette vente.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Si vous avez été vérifié et que vous avez déposé des dollars américains, vous pouvez les retirer sur votre compte bancaire. Sinon, faites vous vérifier par notre partenaire IDNow.eu</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Le montant minimum est de 500 dollars américains. Si vous avez des questions, envoyez simplement un email à support@coinomat.com</string>
   <string name="send_monero_payment_id">ID de paiement Monero</string>
   <string name="send_monero_payment_id_hint">Collez ou tapez votre ID de paiement</string>
   <string name="send_progress_sending">Envoi…</string>
@@ -671,4 +666,13 @@
   <string name="wallet_sorting_favorite_empty">Vous n\'avez pas ajouté de jetons dans vos favoris</string>
   <string name="wallet_sorting_default_empty">La liste des jetons est vide</string>
   <string name="wallet_sorting_hidden_empty">Vous n\'avez pas masqué de jetons</string>
+  <string name="common_permission_error_title">Besoin d\'un accès à l\'appareil photo</string>
+  <string name="common_permission_error_description">Cette application a besoin d\'une autorisation pour utiliser l\'appareil photo. Vous pouvez lui accorder dans les paramètres de l\'application.</string>
+  <string name="common_permission_error_settings">Paramètres</string>
+  <string name="common_permission_error_cancel">Annuler</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Le prix de votre ordre est 5% plus élevé que le dernier prix du marché</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Le prix de votre ordre est 5% moins élevé que le dernier prix du marché</string>
+  <string name="trade_order_dialog_positive_place_order">Placer un ordre</string>
+  <string name="trade_order_dialog_negative_cancel">Annuler</string>
+  <string name="trade_order_dialog_subtitle_proceed">Voulez-vous continuer?</string>
 </resources>

@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v1.util;
 
 import org.junit.Test;
 
-import static com.wavesplatform.wallet.v2.util.ExtensionsKt.getScaledAmount;
+import static com.wavesplatform.sdk.utils.ExtensionsKt.getScaledAmount;
 import static org.junit.Assert.assertEquals;
 
 public class MoneyUtilTest {

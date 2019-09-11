@@ -13,13 +13,13 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.formatBaseUrl
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -89,10 +89,10 @@ class NetworkModule {
     @Singleton
     @Provides
     internal fun provideOkHttpClient(
-        cache: Cache,
-        @Named("timeout") timeout: Int,
-        @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
-        @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
+            cache: Cache,
+            @Named("timeout") timeout: Int,
+            @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
+            @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
                 .cache(cache)
@@ -101,7 +101,7 @@ class NetworkModule {
                 .addInterceptor(receivedCookiesInterceptor)
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
-                .addInterceptor(EnvironmentManager.createHostInterceptor())
+                .addInterceptor(EnvironmentManager.createGateWayHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
@@ -120,33 +120,21 @@ class NetworkModule {
                 .setLenient()
                 .setPrettyPrinting()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) // if filed status_code need as statusCode
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                 .create()
     }
 
     @Singleton
-    @Named("NodeRetrofit")
+    @Named("GatewayRetrofit")
     @Provides
-    internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.nodeUrl)
-                .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
-        return retrofit
-    }
+    internal fun provideGatewayRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val url =
+                if (EnvironmentManager.servers.gatewayUrl.isNotEmpty()) EnvironmentManager.servers.gatewayUrl
+                else EnvironmentManager.getDefaultConfig()?.servers?.gatewayUrl ?: ""
 
-    @Singleton
-    @Named("MatcherRetrofit")
-    @Provides
-    internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.matcherUrl)
+                .baseUrl(url.formatBaseUrl())
                 .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -159,10 +147,9 @@ class NetworkModule {
     @Provides
     internal fun provideGithubRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_GITHUB_PROXY)
+                .baseUrl(Constants.URL_GITHUB_PROXY.formatBaseUrl())
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -175,48 +162,14 @@ class NetworkModule {
     @Provides
     internal fun provideCoinomatRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_COINOMAT)
+                .baseUrl(Constants.URL_COINOMAT.formatBaseUrl())
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
-    }
-
-    @Singleton
-    @Named("ApiRetrofit")
-    @Provides
-    internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.servers.dataUrl)
-                .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
-        return retrofit
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideNodeService(@Named("NodeRetrofit") retrofit: Retrofit): NodeService {
-        return retrofit.create(NodeService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideMatcherService(@Named("MatcherRetrofit") retrofit: Retrofit): MatcherService {
-        return retrofit.create(MatcherService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideApiService(@Named("ApiRetrofit") retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
     }
 
     @Singleton
@@ -229,6 +182,12 @@ class NetworkModule {
     @Provides
     internal fun provideCoinomatService(@Named("CoinomatRetrofit") retrofit: Retrofit): CoinomatService {
         return retrofit.create(CoinomatService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    internal fun provideGatewayService(@Named("GatewayRetrofit") retrofit: Retrofit): GatewayService {
+        return retrofit.create(GatewayService::class.java)
     }
 
     @Named("timeout")

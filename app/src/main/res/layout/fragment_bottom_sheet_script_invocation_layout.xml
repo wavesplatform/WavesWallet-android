@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_script_address_hint"
             android:layout_marginTop="4dp"
-            android:text="Mr. Big Mike"
+            tools:text="Mr. Big Mike"
             android:textColor="@color/disabled900"
             android:visibility="visible" />
 

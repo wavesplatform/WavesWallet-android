@@ -10,8 +10,8 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
@@ -57,13 +57,16 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
         image_asset_icon.setAsset(presenter.assetBalance)
         text_asset_name.text = presenter.assetBalance.getName()
-        text_asset_value.text = presenter.assetBalance.getDisplayAvailableBalance()
+        text_asset_value.text = presenter.assetBalance.getDisplayAvailableBalance().stripZeros()
 
         text_use_total_balance.click {
             edit_amount.setText(presenter.assetBalance.getDisplayAvailableBalance().clearBalance())
         }
 
-        edit_amount.applyFilterStartWithDot()
+        edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                presenter.assetBalance.getMaxDigitsBeforeZero(),
+                presenter.assetBalance.getDecimals(),
+                Double.MAX_VALUE))
 
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
@@ -167,7 +170,13 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             REQUEST_BURN_CONFIRM -> {
                 when (resultCode) {
                     Constants.RESULT_OK -> {
-                        setResult(Constants.RESULT_OK)
+                        val totalBurn = data?.getBooleanExtra(TokenBurnConfirmationActivity.BUNDLE_TOTAL_BURN, false)
+                                ?: false
+
+                        val intent = Intent().apply {
+                            putExtra(TokenBurnConfirmationActivity.BUNDLE_TOTAL_BURN, totalBurn)
+                        }
+                        setResult(Constants.RESULT_OK, intent)
                         finish()
                     }
                     Constants.RESULT_SMART_ERROR -> {
@@ -185,7 +194,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()

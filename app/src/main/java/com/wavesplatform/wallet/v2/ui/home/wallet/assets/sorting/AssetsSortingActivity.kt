@@ -10,26 +10,30 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.TabItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
+import pers.victor.ext.children
+import pers.victor.ext.get
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
@@ -57,6 +61,16 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                         R.drawable.ic_visibility_18_basic_500))
     }
 
+    private val tabSelectListener = object : OnTabSelectListener {
+        override fun onTabSelect(position: Int) {
+            setScreenType(position)
+        }
+
+        override fun onTabReselect(position: Int) {
+
+        }
+    }
+
     @ProvidePresenter
     fun providePresenter(): AssetsSortingPresenter = presenter
 
@@ -78,15 +92,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         })
 
         common_tab_layout.setTabData(tabs)
-        common_tab_layout.setOnTabSelectListener(object : OnTabSelectListener {
-            override fun onTabSelect(position: Int) {
-                setScreenType(position)
-            }
-
-            override fun onTabReselect(position: Int) {
-
-            }
-        })
+        common_tab_layout.setOnTabSelectListener(tabSelectListener)
 
         recycle_assets.layoutManager = LinearLayoutManager(this)
         recycle_assets.itemAnimator = itemAnimator
@@ -114,8 +120,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             // add to not favorite list
                             addToListOf(AssetSortingItem.TYPE_DEFAULT_ITEM, globalItem, asset, linePosition)
 
-                            asset.save()
-                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
+                            AssetBalanceDb(asset).save()
+                            AssetBalanceStoreDb(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
                         AssetSortingItem.TYPE_DEFAULT_ITEM, AssetSortingItem.TYPE_HIDDEN_ITEM -> {
                             // remove from current list
@@ -130,8 +136,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             // add to favorite list
                             addToListOf(AssetSortingItem.TYPE_FAVORITE_ITEM, globalItem, asset, linePosition)
 
-                            asset.save()
-                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position,
+                            AssetBalanceDb(asset).save()
+                            AssetBalanceStoreDb(asset.assetId, asset.isHidden, asset.position,
                                     asset.isFavorite).save()
                         }
                     }
@@ -141,7 +147,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
             override fun onHiddenStateChanged(item: AssetSortingItem, checked: Boolean, position: Int) {
-                if (position != -1) {
+                if (position != POSITION_NONE) {
 
                     presenter.needToUpdate = true
 
@@ -167,8 +173,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                     }
 
                     // Save to DB
-                    item.asset.save()
-                    AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+                    AssetBalanceDb(item.asset).save()
+                    AssetBalanceStoreDb(item.asset.assetId, item.asset.isHidden, item.asset.position,
                             item.asset.isFavorite).save()
                 }
             }
@@ -181,6 +187,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
         adapter.dragStartListener = object : ItemDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                setTabsEnable(false)
                 itemTouchHelper.startDrag(viewHolder)
             }
 
@@ -190,6 +197,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
             override fun onEndDrag(viewHolder: RecyclerView.ViewHolder) {
                 applyCorrectCardBg(viewHolder)
+                setTabsEnable(true)
             }
         }
 
@@ -198,7 +206,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         common_tab_layout.currentTab = 0
     }
 
-    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalance, linePosition: Int) {
+    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalanceResponse, linePosition: Int) {
         globalItem.type = listType
         globalItem.asset = asset
 
@@ -207,42 +215,43 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     }
 
     private fun applyCorrectCardBg(holder: RecyclerView.ViewHolder) {
-        val position = holder.adapterPosition
-        val item = adapter.getItem(position) as AssetSortingItem
-        val type = adapter.resolveType(position)
+        if (holder.adapterPosition != POSITION_NONE) {
+            val item = adapter.getItem(holder.adapterPosition) as AssetSortingItem
+            val type = adapter.resolveType(holder.adapterPosition)
 
-        item.type = type
+            item.type = type
 
-        when (type) {
-            AssetSortingItem.TYPE_FAVORITE_ITEM -> {
-                item.asset.isFavorite = true
-                item.asset.isHidden = false
+            when (type) {
+                AssetSortingItem.TYPE_FAVORITE_ITEM -> {
+                    item.asset.isFavorite = true
+                    item.asset.isHidden = false
+                }
+                AssetSortingItem.TYPE_DEFAULT_ITEM -> {
+                    item.asset.isFavorite = false
+                    item.asset.isHidden = false
+                }
+                AssetSortingItem.TYPE_HIDDEN_ITEM -> {
+                    item.asset.isFavorite = false
+                    item.asset.isHidden = true
+                }
             }
-            AssetSortingItem.TYPE_DEFAULT_ITEM -> {
-                item.asset.isFavorite = false
-                item.asset.isHidden = false
+
+            // disable animation before update item to fix blink bug
+            recycle_assets.itemAnimator = null
+
+            // update item and empty views
+            adapter.setData(holder.adapterPosition, item)
+            adapter.checkEmptyViews()
+
+            // enable animation after update
+            runDelayed(150) {
+                recycle_assets.itemAnimator = itemAnimator
             }
-            AssetSortingItem.TYPE_HIDDEN_ITEM -> {
-                item.asset.isFavorite = false
-                item.asset.isHidden = true
-            }
+
+            AssetBalanceDb(item.asset).save()
+            AssetBalanceStoreDb(item.asset.assetId, item.asset.isHidden, item.asset.position,
+                    item.asset.isFavorite).save()
         }
-
-        // disable animation before update item to fix blink bug
-        recycle_assets.itemAnimator = null
-
-        // update item and empty views
-        adapter.setData(position, item)
-        adapter.checkEmptyViews()
-
-        // enable animation after update
-        runDelayed(150) {
-            recycle_assets.itemAnimator = itemAnimator
-        }
-
-        item.asset.save()
-        AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
-                item.asset.isFavorite).save()
     }
 
     private fun setScreenType(position: Int) {
@@ -263,6 +272,14 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             TYPE_VISIBILITY -> {
                 analytics.trackEvent(AnalyticEvents.WalletTokenSortingVisabilityEvent)
             }
+        }
+    }
+
+    fun setTabsEnable(enable: Boolean) {
+        // to fix quick click to tab when drag & drop
+        (common_tab_layout[0] as? LinearLayout)?.children?.forEach { view ->
+            view.isClickable = enable
+            view.isEnabled = enable
         }
     }
 
@@ -287,6 +304,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     }
 
     companion object {
+        const val POSITION_NONE = -1
+
         const val TYPE_POSITION = 0
         const val TYPE_VISIBILITY = 1
     }

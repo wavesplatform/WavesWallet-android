@@ -7,16 +7,15 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.model.response.data.LastTradesResponse
+import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
+import com.wavesplatform.wallet.v2.data.model.local.OrderBookBidMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -28,18 +27,22 @@ import javax.inject.Inject
 
 @InjectViewState
 class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBookView>() {
-    var watchMarket: WatchMarket? = null
+    var watchMarket: WatchMarketResponse? = null
     var needFirstScrollToLastPrice = true
-    val subscriptions = CompositeDisposable()
+    private val subscriptions = CompositeDisposable()
 
     fun loadOrderBook() {
         addSubscription(
                 Observable.interval(0, 10, TimeUnit.SECONDS)
                         .retry(3)
                         .flatMap {
-                            return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
-                                    apiDataManager.getLastTradeByPair(watchMarket),
-                                    BiFunction { orderBook: OrderBook, lastPrice: ArrayList<LastTradesResponse.Data.ExchangeTransaction> ->
+                            val market = watchMarket?.market
+                            return@flatMap Observable.zip(matcherServiceManager.loadOrderBook(
+                                    market?.amountAsset!!,
+                                    market.priceAsset),
+                                    dataServiceManager.getLastTradeByPair(watchMarket),
+                                    BiFunction { orderBook: OrderBookResponse,
+                                                 lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }
@@ -74,22 +77,26 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         }))
     }
 
-    private fun getCalculatedBids(list: List<OrderBook.Bid>): Collection<MultiItemEntity> {
+    private fun getCalculatedBids(list: List<OrderBookResponse.BidResponse>): Collection<MultiItemEntity> {
         var totalSum = 0L
+        val orderBookBids = mutableListOf<OrderBookBidMultiItemEntity>()
         list.forEach { bid ->
             totalSum += bid.total
             bid.sum = totalSum
+            orderBookBids.add(OrderBookBidMultiItemEntity(bid))
         }
-        return list
+        return orderBookBids
     }
 
-    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBook.Ask> {
+    private fun getCalculatedAsks(list: List<OrderBookResponse.AskResponse>): List<OrderBookAskMultiItemEntity> {
         var totalSum = 0L
+        val orderBookAsks = mutableListOf<OrderBookAskMultiItemEntity>()
         list.forEach { ask ->
             totalSum += ask.total
             ask.sum = totalSum
+            orderBookAsks.add(OrderBookAskMultiItemEntity(ask))
         }
-        return list
+        return orderBookAsks
     }
 
     override fun onDestroy() {

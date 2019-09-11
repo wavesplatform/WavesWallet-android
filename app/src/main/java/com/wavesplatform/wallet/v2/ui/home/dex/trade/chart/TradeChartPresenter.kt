@@ -11,13 +11,14 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
-import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -27,29 +28,30 @@ import kotlin.collections.ArrayList
 
 @InjectViewState
 class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>() {
-    var watchMarket: WatchMarket? = null
+    var watchMarket: WatchMarketResponse? = null
     var selectedTimeFrame = 0
     var newSelectedTimeFrame = 0
-    val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES, ChartTimeFrame.FIFTEEN_MINUTES, ChartTimeFrame.THIRTY_MINUTES,
-            ChartTimeFrame.ONE_HOUR, ChartTimeFrame.FOUR_HOURS, ChartTimeFrame.TWENTY_FOUR_HOURS)
 
     var chartModel: ChartModel = ChartModel()
     private var entries: ArrayList<CandleEntry> = ArrayList()
     private var barEntries: ArrayList<BarEntry> = ArrayList()
     var currentTimeFrame: Int = 30
         set(value) {
-            if (App.getAccessManager().getWallet() == null) {
+            if (!WavesWallet.isAuthenticated()) {
                 return
             }
             field = value
             watchMarket?.market?.currentTimeFrame = value
-            watchMarket?.market?.save()
+            watchMarket?.market.notNull {
+                MarketResponseDb(it).save()
+            }
         }
     private var prevToDate: Long = 0
     private var timer: Timer? = null
 
     internal var valueFormatter = IAxisValueFormatter { value, axis ->
         val simpleDateFormat = SimpleDateFormat("dd MMM HH:mm", Locale.getDefault())
+        simpleDateFormat.timeZone = TimeZone.getDefault()
 
         val date = Date(value.toLong() * 1000 * 60 * currentTimeFrame.toLong())
         simpleDateFormat.format(date)
@@ -63,8 +65,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
         currentTimeFrame = if (chartModel.pairModel?.market?.currentTimeFrame != null)
             chartModel.pairModel?.market?.currentTimeFrame!!
-        else
-            30
+        else 30
 
         loadCandles(EnvironmentManager.getTime(), true)
         getTradesByPair()
@@ -101,7 +102,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         barEntries = ArrayList()
         val fromTimestamp = to!! - 100L * currentTimeFrame.toLong() * 1000 * 60
 
-        addSubscription(apiDataManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
+        addSubscription(dataServiceManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
                 .flatMap { candles ->
                     chartModel.candleList = candles
                     Observable.fromIterable(candles)
@@ -109,10 +110,10 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                 .filter { candle -> candle.volume != null }
                 .filter { candle -> candle.volume!! > 0 }
                 .map { candle ->
-                    val e = CandleEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
+                    val e = CandleEntry((candle.getTimeInMillis() / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
                     entries.add(e)
 
-                    barEntries.add(BarEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
+                    barEntries.add(BarEntry((candle.getTimeInMillis() / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
 
                     candle
                 }
@@ -131,7 +132,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun refreshCandles() {
         val to = EnvironmentManager.getTime()
-        addSubscription(apiDataManager.loadCandles(
+        addSubscription(dataServiceManager.loadCandles(
                 watchMarket,
                 currentTimeFrame, prevToDate, to)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -141,8 +142,15 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                     for (candle in candles) {
                         if (candle.volume != null) {
                             if (candle.volume!! > 0) {
-                                ces.add(CandleEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat()))
-                                bes.add(BarEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
+                                ces.add(CandleEntry((candle.getTimeInMillis()
+                                        / (1000 * 60 * currentTimeFrame)).toFloat(),
+                                        candle.high!!.toFloat(),
+                                        candle.low!!.toFloat(),
+                                        candle.openValue!!.toFloat(),
+                                        candle.close!!.toFloat()))
+                                bes.add(BarEntry((candle.getTimeInMillis()
+                                        / (1000 * 60 * currentTimeFrame)).toFloat(),
+                                        candle.volume!!.toFloat()))
                             }
                         }
                     }
@@ -154,7 +162,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     fun getTradesByPair() {
-        addSubscription(apiDataManager.getLastTradeByPair(watchMarket)
+        addSubscription(dataServiceManager.getLastTradeByPair(watchMarket)
                 .map { it.firstOrNull() }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ tradesMarket ->

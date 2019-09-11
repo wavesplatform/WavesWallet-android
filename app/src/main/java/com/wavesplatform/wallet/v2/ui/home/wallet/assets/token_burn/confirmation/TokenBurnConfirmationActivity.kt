@@ -5,29 +5,26 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.node.transaction.BurnTransactionResponse
+import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_ASSET_BALANCE
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_BLOCKCHAIN_FEE
-import com.wavesplatform.wallet.v2.util.getScaledAmount
-import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_token_burn_confirmation.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.invisiable
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView {
@@ -63,10 +60,13 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         } else {
             getString(R.string.token_burn_confirmationt_not_reissuable)
         }
-        text_description.text = presenter.assetBalance!!.getDescription()
+
+        image_line_5.visiableIf { presenter.assetBalance?.getDescription().isNullOrEmpty() }
+        text_description.visiableIf { presenter.assetBalance?.getDescription().isNullOrEmpty().not() }
+        text_description.text = presenter.assetBalance?.getDescription()
 
         text_fee_value.text = "${getScaledAmount(presenter.fee, 8)} " +
-                "${Constants.CUSTOM_FEE_ASSET_NAME}"
+                "${WavesConstants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click {
             analytics.trackEvent(AnalyticEvents.BurnTokenConfirmTapEvent)
@@ -85,27 +85,30 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         )
     }
 
-    override fun onShowBurnSuccess(tx: BurnRequest?, totalBurn: Boolean) {
+    override fun onShowBurnSuccess(tx: BurnTransactionResponse?, totalBurn: Boolean) {
         completeBurnProcessing()
         relative_success.visiable()
 
         button_okay.click {
-            if (totalBurn) {
-                launchActivity<MainActivity>(clear = true)
-            } else {
-                setResult(Constants.RESULT_OK)
-                finish()
-            }
+            onBackPressed()
         }
     }
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            val intent = Intent().apply {
+                putExtra(BUNDLE_TOTAL_BURN, presenter.totalBurn)
+            }
+            setResult(Constants.RESULT_OK, intent)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun onShowError(errorMessageRes: String) {
@@ -130,5 +133,9 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_confirm.isEnabled = networkConnected
+    }
+
+    companion object {
+        const val BUNDLE_TOTAL_BURN = "total_burn"
     }
 }

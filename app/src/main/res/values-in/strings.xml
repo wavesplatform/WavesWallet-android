@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">Anda HARUS mengisi bidang detail pembayaran dengan informasi berikut:</string>
-  <string name="about_fill_payment_info">CNM — alamat WAVES Anda. \nJika tidak, kami tidak dapat mengkredit akun Anda.</string>
   <string name="about_redirection_message">Setelah Anda melalui verifikasi, Anda akan menerima email dengan instruksi lebih lanjut</string>
   <string name="about_redirection_okay">Ok</string>
   <string name="about_redirection_title">Anda dialihkan ke «IDNow» \nuntuk verifikasi</string>
@@ -136,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 jam</string>
   <string name="chart_time_frame_24_hours">24 jam</string>
   <string name="chart_time_frame_30_min">30 menit</string>
-  <string name="chart_time_frame_4_hours">4 jam</string>
+  <string name="chart_time_frame_3_hours">3 jam</string>
   <string name="chart_time_frame_5_min">5 menit</string>
   <string name="check_connectivity_exit">Tidak ada koneksi ke Internet</string>
   <string name="choose_account">Pilih akun</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">Jumlah dalam %1$s</string>
   <string name="receive_asset">Token</string>
   <string name="receive_card">Kartu</string>
-  <string name="receive_contact_msg">Jika ada masalah dengan verifikasi atau pemrosesan pembayaran, silakan hubungi tim dukungan Coinomat — support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Lanjutkan</string>
   <string name="receive_cryptocurrency">Сryptocurrency</string>
   <string name="receive_dont_accept_international">Kami tidak menerima transfer kawat internasional dari Warga AS atau dari Bank AS</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">Coba lagi nanti</string>
-  <string name="send_gateway_error_title">Layanan Coinomat sementara tidak tersedia</string>
+  <string name="send_gateway_error_title">Layanan sementara tidak tersedia</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Biaya 1% dari jumlah yang ditransfer.</string>
   <string name="send_gateway_info_gateway_fee">Biaya gateway adalah %1$s %2$s</string>
-  <string name="send_gateway_info_gateway_limits">Kami mendeteksi alamat %1$s dan akan mengirim uang Anda melalui gerbang Coinomat ke alamat itu. Jumlah minimum adalah %2$s %1$s, jumlah maksimum adalah %3$s %1$s.</string>
+  <string name="send_gateway_info_gateway_limits">Kami mendeteksi alamat %1$s dan akan mengirimkan uang Anda melalui gateway ke alamat itu. Jumlah minimum adalah %2$s %1$s, jumlah maksimum adalah %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Jangan tarik %1$s ke ICO. Kami tidak akan mengkredit akun Anda dengan token dari penjualan itu.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Jika Anda telah diverifikasi dan telah menyetorkan dolar AS, Anda dapat menarik dolar ini kembali ke rekening bank Anda. Jika tidak, dapatkan diverifikasi oleh mitra kami IDNow.eu</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Jumlah minimum adalah 500 Dolar AS. Jika Anda memiliki pertanyaan, silakan kirim email ke support@coinomat.com</string>
   <string name="send_monero_payment_id">ID Pembayaran Monero</string>
   <string name="send_monero_payment_id_hint">Tempel atau ketikkan ID Pembayaran Anda</string>
   <string name="send_progress_sending">Mengirim…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">Anda tidak menambahkan token di favorit</string>
   <string name="wallet_sorting_default_empty">Daftar token kosong</string>
   <string name="wallet_sorting_hidden_empty">Anda tidak menambah token di token tersembunyi</string>
+  <string name="common_permission_error_title">Perlu akses kamera</string>
+  <string name="common_permission_error_description">Aplikasi ini membutuhkan izin untuk menggunakan kamera. Anda dapat memberi mereka dalam pengaturan aplikasi.</string>
+  <string name="common_permission_error_settings">Pengaturan</string>
+  <string name="common_permission_error_cancel">Batalkan</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Harga pesanan Anda 5% lebih tinggi dari harga pasar terbaru</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Harga pesanan Anda 5% lebih rendah dari harga pasar terbaru</string>
+  <string name="trade_order_dialog_positive_place_order">Tempatkan Order</string>
+  <string name="trade_order_dialog_negative_cancel">Batalkan</string>
+  <string name="trade_order_dialog_subtitle_proceed">Apakah Anda ingin melanjutkan?</string>
 </resources>

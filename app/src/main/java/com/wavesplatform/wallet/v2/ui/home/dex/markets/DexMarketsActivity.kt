@@ -12,19 +12,24 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
+import com.ethanhua.skeleton.Skeleton
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.vicpin.krealmextensions.delete
+import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
-import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
@@ -38,6 +43,8 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
     @Inject
     lateinit var adapter: DexMarketsAdapter
+
+    private var skeletonScreen: RecyclerViewSkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): DexMarketsPresenter = presenter
@@ -55,9 +62,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         recycle_markets.layoutManager = LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_markets)
 
-        presenter.getMarkets()
-
-        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+        edit_search.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
@@ -71,18 +76,26 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_search_24_basic_500, 0,
+                                R.drawable.ic_clear_24_basic_500, 0)
                     } else {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_search_24_basic_500, 0,
+                                0, 0)
                     }
                     return@map it.toString()
                 }
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    adapter.filter(it)
+                .subscribe { query ->
+                    skeletonScreen?.show()
+                    setSkeletonGradient()
+                    presenter.search(query.trim())
                 })
+
+        edit_search.visiable()
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as MarketResponse
@@ -101,29 +114,39 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
             val item = this.adapter.getItem(position) as MarketResponse
 
-            item.checked = !item.checked
+            if (item.checked) {
+                item.checked = false
+                delete<MarketResponseDb> { equalTo("id", item.id) }
+            } else {
+                item.checked = true
+                MarketResponseDb(item).save()
+            }
+
             this.adapter.setData(position, item)
             this.adapter.allData[this.adapter.allData.indexOf(item)] = item
         }
+
+        skeletonScreen = Skeleton.bind(recycle_markets)
+                .adapter(recycle_markets.adapter)
+                .shimmer(true)
+                .count(5)
+                .color(R.color.basic50)
+                .load(R.layout.item_skeleton_markets)
+                .frozen(false)
+                .show()
+        setSkeletonGradient()
+        presenter.initLoad()
     }
 
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
-        progress_bar.hide()
-
+        skeletonScreen?.hide()
         adapter.allData = ArrayList(markets)
         adapter.setNewData(markets)
-
-        if (markets.isEmpty()) {
-            edit_search.gone()
-        } else {
-            edit_search.visiable()
-        }
-
         adapter.emptyView = getEmptyView()
     }
 
     override fun afterFailGetMarkets() {
-        progress_bar.hide()
+        skeletonScreen?.hide()
         showError(R.string.common_server_error, R.id.root)
     }
 
@@ -134,10 +157,6 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun onBackPressed() {
-        if (this.adapter.allData.isNotEmpty()) {
-            presenter.saveSelectedMarkets(this.adapter.allData)
-        }
-
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })
@@ -146,9 +165,18 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun onDestroy() {
-        progress_bar?.hide()
+        skeletonScreen?.hide()
         super.onDestroy()
     }
 
     override fun needToShowNetworkMessage() = true
+
+    private fun setSkeletonGradient() {
+        recycle_markets?.post {
+            recycle_markets?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_markets?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_markets?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_markets?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        }
+    }
 }

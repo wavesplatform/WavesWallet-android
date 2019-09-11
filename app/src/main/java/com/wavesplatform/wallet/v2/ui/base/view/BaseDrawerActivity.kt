@@ -13,11 +13,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
@@ -30,6 +34,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
     private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
+    private var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +115,32 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.image_twitter.click {
             analytics.trackEvent(AnalyticEvents.WavesMenuTwitterEvent)
             openTwitter(Constants.ACC_TWITTER)
+        }
+
+        becomeDeveloper()
+    }
+
+    private fun becomeDeveloper() {
+        slidingRootNav.layout.image_logo.click {
+            counter++
+            if (counter > 3) {
+                if (preferencesHelper.isDeveloper()) {
+                    Toast.makeText(this, "No need. You are already developer!", Toast.LENGTH_LONG).show()
+                } else {
+                    if (counter == 10) {
+                        counter = 0
+                        Toast.makeText(this, "You are developer!", Toast.LENGTH_LONG).show()
+                        preferencesHelper.setDeveloper(true)
+
+                        App.getAccessManager().resetWallet()
+                        App.getAccessManager().setLastLoggedInGuid("")
+                        finish()
+                        launchActivity<WelcomeActivity>(clear = true)
+                    } else {
+                        Toast.makeText(this, "You are almost developer! (${10 - counter})", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
         }
     }
 

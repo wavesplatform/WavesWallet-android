@@ -5,10 +5,10 @@
 
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 
 interface ChooseAccountOnClickListener {
     fun onEditClicked(position: Int)
     fun onDeleteClicked(position: Int)
-    fun onItemClicked(item: AddressBookUser)
+    fun onItemClicked(item: AddressBookUserDb)
 }

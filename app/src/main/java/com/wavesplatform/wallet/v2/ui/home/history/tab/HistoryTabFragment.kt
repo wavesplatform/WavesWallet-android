@@ -16,13 +16,13 @@ import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.fragment_history_tab.*
 import pers.victor.ext.inflate
 import java.util.*
@@ -79,11 +79,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         skeletonShow = true
 
         // make skeleton as designed
-        recycle_history.post {
-            recycle_history.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
-            recycle_history.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
-            recycle_history.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
-            recycle_history.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        recycle_history?.post {
+            recycle_history?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_history?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_history?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_history?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
@@ -160,7 +160,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         const val TYPE = "type"
 
-        fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
+        fun newInstance(type: String, asset: AssetBalanceResponse?): HistoryTabFragment {
             val historyDateItemFragment = HistoryTabFragment()
             val bundle = Bundle()
             bundle.putString(TYPE, type)
@@ -168,6 +168,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             historyDateItemFragment.arguments = bundle
             return historyDateItemFragment
         }
+    }
+
+    override fun onDestroyView() {
+        skeletonScreen?.hide()
+        super.onDestroyView()
     }
 
     interface ChangeTabBarVisibilityListener {

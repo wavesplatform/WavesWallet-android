@@ -15,16 +15,16 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click
@@ -60,6 +60,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+
         when (type) {
             TYPE_EMPTY -> {
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_empty_layout, container, false)
@@ -110,6 +111,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
         }
         progressBarFee = rootView.findViewById<ImageProgressBar>(R.id.progress_bar_fee_transaction)
         feeTransaction = rootView.findViewById(R.id.text_fee_transaction)
+
         return rootView
     }
 
@@ -132,7 +134,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
             }
 
             override fun showCommissionSuccess(unscaledAmount: Long) {
-                feeTransaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+                feeTransaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
                 progressBarFee.hide()
                 feeTransaction.visiable()
                 buttonCreateAlias.isEnabled = true
@@ -149,9 +151,9 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
 
     fun configureDialog(emptyType: Boolean, from: String) {
         type = if (emptyType) {
-            AliasBottomSheetFragment.TYPE_EMPTY
+            TYPE_EMPTY
         } else {
-            AliasBottomSheetFragment.TYPE_CONTENT
+            TYPE_CONTENT
         }
         this.from = from
     }
@@ -164,11 +166,9 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CREATE_ALIAS && resultCode == Constants.RESULT_OK) {
-            val aliasModel = data?.getParcelableExtra<Alias>(CreateAliasActivity.RESULT_ALIAS)
-            aliasModel.notNull {
-                onCreateAliasListener.notNull { listener ->
-                    listener.onSuccess()
-                }
+            val aliasModel = data?.getParcelableExtra<AliasTransactionResponse>(CreateAliasActivity.RESULT_ALIAS)
+            aliasModel.notNull { alias ->
+                onCreateAliasListener?.onSuccess(alias)
             }
         }
     }
@@ -177,11 +177,11 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
         buttonCreateAlias.isEnabled = networkConnected
     }
 
-    override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
+    override fun afterSuccessLoadAliases(ownAliases: List<AliasTransactionResponse>) {
     }
 
     interface OnCreateAliasListener {
-        fun onSuccess()
+        fun onSuccess(alias: AliasTransactionResponse)
     }
 
     companion object {

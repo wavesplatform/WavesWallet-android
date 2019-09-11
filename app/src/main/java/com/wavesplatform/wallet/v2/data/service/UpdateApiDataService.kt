@@ -19,10 +19,10 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class UpdateApiDataService : Service() {
 
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeServiceManager: NodeServiceManager
     @Inject
     lateinit var rxEventBus: RxEventBus
     var subscriptions: CompositeDisposable = CompositeDisposable()
@@ -49,7 +49,7 @@ class UpdateApiDataService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationId = (System.currentTimeMillis() % 10000).toInt()
             val channelId = "update_wavesplatform_history_data_service"
-            val channel = NotificationChannel(channelId, "Wavesplatform Channel",
+            val channel = NotificationChannel(channelId, "WavesSdk Channel",
                     NotificationManager.IMPORTANCE_MIN)
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                     .createNotificationChannel(channel)
@@ -58,21 +58,21 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (App.getAccessManager().getWallet() == null ||
+        if (!App.getAccessManager().isAuthenticated() ||
                 ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 stopForeground(true)
             } else {
                 stopSelf()
             }
-            return Service.START_NOT_STICKY
+            return START_NOT_STICKY
         }
 
-        val transaction = queryFirst<Transaction>()
+        val transaction = queryFirst<TransactionDb>()
         if (transaction == null) {
             transactionLimit = TransactionSaver.MAX_LIMIT
         }
-        subscriptions.add(nodeDataManager.loadTransactions(transactionLimit)
+        subscriptions.add(nodeServiceManager.loadTransactions(transactionLimit)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     if (it.isNotEmpty()) {
@@ -89,10 +89,10 @@ class UpdateApiDataService : Service() {
                     rxEventBus.post(Events.StopUpdateHistoryScreen())
                     it.printStackTrace()
                 }))
-        subscriptions.add(nodeDataManager.currentBlocksHeight()
+        subscriptions.add(nodeServiceManager.currentBlocksHeight()
                 .subscribe {
                 })
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {

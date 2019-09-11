@@ -14,14 +14,16 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -30,6 +32,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -52,7 +55,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
     private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
-    private var skeletonScreen: ViewSkeletonScreen? = null
 
     override fun configLayoutRes() = R.layout.fragment_asset_details_layout
 
@@ -97,12 +99,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         fillInformation(presenter.assetBalance)
 
         presenter.assetBalance.notNull {
-            skeletonScreen = Skeleton.bind(frame_last_transactions)
-                    .shimmer(true)
-                    .color(R.color.basic100)
-                    .load(R.layout.item_skeleton_wallet)
-                    .show()
-
             presenter.loadLastTransactionsFor(it, (activity as AssetDetailsActivity).getAllTransactions())
         }
 
@@ -112,13 +108,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 })
     }
 
-    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalance) {
+    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalanceResponse) {
         presenter.assetBalance = assetBalance
         fillInformation(assetBalance)
     }
 
     override fun showLastTransactions(data: MutableList<HistoryItem>) {
-        skeletonScreen?.hide()
 
         if (data.isNotEmpty()) {
             // configure clickable card
@@ -149,7 +144,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         }
     }
 
-    private fun configureTabsAccordingTo(assetBalance: AssetBalance?): ArrayList<HistoryTab> {
+    private fun configureTabsAccordingTo(assetBalance: AssetBalanceResponse?): ArrayList<HistoryTab> {
         val tabs = arrayListOf<HistoryTab>()
         assetBalance?.let { asset ->
             tabs.add(HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)))
@@ -165,7 +160,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         return tabs
     }
 
-    private fun fillInformation(assetBalance: AssetBalance?) {
+    private fun fillInformation(assetBalance: AssetBalanceResponse?) {
         formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         text_available_balance.text = assetBalance?.getDisplayAvailableBalance()
@@ -273,9 +268,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     override fun onDestroyView() {
         historyAdapter.items = emptyList()
         view_pager_transaction_history.adapter = null
-        skeletonScreen?.hide()
-        skeletonScreen = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        mvpDelegate.onDestroy()
+        super.onDestroy()
     }
 
     companion object {
@@ -286,7 +284,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Constants.RESULT_OK) {
             if (requestCode == TokenBurnActivity.REQUEST_BURN_CONFIRM) {
-                presenter.reloadAssetDetails(3000)
+                val totalBurn = data?.getBooleanExtra(TokenBurnConfirmationActivity.BUNDLE_TOTAL_BURN, false)
+                        ?: false
+
+                if (totalBurn) {
+                    onBackPressed()
+                } else {
+                    presenter.reloadAssetDetails(3000)
+                }
             }
         }
     }

@@ -11,6 +11,8 @@
     android:id="@+id/root"
     android:background="@color/white"
     android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
@@ -72,6 +74,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/item_your_assets"

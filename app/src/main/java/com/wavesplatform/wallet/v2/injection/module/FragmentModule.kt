@@ -25,7 +25,6 @@ import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.bank.BankFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
@@ -35,6 +34,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.widget.configuration.assets.MarketWidgetConfigurationAssetsBottomSheetFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -95,10 +95,6 @@ abstract class FragmentModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun bankFragment(): BankFragment
-
-    @PerFragment
-    @ContributesAndroidInjector
     internal abstract fun tradeMyOrdersFragment(): TradeMyOrdersFragment
 
     @PerFragment
@@ -156,4 +152,10 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun sponsoredFeeBottomSheetFragment(): SponsoredFeeBottomSheetFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun assetsBottomSheetFragment(): MarketWidgetConfigurationAssetsBottomSheetFragment
+
+
 }

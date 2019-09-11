@@ -17,6 +17,7 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
@@ -24,7 +25,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -54,7 +55,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var nodeServiceManager: NodeServiceManager
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
@@ -131,12 +132,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
-                analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
+                if (!MonkeyTest.isTurnedOn()) {
+                    analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
 
-                App.getAccessManager().deleteCurrentWavesWallet()
+                    App.getAccessManager().deleteCurrentWavesWallet()
 
-                presenter.prefsUtil.logOut()
-                App.getAccessManager().restartApp(activity!!)
+                    presenter.prefsUtil.logOut()
+                    restartApp()
+                }
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -147,8 +150,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         button_logout.click {
-            analytics.trackEvent(AnalyticEvents.ProfileLogoutDownEvent)
-            logout()
+            if (!MonkeyTest.isTurnedOn()) {
+                analytics.trackEvent(AnalyticEvents.ProfileLogoutDownEvent)
+                logout()
+            }
         }
 
         initFingerPrintControl()
@@ -290,16 +295,18 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_logout -> {
-                analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)
-                logout()
+                if (!MonkeyTest.isTurnedOn()) {
+                    analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)
+                    logout()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun logout() {
-        App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
+        App.getAccessManager().setLastLoggedInGuid("")
         finish()
         launchActivity<WelcomeActivity>(clear = true)
     }

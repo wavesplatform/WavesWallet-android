@@ -10,16 +10,15 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.item_assets_detailed_history.view.*
 import pers.victor.ext.*
 
@@ -130,7 +129,7 @@ class HistoryTransactionPagerAdapter constructor(
                 layout.text_tag_spam.visiable()
             } else {
                 if (isShowTicker(item.data.assetId)) {
-                    val ticker = item.data.asset?.getTicker()
+                    val ticker = item.data.asset?.getTokenTicker()
                     if (!ticker.isNullOrBlank()) {
                         layout.text_tag.text = ticker
                         layout.text_tag.visiable()
@@ -163,7 +162,7 @@ class HistoryTransactionPagerAdapter constructor(
         return view === `object`
     }
 
-    private fun setExchangeItem(transaction: Transaction, view: View) {
+    private fun setExchangeItem(transaction: HistoryTransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
@@ -180,7 +179,7 @@ class HistoryTransactionPagerAdapter constructor(
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == WavesConstants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -194,7 +193,7 @@ class HistoryTransactionPagerAdapter constructor(
                 secondOrder.assetPair?.priceAssetObject?.name)
 
         val amountAssetTicker = if (amountAsset.name == "WAVES") {
-            Constants.WAVES_ASSET_ID_FILLED
+            WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

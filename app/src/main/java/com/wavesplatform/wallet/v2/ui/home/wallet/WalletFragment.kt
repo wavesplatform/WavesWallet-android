@@ -13,15 +13,18 @@ import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.fragment_wallet.info_alert
+import kotlinx.android.synthetic.main.fragment_wallet.view.*
 import javax.inject.Inject
 
 
@@ -31,6 +34,7 @@ class WalletFragment : BaseFragment(), WalletView {
     @InjectPresenter
     lateinit var presenter: WalletPresenter
     private lateinit var adapter: WalletFragmentPageAdapter
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
@@ -45,6 +49,7 @@ class WalletFragment : BaseFragment(), WalletView {
 
         val elevationAppBarChangeListener = object : MainActivity.OnElevationAppBarChangeListener {
             override fun onChange(elevateEnable: Boolean) {
+                presenter.shadowEnable = elevateEnable
                 enableElevation(elevateEnable)
             }
         }
@@ -70,7 +75,6 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     private fun setupUI() {
-        viewpager_wallet.offscreenPageLimit = 2
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
 
@@ -84,23 +88,26 @@ class WalletFragment : BaseFragment(), WalletView {
             }
 
             override fun onPageSelected(position: Int) {
-                val enable = if (position == 0) {
-                    (adapter.fragments[position] as AssetsFragment).presenter.enableElevation
-                } else {
-                    (adapter.fragments[position] as LeasingFragment).presenter.enableElevation
-                }
-                enableElevation(enable)
+                presenter.shadowEnable = (adapter.fragments[position] as WalletTabShadowListener).isShadowEnable()
+                enableElevation(presenter.shadowEnable)
             }
         })
 
         stl_wallet.setCurrentTab(0, false)
     }
 
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
+    }
+
     private fun enableElevation(enable: Boolean) {
-        if (enable) {
-            ViewCompat.setZ(wallet_appbar_layout, 8F)
-        } else {
-            ViewCompat.setZ(wallet_appbar_layout, 0F)
+        onElevationAppBarChangeListener?.onChange(true)
+        wallet_appbar_layout.notNull {
+            if (enable) {
+                ViewCompat.setZ(wallet_appbar_layout, 8F)
+            } else {
+                ViewCompat.setZ(wallet_appbar_layout, 0F)
+            }
         }
     }
 
@@ -117,6 +124,13 @@ class WalletFragment : BaseFragment(), WalletView {
                 }
             }.show()
             setScrollAlert(true)
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            enableElevation(presenter.shadowEnable)
         }
     }
 

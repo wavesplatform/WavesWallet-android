@@ -9,27 +9,24 @@ import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
+import com.wavesplatform.sdk.model.request.node.BaseTransaction
+import com.wavesplatform.sdk.model.request.node.TransferTransaction
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
+import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
+import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.crypto.Hash
-import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
+import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
-import com.wavesplatform.wallet.v2.util.isSpamConsidered
-import com.wavesplatform.wallet.v2.util.isValidWavesAddress
-import com.wavesplatform.wallet.v2.util.isWaves
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -37,21 +34,20 @@ import javax.inject.Inject
 class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var gatewayProvider: GatewayProvider
+    var gatewayMetadata: GatewayMetadata = GatewayMetadata()
 
-    var selectedAsset: AssetBalance? = null
+    var type: Type = Type.UNKNOWN
+    var selectedAsset: AssetBalanceResponse? = null
+
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
     var moneroPaymentId: String? = null
     var recipientAssetId: String? = null
-    var type: Type? = null
-    var gatewayCommission: BigDecimal = BigDecimal.ZERO
-    var gatewayMin: BigDecimal = BigDecimal.ZERO
-    var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance? = null
+    var feeAsset: AssetBalanceResponse? = null
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -65,7 +61,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     fun checkAlias(alias: String) {
         if (alias.length in 4..30) {
             addSubscription(
-                    apiDataManager.loadAlias(alias)
+                    dataServiceManager.loadAlias(alias)
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({ _ ->
                                 type = Type.ALIAS
@@ -80,16 +76,15 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
-    private fun getTxRequest(): TransactionsBroadcastRequest {
-        return TransactionsBroadcastRequest(
-                selectedAsset?.assetId ?: "",
-                App.getAccessManager().getWallet()!!.publicKeyStr,
-                recipient ?: "",
-                MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
-                EnvironmentManager.getTime(),
-                fee,
-                "",
-                feeAsset?.assetId ?: "")
+    private fun getTxRequest(): TransferTransaction {
+        val transaction = TransferTransaction(
+                assetId = selectedAsset?.assetId ?: "",
+                recipient = recipient ?: "",
+                amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
+                attachment = SignUtil.textToBase58(""),
+                feeAssetId = feeAsset?.assetId ?: "")
+        transaction.fee = fee
+        return transaction
     }
 
     private fun validateTransfer(): Int {
@@ -99,18 +94,18 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return R.string.invalid_address
         } else {
             val tx = getTxRequest()
-            if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
-                    > TransferTransactionRequest.MaxAttachmentSize) {
+            if (TransferTransaction.getAttachmentSize(tx.attachment)
+                    > TransferTransaction.MAX_ATTACHMENT_SIZE) {
                 return R.string.attachment_too_long
             } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                 return R.string.invalid_amount
-            } else if (tx.fee <= 0 || (feeAsset?.isWaves() != false && tx.fee < Constants.WAVES_MIN_FEE)) {
+            } else if (tx.fee <= 0 || (feeAsset?.isWaves() != false && tx.fee < WavesConstants.WAVES_MIN_FEE)) {
                 return R.string.insufficient_fee
             } else if (!isFundSufficient(tx)) {
                 return R.string.insufficient_funds
             } else if (isGatewayAmountError()) {
                 return R.string.insufficient_gateway_funds_error
-            } else if (Constants.findByGatewayId("XMR")?.assetId == recipientAssetId &&
+            } else if (findByGatewayId("XMR")?.assetId == recipientAssetId &&
                     moneroPaymentId != null &&
                     (moneroPaymentId?.length != MONERO_PAYMENT_ID_LENGTH ||
                             moneroPaymentId?.contains(" ".toRegex()) == true)) {
@@ -121,27 +116,28 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun isGatewayAmountError(): Boolean {
-        if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
-            val totalAmount = amount + gatewayCommission
+        if ((type == Type.ERGO || type == Type.VOSTOK || type == Type.GATEWAY)
+                && selectedAsset != null && gatewayMetadata.maxLimit.toFloat() > 0) {
+            val totalAmount = amount + gatewayMetadata.fee
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
                     selectedAsset!!.getDecimals())
             return !(balance >= totalAmount &&
-                    totalAmount >= gatewayMin &&
-                    totalAmount <= gatewayMax)
+                    totalAmount >= gatewayMetadata.minLimit &&
+                    totalAmount <= gatewayMetadata.maxLimit)
         }
         return false
     }
 
-    private fun isFundSufficient(tx: TransactionsBroadcastRequest): Boolean {
+    private fun isFundSufficient(tx: TransferTransaction): Boolean {
         return if (isSameSendingAndFeeAssets()) {
-            tx.amount + tx.fee <= selectedAsset!!.balance!!
+            tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            val validFee = if (tx.feeAssetId?.isWaves() == true) {
-                tx.fee <= queryFirst<AssetBalance> { equalTo("assetId", "") }?.balance ?: 0
+            val validFee = if (tx.feeAssetId.isWaves()) {
+                tx.fee <= queryFirst<AssetBalanceDb> {
+                    equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
             } else {
                 true
             }
-
             tx.amount <= selectedAsset!!.balance!! && validFee
         }
     }
@@ -153,38 +149,20 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    fun loadXRate(assetId: String) {
-        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
-        if (currencyTo.isNullOrEmpty()) {
-            type = Type.UNKNOWN
-            runOnUiThread {
-                viewState.showXRateError()
-            }
-            return
-        }
-
-        val currencyFrom = "W$currencyTo"
-        runAsync {
-            addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
-                    .subscribe({ xRate ->
-                        type = Type.GATEWAY
-                        gatewayCommission = BigDecimal(xRate.feeOut ?: "0")
-                        gatewayMin = BigDecimal(xRate.inMin ?: "0")
-                        gatewayMax = BigDecimal(xRate.inMax ?: "0")
-                        runOnUiThread {
-                            if (xRate == null) {
-                                viewState.showXRateError()
-                            } else {
-                                viewState.showXRate(xRate, currencyTo)
-                            }
-                        }
-                    }, {
-                        type = Type.UNKNOWN
-                        runOnUiThread {
-                            viewState.showXRateError()
-                        }
-                    }))
-        }
+    fun loadGatewayMetadata(assetId: String) {
+        addSubscription(gatewayProvider
+                .getGatewayDataManager(assetId)
+                .loadGatewayMetadata(GatewayMetadataArgs(selectedAsset, recipient))
+                .executeInBackground()
+                .subscribe({ metadata ->
+                    type = Type.GATEWAY
+                    val gatewayTicket = Constants.coinomatCryptoCurrencies()[assetId]
+                    gatewayMetadata = metadata
+                    viewState.onLoadMetadataSuccess(metadata, gatewayTicket)
+                }, {
+                    type = Type.UNKNOWN
+                    viewState.onLoadMetadataError()
+                }))
     }
 
     fun isRecipientValid(): Boolean? {
@@ -196,11 +174,19 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return null
         }
 
-        if (type == Type.GATEWAY && selectedAsset!!.assetId.equals(recipientAssetId)) {
+        if (type == Type.GATEWAY && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
-        if (type == Type.WAVES && isWavesAddress(recipient)) {
+        if (type == Type.WAVES && recipient.isValidWavesAddress()) {
+            return true
+        }
+
+        if (type == Type.VOSTOK && recipient.isValidVostokAddress() && selectedAsset!!.assetId == recipientAssetId) {
+            return true
+        }
+
+        if (type == Type.ERGO && recipient.isValidErgoAddress() && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
@@ -215,12 +201,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(),
-                nodeDataManager.assetDetails(assetId),
-                Function3 { t1: GlobalTransactionCommission,
-                            t2: ScriptInfo,
-                            t3: AssetsDetails ->
+                githubServiceManager.getGlobalCommission(),
+                nodeServiceManager.scriptAddressInfo(),
+                nodeServiceManager.assetDetails(assetId),
+                Function3 { t1: GlobalTransactionCommissionResponse,
+                            t2: ScriptInfoResponse,
+                            t3: AssetsDetailsResponse ->
                     return@Function3 Triple(t1, t2, t3)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -228,11 +214,11 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     val commission = triple.first
                     val scriptInfo = triple.second
                     val assetsDetails = triple.third
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.TRANSFER
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = BaseTransaction.TRANSFER
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
-                    fee = countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     feeWaves = fee
                     viewState.showCommissionSuccess(fee)
                 }, {
@@ -244,13 +230,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     fun loadAssetForLink(assetId: String, url: String) {
         addSubscription(
-                nodeDataManager.assetDetails(assetId)
+                nodeServiceManager.assetDetails(assetId)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe({ assetsDetails ->
-                            val assetBalance = AssetBalance(
+                            val assetBalance = AssetBalanceResponse(
                                     assetsDetails.assetId,
                                     quantity = assetsDetails.quantity,
-                                    issueTransaction = IssueTransaction(
+                                    issueTransaction = IssueTransactionResponse(
                                             assetId = assetsDetails.assetId,
                                             id = assetsDetails.assetId,
                                             name = assetsDetails.name,
@@ -260,7 +246,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                             reissuable = assetsDetails.reissuable,
                                             timestamp = assetsDetails.issueTimestamp,
                                             sender = assetsDetails.issuer))
-                            assetBalance.save()
+                            AssetBalanceDb(assetBalance).save()
                             if (!TextUtils.isEmpty(url)) {
                                 viewState.setDataFromUrl(url)
                             } else {
@@ -275,10 +261,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     companion object {
-        const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
-        fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
+        fun getAssetId(recipient: String?, assetBalance: AssetBalanceResponse?): String? {
             val configAsset = EnvironmentManager.globalConfiguration.generalAssets
                     .firstOrNull { it.assetId == assetBalance?.assetId }
 
@@ -288,37 +273,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 null
             }
         }
-
-        fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidWavesAddress()) {
-                return false
-            }
-
-            val addressBytes = Base58.decode(address)
-
-            if (addressBytes[0] != 1.toByte() ||
-                    addressBytes[1] != EnvironmentManager.netCode) {
-                return false
-            }
-
-            val key = addressBytes.slice(IntRange(0, 21))
-            val check = addressBytes.slice(IntRange(22, 25))
-            val keyHash = Hash.secureHash(key.toByteArray())
-                    .toList()
-                    .slice(IntRange(0, 3))
-
-            for (i in 0..3) {
-                if (check[i] != keyHash[i]) {
-                    return false
-                }
-            }
-            return true
-        }
     }
 
     enum class Type {
         ALIAS,
         WAVES,
+        VOSTOK,
+        ERGO,
         GATEWAY,
         UNKNOWN
     }

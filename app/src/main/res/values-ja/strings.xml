@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">以下の情報を支払詳細欄に記入する必要があります。</string>
-  <string name="about_fill_payment_info">CNM — あなたの WAVES アドレス. \nもしそれを実行しないならあなたのアカウントを入金しません。</string>
   <string name="about_redirection_message">認証後にあなたは案内が記載されたメールを受信します</string>
   <string name="about_redirection_okay">OK</string>
   <string name="about_redirection_title">あなたは«IDNow» \n認証にリダイレクトされました</string>
@@ -136,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1時間</string>
   <string name="chart_time_frame_24_hours">24時間</string>
   <string name="chart_time_frame_30_min">30分</string>
-  <string name="chart_time_frame_4_hours">4時間</string>
+  <string name="chart_time_frame_3_hours">3時間</string>
   <string name="chart_time_frame_5_min">5分</string>
   <string name="check_connectivity_exit">インターネット接続がありません</string>
   <string name="choose_account">アカウントを選択</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">%1$s の数量</string>
   <string name="receive_asset">トークン</string>
   <string name="receive_card">カード</string>
-  <string name="receive_contact_msg">認証や支払い処理に問題が発生した場合には、Coinomatのサポートチーム(support@coinomat.com)までお問い合わせください。</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">次へ</string>
   <string name="receive_cryptocurrency">暗号通貨</string>
   <string name="receive_dont_accept_international">私たちはアメリカ市民もしくはアメリカの銀行からの国際送金を受け付けることができません。</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">再度お試しください</string>
-  <string name="send_gateway_error_title">Coinomatのサービスは一時的にご利用いただけません</string>
+  <string name="send_gateway_error_title">サービスは現在利用することができません</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">手数料は送信される金額の1%です</string>
   <string name="send_gateway_info_gateway_fee">ゲートウェイの手数料は %1$s %2$s です</string>
-  <string name="send_gateway_info_gateway_limits">私たちは、%1$s のアドレスを検出し、そのアドレスにCoinomatゲートウェイを経由してあなたのお金を送信します。最少額は %2$s %1$s、最大額は %3$s %1$sです。</string>
+  <string name="send_gateway_info_gateway_limits">私たちは、%1$s のアドレスを検出し、そのアドレスにゲートウェイを経由してあなたのお金を送信します。最少額は %2$s %1$s、最大額は %3$s %1$sです。</string>
   <string name="send_gateway_info_gateway_warning">%1$s をICOの為に引き出さないで下さい。そのセールに関するトークンを私達はデポジットしません。</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">すでに認証を取得し米ドルの入金を行っている場合は、そのドルを引き出してあなたの銀行口座に戻すことができます。まだの場合は、私たちのパートナーであるIDNow.euの認証を取得してください。</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">最低入金額は500米ドルです。なにかご不明な点がございましたら、support@coinomat.com までお問い合わせください</string>
   <string name="send_monero_payment_id">MoneroペイメントID</string>
   <string name="send_monero_payment_id_hint">支払IDを貼り付けまたは入力してください</string>
   <string name="send_progress_sending">送信中…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">お気に入りにトークンが登録されていません</string>
   <string name="wallet_sorting_default_empty">トークンのリストが空です</string>
   <string name="wallet_sorting_hidden_empty">非表示リストにトークンが登録されていません</string>
+  <string name="common_permission_error_title">カメラ機能へのアクセス権が必要です</string>
+  <string name="common_permission_error_description">このアプリはカメラ機能を使用するための許可が必要です。アプリの設定からアクセス権を付与することができます。</string>
+  <string name="common_permission_error_settings">設定</string>
+  <string name="common_permission_error_cancel">キャンセル</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">あなたの注文価格は 5% 市場価格よりも高いです</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">あなたの注文価格は 5% 市場価格よりも安いです</string>
+  <string name="trade_order_dialog_positive_place_order">注文する</string>
+  <string name="trade_order_dialog_negative_cancel">キャンセル</string>
+  <string name="trade_order_dialog_subtitle_proceed">次へ進みますか？</string>
 </resources>

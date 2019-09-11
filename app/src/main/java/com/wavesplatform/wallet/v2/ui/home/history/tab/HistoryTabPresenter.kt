@@ -9,21 +9,22 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
+import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
-import com.wavesplatform.wallet.v2.data.manager.AccessManager
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
-import com.wavesplatform.wallet.v2.util.isWavesId
+import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.isSponsorshipTransaction
 import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,11 +36,11 @@ import javax.inject.Inject
 
 @InjectViewState
 class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>() {
-    var allItemsFromDb = listOf<Transaction>()
+    var allItemsFromDb = listOf<HistoryTransactionResponse>()
     var totalHeaders = 0
     var type: String? = "all"
     var hashOfTimestamp = hashMapOf<Long, Long>()
-    var assetBalance: AssetBalance? = null
+    var assetBalance: AssetBalanceResponse? = null
 
     @Inject
     lateinit var transactionSaver: TransactionSaver
@@ -64,9 +65,9 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun loadFromDb(): Single<ArrayList<HistoryItem>> {
         Log.d("historydev", "on presenter")
-        val singleData: Single<List<Transaction>> = when (type) {
+        val singleData: Single<List<TransactionDb>> = when (type) {
             HistoryTabFragment.all -> {
-                queryAllAsSingle<Transaction>()
+                queryAllAsSingle<TransactionDb>()
                         .map {
                             return@map filterNodeCancelLeasing(it)
                         }
@@ -81,7 +82,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leased -> {
-                queryAsSingle<Transaction> {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
                             Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
                 }.map {
@@ -101,7 +102,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_all -> {
-                queryAsSingle<Transaction> {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
                             Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
                 }.map {
@@ -116,20 +117,21 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
-                queryAsSingle<Transaction> {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
                 }.map {
                     return@map filterNodeCancelLeasing(it)
                 }
             }
             else -> {
-                queryAllAsSingle<Transaction>().map {
+                queryAllAsSingle<TransactionDb>().map {
                     return@map filterNodeCancelLeasing(it)
                 }
             }
         }
 
-        return singleData.map { transitions ->
+        return singleData.map { transitionsDb ->
+            val transitions = TransactionDb.convertFromDb(transitionsDb)
             allItemsFromDb = if (assetBalance == null) {
                 filterSpam(transitions).sortedByDescending { transaction -> transaction.timestamp }
             } else {
@@ -140,9 +142,9 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
     }
 
-    private fun filterNodeCancelLeasing(transactions: List<Transaction>): List<Transaction> {
+    private fun filterNodeCancelLeasing(transactions: List<TransactionDb>): List<TransactionDb> {
         return transactions.filter { transaction ->
-            if (transaction.transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
+            if (transaction.convertFromDb().transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
                 true
             } else {
                 transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
@@ -150,7 +152,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
     }
 
-    private fun filterSpam(transitions: List<Transaction>): List<Transaction> {
+    private fun filterSpam(transitions: List<HistoryTransactionResponse>): List<HistoryTransactionResponse> {
         val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
         return if (enableSpamFilter) {
             transitions.filter { !(it.asset?.isSpam ?: false) }
@@ -159,7 +161,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
     }
 
-    private fun filterDetailed(transactions: List<Transaction>, assetId: String): List<Transaction> {
+    private fun filterDetailed(transactions: List<HistoryTransactionResponse>, assetId: String): List<HistoryTransactionResponse> {
         return transactions.filter { transaction ->
             (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
                     AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId) ||
@@ -169,7 +171,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     }
 
     fun loadLastTransactions() {
-        addSubscription(nodeDataManager.loadLightTransactions()
+        addSubscription(nodeServiceManager.loadLightTransactions()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ list ->
@@ -184,7 +186,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }))
     }
 
-    private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
+    private fun sortAndConfigToUi(it: List<HistoryTransactionResponse>): ArrayList<HistoryItem> {
         init()
 
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy",

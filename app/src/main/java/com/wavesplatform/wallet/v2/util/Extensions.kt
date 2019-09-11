@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.util
 
+import android.Manifest
 import android.app.Activity
-import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -36,33 +36,44 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
-import android.util.Patterns
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.common.primitives.Bytes
-import com.google.common.primitives.Shorts
+import com.google.zxing.integration.android.IntentIntegrator
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.calcCheckSum
+import com.wavesplatform.sdk.model.request.node.*
+import com.wavesplatform.sdk.model.response.ErrorResponse
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.LastTradesResponse
+import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.sdk.model.response.node.OrderResponse
+import com.wavesplatform.sdk.net.NetworkException
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pers.victor.ext.Ext.ctx
-import pyxis.uzuki.live.richutilskt.utils.asDateString
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pyxis.uzuki.live.richutilskt.impl.F2
+import pyxis.uzuki.live.richutilskt.utils.*
 import java.io.File
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.*
+import kotlin.arrayOf
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -87,6 +98,63 @@ inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
             }
         }
     })
+}
+
+fun String.formatBaseUrl(): String {
+    return if (this.isNotEmpty()) {
+        if (this.lastOrNull() == '/') {
+            this
+        } else {
+            this.plus("/")
+        }
+    } else {
+        this
+    }
+}
+
+const val REQUEST_SCAN_QR_CODE = 876
+fun Activity.launchQrCodeScanner(requestCode: Int = REQUEST_SCAN_QR_CODE) {
+    RPermission.instance.checkPermission(this, arrayOf(Manifest.permission.CAMERA), F2 { result, permissions ->
+        if (result == RPermission.PERMISSION_GRANTED) {
+            IntentIntegrator(this)
+                    .setRequestCode(requestCode)
+                    .setOrientationLocked(true)
+                    .setBeepEnabled(false)
+                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                    .initiateScan()
+        } else {
+            AlertDialog.Builder(this)
+                    .create()
+                    .apply {
+                        setTitle(getString(R.string.common_permission_error_title))
+                        setMessage(getString(R.string.common_permission_error_description))
+                        setButton(
+                                AlertDialog.BUTTON_POSITIVE,
+                                getString(R.string.common_permission_error_settings)) { dialog, _ ->
+                            launchPermissionsAppSettings()
+                            dialog.dismiss()
+                        }
+                        setButton(
+                                AlertDialog.BUTTON_NEGATIVE,
+                                getString(R.string.common_permission_error_cancel)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        show()
+                        makeStyled()
+                    }
+        }
+    })
+}
+
+fun Context.launchPermissionsAppSettings() {
+    val intent = Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data = Uri.fromParts("package", packageName, null)
+        addCategory(Intent.CATEGORY_DEFAULT)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    }
+    startActivity(intent)
 }
 
 fun View.animateVisible() {
@@ -144,21 +212,6 @@ fun Long.currentDateAsTimeSpanString(context: Context): String {
     return context.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
 }
 
-fun String.isWaves(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
-}
-
-fun String.withWavesIdConvert(): String {
-    if (this.isWaves()) {
-        return ""
-    }
-    return this
-}
-
-fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
 /**
  * @param action constant from EditorInfo
  * @see android.view.inputmethod.EditorInfo
@@ -189,20 +242,6 @@ fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, R : Any> safeLet(p1: T1?, p2: T2?, 
 
 fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, T5 : Any, R : Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, p5: T5?, block: (T1, T2, T3, T4, T5) -> R?): R? {
     return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(p1, p2, p3, p4, p5) else null
-}
-
-fun String.isWavesId(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.id
-}
-
-fun ByteArray.arrayWithSize(): ByteArray {
-    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
-}
-
-fun String.clearBalance(): String {
-    return this.stripZeros()
-            .replace(MoneyUtil.DEFAULT_SEPARATOR_COMMA.toString(), "")
-            .replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
 fun View.makeBackgroundWithRippleEffect() {
@@ -256,10 +295,6 @@ fun Activity.openUrlWithIntent(url: String) {
     startActivity(browserIntent)
 }
 
-fun Transaction.transactionType(): TransactionType {
-    return TransactionType.getTypeById(this.transactionTypeId)
-}
-
 fun TransactionType.icon(): Drawable? {
     return ContextCompat.getDrawable(app, this.image)
 }
@@ -283,18 +318,6 @@ fun AlertDialog.makeStyled() {
     buttonNegative?.setTextColor(findColor(R.color.submit300))
 }
 
-fun Context.isAppOnForeground(): Boolean {
-    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
-            ?: return false
-    val packageName = packageName
-    appProcesses?.forEach {
-        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-                it.processName.equals(packageName)) {
-            return true
-        }
-    }
-    return false
-}
 
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
     forEach {
@@ -327,8 +350,6 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
-fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).clearBalance().toDouble()
-
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     return if (numDecimalPlaces != null) {
         val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
@@ -337,9 +358,6 @@ fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
         this
     }
 }
-
-fun ClosedRange<Int>.random() =
-        Random().nextInt((endInclusive + 1) - start) + start
 
 fun TextView.makeLinks(links: Array<String>, clickableSpans: Array<ClickableSpan>) {
     val spannableString = SpannableString(this.text)
@@ -371,15 +389,6 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
             lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
-}
-
-fun String.isWebUrl(): Boolean {
-    return Patterns.WEB_URL.matcher(this.trim()).matches()
-}
-
-fun String.stripZeros(): String {
-    if (this == "0.0") return this
-    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
@@ -496,22 +505,10 @@ fun View.copyToClipboard(
     }
 }
 
-inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
-    var sum = 0L
-    for (element in this) {
-        sum += selector(element)
-    }
-    return sum
-}
-
-fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
-    if (this != null) f(this)
-}
 
 /**
  * Extensions for simpler launching of Activities
  */
-
 inline fun <reified T : Any> Activity.launchActivity(
         requestCode: Int = -1,
         clear: Boolean = false,
@@ -626,41 +623,57 @@ fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
     }
     val str = SpannableStringBuilder(value)
     when {
-        value.indexOf(".") != -1 && !boldWholeValue -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        value.indexOf(" ") != -1 -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        else -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        value.indexOf(".") != -1 && !boldWholeValue ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf("."),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        value.indexOf(" ") != -1 ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf(" "),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        else ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, value.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     this.text = str.append(" $tokenName")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String?): Order {
-    return if (first.sender == second.sender) {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    } else if (first.sender == address) {
-        first
-    } else if (second.sender == address) {
-        second
-    } else {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    }
+
+fun find(assetId: String): AssetBalanceResponse? {
+    return (queryFirst<AssetBalanceDb> { equalTo("assetId", assetId) })?.convertFromDb()
 }
 
-fun AssetBalance.getMaxDigitsBeforeZero(): Int {
+fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
+    for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
+        if (asset.gatewayId.contains(gatewayId)) {
+            return find(asset.assetId)
+        }
+    }
+    return null
+}
+
+fun findInConstantsGeneralAssets(ticker: String): AssetBalanceResponse? {
+    for (asset in listOf(Constants.MrtGeneralAsset, Constants.WctGeneralAsset, Constants.VstGeneralAsset)) {
+        if (asset.gatewayId.contains(ticker)) {
+            return find(asset.assetId)
+        }
+    }
+    return null
+}
+
+fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
     return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
             .replace(",", "")
             .split(".")[0].length
 }
 
-fun loadDbWavesBalance(): AssetBalance {
-    return Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+
+fun AssetInfoResponse.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity, this.precision)
+            .replace(",", "")
+            .split(".")[0].length
+}
+
+fun loadDbWavesBalance(): AssetBalanceResponse {
+    return find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun getDeviceId(): String {
@@ -668,7 +681,7 @@ fun getDeviceId(): String {
 }
 
 fun Throwable.errorBody(): ErrorResponse? {
-    return if (this is RetrofitException) {
+    return if (this is NetworkException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
     } else {
         null
@@ -678,40 +691,6 @@ fun Throwable.errorBody(): ErrorResponse? {
 fun ResponseBody.clone(): ResponseBody {
     val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
-}
-
-fun ErrorResponse.isSmartError(): Boolean {
-    return this.error in 305..308
-}
-
-fun AssetInfo.getTicker(): String {
-
-    if (this.id.isWavesId()) {
-        return Constants.wavesAssetInfo.name
-    }
-
-    return this.ticker ?: this.name
-}
-
-fun getScaledAmount(amount: Long, decimals: Int): String {
-    val absAmount = Math.abs(amount)
-    val value = BigDecimal.valueOf(absAmount, decimals)
-    if (amount == 0L) {
-        return "0"
-    }
-
-    val sign = if (amount < 0) "-" else ""
-
-    return sign + when {
-        value >= MoneyUtil.ONE_B -> value.divide(MoneyUtil.ONE_B, 1, RoundingMode.FLOOR)
-                .toPlainString().stripZeros() + "B"
-        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.FLOOR)
-                .toPlainString().stripZeros() + "M"
-        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.FLOOR)
-                .toPlainString().stripZeros() + "k"
-        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
-                .stripZeros() + ""
-    }
 }
 
 fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {
@@ -743,16 +722,22 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isSpam(assetId: String?): Boolean {
-    return (App.getAccessManager().getWallet() != null
-            && (null != queryFirst<SpamAsset> { equalTo("assetId", assetId) }))
+    return (App.getAccessManager().isAuthenticated()
+            && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
-fun isShowTicker(assetId: String?): Boolean {
-    return assetId.isNullOrEmpty() || EnvironmentManager.globalConfiguration.generalAssets
-            .plus(EnvironmentManager.globalConfiguration.assets)
-            .any {
-                it.assetId == assetId
-            }
+fun AssetBalanceResponse.getItemType(): Int {
+    return when {
+        isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
+        isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
+        else -> AssetsAdapter.TYPE_ASSET
+    }
+}
+
+fun restartApp() {
+    val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    App.getAppContext().startActivity(intent)
 }
 
 fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
@@ -762,19 +747,299 @@ fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): Strin
     return localizedContext.resources.getString(id)
 }
 
-fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBalance> {
+fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List<AssetBalanceResponse> {
     return if (TextUtils.isEmpty(query)) {
         list.filter { !it.isSpam }
     } else {
         val queryLower = query!!.toLowerCase()
         list.filter { !it.isSpam }
                 .filter {
-                    it.assetId.toLowerCase().contains(queryLower)
+                    it.assetId.toLowerCase().equals(queryLower)
                             || it.getName().toLowerCase().contains(queryLower)
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
-                            || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
-                            || it.assetId == Constants.findByGatewayId(query.toUpperCase())?.assetId
-                            || it.assetId == Constants.findInConstantsGeneralAssets(query.toUpperCase())?.assetId
+                            || it.issueTransaction?.assetId?.toLowerCase()?.equals(queryLower) ?: false
+                            || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
+                            || it.assetId == findInConstantsGeneralAssets(query.toUpperCase())?.assetId
                 }
     }
+}
+
+fun isShowTicker(assetId: String?): Boolean {
+    return assetId.isNullOrEmpty() || com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
+            .plus(com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.assets)
+            .any {
+                it.assetId == assetId
+            }
+}
+
+fun isFiat(assetId: String): Boolean {
+    return Constants.defaultFiat().any { it == assetId }
+}
+
+fun isGateway(assetId: String): Boolean {
+    return when {
+        assetId.isWavesId() -> false
+        Constants.defaultCrypto().any { it == assetId } -> true
+        else -> false
+    }
+}
+
+fun AssetPairOrderResponse.getStatus(): OrderStatus {
+    return when (status) {
+        AssetPairOrderResponse.API_STATUS_ACCEPTED -> OrderStatus.Accepted
+        AssetPairOrderResponse.API_STATUS_PARTIALLY_FILLED -> OrderStatus.PartiallyFilled
+        AssetPairOrderResponse.API_STATUS_CANCELLED -> OrderStatus.Cancelled
+        AssetPairOrderResponse.API_STATUS_FILLED -> OrderStatus.Filled
+        else -> OrderStatus.Filled
+    }
+}
+
+fun AssetPairOrderResponse.getScaledFilled(amountAssetDecimals: Int?): String {
+    val notScaledValue = if (getStatus() == OrderStatus.Filled) {
+        amount
+    } else {
+        filled
+    }
+    return MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(notScaledValue,
+            amountAssetDecimals ?: 8))
+}
+
+fun AssetPairOrderResponse.getType(): OrderType {
+    return type.getOrderType()
+}
+
+fun LastTradesResponse.DataResponse.ExchangeTransactionResponse.ExchangeOrderResponse.getType(): OrderType {
+    return orderType.getOrderType()
+}
+
+fun OrderResponse.getType(): OrderType {
+    return orderType.getOrderType()
+}
+
+fun String.getOrderType(): OrderType {
+    return when (this) {
+        WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
+        WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
+        else -> OrderType.BUY
+    }
+}
+
+fun addressByPublicKey(publicKey: String): String {
+    return WavesCrypto.addressFromPublicKey(
+            WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
+}
+
+fun getTransactionType(transaction: BaseTransaction, address: String, spam: Set<String>?): Int {
+    val sender = addressByPublicKey(transaction.senderPublicKey)
+    when {
+        transaction.type == BaseTransaction.TRANSFER -> {
+            transaction as TransferTransaction
+            if (sender == address) {
+                if (sender == transaction.recipient) {
+                    return Constants.ID_SELF_TRANSFER_TYPE
+                }
+                return Constants.ID_SENT_TYPE
+            } else {
+                if (spam != null && spam.isNotEmpty() && spam.contains(transaction.assetId)) {
+                    return Constants.ID_SPAM_RECEIVE_TYPE
+                }
+                if (transaction.recipient != address) {
+                    return Constants.ID_RECEIVE_SPONSORSHIP_TYPE
+                }
+                return Constants.ID_RECEIVED_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.MASS_TRANSFER -> {
+            transaction as MassTransferTransaction
+            return if (sender == address) {
+                Constants.ID_MASS_SEND_TYPE
+            } else {
+                if (spam != null && spam.isNotEmpty() && spam.contains(transaction.assetId)) {
+                    Constants.ID_MASS_SPAM_RECEIVE_TYPE
+                } else {
+                    Constants.ID_MASS_RECEIVE_TYPE
+                }
+            }
+        }
+        transaction.type == BaseTransaction.CANCEL_LEASING -> {
+            transaction as LeaseCancelTransaction
+            return if (sender == address) {
+                if (transaction.leaseId.isEmpty()) {
+                    Constants.ID_UNRECOGNISED_TYPE
+                } else {
+                    Constants.ID_CANCELED_LEASING_TYPE
+                }
+            } else {
+                Constants.ID_RECEIVED_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.EXCHANGE -> return Constants.ID_EXCHANGE_TYPE
+        transaction.type == BaseTransaction.ISSUE -> return Constants.ID_TOKEN_GENERATION_TYPE
+        transaction.type == BaseTransaction.BURN -> return Constants.ID_TOKEN_BURN_TYPE
+        transaction.type == BaseTransaction.REISSUE -> return Constants.ID_TOKEN_REISSUE_TYPE
+        transaction.type == BaseTransaction.CREATE_ALIAS -> return Constants.ID_CREATE_ALIAS_TYPE
+        transaction.type == BaseTransaction.CREATE_LEASING -> {
+            transaction as LeaseTransaction
+            return if (transaction.recipient == address) {
+                Constants.ID_INCOMING_LEASING_TYPE
+            } else {
+                Constants.ID_STARTED_LEASING_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.DATA -> return Constants.ID_DATA_TYPE
+        transaction.type == BaseTransaction.ADDRESS_SCRIPT -> {
+            transaction as SetScriptTransaction
+            return if (transaction.script == null) {
+                Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
+            } else {
+                Constants.ID_SET_ADDRESS_SCRIPT_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.SPONSORSHIP -> {
+            transaction as SponsorshipTransaction
+            return if (transaction.minSponsoredAssetFee == null) {
+                Constants.ID_CANCEL_SPONSORSHIP_TYPE
+            } else {
+                Constants.ID_SET_SPONSORSHIP_TYPE
+            }
+        }
+        transaction.type == BaseTransaction.ASSET_SCRIPT -> return Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
+        transaction.type == BaseTransaction.SCRIPT_INVOCATION -> return Constants.ID_SCRIPT_INVOCATION_TYPE
+        else -> return Constants.ID_UNRECOGNISED_TYPE
+    }
+}
+
+fun getTransactionType(transaction: HistoryTransactionResponse, address: String): Int =
+        if (transaction.type == BaseTransaction.TRANSFER &&
+                transaction.sender != address &&
+                transaction.asset?.isSpam == true) {
+            Constants.ID_SPAM_RECEIVE_TYPE
+        } else if (transaction.type == BaseTransaction.TRANSFER &&
+                transaction.sender != address &&
+                transaction.recipientAddress != address) {
+            Constants.ID_RECEIVE_SPONSORSHIP_TYPE
+        } else if (transaction.type == BaseTransaction.MASS_TRANSFER &&
+                transaction.sender != address &&
+                transaction.asset?.isSpam == true) {
+            Constants.ID_MASS_SPAM_RECEIVE_TYPE
+        } else if (transaction.type == BaseTransaction.CANCEL_LEASING &&
+                !transaction.leaseId.isNullOrEmpty()) {
+            Constants.ID_CANCELED_LEASING_TYPE
+        } else if ((transaction.type == BaseTransaction.TRANSFER || transaction.type == BaseTransaction.CANCEL_LEASING) &&
+                transaction.sender != address) {
+            Constants.ID_RECEIVED_TYPE
+        } else if (transaction.type == BaseTransaction.TRANSFER &&
+                transaction.sender == transaction.recipientAddress) {
+            Constants.ID_SELF_TRANSFER_TYPE
+        } else if (transaction.type == BaseTransaction.TRANSFER &&
+                transaction.sender == address) {
+            Constants.ID_SENT_TYPE
+        } else if (transaction.type == BaseTransaction.CREATE_LEASING &&
+                transaction.recipientAddress != address) {
+            Constants.ID_STARTED_LEASING_TYPE
+        } else if (transaction.type == BaseTransaction.EXCHANGE) {
+            Constants.ID_EXCHANGE_TYPE
+        } else if (transaction.type == BaseTransaction.ISSUE) {
+            Constants.ID_TOKEN_GENERATION_TYPE
+        } else if (transaction.type == BaseTransaction.BURN) {
+            Constants.ID_TOKEN_BURN_TYPE
+        } else if (transaction.type == BaseTransaction.REISSUE) {
+            Constants.ID_TOKEN_REISSUE_TYPE
+        } else if (transaction.type == BaseTransaction.CREATE_ALIAS) {
+            Constants.ID_CREATE_ALIAS_TYPE
+        } else if (transaction.type == BaseTransaction.CREATE_LEASING &&
+                transaction.recipientAddress == address) {
+            Constants.ID_INCOMING_LEASING_TYPE
+        } else if (transaction.type == BaseTransaction.MASS_TRANSFER &&
+                transaction.sender == address) {
+            Constants.ID_MASS_SEND_TYPE
+        } else if (transaction.type == BaseTransaction.MASS_TRANSFER &&
+                transaction.sender != address) {
+            Constants.ID_MASS_RECEIVE_TYPE
+        } else if (transaction.type == BaseTransaction.DATA) {
+            Constants.ID_DATA_TYPE
+        } else if (transaction.type == BaseTransaction.ADDRESS_SCRIPT) {
+            if (transaction.script == null) {
+                Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
+            } else {
+                Constants.ID_SET_ADDRESS_SCRIPT_TYPE
+            }
+        } else if (transaction.type == BaseTransaction.SPONSORSHIP) {
+            if (transaction.minSponsoredAssetFee == null) {
+                Constants.ID_CANCEL_SPONSORSHIP_TYPE
+            } else {
+                Constants.ID_SET_SPONSORSHIP_TYPE
+            }
+        } else if (transaction.type == BaseTransaction.ASSET_SCRIPT) {
+            Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
+        } else if (transaction.type == BaseTransaction.SCRIPT_INVOCATION) {
+            Constants.ID_SCRIPT_INVOCATION_TYPE
+        } else {
+            Constants.ID_UNRECOGNISED_TYPE
+        }
+
+fun getTransactionAmount(transaction: HistoryTransactionResponse, decimals: Int = 8, round: Boolean = true): String {
+
+    var sign = "-"
+    if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
+            transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
+        sign = "+"
+    }
+
+    return sign + if (transaction.transfers.isNotEmpty()) {
+        val sumString = if (round) {
+            getScaledAmount(transaction.transfers.sumByLong { it.amount }, decimals)
+        } else {
+            MoneyUtil.getScaledText(
+                    transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                    .stripZeros()
+        }
+        if (sumString.isEmpty()) {
+            ""
+        } else {
+            sumString
+        }
+    } else {
+        if (round) {
+            getScaledAmount(transaction.amount, decimals)
+        } else {
+            MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()
+        }
+    }
+}
+
+fun HistoryTransactionResponse.isSponsorshipTransaction(): Boolean {
+    return transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
+            transactionType() == TransactionType.CANCEL_SPONSORSHIP_TYPE
+}
+
+fun HistoryTransactionResponse.transactionType(): TransactionType {
+    return TransactionType.getTypeById(this.transactionTypeId)
+}
+
+fun String?.isValidVostokAddress(): Boolean {
+    if (this.isNullOrEmpty()) return false
+    return try {
+        val bytes = WavesCrypto.base58decode(this)
+        if (bytes.size == WavesCrypto.ADDRESS_LENGTH &&
+                bytes[0] == WavesCrypto.ADDRESS_VERSION &&
+                bytes[1] == EnvironmentManager.vostokNetCode) {
+            val checkSum = Arrays.copyOfRange(bytes,
+                    bytes.size - WavesCrypto.CHECK_SUM_LENGTH, bytes.size)
+            val checkSumGenerated = calcCheckSum(
+                    bytes.copyOf(bytes.size - WavesCrypto.CHECK_SUM_LENGTH))
+            Arrays.equals(checkSum, checkSumGenerated)
+        } else {
+            false
+        }
+    } catch (e: Exception) {
+        false
+    }
+}
+
+fun String?.isValidErgoAddress(): Boolean {
+    if (this.isNullOrEmpty()) {
+        return false
+    }
+    return this.matches(Regex("^9[a-km-zA-HJ-NP-Z1-9]{5,}"))
 }

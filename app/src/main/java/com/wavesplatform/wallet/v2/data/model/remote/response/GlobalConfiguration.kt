@@ -19,7 +19,8 @@ data class GlobalConfiguration(
         @SerializedName("nodeUrl") var nodeUrl: String = "",
         @SerializedName("dataUrl") var dataUrl: String = "",
         @SerializedName("spamUrl") var spamUrl: String = "",
-        @SerializedName("matcherUrl") var matcherUrl: String = ""
+        @SerializedName("matcherUrl") var matcherUrl: String = "",
+        @SerializedName("gatewayUrl") var gatewayUrl: String = ""
     )
 
     data class ConfigAsset(
@@ -29,6 +30,7 @@ data class GlobalConfiguration(
         @SerializedName("isGateway") var isGateway: Boolean = false,
         @SerializedName("wavesId") var wavesId: String = "",
         @SerializedName("gatewayId") var gatewayId: String = "",
+        @SerializedName("gatewayType") var gatewayType: String = "",
         @SerializedName("iconUrls") var iconUrls: IconUrls = IconUrls(),
         @SerializedName("addressRegEx") var addressRegEx: String = ""
     ) {

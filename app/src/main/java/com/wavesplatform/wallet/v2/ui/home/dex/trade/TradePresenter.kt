@@ -5,28 +5,27 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
 import javax.inject.Inject
 
 @InjectViewState
 class TradePresenter @Inject constructor() : BasePresenter<TradeView>() {
-    var watchMarket: WatchMarket? = null
-    var amountAssetInfo: AssetInfo? = null
-    var priceAssetInfo: AssetInfo? = null
+    var watchMarket: WatchMarketResponse? = null
+    var amountAssetInfo: AssetInfoResponse? = null
+    var priceAssetInfo: AssetInfoResponse? = null
 
     fun loadAssetsInfoOfPair() {
-        addSubscription(apiDataManager.assetsInfoByIds(arrayListOf(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset))
+        addSubscription(dataServiceManager.assets(
+                ids = arrayListOf(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset))
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe { assetsInfo ->
                     val map = assetsInfo.associateBy { it.id }
                     amountAssetInfo = map[watchMarket?.market?.amountAsset]
                     priceAssetInfo = map[watchMarket?.market?.priceAsset]
-                    Log.d("test", "test")
                 })
     }
 }

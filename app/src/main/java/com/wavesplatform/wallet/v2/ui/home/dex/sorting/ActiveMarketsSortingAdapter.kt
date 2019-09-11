@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 import com.chad.library.adapter.base.BaseItemDraggableAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import javax.inject.Inject
 
 class ActiveMarketsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<MarketResponse, BaseViewHolder>(R.layout.item_dex_active_markets_sorting, null) {

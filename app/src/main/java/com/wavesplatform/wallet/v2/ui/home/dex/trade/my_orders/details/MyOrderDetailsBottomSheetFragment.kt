@@ -8,15 +8,16 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details
 import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
-import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
+import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.MatcherServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,7 +33,9 @@ import kotlin.math.roundToInt
 class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyOrderTransaction>() {
 
     @Inject
-    lateinit var matcherDataManager: MatcherDataManager
+    lateinit var matcherServiceManager: MatcherServiceManager
+    @Inject
+    lateinit var nodeServiceManager: NodeServiceManager
 
     var cancelOrderListener: CancelOrderListener? = null
 
@@ -99,7 +102,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
         return view
     }
 
-    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfoResponse?) {
         if (isShowTicker(assetInfo?.id)) {
             val ticker = assetInfo?.getTokenTicker()
             if (!ticker.isNullOrBlank()) {
@@ -121,15 +124,46 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             view.relative_status.gone()
             view.relative_confirmations.gone()
 
-            // fill fee field
-            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, Constants.wavesAssetInfo.precision).stripZeros()
-            view.text_base_info_tag.visiable()
+            setFee(data, view)
 
             // fill time field
-            view.text_timestamp?.text = data.orderResponse.timestamp.date("dd.MM.yyyy HH:mm")
+            view.text_timestamp?.text = data.orderResponse.timestamp.date(Constants.DATE_TIME_PATTERN)
         }
 
         return view
+    }
+
+    private fun setFee(data: MyOrderTransaction, view: View) {
+        if (data.orderResponse.feeAsset != null && data.orderResponse.fee != null) {
+
+            val feeAssetBalance = find(data.orderResponse.feeAsset!!)
+
+            if (feeAssetBalance == null) {
+                showProgressBar(true)
+                eventSubscriptions.add(nodeServiceManager.assetDetails(data.orderResponse.feeAsset!!)
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe({
+                            showProgressBar(false)
+                            view.text_fee?.text =
+                                    "${MoneyUtil.getScaledText(
+                                            data.orderResponse.fee ?: 0, 
+                                            it.decimals).stripZeros()} " +
+                                    it.name
+                        }, {
+                            showProgressBar(false)
+                            it.printStackTrace()
+                        }))
+            } else {
+                view.text_fee?.text =
+                        "${MoneyUtil.getScaledText(
+                                data.orderResponse.fee ?: 0,
+                                feeAssetBalance.getDecimals()).stripZeros()} " +
+                                feeAssetBalance.getName()
+            }
+        } else {
+            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, WavesConstants.WAVES_ASSET_INFO.precision).stripZeros()
+            view.text_base_info_tag.visiable()
+        }
     }
 
     override fun setupFooter(data: MyOrderTransaction): View? {
@@ -160,13 +194,13 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     private fun cancelOrder(data: MyOrderTransaction) {
         showProgressBar(true)
-        eventSubscriptions.add(matcherDataManager.cancelOrder(data.orderResponse.id, data.amountAssetInfo?.id, data.priceAssetInfo?.id)
+        eventSubscriptions.add(matcherServiceManager.cancelOrder(data.orderResponse.id, data.amountAssetInfo?.id, data.priceAssetInfo?.id)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     showProgressBar(false)
                     cancelOrderListener?.successCancelOrder()
 
-                    selectedItem?.orderResponse?.status = OrderResponse.API_STATUS_CANCELLED
+                    selectedItem?.orderResponse?.status = AssetPairOrderResponse.API_STATUS_CANCELLED
                     configureView()
                 }, {
                     showProgressBar(false)

@@ -14,21 +14,25 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_sponsored_fee_bottom_sheet_dialog.view.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import timber.log.Timber
 import javax.inject.Inject
 
 class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), SponsoredFeeDetailsView {
     private var rootView: View? = null
 
     private var selectedAssetId: String? = null
-    private var wavesFee: Long = Constants.WAVES_MIN_FEE
+    private var exchange: Boolean = false
+    private var amountAssetId: String? = null
+    private var priceAssetId: String? = null
+    private var wavesFee: Long = WavesConstants.WAVES_MIN_FEE
 
     var onSelectedAssetListener: SponsoredAssetSelectedListener? = null
 
@@ -75,17 +79,30 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
             }
         }
 
-        presenter.loadSponsoredAssets {
-            rootView?.image_loader?.hide()
-            adapter.setNewData(it)
+        if (exchange) {
+            presenter.loadExchangeCommission(amountAssetId, priceAssetId) {
+                rootView?.image_loader?.hide()
+                adapter.setNewData(it)
+            }
+        } else {
+            presenter.loadSponsoredAssets {
+                rootView?.image_loader?.hide()
+                adapter.setNewData(it)
+            }
         }
 
         return rootView
     }
 
-    fun configureData(selectedAssetId: String, wavesFee: Long) {
+    fun configureData(selectedAssetId: String, wavesFee: Long,
+                      exchange: Boolean = false,
+                      amountAssetId: String? = null,
+                      priceAssetId: String? = null) {
         this.wavesFee = wavesFee
         this.selectedAssetId = selectedAssetId
+        this.exchange = exchange
+        this.amountAssetId = amountAssetId
+        this.priceAssetId = priceAssetId
     }
 
     override fun onDestroyView() {
@@ -94,6 +111,6 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
     }
 
     interface SponsoredAssetSelectedListener {
-        fun onSelected(asset: AssetBalance, fee: Long)
+        fun onSelected(asset: AssetBalanceResponse, fee: Long)
     }
 }

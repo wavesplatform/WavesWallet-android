@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">Ödeme detayları tarif edildiği gibi doldurmanız gerekmektedir.</string>
-  <string name="about_fill_payment_info">COINOMAT — WAVES adresin. \nEğer yapmazsanız hesabınıza tanımlayamayız.</string>
   <string name="about_redirection_message">Doğrulama sürecinden geçtikten sonra yapılması gerekenler ile ilgili e-posta alacaksınız</string>
   <string name="about_redirection_okay">Tamam</string>
   <string name="about_redirection_title">Kimlik doğrulaması için «IDNow» \nyönlendiriliyorsunuz</string>
@@ -136,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 saat</string>
   <string name="chart_time_frame_24_hours">24 saat</string>
   <string name="chart_time_frame_30_min">30 dakika</string>
-  <string name="chart_time_frame_4_hours">4 saat</string>
+  <string name="chart_time_frame_3_hours">3 saat</string>
   <string name="chart_time_frame_5_min">5 dakika</string>
   <string name="check_connectivity_exit">İnternet bağlantısı bulunmamaktadır</string>
   <string name="choose_account">Hesabınızı seçin</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">Miktar %1$s</string>
   <string name="receive_asset">Token</string>
   <string name="receive_card">Kredi Kartı</string>
-  <string name="receive_contact_msg">Eğer doğrulama veya ödeme işlemlerinde bir problem ile karşılaşırsanız Coinomat destek ekibi ile irtibata geçin. — support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Devam</string>
   <string name="receive_cryptocurrency">Kripto para</string>
   <string name="receive_dont_accept_international">Amerikan vatandaşlarından veya Amerikan bankalarından para transferini kabul etmiyoruz.</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">Lütfen tekrar deneyin</string>
-  <string name="send_gateway_error_title">Coinomat hizmeti geçici olarak durdurulmuştur</string>
+  <string name="send_gateway_error_title">Hizmet geçici olarak kullanılamıyor</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Komisyon ücreti 1% dir</string>
   <string name="send_gateway_info_gateway_fee">Geçit komisyonu %1$s %2$s dur</string>
-  <string name="send_gateway_info_gateway_limits">%1$s Adresini tespit ettik. Bu adrese gönderimler Coinomat geçidi tarafından yapılacaktır. Minimum %2$s %1$s, Maksimum %3$s %1$s.</string>
+  <string name="send_gateway_info_gateway_limits">%1$s Adresini tespit ettik. Bu adrese gönderimler geçit tarafından yapılacaktır. Minimum %2$s %1$s, Maksimum %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Herhangi bir ICO\'ya katılmak için %1$s çekmeyin. ICO\'dan elde edeceğiniz kripto paraları hesabınıza tanımlayamayız.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Eğer kimlik doğrulamadan geçmiş ve USD yatırmışsanız, paranızı tekrar bankaya çekebilirsiniz. Aksi halde IDNow.eu tarafından onaydan geçmeniz gerekmektedir.</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Minimum yatırma tutarı 500 Dolar\'dır. Eğer bir sorunuz varsa support@coinomat.com \'a e-posta atabilirsiniz.</string>
   <string name="send_monero_payment_id">Monero Ödeme ID\'si</string>
   <string name="send_monero_payment_id_hint">Lütfen Ödeme ID\'sini yazın veya yapıştırın</string>
   <string name="send_progress_sending">Gönderiliyor…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">Sık kullanılanlara herhangi bir token eklemediniz</string>
   <string name="wallet_sorting_default_empty">Token listesi boş</string>
   <string name="wallet_sorting_hidden_empty">Herhangi bir token gizlemediniz</string>
+  <string name="common_permission_error_title">Kamera erişim izni gerekmektedir</string>
+  <string name="common_permission_error_description">Bu uygulamada kamera kullanmak için izin almanız gerekiyor. Uygulama ayarlarından izin verebilirsiniz.</string>
+  <string name="common_permission_error_settings">Ayarlar</string>
+  <string name="common_permission_error_cancel">İptal</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Emir fiyatınız son pazar fiyatından %5 daha yüksek</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Emir fiyatınız son pazar fiyatından %5 daha düşük</string>
+  <string name="trade_order_dialog_positive_place_order">Emri gir</string>
+  <string name="trade_order_dialog_negative_cancel">İptal</string>
+  <string name="trade_order_dialog_subtitle_proceed">Devam etmek istiyor musunuz?</string>
 </resources>

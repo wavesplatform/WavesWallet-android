@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">Você DEVE preencher o campo detalhes de pagamento com as seguintes informações:</string>
-  <string name="about_fill_payment_info">CNM — seu endereço WAVES. \nSe você não fizer isso, não podemos creditar sua conta.</string>
   <string name="about_redirection_message">Após a verificação, você receberá um e-mail com instruções adicionais</string>
   <string name="about_redirection_okay">Ok</string>
   <string name="about_redirection_title">Você foi redirecionado para o «IDNow» \npara verificação</string>
@@ -136,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 hora</string>
   <string name="chart_time_frame_24_hours">24 horas</string>
   <string name="chart_time_frame_30_min">30 minutos</string>
-  <string name="chart_time_frame_4_hours">4 horas</string>
+  <string name="chart_time_frame_3_hours">3 horas</string>
   <string name="chart_time_frame_5_min">5 minutos</string>
   <string name="check_connectivity_exit">Sem conexão com a Internet</string>
   <string name="choose_account">Escolha uma conta</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">Quantidade em %1$s</string>
   <string name="receive_asset">Token</string>
   <string name="receive_card">Cartão</string>
-  <string name="receive_contact_msg">Em caso de problemas com a verificação ou processamento de pagamento, entre em contato com a equipe de suporte da Coinomat — support@coinomat.com</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">Continuar</string>
   <string name="receive_cryptocurrency">Criptomoeda</string>
   <string name="receive_dont_accept_international">Nós não aceitamos transferências bancárias internacionais de cidadãos ou de bancos dos EUA</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">Tente mais tarde</string>
-  <string name="send_gateway_error_title">O serviço da Coinomat está temporariamente indisponível</string>
+  <string name="send_gateway_error_title">O serviço está temporariamente indisponível</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">As taxas são de 1% do valor transferido.</string>
   <string name="send_gateway_info_gateway_fee">A taxa do gateway é %1$s %2$s</string>
-  <string name="send_gateway_info_gateway_limits">Identificamos o endereço %1$s e enviaremos seu dinheiro através do gateway Coinomat para esse endereço. A quantidade mínima é %2$s %1$s e a quantidade máxima é %3$s %1$s.</string>
+  <string name="send_gateway_info_gateway_limits">Identificamos o endereço %1$s e enviaremos seu dinheiro através do gateway para esse endereço. A quantidade mínima é %2$s %1$s e a quantidade máxima é %3$s %1$s.</string>
   <string name="send_gateway_info_gateway_warning">Não saque %1$s para uma ICO. Não creditaremos sua conta com tokens dessa venda.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Se você foi verificado e depositou dólares americanos, poderá sacar esses dólares de volta para sua conta bancária. Caso contrário, faça a verificação com o nosso parceiro IDNow.eu</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">O valor mínimo é de 500 dólares americanos. Se você tiver alguma dúvida, basta enviar um email para support@coinomat.com</string>
   <string name="send_monero_payment_id">ID de Pagamento de Monero</string>
   <string name="send_monero_payment_id_hint">Cole ou digite seu ID de pagamento</string>
   <string name="send_progress_sending">Enviando…</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">Você ainda não adicionou tokens nos favoritos</string>
   <string name="wallet_sorting_default_empty">A lista de tokens está vazia</string>
   <string name="wallet_sorting_hidden_empty">Você ainda não adicionou tokens ocultos</string>
+  <string name="common_permission_error_title">É necessário o acesso à câmera</string>
+  <string name="common_permission_error_description">Este aplicativo precisa de permissão para usar a câmera. Você pode concedê-las nas configurações do aplicativo.</string>
+  <string name="common_permission_error_settings">Configurações</string>
+  <string name="common_permission_error_cancel">Cancelar</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">Sua ordem é 5% superior ao último preço de mercado</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">Sua ordem é 5% inferior ao último preço de mercado</string>
+  <string name="trade_order_dialog_positive_place_order">Criar Ordem</string>
+  <string name="trade_order_dialog_negative_cancel">Cancelar</string>
+  <string name="trade_order_dialog_subtitle_proceed">Você deseja continuar?</string>
 </resources>

@@ -5,42 +5,37 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
-import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.addressFromPublicKey
+import com.wavesplatform.wallet.v2.util.WavesWallet
+import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.crypto.AESUtil
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
-import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
-import com.wavesplatform.wallet.v1.data.services.PinStoreService
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
-import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
-import com.wavesplatform.wallet.v2.util.AddressUtil
+import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.deleteRecursive
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
 import org.apache.commons.io.Charsets
-import org.spongycastle.util.encoders.Hex
 import pers.victor.ext.app
+import timber.log.Timber
 import java.io.File
-import java.security.SecureRandom
 import java.util.*
 
 class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
-    private var wallet: WavesWallet? = null
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
         return readPassCodeObservable(
@@ -58,8 +53,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
                     try {
                         val encryptedPassword = prefs.getValue(
                                 guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "")
-                        AESUtil.decrypt(
-                                encryptedPassword, seed, AESUtil.PIN_PBKDF2_ITERATIONS)
+                        WavesCrypto.aesDecrypt(encryptedPassword, seed)
                     } catch (e: Exception) {
                         throw Exceptions.propagate(Throwable("Decrypt wallet failed"))
                     }
@@ -75,9 +69,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
             try {
                 val keyPassword = randomString()
                 pinStore.writePassword(guid, passCode, keyPassword)
-                        .subscribe({ _ ->
-                            val encryptedPassword = AESUtil.encrypt(
-                                    password, keyPassword, AESUtil.PIN_PBKDF2_ITERATIONS)
+                        .subscribe({
+                            val encryptedPassword = WavesCrypto.aesEncrypt(password, keyPassword)
                             prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword)
                             if (!subscriber.isDisposed) {
                                 subscriber.onComplete()
@@ -88,7 +81,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
                             }
                         })
             } catch (e: Exception) {
-                Log.e(javaClass.simpleName, "createPinObservable", e)
+                Timber.e(e,"AccessManager: writePassCodeObservable")
                 if (!subscriber.isDisposed) {
                     subscriber.onError(RuntimeException("Failed to encrypt password"))
                 }
@@ -96,29 +89,21 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         }.compose(RxUtil.applySchedulersToCompletable())
     }
 
-    private fun randomString(): String {
-        val bytes = ByteArray(16)
-        val random = SecureRandom()
-        random.nextBytes(bytes)
-        return String(Hex.encode(bytes), charset("UTF-8"))
-    }
-
     fun storeWalletData(seed: String, password: String, walletName: String, skipBackup: Boolean): String {
         try {
-            wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-            val guid = UUID.randomUUID().toString()
-            loggedInGuid = guid
-            prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
+            loggedInGuid = WavesWallet.createWallet(seed)
+            prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, loggedInGuid)
             prefs.addGlobalListValue(EnvironmentManager.name +
-                    PrefsUtil.LIST_WALLET_GUIDS, guid)
-            prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
+                    PrefsUtil.LIST_WALLET_GUIDS, loggedInGuid)
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, WavesWallet.getWallet()!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
-            authHelper.configureDB(wallet?.address, guid)
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, WavesWallet.getWallet()!!.getEncryptedData(password))
+            authHelper.configureDB(WavesWallet.getWallet()!!.address, loggedInGuid)
+            MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, skipBackup)
-            return guid
+            return loggedInGuid
         } catch (e: Exception) {
-            Log.e(javaClass.simpleName, "storeWalletData: ", e)
+            Timber.e(e,"AccessManager: storeWalletData")
             return ""
         }
     }
@@ -136,7 +121,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         var resultGuid = ""
         for (guid in guids) {
             val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-            if (AddressUtil.addressFromPublicKey(publicKey) == address) {
+            if (addressFromPublicKey(WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
+                    == address) {
                 resultGuid = guid
             }
         }
@@ -192,22 +178,28 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
     }
 
     fun resetWallet() {
+        addToRecentSavedWallets(loggedInGuid)
         clearRealmConfiguration()
-        wallet = null
+        WavesWallet.resetWallet()
         loggedInGuid = ""
     }
 
     fun setWallet(guid: String, password: String) {
-        wallet = WavesWallet(getWalletData(guid), password)
+        WavesWallet.createWallet(getWalletData(guid), password, guid)
         setLastLoggedInGuid(guid)
-        authHelper.configureDB(wallet?.address, guid)
+        authHelper.configureDB(getWallet()?.address, guid)
+        MigrationUtil.checkOldAddressBook(prefs, guid)
+    }
+
+    fun isAuthenticated(): Boolean {
+        return WavesWallet.isAuthenticated()
     }
 
     fun getWallet(): WavesWallet? {
-        return wallet
+        return WavesWallet.getWallet()
     }
 
-    private fun createAddressBookCurrentAccount(): AddressBookUser? {
+    private fun createAddressBookCurrentAccount(): AddressBookUserDb? {
         if (TextUtils.isEmpty(loggedInGuid)) {
             return null
         }
@@ -217,7 +209,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
-        } else AddressBookUser(AddressUtil.addressFromPublicKey(publicKey), name)
+        } else AddressBookUserDb(addressFromPublicKey(
+                WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode), name)
     }
 
     fun deleteCurrentWavesWallet(): Boolean {
@@ -238,19 +231,26 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         configMap.clear()
     }
 
-    private fun deleteRealmDBForAccount(guid: String) {
-        // force delete db
-        try {
-            val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm", guid))
-            val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm.lock", guid))
-            dbFile.delete()
-            dbLockFile.delete()
-            deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm.management", guid)))
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun deleteRealmDBForAccount(guid: String, fullClear: Boolean = true) {
+        fun deleteDBWith(dbName: String) {
+            // force delete db
+            try {
+                val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
+                        String.format("%s.realm", dbName))
+                val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
+                        String.format("%s.realm.lock", dbName))
+                dbFile.delete()
+                dbLockFile.delete()
+                deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory,
+                        String.format("%s.realm.management", dbName)))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        deleteDBWith(guid)
+        if (fullClear) {
+            deleteDBWith("${guid}_userdata")
         }
     }
 
@@ -275,11 +275,12 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmAndCleanConfigs(searchWalletGuid)
+        removeFromRecentSavedWallets(searchWalletGuid)
+        deleteRealmAndCleanConfigs(searchWalletGuid, true)
     }
 
-    fun deleteRealmAndCleanConfigs(guid: String) {
-        deleteRealmDBForAccount(guid)
+    private fun deleteRealmAndCleanConfigs(guid: String, fullClear: Boolean = true) {
+        deleteRealmDBForAccount(guid, fullClear)
         clearRealmConfiguration()
     }
 
@@ -316,7 +317,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
             return ""
         }
         val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-        return AddressUtil.addressFromPublicKey(publicKey)
+        return addressFromPublicKey(WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
     }
 
     fun storePassword(guid: String, publicKeyStr: String, encryptedPassword: String) {
@@ -368,9 +369,48 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
     }
 
-    fun restartApp(context: Context) {
-        val intent = Intent(context, SplashActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
+    fun addToRecentSavedWallets(guid: String) {
+        val recents = prefs.getGlobalValueList(
+                EnvironmentManager.name + PrefsUtil.LIST_RECENT_SAVED_WALLETS).toMutableList()
+
+        fun swapAccountIfExistOr(guid: String, notExistFunc: () -> Unit) {
+            if (recents.contains(guid)) {
+                recents.removeAt(recents.indexOf(guid))
+                recents.add(guid)
+            } else {
+                notExistFunc.invoke()
+            }
+        }
+
+        if (recents.size >= MAX_RECENT_SAVED_ACCOUNTS) {
+            swapAccountIfExistOr(guid) {
+                // delete the oldest account DB and configs and add new account to list
+                deleteRealmAndCleanConfigs(recents.first(), false)
+                recents.removeAt(0)
+                recents.add(guid)
+            }
+        } else {
+            swapAccountIfExistOr(guid) {
+                recents.add(guid)
+            }
+        }
+
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_RECENT_SAVED_WALLETS, recents.toTypedArray())
+    }
+
+    fun removeFromRecentSavedWallets(guid: String) {
+        val recents = prefs.getGlobalValueList(
+                EnvironmentManager.name + PrefsUtil.LIST_RECENT_SAVED_WALLETS).toMutableList()
+        if (recents.contains(guid)) {
+            recents.removeAt(recents.indexOf(guid))
+        }
+
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_RECENT_SAVED_WALLETS, recents.toTypedArray())
+    }
+
+    companion object {
+        const val MAX_RECENT_SAVED_ACCOUNTS = 3
     }
 }

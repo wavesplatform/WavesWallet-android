@@ -15,7 +15,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -88,7 +88,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 })
 
         if (useFingerprint) {
-            if (!SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
+            if (!SecurePreferences.contains(guid + KEY_INTENT_PASS_CODE)) {
                 pass_keypad.isFingerprintAvailable(false)
             } else {
                 fingerprintDialog = FingerprintAuthDialogFragment.newInstance(getGuid())
@@ -166,8 +166,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        if (useFingerprint && !SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
-            SecurePreferences.setValue(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+        if (useFingerprint && !SecurePreferences.contains(guid + KEY_INTENT_PASS_CODE)) {
+            SecurePreferences.setValue(guid + KEY_INTENT_PASS_CODE, passCode)
             prefsUtil.removeValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN)
         }
 

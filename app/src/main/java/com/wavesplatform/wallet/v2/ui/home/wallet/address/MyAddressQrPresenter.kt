@@ -11,12 +11,12 @@ import com.arellomobile.mvp.InjectViewState
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.v1.ui.zxing.Contents
-import com.wavesplatform.wallet.v1.ui.zxing.encode.QRCodeEncoder
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
+import com.wavesplatform.sdk.utils.Identicon
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.zxing.Contents
+import com.wavesplatform.wallet.v2.util.zxing.encode.QRCodeEncoder
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +31,7 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
 
     private fun generateQrCodeObservable(uri: String?, dimensions: Int): Observable<Bitmap> {
         return Observable.defer {
-            var bitmap: Bitmap? = null
+            val bitmap: Bitmap?
             val qrCodeEncoder = QRCodeEncoder(uri, null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), dimensions)
             try {
                 bitmap = qrCodeEncoder.encodeAsBitmap()
@@ -48,9 +48,8 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     }
 
     fun generateAvatars(address: String?, image: AppCompatImageView) {
-        Observable.fromCallable {
-            return@fromCallable identicon.create(address)
-        }.compose(RxUtil.applyObservableDefaultSchedulers())
+        Observable.fromCallable { return@fromCallable identicon.create(address) }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     viewState.afterSuccessGenerateAvatar(it, image)
                 }
@@ -65,19 +64,19 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     fun loadAliases() {
         runAsync {
             addSubscription(
-                    queryAllAsSingle<Alias>().toObservable()
+                    queryAllAsSingle<AliasDb>().toObservable()
                             .observeOn(AndroidSchedulers.mainThread())
                             .map { aliases ->
                                 val ownAliases = aliases.filter { it.own }
-                                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases) }
+                                runOnUiThread { viewState.afterSuccessLoadAliases(AliasDb.convertFromDb(ownAliases)) }
                             }
                             .observeOn(Schedulers.io())
                             .flatMap {
-                                apiDataManager.loadAliases()
+                                dataServiceManager.loadAliases()
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe {
-                                runOnUiThread { viewState.afterSuccessLoadAliases(it) }
+                            .subscribe { aliases ->
+                                runOnUiThread { viewState.afterSuccessLoadAliases(aliases.toMutableList()) }
                             })
         }
     }

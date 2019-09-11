@@ -10,11 +10,11 @@ import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -25,9 +25,9 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun loadAssets() {
         runAsync {
-            addSubscription(queryAllAsSingle<AssetBalance>()
+            addSubscription(queryAllAsSingle<AssetBalanceDb>()
                     .toObservable()
-                    .map { it.filter { list -> !list.isSpam } }
+                    .map { it.filter { asset -> !asset.isSpam } }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         val result = mutableListOf<AssetSortingItem>()
@@ -36,18 +36,18 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                                 .sortedBy { it.position }
                                 .sortedByDescending { it.isFavorite }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_FAVORITE_ITEM, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_FAVORITE_ITEM, it.convertFromDb())
                                 }
                         val notFavoriteList = it.filter { !it.isFavorite && !it.isSpam && !it.isHidden }
                                 .sortedBy { it.position }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_DEFAULT_ITEM, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_DEFAULT_ITEM, it.convertFromDb())
                                 }
 
                         val hiddenList = it.filter { it.isHidden }
                                 .sortedBy { it.position }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_ITEM, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_ITEM, it.convertFromDb())
                                 }
 
                         // add favorite list or empty view
@@ -85,18 +85,18 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
     }
 
     fun saveSortedPositions(data: MutableList<AssetSortingItem>) {
-        data
+        val list = data
                 .filter { it.type == AssetSortingItem.TYPE_DEFAULT_ITEM
                         || it.type == AssetSortingItem.TYPE_HIDDEN_ITEM
                         || it.type == AssetSortingItem.TYPE_FAVORITE_ITEM }
                 .mapIndexedTo(mutableListOf()) { position, item ->
                     item.asset.position = position
-                    AssetBalanceStore(item.asset.assetId,
+                    AssetBalanceStoreDb(item.asset.assetId,
                             item.asset.isHidden,
                             item.asset.position,
                             item.asset.isFavorite).save()
                     return@mapIndexedTo item.asset
                 }
-                .saveAll()
+        AssetBalanceDb.convertToDb(list).saveAll()
     }
 }

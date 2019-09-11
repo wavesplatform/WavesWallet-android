@@ -11,13 +11,21 @@ import io.realm.RealmMigration
 class UserDataMigration : RealmMigration {
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        var oldVersion = oldVersion
-        val schema = realm.schema
-
-        if (oldVersion <= 1L) {
-            // first migration here
-
-            oldVersion++
+        if (oldVersion < 2) {
+            val schema = realm.schema
+            schema.rename("AddressBookUser", "AddressBookUserDb")
+            schema.rename("AssetBalanceStore", "AssetBalanceStoreDb")
+            schema.rename("MarketResponse", "MarketResponseDb")
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
     }
 }

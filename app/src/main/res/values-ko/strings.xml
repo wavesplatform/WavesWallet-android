@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="about_fill_payment_details">지불 정보 입력란에 다음 정보를 필히 기입해야합니다:</string>
-  <string name="about_fill_payment_info">CNM — 귀하의 WAVES 주소. \nIf그렇지 않으면 귀하의 계좌에 크레딧을 줄 수 없습니다</string>
   <string name="about_redirection_message">인증 작업 후 자세한 지시 사항을 이메일로 받게됩니다</string>
   <string name="about_redirection_okay">확인</string>
   <string name="about_redirection_title">확인을 위해 «IDNow» 로 \n이동됩니다</string>
@@ -136,7 +134,7 @@
   <string name="chart_time_frame_1_hour">1 시간</string>
   <string name="chart_time_frame_24_hours">24 시간</string>
   <string name="chart_time_frame_30_min">30 분</string>
-  <string name="chart_time_frame_4_hours">4 시간</string>
+  <string name="chart_time_frame_3_hours">3 시간</string>
   <string name="chart_time_frame_5_min">5 분</string>
   <string name="check_connectivity_exit">인터넷에 연결되어있지 않습니다</string>
   <string name="choose_account">계정 선택</string>
@@ -467,8 +465,6 @@
   <string name="receive_amount_title">받은 수량 %1$s</string>
   <string name="receive_asset">토큰</string>
   <string name="receive_card">카드</string>
-  <string name="receive_contact_msg">인증 또는 지불 처리에 문제가 있는 경우 Coinomat 지원 팀 (support@coinomat.com)에 문의하세요</string>
-  <string name="receive_contact_msg_key">support@coinomat.com</string>
   <string name="receive_continue">계속</string>
   <string name="receive_cryptocurrency">암호화폐</string>
   <string name="receive_dont_accept_international">당사는 미국 시민권자 또는 미국 은행으로부터의 국제 송금을 허용하지 않습니다.</string>
@@ -528,13 +524,12 @@
   <string name="send_fifty_percents">50%</string>
   <string name="send_five_percents">5%</string>
   <string name="send_gateway_error_subtitle">나중에 다시 시도하세요</string>
-  <string name="send_gateway_error_title">Coinomat 서비스를 일시적으로 사용할 수 없습니다</string>
+  <string name="send_gateway_error_title">서비스를 일시적으로 사용할 수 없습니다</string>
   <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">수수료는 전송하는 금액의 1% 입니다.</string>
   <string name="send_gateway_info_gateway_fee">게이트웨이 수수료는 %1$s %2$s 입니다</string>
-  <string name="send_gateway_info_gateway_limits">%1$s 주소를 감지했으며 해당 주소로 Coinomat 게이트웨이를 통해 자산을 송금할 것입니다. 최소 수량은 %2$s %1$s 이며, 최대 수량은 %3$s %1$s 입니다.</string>
+  <string name="send_gateway_info_gateway_limits">%1$s 주소를 감지했으며 해당 주소로 게이트웨이를 통해 자산을 송금할 것입니다. 최소 수량은 %2$s %1$s 이며, 최대 수량은 %3$s %1$s 입니다.</string>
   <string name="send_gateway_info_gateway_warning">ICO로 %1$s 를 출금하지 마세요. 해당 판매의 토큰을 귀하의 계정에 크레딧 하지 않을 것입니다.</string>
   <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">인증을 완료하고 미국 달러를 입금했다면 해당 달러를 귀하의 은행 계좌로 출금할 수 있습니다. 그렇지 않은 경우 우리의 파트너사인 IDNow.eu에서 인증을 받으세요.</string>
-  <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">최소 수량은 500 US 달러입니다. 질문이 있으시면 support@coinomat.com으로 이메일을 보내주세요.</string>
   <string name="send_monero_payment_id">Monero Payment ID</string>
   <string name="send_monero_payment_id_hint">귀하의 Payment ID를 붙여넣거나 입력하세요</string>
   <string name="send_progress_sending">보내는 중…</string>
@@ -655,7 +650,7 @@
   <string name="my_orders_details_price_hint">가격</string>
   <string name="my_orders_details_total_hint">총</string>
   <string name="clean_banner_title">깨끗하게 유지하세요!</string>
-  <string name="clean_banner_description">귀하의 지갑을 깨끗하고 깔끔하게 유지할 수 있도록 토큰 디스플레이를 재설계하였습니다. 토큰 목록은 사용자가 원하는 데로 직접 편집할 수 있습니다.</string>
+  <string name="clean_banner_description">귀하의 지갑을 깨끗하고 깔끔하게 유지할 수 있도록 토큰 디스플레이를 재설계하였습니다. 토큰 목록은 사용자가 원하는 대로 직접 편집할 수 있습니다.</string>
   <string name="search_asset_hint">검색</string>
   <string name="search_asset_cancel">취소</string>
   <string name="search_asset_empty">귀하는 해당 토큰을 보유하고 있지 않습니다</string>
@@ -670,4 +665,13 @@
   <string name="wallet_sorting_favorite_empty">즐겨찾기에 토큰을 추가하지 않았습니다</string>
   <string name="wallet_sorting_default_empty">토큰 목록이 없습니다</string>
   <string name="wallet_sorting_hidden_empty">숨긴 목록에 토큰을 추가하지 않았습니다</string>
+  <string name="common_permission_error_title">카메라 액세스 필요</string>
+  <string name="common_permission_error_description">이 앱은 카메라 사용 권한이 필요합니다. 앱 설정에서 권한을 부여 할 수 있습니다.</string>
+  <string name="common_permission_error_settings">환경설정</string>
+  <string name="common_permission_error_cancel">취소</string>
+  <string name="trade_order_dialog_subtitle_price_highter_market">귀하의 주문가는 시장가보다 5% 높습니다</string>
+  <string name="trade_order_dialog_subtitle_price_lower_market">귀하의 주문가는 시장가보다 5% 낮습니다</string>
+  <string name="trade_order_dialog_positive_place_order">주문 등록</string>
+  <string name="trade_order_dialog_negative_cancel">취소</string>
+  <string name="trade_order_dialog_subtitle_proceed">계속 진행하시겠습니까?</string>
 </resources>

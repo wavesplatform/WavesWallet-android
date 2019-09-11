@@ -16,8 +16,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.notNull
 import pers.victor.ext.clipboardManager
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor

@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -13,7 +14,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
@@ -45,24 +46,21 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        val assetBalance = intent?.getParcelableExtra<AssetBalance>(
-                YourAssetsActivity.BUNDLE_ASSET_ITEM)
-        toolbar_view.title = getString(R.string.receive_address_view_toolbar,
-                assetBalance?.getName()
-                        ?: "")
+        val assetBalance = intent?.getParcelableExtra<AssetBalanceResponse>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+        toolbar_view.title = getString(R.string.receive_address_view_toolbar, assetBalance?.getName())
 
         image_asset_icon.setAsset(assetBalance)
 
         image_close.click {
-            launchActivity<MainActivity>(clear = true)
+            onBackPressed()
         }
         button_close.click {
-            launchActivity<MainActivity>(clear = true)
+            onBackPressed()
         }
         frame_share.click {
             val sharingIntent = Intent(Intent.ACTION_SEND)
             sharingIntent.type = "text/plain"
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text_address.text)
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, text_address.text)
             startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
         }
 
@@ -89,7 +87,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
                 .subscribe {
                     val sharingIntent = Intent(Intent.ACTION_SEND)
                     sharingIntent.type = "text/plain"
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text_invoice_link.text)
+                    sharingIntent.putExtra(Intent.EXTRA_TEXT, text_invoice_link.text)
                     startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
                 })
 
@@ -127,6 +125,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
     }
 
     override fun onBackPressed() {
+        setResult(Activity.RESULT_OK)
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }

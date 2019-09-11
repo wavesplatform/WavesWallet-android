@@ -7,14 +7,14 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
+import com.wavesplatform.wallet.v2.util.*
 
 class ClearAssetsHelper {
     companion object {
-        fun clearUnimportantAssets(prefsUtil: PrefsUtil, assets: MutableList<AssetBalance>, fromAPI: Boolean = false): MutableList<AssetBalance> {
+        fun clearUnimportantAssets(prefsUtil: PrefsUtil, assets: MutableList<AssetBalanceResponse>, fromAPI: Boolean = false): MutableList<AssetBalanceResponse> {
             return if (!prefsUtil.getValue(PrefsUtil.KEY_IS_CLEARED_ASSETS, false)) {
                 if (assets.size == EnvironmentManager.defaultAssets.size) {
                     // new account or empty account - let's go next
@@ -33,19 +33,22 @@ class ClearAssetsHelper {
             }
         }
 
-        private fun checkAndClear(assets: MutableList<AssetBalance>): MutableList<AssetBalance> {
+        private fun checkAndClear(assets: MutableList<AssetBalanceResponse>): MutableList<AssetBalanceResponse> {
             // load config for assets
-            val savedAssetPrefs = queryAll<AssetBalanceStore>()
+            val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
             val savedAssetPrefsMap = savedAssetPrefs.associateBy { it.assetId }
 
             // filter unimportant assets
             val allUnimportantAssets = assets.filter { asset ->
-                !asset.isWaves() && !AssetBalance.isFiat(asset.assetId) && !AssetBalance.isGateway(asset.assetId) && !asset.isFavorite && !asset.isMyWavesToken()
+                !asset.isWaves()
+                        && !isFiat(asset.assetId)
+                        && !isGateway(asset.assetId)
+                        && !asset.isFavorite
+                        && !asset.isMyWavesToken(WavesWallet.getAddress())
             }
-
             // filter general assets with zero balance
             val generalAssetsWithZeroBalance = assets.filter { asset ->
-                (AssetBalance.isFiat(asset.assetId) || AssetBalance.isGateway(asset.assetId))
+                (isFiat(asset.assetId) || isGateway(asset.assetId))
                         && !asset.isWaves() && !asset.isFavorite && asset.balance == 0L
             }
 
@@ -58,10 +61,10 @@ class ClearAssetsHelper {
                 savedAssetPrefsMap[it.assetId]?.isHidden = true
             }
 
-            allAssetsToClear.saveAll()
+            AssetBalanceDb.convertToDb(allAssetsToClear).saveAll()
             savedAssetPrefs.saveAll()
 
-            return queryAll<AssetBalance>().toMutableList()
+            return AssetBalanceDb.convertFromDb(queryAll()).toMutableList()
         }
     }
 }

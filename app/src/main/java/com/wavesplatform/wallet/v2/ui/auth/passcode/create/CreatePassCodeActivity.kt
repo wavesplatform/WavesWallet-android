@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -18,6 +19,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_create_passcode.*
@@ -88,43 +90,65 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun onSuccessCreatePassCode(guid: String, passCode: String) {
         showProgressBar(false)
-        if ((intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION) ||
-                        intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT)) &&
-                FingerprintAuthDialogFragment.isAvailable(this)) {
+        val createOrImport = (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
+                || intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT))
+        if (createOrImport && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
-                putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
-                putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+                putExtra(KEY_INTENT_GUID, guid)
+                putExtra(KEY_INTENT_PASS_CODE, passCode)
             }
-        } else if (App.getAccessManager().isUseFingerPrint(guid)) {
-            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
-            fingerprintDialog.isCancelable = false
-            fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
-            fingerprintDialog.setFingerPrintDialogListener(
-                    object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
-                        override fun onSuccessRecognizedFingerprint() {
-                            launchActivity<MainActivity>(clear = true)
-                        }
-
-                        override fun onCancelButtonClicked(dialog: Dialog) {
-                            App.getAccessManager().setUseFingerPrint(guid, false)
-                            launchActivity<MainActivity>(clear = true)
-                        }
-
-                        override fun onFingerprintLocked(message: String) {
-                            launchActivity<MainActivity>(clear = true)
-                        }
-
-                        override fun onShowErrorMessage(message: String) {
-                            Toast.makeText(this@CreatePassCodeActivity, message,
-                                    Toast.LENGTH_SHORT).show()
-                            launchActivity<MainActivity>(clear = true)
-                        }
-                    })
+        } else if (App.getAccessManager().isUseFingerPrint(guid)
+                && FingerprintAuthDialogFragment.isAvailable(this)) {
+            showFingerprintDialog(guid, passCode)
         } else if (intent.hasExtra(KEY_INTENT_GUID)) {
             setResult(RESULT_OK)
             finish()
         } else {
-            launchActivity<MainActivity>(clear = true)
+            closeOrMain()
+        }
+    }
+
+    private fun showFingerprintDialog(guid: String, passCode: String) {
+        val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
+        fingerprintDialog.isCancelable = false
+        fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
+        fingerprintDialog.setFingerPrintDialogListener(
+                object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
+                    override fun onSuccessRecognizedFingerprint() {
+                        App.getAccessManager().setUseFingerPrint(guid, true)
+                        closeOrMain()
+                    }
+
+                    override fun onCancelButtonClicked(dialog: Dialog) {
+                        App.getAccessManager().setUseFingerPrint(guid, false)
+                        closeOrMain()
+                    }
+
+                    override fun onFingerprintLocked(message: String) {
+                        App.getAccessManager().setUseFingerPrint(guid, false)
+                        closeOrMain()
+                    }
+
+                    override fun onShowErrorMessage(message: String) {
+                        Toast.makeText(this@CreatePassCodeActivity,
+                                message, Toast.LENGTH_SHORT).show()
+                        closeOrMain()
+                    }
+                })
+    }
+
+    private fun closeOrMain() {
+        val changePassCode = intent.getBooleanExtra(
+                KEY_INTENT_PROCESS_CHANGE_PASS_CODE, false)
+        if (changePassCode) {
+            setResult(RESULT_OK)
+            finish()
+        } else {
+            if (WavesSdk.keeper().isKeeperIntent(intent)) {
+                launchActivity<KeeperTransactionActivity>()
+            } else {
+                launchActivity<MainActivity>(clear = true)
+            }
         }
     }
 

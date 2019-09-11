@@ -14,15 +14,14 @@ import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.item_history.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -157,7 +156,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             view.text_tag_spam.visiable()
                         } else {
                             if (isShowTicker(item.data.assetId)) {
-                                val ticker = item.data.asset?.getTicker()
+                                val ticker = item.data.asset?.getTokenTicker()
                                 if (!ticker.isNullOrBlank()) {
                                     view.text_tag.text = ticker
                                     view.text_tag.visiable()
@@ -180,7 +179,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         }
     }
 
-    private fun setExchangeItem(transaction: Transaction, view: View) {
+    private fun setExchangeItem(transaction: HistoryTransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
@@ -197,7 +196,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == WavesConstants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -210,20 +209,15 @@ class HistoryTabItemAdapter @Inject constructor() :
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == Constants.WAVES_ASSET_ID_FILLED) {
-            Constants.WAVES_ASSET_ID_FILLED
+        if (isShowTicker(amountAsset.id)) {
+            val ticker = amountAsset.getTokenTicker()
+            if (!ticker.isNullOrBlank()) {
+                view.text_tag.text = ticker
+                view.text_tag.visiable()
+            }
+            view.text_transaction_value.text = directionSign + amountValue
         } else {
-            amountAsset.ticker
+            view.text_transaction_value.text = directionSign + amountValue + " ${amountAsset.name}"
         }
-
-        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
-            " ${amountAsset.name}"
-        } else {
-            view.text_tag.visiable()
-            view.text_tag.text = amountAssetTicker
-            ""
-        }
-
-        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 }

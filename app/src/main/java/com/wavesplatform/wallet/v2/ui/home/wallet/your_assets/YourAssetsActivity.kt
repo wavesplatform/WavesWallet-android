@@ -17,16 +17,18 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.clearText
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -79,7 +81,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
                     adapter.filter(it)
                 })
 
-        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+        edit_search.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
@@ -93,14 +95,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         recycle_assets.adapter = adapter
         adapter.bindToRecyclerView(recycle_assets)
 
-        if (intent.hasExtra(CRYPTO_CURRENCY)) {
-            presenter.loadCryptoAssets(presenter.greaterZeroBalance, useWaves = false)
-        } else {
-            presenter.loadAssets(presenter.greaterZeroBalance)
-        }
-
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = adapter.getItem(position) as AssetBalanceResponse
 
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, _ ->
                 // disable click for next items, which user click before activity will finish
@@ -111,9 +107,11 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             })
             onBackPressed()
         }
+
+        presenter.loadAssets(intent.hasExtra(CRYPTO_CURRENCY))
     }
 
-    override fun showAssets(assets: MutableList<AssetBalance>) {
+    override fun showAssets(assets: MutableList<AssetBalanceResponse>) {
         progress_bar.hide()
 
         if (assets.isEmpty()) {
@@ -138,19 +136,25 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_sorting -> {
-                if (intent.hasExtra(CRYPTO_CURRENCY)) {
-                    presenter.loadCryptoAssets(!presenter.greaterZeroBalance)
-                } else {
-                    presenter.loadAssets(!presenter.greaterZeroBalance)
-                }
-                item.title = if (presenter.greaterZeroBalance) {
-                    getString(R.string.your_asset_activity_all)
-                } else {
+                clearSearchInput()
+                item.title = if (item.title == getString(R.string.your_asset_activity_all)) {
+                    adapter.showOnlyWithBalance(false)
                     getString(R.string.your_asset_activity_greater_zero)
+                } else {
+                    adapter.showOnlyWithBalance(true)
+                    getString(R.string.your_asset_activity_all)
                 }
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun clearSearchInput() {
+        if (edit_search.text.isNotEmpty()) {
+            hideKeyboard()
+            edit_search.clearText()
+            edit_search.clearFocus()
+        }
     }
 
     private fun getEmptyView(): View {

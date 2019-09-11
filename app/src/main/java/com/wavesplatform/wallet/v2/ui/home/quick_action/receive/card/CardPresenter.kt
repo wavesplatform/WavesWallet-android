@@ -8,11 +8,12 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,14 +26,14 @@ import javax.inject.Inject
 class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     @Inject
-    lateinit var coinomatManager: CoinomatManager
+    lateinit var coinomatServiceManager: CoinomatDataManager
 
-    var crypto: String = Constants.WAVES_ASSET_ID_FILLED
+    var crypto: String = WavesConstants.WAVES_ASSET_ID_FILLED
     private var amount: String = "0"
     var fiat: String = "USD"
     private var min: Float = 0F
     private var max: Float = 0F
-    var asset: AssetBalance? = null
+    var asset: AssetBalanceResponse? = null
     private var rate = ""
 
     fun invalidate() {
@@ -47,15 +48,15 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     fun loadWaves() {
         runAsync {
-            val singleData: Single<List<AssetBalance>> = queryAsSingle { equalTo("assetId", "") }
+            val singleData: Single<List<AssetBalanceDb>> = queryAsSingle { equalTo("assetId", "") }
             addSubscription(singleData
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (it.size == 1) {
                             runOnUiThread {
-                                asset = it[0]
-                                viewState.showWaves(it[0])
+                                asset = it[0].convertFromDb()
+                                viewState.showWaves(asset)
                             }
                         }
                     }, {
@@ -87,7 +88,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
         }
 
         runAsync {
-            addSubscription(coinomatManager.loadRate(crypto, getWavesAddress(), fiat, amount).subscribe({ rate ->
+            addSubscription(coinomatServiceManager.loadRate(crypto, getWavesAddress(), fiat, amount).subscribe({ rate ->
                 this.rate = rate
                 runOnUiThread {
                     viewState.showRate(rate)
@@ -102,7 +103,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     private fun loadLimits() {
         runAsync {
-            addSubscription(coinomatManager.loadLimits(crypto, getWavesAddress(), fiat).subscribe({ limits ->
+            addSubscription(coinomatServiceManager.loadLimits(crypto, getWavesAddress(), fiat).subscribe({ limits ->
                 min = if (limits?.min == null) {
                     0F
                 } else {

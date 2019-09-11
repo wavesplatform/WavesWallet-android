@@ -9,7 +9,7 @@ import android.content.Intent
 import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 

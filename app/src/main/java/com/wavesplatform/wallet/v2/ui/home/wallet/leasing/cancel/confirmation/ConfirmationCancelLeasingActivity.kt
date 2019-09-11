@@ -9,11 +9,12 @@ import android.app.Activity
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
@@ -69,7 +70,6 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         }
 
         button_okay.click {
-            setResult(Activity.RESULT_OK)
             onBackPressed()
         }
 
@@ -78,11 +78,16 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
 
     override fun onBackPressed() {
         if (presenter.success) {
-            launchActivity<MainActivity>(clear = true)
+            setResult(Activity.RESULT_OK)
+            exitFromActivity()
         } else {
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+            exitFromActivity()
         }
+    }
+
+    private fun exitFromActivity() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun successCancelLeasing() {
@@ -102,7 +107,7 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun failedCancelLeasingCauseSmart() {
-        setResult(Constants.RESULT_SMART_ERROR)
+        setResult(com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR)
         onBackPressed()
     }
 
@@ -120,7 +125,8 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} ${Constants.wavesAssetInfo.name}"
+        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()}" +
+                " ${WavesConstants.WAVES_ASSET_INFO.name}"
         button_okay.isEnabled = true
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
