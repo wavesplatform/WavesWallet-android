@@ -17,9 +17,9 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.correctPair
 import com.wavesplatform.wallet.v2.util.isFiat
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import com.wavesplatform.wallet.v2.util.mapCorrectPairs
 import javax.inject.Inject
 
 
@@ -31,48 +31,68 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     var intervalUpdate = MarketWidgetUpdateInterval.MIN_10
     var widgetAssetPairs = arrayListOf<MarketWidgetActiveAsset>()
     var canAddPair = false
+    private val pricesOrder = mutableListOf<String>()
 
     fun loadAssetsPairs(context: Context, widgetId: Int) {
 
-        val initAssetList = MarketWidgetSettings.assetsSettings().queryAll(context, widgetId).isEmpty()
-
         setInitAppWidgetConfig(context, widgetId)
 
-        val pairsList = createPairs(assets)
         addSubscription(
-                Observable.zip(dataServiceManager.assets(ids = assets),
-                        dataServiceManager.loadPairs(pairs = pairsList)
-                                .flatMap { pairs ->
-                                    Observable.just(getFilledPairs(pairs, pairsList, initAssetList))
-                                },
-                        BiFunction { assetInfoList: List<AssetInfoResponse>, searchPair: List<SearchPairResponse.Pair> ->
-                            return@BiFunction Pair(assetInfoList, searchPair)
-                        })
+                matcherServiceManager.getSettings()
+                        .flatMap {
+                            pricesOrder.clear()
+                            pricesOrder.addAll(it.priceAssets)
+                            dataServiceManager.assets(ids = assets)
+                        }
                         .compose(RxUtil.applyObservableDefaultSchedulers())
-                        .subscribe({ (assetInfoList, searchPair) ->
-                            val tokenPairList = arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
-                            searchPair.forEach { assetPair ->
+                        .subscribe({ assetInfoList ->
 
-                                val id = when {
-                                    assetPair.priceAsset?.isWaves() == true ->
-                                        assetPair.amountAsset
-                                    isFiat(assetPair.priceAsset ?: "") ->
-                                        assetPair.amountAsset
-                                    else ->
-                                        assetPair.priceAsset
+                            val pairs = mapCorrectPairs(
+                                    pricesOrder, createPairs(assets))
+
+                            val tokenPairList =
+                                    arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
+
+                            pairs.forEach { pair ->
+                                val amountAssetInfo = assetInfoList
+                                        .firstOrNull { it.id == pair.first }
+                                val priceAssetInfo = assetInfoList
+                                        .firstOrNull { it.id == pair.second }
+
+                                val assetInfoResponse = when {
+                                    isFiat(pair.first) -> priceAssetInfo
+                                    isFiat(pair.second) -> amountAssetInfo
+                                    pair.first.isWaves() -> priceAssetInfo
+                                    else -> amountAssetInfo
                                 }
 
-                                val assetInfo = assetInfoList.firstOrNull { it.id == id }
-                                assetInfo.notNull {
+                                assetInfoResponse.notNull {
                                     tokenPairList.add(
                                             MarketWidgetConfigurationMarketsAdapter.TokenPair(
-                                                    it, assetPair))
+                                                    it,
+                                                    SearchPairResponse.Pair(
+                                                            amountAsset = pair.first,
+                                                            priceAsset = pair.second)))
                                 }
+
                             }
-                            if (tokenPairList.isEmpty()) {
-                                viewState.onFailGetMarkets()
+
+                            val initAssetList = MarketWidgetSettings.assetsSettings()
+                                    .queryAll(context, widgetId).isEmpty()
+
+                            val assetsMaxCount = if (initAssetList) {
+                                INIT_WIDGET_VIEW_ASSETS_MAX_COUNT
                             } else {
-                                viewState.onUpdatePairs(tokenPairList)
+                                WIDGET_VIEW_ASSETS_MAX_COUNT
+                            }
+
+                            when {
+                                tokenPairList.isEmpty() ->
+                                    viewState.onFailGetMarkets()
+                                tokenPairList.size > assetsMaxCount ->
+                                    viewState.onUpdatePairs(tokenPairList.subList(0, assetsMaxCount))
+                                else ->
+                                    viewState.onUpdatePairs(tokenPairList)
                             }
                         }, {
                             it.printStackTrace()
@@ -82,28 +102,17 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     }
 
     fun loadAssetPair(assetInfo: AssetInfoResponse) {
-        val pairsList = createPairs(mutableListOf(assetInfo.id))
-        addSubscription(dataServiceManager.loadPairs(pairs = pairsList)
-                .flatMap { pairs ->
-                    Observable.just(getFilledPairs(pairs, pairsList, false))
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe(
-                        { searchPair ->
-                            val tokenPairList = arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
-                            searchPair.forEach { assetPair ->
-                                assetInfo.notNull {
-                                    tokenPairList.add(
-                                            MarketWidgetConfigurationMarketsAdapter.TokenPair(
-                                                    it, assetPair))
-                                }
-                            }
-                            viewState.onAddPairs(tokenPairList)
-                        },
-                        {
-                            it.printStackTrace()
-                            viewState.onFailGetMarkets()
-                        }))
+        val pair = correctPair(
+                pricesOrder, Pair(assetInfo.id, WavesConstants.WAVES_ASSET_ID_FILLED))
+
+        val tokenPairList =
+                arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
+        tokenPairList.add(
+                MarketWidgetConfigurationMarketsAdapter.TokenPair(
+                        assetInfo, SearchPairResponse.Pair(amountAsset = pair.first,
+                        priceAsset = pair.second)))
+
+        viewState.onAddPairs(tokenPairList)
     }
 
     private fun setInitAppWidgetConfig(context: Context, widgetId: Int) {
@@ -129,46 +138,21 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
         themeName = MarketWidgetSettings.themeSettings().getTheme(context, widgetId)
     }
 
-    private fun createPairs(assets: List<String>): MutableList<String> {
-        val initPairsList = mutableListOf<String>()
+    private fun createPairs(assets: List<String>): MutableList<Pair<String, String>> {
+        val initPairsList = mutableListOf<Pair<String, String>>()
 
         for (priceAssetId in assets) {
             if (priceAssetId.isWaves()) {
-                initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/${EnvironmentManager.environment.externalProperties.usdId}")
-                initPairsList.add("${EnvironmentManager.environment.externalProperties.usdId}/${WavesConstants.WAVES_ASSET_ID_FILLED}")
-                continue
+                initPairsList.add(Pair(
+                        WavesConstants.WAVES_ASSET_ID_FILLED,
+                        EnvironmentManager.environment.externalProperties.usdId))
             } else {
-                initPairsList.add("${WavesConstants.WAVES_ASSET_ID_FILLED}/$priceAssetId")
-                initPairsList.add("$priceAssetId/${WavesConstants.WAVES_ASSET_ID_FILLED}")
+                initPairsList.add(Pair(
+                        WavesConstants.WAVES_ASSET_ID_FILLED,
+                        priceAssetId))
             }
         }
         return initPairsList
-    }
-
-    private fun getFilledPairs(pairs: SearchPairResponse, assets: MutableList<String>,
-                               initAssetsMaxCount: Boolean = true)
-            : MutableList<SearchPairResponse.Pair> {
-        val filledResult = mutableListOf<SearchPairResponse.Pair>()
-        pairs.data.forEachIndexed { index, item ->
-            if (item.data != null && index < assets.size) {
-                val pair = assets[index].split("/")
-                item.amountAsset = pair[0]
-                item.priceAsset = pair[1]
-                filledResult.add(item)
-            }
-        }
-
-        val assetsMaxCount = if (initAssetsMaxCount) {
-            INIT_WIDGET_VIEW_ASSETS_MAX_COUNT
-        } else {
-            WIDGET_VIEW_ASSETS_MAX_COUNT
-        }
-
-        return if (filledResult.size > assetsMaxCount) {
-            filledResult.subList(0, assetsMaxCount)
-        } else {
-            filledResult
-        }
     }
 
     companion object {

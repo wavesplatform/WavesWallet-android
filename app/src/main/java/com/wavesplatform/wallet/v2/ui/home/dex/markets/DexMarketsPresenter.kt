@@ -33,6 +33,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
     var needToUpdate: Boolean = false
     private val defaultAssets: MutableList<String> = mutableListOf()
+    private val pricesOrder: MutableList<String> = mutableListOf()
 
     init {
         EnvironmentManager.defaultAssets.forEach {
@@ -59,7 +60,10 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         val assetInfoHashMap = hashMapOf<String, AssetInfoResponse>()
 
         addSubscription(matcherServiceManager.getSettings()
-                .flatMap { getAllAssetInfoObservable(observablePair) }
+                .flatMap {
+                    pricesOrder.clear()
+                    pricesOrder.addAll(it.priceAssets)
+                    getAllAssetInfoObservable(observablePair) }
                 .flatMap { (amountAssetInfoList,
                                    priceAssetInfoList) ->
 
@@ -138,7 +142,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         }
 
         val pairsMap = hashMapOf<String, Pair<String, String>>()
-        mapCorrectPairs(defaultAssets, pairs).forEach {
+        mapCorrectPairs(pricesOrder, pairs).forEach {
             pairsMap[it.first + "/" + it.second] = it
         }
         val pairsKeys = pairsMap.keys.toList()
