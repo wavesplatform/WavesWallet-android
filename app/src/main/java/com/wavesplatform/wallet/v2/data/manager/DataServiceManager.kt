@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTradesPresenter.Companion.DEFAULT_LAST_TRADES_LIMIT
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
@@ -26,10 +27,6 @@ import javax.inject.Singleton
 
 @Singleton
 class DataServiceManager @Inject constructor() : BaseServiceManager() {
-
-    companion object {
-        var DEFAULT_LAST_TRADES_LIMIT = 50
-    }
 
     fun loadAliases(): Observable<List<AliasTransactionResponse>> {
         return dataService.aliases(getAddress())
@@ -98,15 +95,11 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    fun loadLastTradesByPair(watchMarket: WatchMarketResponse?): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
-        return dataService.transactionsExchange(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)
-                .map {
-                    return@map it.data.mapTo(ArrayList()) { it.transaction }
-                }
-    }
-
-    fun getLastTradeByPair(watchMarket: WatchMarketResponse?): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
-        return dataService.transactionsExchange(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, 1)
+    fun getLastExchangesByPair(
+            amountAsset: String?,
+            priceAsset: String?,
+            limit: Int): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
+        return dataService.transactionsExchange(amountAsset, priceAsset, limit)
                 .map {
                     return@map it.data.mapTo(ArrayList()) { it.transaction }
                 }

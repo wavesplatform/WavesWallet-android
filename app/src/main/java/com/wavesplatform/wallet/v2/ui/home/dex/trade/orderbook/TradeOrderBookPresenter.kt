@@ -40,7 +40,9 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                             return@flatMap Observable.zip(matcherServiceManager.loadOrderBook(
                                     market?.amountAsset!!,
                                     market.priceAsset),
-                                    dataServiceManager.getLastTradeByPair(watchMarket),
+                                    dataServiceManager.getLastExchangesByPair(watchMarket?.market?.amountAsset,
+                                            watchMarket?.market?.amountAsset,
+                                            DEFAULT_LIMIT),
                                     BiFunction { orderBook: OrderBookResponse,
                                                  lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
@@ -110,5 +112,9 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
 
     fun clearSubscriptions() {
         subscriptions.clear()
+    }
+
+    companion object {
+        var DEFAULT_LIMIT = 1
     }
 }

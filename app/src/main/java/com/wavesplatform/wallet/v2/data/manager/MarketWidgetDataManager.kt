@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveMar
 import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.executeInBackground
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -41,18 +42,32 @@ class MarketWidgetDataManager @Inject constructor() {
                 PairRequest(
                         pairs = activeAssetsIds,
                         matcher = EnvironmentManager.getMatcherAddress()))
-                .executeInBackground()
-                .map { response ->
-                    return@map activeAssets
-                            .mapIndexedTo(mutableListOf(), { index, marketWidgetActiveAsset ->
-                                MarketWidgetActiveMarket(marketWidgetActiveAsset,
-                                        response.data[index].data ?: SearchPairResponse.Pair.Data())
-                            })
+                .flatMap { searchResult ->
+                    Observable.fromIterable(activeAssets)
+                            .flatMap { activeAsset ->
+                                dataServiceManager.getLastExchangesByPair(activeAsset.amountAsset, activeAsset.priceAsset, DEFAULT_LIMIT)
+                                        .map { transactions ->
+                                            if (transactions.isEmpty()) {
+                                                return@map activeAsset to 0.0
+                                            } else {
+                                                return@map activeAsset to transactions.sumByDouble { it.price } / transactions.size
+                                            }
+                                        }
+                            }
+                            .map { (activeAsset, price) ->
+                                val assetIndex = activeAssets.indexOf(activeAsset)
+                                MarketWidgetActiveMarket(activeAsset,
+                                        searchResult.data[assetIndex].data
+                                                ?: SearchPairResponse.Pair.Data(),
+                                        price)
+                            }
+                            .toList().toObservable()
                 }
                 .map { activeMarkets ->
                     val prices = calculatePrice(activeMarkets)
                     MarketWidgetSettings.marketsSettings().saveAll(context, widgetId, prices)
                 }
+                .executeInBackground()
                 .subscribe({
                     successListener.invoke()
                 }, {
@@ -91,28 +106,28 @@ class MarketWidgetDataManager @Inject constructor() {
 
     private fun calculateTokenPriceFor(activeMarket: MarketWidgetActiveMarket,
                                        wavesCurrencyAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
-        val deltaPercentUsd = (activeMarket.data.lastPrice - activeMarket.data.firstPrice) * BigDecimal(100)
-        val percentUsd =
-                if (activeMarket.data.lastPrice != BigDecimal.ZERO) deltaPercentUsd / activeMarket.data.lastPrice
+        val deltaPercent = (activeMarket.data.lastPrice - activeMarket.data.firstPrice) * BigDecimal(100)
+        val percent =
+                if (activeMarket.data.lastPrice != BigDecimal.ZERO) deltaPercent / activeMarket.data.lastPrice
                 else BigDecimal.ZERO
 
-        val priceUsd =
+        val price =
                 if (activeMarket.assetInfo.amountAsset.isWavesId() || activeMarket.assetInfo.amountAsset.isWaves()) {
-                    if (activeMarket.data.quoteVolume != null && activeMarket.data.quoteVolume != BigDecimal.ZERO)
-                        (activeMarket.data.volume.div(activeMarket.data.quoteVolume!!)).times(wavesCurrencyAsset.data.lastPrice)
+                    if (activeMarket.assetPrice != 0.0)
+                        (1 / activeMarket.assetPrice * wavesCurrencyAsset.assetPrice).toBigDecimal()
                     else {
                         BigDecimal.ZERO
                     }
                 } else {
-                    if (activeMarket.data.volumeWaves != null && activeMarket.data.volume != BigDecimal.ZERO)
-                        (activeMarket.data.volumeWaves!!.div(activeMarket.data.volume)).times(wavesCurrencyAsset.data.lastPrice)
+                    if (activeMarket.assetPrice != 0.0)
+                        (activeMarket.assetPrice * wavesCurrencyAsset.assetPrice).toBigDecimal()
                     else {
                         BigDecimal.ZERO
                     }
                 }
 
 
-        return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)
+        return MarketWidgetActiveMarket.UI.PriceData(price, percent)
     }
 
     private fun calculateWavesPriceFor(wavesCurrencyAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
@@ -139,6 +154,7 @@ class MarketWidgetDataManager @Inject constructor() {
     companion object {
         const val USD_NAME = "Dollar"
         const val EUR_NAME = "Euro"
+        const val DEFAULT_LIMIT = 5
     }
 
 }

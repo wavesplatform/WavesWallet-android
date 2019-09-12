@@ -10,7 +10,8 @@ import java.math.BigDecimal
 
 data class MarketWidgetActiveMarket(
         var assetInfo: MarketWidgetActiveAsset,
-        var data: SearchPairResponse.Pair.Data
+        var data: SearchPairResponse.Pair.Data,
+        var assetPrice: Double
 ) {
     data class UI(
             var id: String,
