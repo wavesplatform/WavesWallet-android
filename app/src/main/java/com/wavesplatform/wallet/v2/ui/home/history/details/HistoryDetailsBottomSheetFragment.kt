@@ -663,7 +663,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
             confirmations.toString()
         }
         layout.text_block?.text = transaction.height.toString()
-        layout.text_timestamp?.text = transaction.timestamp.date("dd.MM.yyyy HH:mm")
+        layout.text_timestamp?.text = transaction.timestamp.date(Constants.DATE_TIME_PATTERN)
 
         showTransactionFee()
 

@@ -8,11 +8,13 @@ package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_use_fingerprint.*
@@ -69,6 +71,10 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
 
     override fun onBackPressed() {
         App.getAccessManager().setUseFingerPrint(guid, false)
-        launchActivity<MainActivity>(clear = true)
+        if (WavesSdk.keeper().isKeeperIntent(intent)) {
+            launchActivity<KeeperTransactionActivity>()
+        } else {
+            launchActivity<MainActivity>(clear = true)
+        }
     }
 }

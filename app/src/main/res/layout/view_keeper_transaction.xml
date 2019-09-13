@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/basic50"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="24dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_transaction"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_t_startlease_48"
+        android:layout_width="@dimen/asset_icon_size"
+        android:layout_height="@dimen/asset_icon_size"
+        android:layout_centerVertical="true" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_transaction_name"
+        app:autoSizeMaxTextSize="12sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintStart_toEndOf="@+id/image_transaction"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Started Leasing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:textColor="@color/basic500"
+        android:textSize="12sp" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_transaction_title"
+        app:autoSizeMaxTextSize="16sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/image_transaction"
+        app:layout_constraintStart_toEndOf="@+id/image_transaction"
+        app:layout_constraintTop_toBottomOf="@+id/text_transaction_name"
+        tools:text="1.3423423"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:lines="1"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</android.support.constraint.ConstraintLayout>

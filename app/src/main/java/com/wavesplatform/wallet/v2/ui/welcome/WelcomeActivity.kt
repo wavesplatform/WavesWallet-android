@@ -97,7 +97,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     }
 
     private fun setEnvButton() {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG || preferencesHelper.isDeveloper()) {
             button_switch_net.visiable()
             val newEnvironment = when (EnvironmentManager.environmentName) {
                 ClientEnvironment.KEY_ENV_MAIN_NET -> {

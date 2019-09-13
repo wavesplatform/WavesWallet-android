@@ -19,7 +19,6 @@ data class GatewayWithdrawArgs(var transaction: TransferTransaction,
             transaction.assetId,
             transaction.recipient,
             transaction.amount,
-            transaction.fee,
             transaction.attachment,
             transaction.feeAssetId) {
 
@@ -30,6 +29,7 @@ data class GatewayWithdrawArgs(var transaction: TransferTransaction,
             this.proofs.addAll(transaction.proofs)
             this.signature = transaction.signature
             this.chainId = transaction.chainId
+            this.fee = transaction.fee
         }
     }
 }

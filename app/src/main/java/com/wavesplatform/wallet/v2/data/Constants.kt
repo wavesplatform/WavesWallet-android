@@ -37,6 +37,7 @@ object Constants {
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
     const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
+    const val DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm"
 
 
     // Custom Result code
