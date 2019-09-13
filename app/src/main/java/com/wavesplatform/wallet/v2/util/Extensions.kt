@@ -1043,3 +1043,55 @@ fun String?.isValidErgoAddress(): Boolean {
     }
     return this.matches(Regex("^9[a-km-zA-HJ-NP-Z1-9]{5,}"))
 }
+
+fun mapCorrectPairs(settingsIdsPairs: List<String>, pairs: List<Pair<String, String>>)
+        : List<Pair<String, String>> {
+    return pairs.map { pair ->
+        correctPair(settingsIdsPairs, pair)
+    }
+}
+
+fun correctPair(settingsIdsPairs: List<String>, pair: Pair<String, String>): Pair<String, String> {
+    val amountIndex = settingsIdsPairs.indexOf(pair.first)
+    val priceIndex = settingsIdsPairs.indexOf(pair.second)
+
+    val amount: String
+    val price: String
+
+    val isFirstInList = amountIndex != -1
+    val isSecondInList = priceIndex != -1
+
+    if (isFirstInList && isSecondInList) {
+        if (amountIndex > priceIndex) {
+            amount = pair.first
+            price = pair.second
+        } else {
+            amount = pair.second
+            price = pair.first
+        }
+    } else if (isFirstInList && !isSecondInList) {
+        amount = pair.second
+        price = pair.first
+    } else if (!isFirstInList && isSecondInList) {
+        amount = pair.first
+        price = pair.second
+    } else {
+        val amountBytes = WavesCrypto.base58decode(input = pair.first).toHexString()
+        val priceBytes = WavesCrypto.base58decode(input = pair.second).toHexString()
+
+        if (amountBytes > priceBytes) {
+            amount = pair.first
+            price = pair.second
+        } else {
+            amount = pair.second
+            price = pair.first
+        }
+    }
+    return Pair(amount, price)
+}
+
+private fun ByteArray.toHexString(): String {
+    return this.joinToString("") {
+        java.lang.String.format("%02x", it)
+    }
+}
