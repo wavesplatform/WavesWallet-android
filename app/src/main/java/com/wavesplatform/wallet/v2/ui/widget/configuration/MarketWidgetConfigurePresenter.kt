@@ -53,16 +53,16 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                             val tokenPairList =
                                     arrayListOf<MarketWidgetConfigurationMarketsAdapter.TokenPair>()
 
-                            pairs.forEach { pair ->
+                            pairs.forEach { (amountAssetId, priceAssetId ) ->
                                 val amountAssetInfo = assetInfoList
-                                        .firstOrNull { it.id == pair.first }
+                                        .firstOrNull { it.id == amountAssetId }
                                 val priceAssetInfo = assetInfoList
-                                        .firstOrNull { it.id == pair.second }
+                                        .firstOrNull { it.id == priceAssetId }
 
                                 val assetInfoResponse = when {
-                                    isFiat(pair.first) -> priceAssetInfo
-                                    isFiat(pair.second) -> amountAssetInfo
-                                    pair.first.isWaves() -> priceAssetInfo
+                                    isFiat(amountAssetId) -> priceAssetInfo
+                                    isFiat(priceAssetId) -> amountAssetInfo
+                                    amountAssetId.isWaves() -> priceAssetInfo
                                     else -> amountAssetInfo
                                 }
 
@@ -71,8 +71,8 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                                             MarketWidgetConfigurationMarketsAdapter.TokenPair(
                                                     it,
                                                     SearchPairResponse.Pair(
-                                                            amountAsset = pair.first,
-                                                            priceAsset = pair.second)))
+                                                            amountAsset = amountAssetId,
+                                                            priceAsset = priceAssetId)))
                                 }
 
                             }
