@@ -131,10 +131,12 @@ class MarketWidgetDataManager @Inject constructor() {
     }
 
     private fun calculateWavesPriceFor(wavesCurrencyAsset: MarketWidgetActiveMarket): MarketWidgetActiveMarket.UI.PriceData {
-        val deltaPercentUsd = (wavesCurrencyAsset.data.lastPrice - wavesCurrencyAsset.data.firstPrice) * BigDecimal(100)
-        val percentUsd = deltaPercentUsd / wavesCurrencyAsset.data.lastPrice
-        val priceUsd = wavesCurrencyAsset.data.lastPrice
-        return MarketWidgetActiveMarket.UI.PriceData(priceUsd, percentUsd)
+        val deltaPercent = (wavesCurrencyAsset.data.lastPrice - wavesCurrencyAsset.data.firstPrice) * BigDecimal(100)
+        val percent =
+                if (wavesCurrencyAsset.data.lastPrice != BigDecimal.ZERO) deltaPercent / wavesCurrencyAsset.data.lastPrice
+                else BigDecimal.ZERO
+        val price = wavesCurrencyAsset.data.lastPrice
+        return MarketWidgetActiveMarket.UI.PriceData(price, percent)
     }
 
     private fun withDefaultPair(assets: MutableList<MarketWidgetActiveAsset>): MutableList<MarketWidgetActiveAsset> {

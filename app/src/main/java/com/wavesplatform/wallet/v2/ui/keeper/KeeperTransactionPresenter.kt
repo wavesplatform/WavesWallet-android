@@ -55,15 +55,21 @@ class KeeperTransactionPresenter @Inject constructor() : BasePresenter<KeeperTra
                     it.printStackTrace()
                     viewState.onError(it)
                 }, {
-                    val dAppAddress = if (this.transaction is InvokeScriptTransaction) {
-                        (this.transaction as InvokeScriptTransaction).dApp
-                    } else {
-                        ""
+                    try {
+                        val dAppAddress =
+                                when (transaction) {
+                                    is InvokeScriptTransaction -> transaction.dApp
+                                    else -> ""
+                                }
+                        if (commission != null && scriptInfo != null) {
+                            fee = countFee(transaction, commission!!, scriptInfo!!, assetDetails)
+                        }
+
+                        viewState.onReceiveTransactionData(this.transaction, dAppAddress, assetDetails)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        viewState.onError(e)
                     }
-                    if (commission != null && scriptInfo != null) {
-                        fee = countFee(transaction, commission!!, scriptInfo!!, assetDetails)
-                    }
-                    viewState.onReceiveTransactionData(this.transaction, dAppAddress, assetDetails)
                 }))
     }
 
