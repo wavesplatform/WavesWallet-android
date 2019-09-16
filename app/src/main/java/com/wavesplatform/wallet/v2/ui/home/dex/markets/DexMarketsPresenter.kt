@@ -176,15 +176,15 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         val observablePrice: Observable<List<AssetInfoResponse>>
         when {
             assetPair.size == 2 -> {
-                observableAmount = dataServiceManager.assets(search = assetPair[0], limit = 10)
+                observableAmount = dataServiceManager.assets(search = assetPair[0])
                 observablePrice = if (assetPair[1] == "") {
                     dataServiceManager.assets(ids = defaultAssets)
                 } else {
-                    dataServiceManager.assets(search = assetPair[1], limit = 10)
+                    dataServiceManager.assets(search = assetPair[1])
                 }
             }
             assetPair.size == 1 -> {
-                observableAmount = dataServiceManager.assets(search = assetPair[0], limit = 10)
+                observableAmount = dataServiceManager.assets(search = assetPair[0])
                 observablePrice = dataServiceManager.assets(ids = defaultAssets)
             }
             else -> {
@@ -293,18 +293,14 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
 
     private fun filterSpam(markets: MutableList<MarketResponse>): MutableList<MarketResponse> {
-        val spamAssets = queryAll<SpamAssetDb>()
+        val spamAssets = queryAll<SpamAssetDb>().associateBy { it.assetId }
 
         val filteredSpamList = if (prefsUtil.getValue(
                         PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
             markets.filter { market ->
-                val amountSpam = spamAssets.firstOrNull {
-                    it.assetId == market.amountAsset
-                }
-                val priceSpam = spamAssets.firstOrNull {
-                    it.assetId == market.priceAsset
-                }
-                amountSpam == null && priceSpam == null
+                val amountSpam = spamAssets.containsKey(market.amountAsset)
+                val priceSpam = spamAssets.containsKey(market.priceAsset)
+                !amountSpam && !priceSpam
             }
         } else {
             markets
