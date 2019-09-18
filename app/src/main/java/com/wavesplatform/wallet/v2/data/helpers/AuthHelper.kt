@@ -59,12 +59,14 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
     private fun saveDefaultAssets() {
         EnvironmentManager.defaultAssets.forEach { asset ->
-            val dbAsset = queryFirst<AssetBalanceDb> { equalTo("assetId", asset.assetId) }
-            if (dbAsset == null) {
-                AssetBalanceDb(asset).save()
-            } else {
-                dbAsset.updateInfo(asset)
-                dbAsset.save()
+            asset?.let { notNullAsset ->
+                val dbAsset = queryFirst<AssetBalanceDb> { equalTo("assetId", notNullAsset.assetId) }
+                if (dbAsset == null) {
+                    AssetBalanceDb(asset).save()
+                } else {
+                    dbAsset.updateInfo(asset)
+                    dbAsset.save()
+                }
             }
         }
         prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)

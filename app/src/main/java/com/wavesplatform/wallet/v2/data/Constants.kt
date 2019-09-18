@@ -20,7 +20,7 @@ object Constants {
     const val URL_GITHUB_CONFIG_VERSION = "master/version_android.json"
     const val URL_GITHUB_CONFIG_SPAM_FILE = "master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
-    const val URL_TERMS = "https://wavesplatform.com/files/docs/Privacy%20Policy_SW.pdf"
+    const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_privacy_policy.pdf"
     const val URL_TERMS_AND_CONDITIONS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
     const val URL_WHITEPAPER = "https://wavesplatform.com/files/whitepaper_v0.pdf"
     const val URL_TELEGRAM = "https://telegram.me/wavesnews"
@@ -59,6 +59,7 @@ object Constants {
         const val TEST_GATEWAY_URL = "https://gw.wavesplatform.com"
         const val MAIN_NET_CODE = 'V'
         const val TEST_NET_CODE = 'F'
+        const val STAGE_NET_CODE = 'S'
     }
 
     object GatewayType {
@@ -79,11 +80,17 @@ object Constants {
             const val USD_ID = "D6N2rAqWN6ZCWnCeNFWLGqqjS6nJLeK4m19XiuhdDenr"
             const val EUR_ID = "AsuWyM9MUUsMmWkK7jS48L3ky6gA1pxx7QtEYPbfLjAJ"
         }
+
+        object StageNet {
+            const val USD_ID = "HETgTyfn5grcHWGRKHi7p3hvMB4QxWVrPD8Fnfi9tfD9"
+            const val EUR_ID = "EqZfxiqYKkByP42hqNsvuPdXxVYMHaQDwfKgFnAz5D1x"
+        }
     }
 
     object MatcherAddress {
         const val MAIN_NET = "3PJaDyprvekvPXPuAtxrapacuDJopgJRaU3"
         const val TEST_NET = "3N8aZG6ZDfnh8YxS6aNcteobN8eXTWHaBBd"
+        const val STAGE_NET = "3MiZL2gvmPcX4hwjpCUYnHxXEJ95kHBfCws"
     }
 
     val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)

@@ -688,7 +688,7 @@ fun loadDbWavesBalance(): AssetBalanceResponse {
 }
 
 fun getDeviceId(): String {
-    return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
+    return "android:${Settings.Secure.getString(ctx.contentResolver, Settings.Secure.ANDROID_ID)}"
 }
 
 fun Throwable.errorBody(): ErrorResponse? {
