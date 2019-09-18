@@ -29,7 +29,7 @@ class NewsResponse {
     }
 
     companion object {
-        const val URL = "mobile/v2.2/notifications_android.json"
+        const val URL = "mobile/v2.6/notifications_android.json"
         const val URL_TEST = "mobile/v2.3/notifications_test_android.json"
         private const val DEFAULT_LANG_CODE = "en"
 

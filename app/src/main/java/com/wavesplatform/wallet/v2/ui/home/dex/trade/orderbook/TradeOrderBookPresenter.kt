@@ -41,7 +41,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                                     market?.amountAsset!!,
                                     market.priceAsset),
                                     dataServiceManager.getLastExchangesByPair(watchMarket?.market?.amountAsset,
-                                            watchMarket?.market?.amountAsset,
+                                            watchMarket?.market?.priceAsset,
                                             DEFAULT_LIMIT),
                                     BiFunction { orderBook: OrderBookResponse,
                                                  lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
