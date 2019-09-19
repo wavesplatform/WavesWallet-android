@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Created by Eduard Zaydel on 19/7/2019
-  ~ Copyright © 2019 Waves Platform. All rights reserved.
-  -->
-
 <resources>
   <string name="about_redirection_message">सत्यापन के माध्यम से जाने के बाद आपको आगे के निर्देशों के साथ एक ईमेल प्राप्त होगा</string>
   <string name="about_redirection_okay">ठीक है</string>
@@ -679,4 +674,36 @@
   <string name="trade_order_dialog_positive_place_order">ऑर्डर देना</string>
   <string name="trade_order_dialog_negative_cancel">रद्द करना</string>
   <string name="trade_order_dialog_subtitle_proceed">क्या आप आगे बढ़ना चाहते हैं?</string>
+  <string name="market_widget_update">अद्यतन करें</string>
+  <string name="market_widget_updating">अद्यतन कर रहा है…</string>
+  <string name="market_widget_currency_text">USD / EUR</string>
+  <string name="market_widget_config_update_interval">अंतराल अद्यतन करें</string>
+  <string name="market_widget_config_interval_1_min">1 मिनिट</string>
+  <string name="market_widget_config_interval_5_min">5 मिनिट</string>
+  <string name="market_widget_config_interval_10_min">10 मिनिट</string>
+  <string name="market_widget_config_interval_manually">मैन्युअल रूप से अपडेट करें</string>
+  <string name="market_widget_config_widget_style">विजेट शैली</string>
+  <string name="market_widget_config_classic">क्लासिक</string>
+  <string name="market_widget_config_dark">गहरा</string>
+  <string name="market_widget_config_title">बाजार पल्स</string>
+  <string name="market_widget_config_interval">अंतराल</string>
+  <string name="market_widget_config_add_token">टोकन जोड़ें</string>
+  <string name="market_widget_config_style">अंदाज</string>
+  <string name="market_widget_config_error_add_asset">यह टोकन पहले ही जोड़ा जा चुका है</string>
+  <string name="market_widget_config_added">जोड़ा गया</string>
+  <string name="market_widget_config_cant_find_currency_pair">आपकी खोज से मेल खाता कोई टोकन नहीं</string>
+  <string name="choose_account_new_account_dialog_title">Please select</string>
+  <string name="keeper_title_confirm_request">Confirm request</string>
+  <string name="keeper_from">From</string>
+  <string name="keeper_to">To</string>
+  <string name="keeper_tx_id">TXID</string>
+  <string name="keeper_function">Function</string>
+  <string name="keeper_script_address">Script address</string>
+  <string name="keeper_fee">Fee</string>
+  <string name="keeper_payment">Payment</string>
+  <string name="keeper_tx_time">TX time</string>
+  <string name="keeper_reject">Reject</string>
+  <string name="keeper_approve">Approve</string>
+  <string name="keeper_sign">Sign</string>
+  <string name="keeper_send">Send</string>
 </resources>
