@@ -46,6 +46,12 @@ object Constants {
     const val RESULT_OK_NO_RESULT = 204
     const val RESULT_SMART_ERROR = 307
 
+    object News {
+        const val URL = "master/notifications_android.json"
+        const val URL_TEST = "master/notifications_test_android.json"
+        const val DEFAULT_LANG_CODE = "en"
+    }
+
     object View {
         const val ENABLE_VIEW = 1f
         const val DISABLE_VIEW = 0.3f

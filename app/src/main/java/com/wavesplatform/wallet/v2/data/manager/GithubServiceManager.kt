@@ -43,9 +43,9 @@ class GithubServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun loadNews(): Observable<NewsResponse> {
         val newsUrl = if (preferencesHelper.useTestNews) {
-            NewsResponse.URL_TEST
+            Constants.News.URL_TEST
         } else {
-            NewsResponse.URL
+            Constants.News.URL
         }
         return githubService.news(newsUrl)
     }
