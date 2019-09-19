@@ -76,7 +76,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
-                                it.assetId == assetInfoData.assetInfo.id
+                                assetInfoData.assetInfo != null && it.assetId == assetInfoData.assetInfo.id
                             }
 
                             defaultAsset.notNull { assetBalance ->
