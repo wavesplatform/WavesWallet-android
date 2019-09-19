@@ -65,8 +65,7 @@
   <string name="backup_hint_2">Veuillez noter soigneusement ces 15 mots ou les copier</string>
   <string name="backup_hint_3">Vous confirmerez cette phrase à l\'écran suivant</string>
   <string name="backup_info_button">Je comprends</string>
-  <string name="backup_info_subtitle">Waves Platform aimerait vous mettre en garde contre l\'augmentation de la fréquence des escroqueries et des attaques d\'hameçonnage au cours du dernier mois. Les escrocs cachent leur programme malveillant dans leur propre version de l\'application Waves, promettant des bonus et des remises pour attirer des utilisateurs.
-\n\nVeuillez faire attention et n\'entrez jamais votre phrase secrète (SEED) dans ces \'clients\' car votre compte serait compromis et vous perdriez tous vos fonds. \n\nVous devez utiliser UNIQUEMENT le client officiel Waves.</string>
+  <string name="backup_info_subtitle">Waves Platform aimerait vous mettre en garde contre l\'augmentation de la fréquence des escroqueries et des attaques d\'hameçonnage au cours du dernier mois. Les escrocs cachent leur programme malveillant dans leur propre version de l\'application Waves, promettant des bonus et des remises pour attirer des utilisateurs.\n\nVeuillez faire attention et n\'entrez jamais votre phrase secrète (SEED) dans ces \'clients\' car votre compte serait compromis et vous perdriez tous vos fonds. \n\nVous devez utiliser UNIQUEMENT le client officiel Waves.</string>
   <string name="backup_info_title">Conservez soigneusement votre phrase de sauvegarde !</string>
   <string name="backup_phrase">Phrase de sauvegarde</string>
   <string name="backup_wrriten_down">Je l\'ai écrite</string>
@@ -675,4 +674,36 @@
   <string name="trade_order_dialog_positive_place_order">Placer un ordre</string>
   <string name="trade_order_dialog_negative_cancel">Annuler</string>
   <string name="trade_order_dialog_subtitle_proceed">Voulez-vous continuer?</string>
+  <string name="market_widget_update">Mettre à jour</string>
+  <string name="market_widget_updating">Mise à jour…</string>
+  <string name="market_widget_currency_text">USD / EUR</string>
+  <string name="market_widget_config_update_interval">Intervalle de mise à jour</string>
+  <string name="market_widget_config_interval_1_min">1 minute</string>
+  <string name="market_widget_config_interval_5_min">5 minutes</string>
+  <string name="market_widget_config_interval_10_min">10 minutes</string>
+  <string name="market_widget_config_interval_manually">Mettre à jour manuellement</string>
+  <string name="market_widget_config_widget_style">Style de widget</string>
+  <string name="market_widget_config_classic">Classique</string>
+  <string name="market_widget_config_dark">Sombre</string>
+  <string name="market_widget_config_title">Impulsion du marché</string>
+  <string name="market_widget_config_interval">Intervalle</string>
+  <string name="market_widget_config_add_token">Ajouter un jeton</string>
+  <string name="market_widget_config_style">Style</string>
+  <string name="market_widget_config_error_add_asset">Ce jeton a déjà été ajouté</string>
+  <string name="market_widget_config_added">Ajouté</string>
+  <string name="market_widget_config_cant_find_currency_pair">Aucun jeton correspondant à votre recherche</string>
+  <string name="choose_account_new_account_dialog_title">Please select</string>
+  <string name="keeper_title_confirm_request">Confirm request</string>
+  <string name="keeper_from">From</string>
+  <string name="keeper_to">To</string>
+  <string name="keeper_tx_id">TXID</string>
+  <string name="keeper_function">Function</string>
+  <string name="keeper_script_address">Script address</string>
+  <string name="keeper_fee">Fee</string>
+  <string name="keeper_payment">Payment</string>
+  <string name="keeper_tx_time">TX time</string>
+  <string name="keeper_reject">Reject</string>
+  <string name="keeper_approve">Approve</string>
+  <string name="keeper_sign">Sign</string>
+  <string name="keeper_send">Send</string>
 </resources>
