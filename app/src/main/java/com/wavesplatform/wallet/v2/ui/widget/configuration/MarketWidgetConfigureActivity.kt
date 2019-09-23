@@ -33,6 +33,7 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.utils.isWaves
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
@@ -120,6 +121,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         toolbar_close.click {
             saveAppWidget()
+            finish()
         }
 
 
@@ -131,6 +133,9 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                     when (view.id) {
                         R.id.image_delete -> {
                             if (adapter.data.size > 1) {
+                                this.adapter.getItem(position).notNull {
+                                    presenter.assets.remove(it.assetInfo.id)
+                                }
                                 adapter.remove(position)
                                 updateWidgetAssetPairs()
                                 checkCanAddPair()
@@ -183,17 +188,21 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
     }
 
     override fun onBackPressed() {
-        saveAppWidget()
+        if (!intent.hasExtra(EXTRA_APPWIDGET_CHANGE)) {
+            MarketWidgetActiveAssetStore.clear(this, widgetId)
+            setResult(Activity.RESULT_CANCELED)
+        }
+        finish()
     }
 
     override fun onPause() {
         super.onPause()
         EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener)
+        MarketPulseAppWidgetProvider.updateWidgetByBroadcast(this, widgetId)
     }
 
     private fun saveAppWidget() {
         if (!isNetworkConnected() || presenter.assets.size == 0 || adapter.data.size == 0) {
-            finish()
             return
         }
 
@@ -205,12 +214,10 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
 
         MarketWidgetActiveAssetStore.saveAll(this, widgetId, presenter.widgetAssetPairs)
-        MarketPulseAppWidgetProvider.updateWidgetByBroadcast(this, widgetId)
 
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         setResult(Activity.RESULT_OK, resultValue)
-        finish()
     }
 
     private fun loadAssetsPairs() {
@@ -264,11 +271,13 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         adapter.emptyView = getEmptyView()
         skeletonScreen?.hide()
         updateWidgetAssetPairs()
+        setSkeletonGradient(false)
     }
 
     override fun onFailGetMarkets() {
         afterFailGetMarkets()
         skeletonScreen?.hide()
+        setSkeletonGradient(false)
     }
 
     private fun updateWidgetAssetPairs() {
@@ -290,6 +299,8 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                     id ?: "",
                     it.pair.amountAsset ?: "",
                     it.pair.priceAsset ?: ""))
+
+            saveAppWidget()
         }
     }
 
@@ -374,6 +385,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                         .intervalSettings()
                         .setInterval(this@MarketWidgetConfigureActivity, widgetId, presenter.intervalUpdate)
                 setTabText(INTERVAL_TAB, presenter.intervalUpdate.itemTitle())
+                saveAppWidget()
             }
         }
 
@@ -397,6 +409,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
                         .themeSettings()
                         .setTheme(this@MarketWidgetConfigureActivity, widgetId, presenter.themeName)
                 setTabText(THEME_TAB, presenter.themeName.itemTitle())
+                saveAppWidget()
             }
         }
 
@@ -427,12 +440,19 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
     }
 
-    private fun setSkeletonGradient() {
+    private fun setSkeletonGradient(enable: Boolean = true) {
         tokensList?.post {
-            tokensList?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
-            tokensList?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
-            tokensList?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
-            tokensList?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+            if (enable) {
+                tokensList?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+                tokensList?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+                tokensList?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+                tokensList?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+            } else {
+                tokensList?.layoutManager?.findViewByPosition(1)?.alpha = 1.0f
+                tokensList?.layoutManager?.findViewByPosition(2)?.alpha = 1.0f
+                tokensList?.layoutManager?.findViewByPosition(3)?.alpha = 1.0f
+                tokensList?.layoutManager?.findViewByPosition(4)?.alpha = 1.0f
+            }
         }
     }
 
