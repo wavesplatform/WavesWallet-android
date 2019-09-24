@@ -34,6 +34,8 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
     private val pricesOrder = mutableListOf<String>()
 
     fun loadAssetsPairs(context: Context, widgetId: Int) {
+        val initAssetList = MarketWidgetSettings.assetsSettings()
+                .queryAll(context, widgetId).isEmpty()
 
         setInitAppWidgetConfig(context, widgetId)
 
@@ -74,11 +76,7 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                                                             amountAsset = amountAssetId,
                                                             priceAsset = priceAssetId)))
                                 }
-
                             }
-
-                            val initAssetList = MarketWidgetSettings.assetsSettings()
-                                    .queryAll(context, widgetId).isEmpty()
 
                             val assetsMaxCount = if (initAssetList) {
                                 INIT_WIDGET_VIEW_ASSETS_MAX_COUNT
