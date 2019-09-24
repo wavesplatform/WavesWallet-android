@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.smart_info.SmartPairInfoBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.safeLet
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
 import kotlinx.android.synthetic.main.content_global_server_error_layout.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
@@ -52,7 +53,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     override fun configLayoutRes() = R.layout.fragment_trade_orderbook
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarketResponse>(TradeActivity.BUNDLE_MARKET)
+        presenter.watchMarket = arguments?.getParcelable(TradeActivity.BUNDLE_MARKET)
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.DexOrderButtonClickEvent::class.java)
                 .subscribe {
@@ -241,13 +242,17 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         }
     }
 
-    override fun afterFailedOrderbook() {
+    override fun afterFailedOrderbook(message: String?) {
         progress_bar.hide()
         if (adapter.data.isEmpty()) {
             linear_buttons.gone()
             linear_fields_name.gone()
 
             error_layout.visiable()
+        }
+
+        if (!message.isNullOrEmpty()) {
+            showError(message, R.id.trade_orderbook_root)
         }
     }
 
