@@ -681,7 +681,7 @@
   <string name="market_widget_config_interval_1_min">1 dakika</string>
   <string name="market_widget_config_interval_5_min">5 dakika</string>
   <string name="market_widget_config_interval_10_min">10 dakika</string>
-  <string name="market_widget_config_interval_manually">Manuel güncelleme</string>
+  <string name="market_widget_config_interval_manually">Manuel</string>
   <string name="market_widget_config_widget_style">Widget tarzı</string>
   <string name="market_widget_config_classic">Klasik</string>
   <string name="market_widget_config_dark">Karanlık</string>

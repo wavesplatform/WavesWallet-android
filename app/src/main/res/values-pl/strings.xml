@@ -681,7 +681,7 @@
   <string name="market_widget_config_interval_1_min">1 minuta</string>
   <string name="market_widget_config_interval_5_min">5 minut</string>
   <string name="market_widget_config_interval_10_min">10 minut</string>
-  <string name="market_widget_config_interval_manually">Zaktualizuj ręcznie</string>
+  <string name="market_widget_config_interval_manually">Ręcznie</string>
   <string name="market_widget_config_widget_style">Styl widżetu</string>
   <string name="market_widget_config_classic">Klasyczny</string>
   <string name="market_widget_config_dark">Ciemny</string>

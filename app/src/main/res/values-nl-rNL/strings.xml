@@ -681,7 +681,7 @@
   <string name="market_widget_config_interval_1_min">1 minuut</string>
   <string name="market_widget_config_interval_5_min">5 minuten</string>
   <string name="market_widget_config_interval_10_min">10 minuten</string>
-  <string name="market_widget_config_interval_manually">Update handmatig</string>
+  <string name="market_widget_config_interval_manually">Handmatig</string>
   <string name="market_widget_config_widget_style">Widgetstijl</string>
   <string name="market_widget_config_classic">Klassiek</string>
   <string name="market_widget_config_dark">Donker</string>
