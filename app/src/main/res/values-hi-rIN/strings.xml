@@ -681,7 +681,7 @@
   <string name="market_widget_config_interval_1_min">1 मिनिट</string>
   <string name="market_widget_config_interval_5_min">5 मिनिट</string>
   <string name="market_widget_config_interval_10_min">10 मिनिट</string>
-  <string name="market_widget_config_interval_manually">ममैन्युअल रूप से</string>
+  <string name="market_widget_config_interval_manually">मैन्युअल रूप से</string>
   <string name="market_widget_config_widget_style">विजेट शैली</string>
   <string name="market_widget_config_classic">क्लासिक</string>
   <string name="market_widget_config_dark">गहरा</string>
