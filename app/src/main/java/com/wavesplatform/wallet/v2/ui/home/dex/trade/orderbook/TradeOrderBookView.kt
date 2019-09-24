@@ -10,5 +10,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TradeOrderBookView : BaseMvpView {
     fun afterSuccessOrderbook(data: MutableList<MultiItemEntity>, lastPricePosition: Int)
-    fun afterFailedOrderbook()
+    fun afterFailedOrderbook(message: String? = null)
 }
