@@ -411,6 +411,7 @@ fun Fragment.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? 
     view.notNull { v ->
         Snackbar.make(v.findViewById(viewId), msg, Snackbar.LENGTH_LONG)
                 .withColor(color)
+                .withMultiline()
                 .show()
     }
 }
@@ -418,6 +419,7 @@ fun Fragment.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? 
 fun Activity.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
     Snackbar.make(findViewById(android.R.id.content), getString(msg), during)
             .withColor(color)
+            .withMultiline()
             .show()
 }
 
@@ -425,6 +427,7 @@ fun View.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during:
     if (context is Activity) {
         Snackbar.make(this, context.getString(msg), during)
                 .withColor(color)
+                .withMultiline()
                 .show()
     }
 }
@@ -448,12 +451,14 @@ fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = 
 fun Activity.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
     Snackbar.make(findViewById(viewId), msg, Snackbar.LENGTH_LONG)
             .withColor(color)
+            .withMultiline()
             .show()
 }
 
 fun showMessage(msg: String, view: View, @ColorRes color: Int? = null) {
     Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
             .withColor(color)
+            .withMultiline()
             .show()
 }
 
@@ -587,6 +592,12 @@ fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
     return this
 }
 
+fun Snackbar.withMultiline(line: Int = 8): Snackbar {
+    val textView = view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+    textView.maxLines = line
+    return this
+}
+
 inline fun <reified T : Any> newIntent(context: Context): Intent = Intent(context, T::class.java)
 
 inline fun <reified T : Any> newClearIntent(context: Context): Intent {
@@ -677,7 +688,7 @@ fun loadDbWavesBalance(): AssetBalanceResponse {
 }
 
 fun getDeviceId(): String {
-    return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
+    return "android:${Settings.Secure.getString(ctx.contentResolver, Settings.Secure.ANDROID_ID)}"
 }
 
 fun Throwable.errorBody(): ErrorResponse? {

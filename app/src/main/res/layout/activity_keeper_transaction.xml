@@ -9,6 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/constrain_buttons"
         android:layout_below="@+id/appbar_layout">
 
         <LinearLayout
@@ -21,6 +22,85 @@
                 android:id="@+id/transaction_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/scriptInvokeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/functionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_transaction_function_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:text="@string/keeper_function"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp"
+                        app:autoSizeMaxTextSize="12sp"
+                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_transaction_function"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/text_transaction_function_label"
+                        tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/scriptAddressLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_transaction_scriptAddress_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:text="@string/keeper_script_address"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp"
+                        app:autoSizeMaxTextSize="12sp"
+                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_transaction_scriptAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/text_transaction_scriptAddress_label"
+                        tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -135,85 +215,6 @@
 
             </android.support.constraint.ConstraintLayout>
 
-            <LinearLayout
-                android:id="@+id/scriptInvokeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/functionLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_function_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:text="@string/keeper_function"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp"
-                        app:autoSizeMaxTextSize="12sp"
-                        app:autoSizeMinTextSize="10sp"
-                        app:autoSizeStepGranularity="1sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_function"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text_transaction_function_label"
-                        tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
-
-                </android.support.constraint.ConstraintLayout>
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/scriptAddressLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_scriptAddress_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:text="@string/keeper_script_address"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp"
-                        app:autoSizeMaxTextSize="12sp"
-                        app:autoSizeMinTextSize="10sp"
-                        app:autoSizeStepGranularity="1sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_scriptAddress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text_transaction_scriptAddress_label"
-                        tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
-
-                </android.support.constraint.ConstraintLayout>
-
-            </LinearLayout>
-
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -239,8 +240,8 @@
                     android:id="@+id/text_transaction_txid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -260,10 +261,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:orientation="horizontal"
-                    app:layout_constraintWidth_percent="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_transaction_fee_label"
@@ -285,8 +286,8 @@
                         android:id="@+id/text_transaction_fee_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -310,10 +311,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:orientation="horizontal"
-                    app:layout_constraintWidth_percent="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_transaction_time_label"
@@ -335,8 +336,8 @@
                         android:id="@+id/text_transaction_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -347,13 +348,17 @@
 
             </android.support.constraint.ConstraintLayout>
 
+
         </LinearLayout>
 
     </ScrollView>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constrain_buttons"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
         android:padding="16dp">
 
         <Button
@@ -373,8 +378,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/keeper_approve"
             android:enabled="false"
+            android:text="@string/keeper_approve"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_reject" />

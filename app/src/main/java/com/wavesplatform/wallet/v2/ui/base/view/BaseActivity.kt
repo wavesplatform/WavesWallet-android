@@ -169,7 +169,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     private fun addErrorListener() {
-        // todo check refactor without clients recreation & Check Errors to show or log
         WavesSdk.service().addOnErrorListener(onErrorListener!!)
         dataManager.coinomatService = CoinomatDataManager.create(onErrorListener)
         dataManager.gatewayService = GatewayDataManager.create(onErrorListener)

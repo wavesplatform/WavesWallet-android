@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.isWaves
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -23,6 +24,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.mapCorrectPairs
+import com.wavesplatform.wallet.v2.util.safeLet
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -71,8 +73,10 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                         throw Exception(ERROR_CANT_FIND_ASSETS)
                     }
 
-                    amountAssetInfoList.forEach {
-                        assetInfoHashMap[it.id] = it
+                    amountAssetInfoList.forEach { item ->
+                        item.notNull {
+                            assetInfoHashMap[it.id] = it
+                        }
                     }
                     priceAssetInfoList.forEach {
                         assetInfoHashMap[it.id] = it
@@ -133,10 +137,12 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
             priceAssetInfoList: List<AssetInfoResponse>)
             : Observable<Triple<List<String>, HashMap<String, Pair<String, String>>, SearchPairResponse>>? {
         val pairs = mutableListOf<Pair<String, String>>()
-        amountAssetInfoList.forEach { i ->
-            priceAssetInfoList.forEach { j ->
-                if (i.id != j.id) {
-                    pairs.add(Pair(i.id, j.id))
+        amountAssetInfoList.forEach { amount ->
+            priceAssetInfoList.forEach { price ->
+                safeLet(amount, price) { safeAmount, safePrice ->
+                    if (safeAmount.id != safePrice.id) {
+                        pairs.add(Pair(safeAmount.id, safePrice.id))
+                    }
                 }
             }
         }
@@ -176,15 +182,15 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         val observablePrice: Observable<List<AssetInfoResponse>>
         when {
             assetPair.size == 2 -> {
-                observableAmount = dataServiceManager.assets(search = assetPair[0], limit = 10)
+                observableAmount = dataServiceManager.assets(search = assetPair[0])
                 observablePrice = if (assetPair[1] == "") {
                     dataServiceManager.assets(ids = defaultAssets)
                 } else {
-                    dataServiceManager.assets(search = assetPair[1], limit = 10)
+                    dataServiceManager.assets(search = assetPair[1])
                 }
             }
             assetPair.size == 1 -> {
-                observableAmount = dataServiceManager.assets(search = assetPair[0], limit = 10)
+                observableAmount = dataServiceManager.assets(search = assetPair[0])
                 observablePrice = dataServiceManager.assets(ids = defaultAssets)
             }
             else -> {
@@ -293,18 +299,14 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
 
 
     private fun filterSpam(markets: MutableList<MarketResponse>): MutableList<MarketResponse> {
-        val spamAssets = queryAll<SpamAssetDb>()
+        val spamAssets = queryAll<SpamAssetDb>().associateBy { it.assetId }
 
         val filteredSpamList = if (prefsUtil.getValue(
                         PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
             markets.filter { market ->
-                val amountSpam = spamAssets.firstOrNull {
-                    it.assetId == market.amountAsset
-                }
-                val priceSpam = spamAssets.firstOrNull {
-                    it.assetId == market.priceAsset
-                }
-                amountSpam == null && priceSpam == null
+                val amountSpam = spamAssets.containsKey(market.amountAsset)
+                val priceSpam = spamAssets.containsKey(market.priceAsset)
+                !amountSpam && !priceSpam
             }
         } else {
             markets

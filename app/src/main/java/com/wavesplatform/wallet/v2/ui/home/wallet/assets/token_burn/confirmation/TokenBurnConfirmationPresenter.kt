@@ -32,6 +32,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
         val request = BurnTransaction(
                 assetId = assetBalance!!.assetId,
                 quantity = quantity)
+        request.fee = fee
         request.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
 
         addSubscription(nodeServiceManager.burn(request, totalBurn)

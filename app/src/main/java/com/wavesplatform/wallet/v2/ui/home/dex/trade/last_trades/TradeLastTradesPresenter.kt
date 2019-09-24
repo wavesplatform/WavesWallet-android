@@ -17,7 +17,7 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
 
     fun loadLastTrades() {
         addSubscription(dataServiceManager.getLastExchangesByPair(watchMarket?.market?.amountAsset,
-                watchMarket?.market?.amountAsset,
+                watchMarket?.market?.priceAsset,
                 DEFAULT_LAST_TRADES_LIMIT)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({

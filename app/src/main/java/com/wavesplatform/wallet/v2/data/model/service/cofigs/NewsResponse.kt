@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.data.model.service.cofigs
 
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.v2.data.Constants
 
 class NewsResponse {
 
@@ -29,19 +30,15 @@ class NewsResponse {
     }
 
     companion object {
-        const val URL = "mobile/v2.2/notifications_android.json"
-        const val URL_TEST = "mobile/v2.3/notifications_test_android.json"
-        private const val DEFAULT_LANG_CODE = "en"
-
         fun getTitle(langCode: String, notification: NotificationResponse): String {
             return notification.title?.get(langCode)
-                    ?: notification.title?.get(DEFAULT_LANG_CODE)
+                    ?: notification.title?.get(Constants.News.DEFAULT_LANG_CODE)
                     ?: ""
         }
 
         fun getSubtitle(langCode: String, notification: NotificationResponse): String {
             return notification.subtitle?.get(langCode)
-                    ?: notification.subtitle?.get(DEFAULT_LANG_CODE)
+                    ?: notification.subtitle?.get(Constants.News.DEFAULT_LANG_CODE)
                     ?: ""
         }
     }

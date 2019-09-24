@@ -34,6 +34,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
+import java.lang.NullPointerException
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -254,11 +255,17 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                             return@map it[WavesConstants.WAVES_ASSET_INFO.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
-                    val currentWaves = loadDbWavesBalance()
-                    currentWaves.balance = totalBalance
-                    currentWaves.leasedBalance = leasedBalance
-                    currentWaves.inOrderBalance = inOrderBalance
-                    AssetBalanceDb(currentWaves).save()
+                    var currentWaves: AssetBalanceResponse
+                    try {
+                        currentWaves = loadDbWavesBalance()
+                        currentWaves.balance = totalBalance
+                        currentWaves.leasedBalance = leasedBalance
+                        currentWaves.inOrderBalance = inOrderBalance
+                        AssetBalanceDb(currentWaves).save()
+                    } catch (exception: NullPointerException) {
+                        exception.printStackTrace()
+                        currentWaves = AssetBalanceResponse(WavesConstants.WAVES_ASSET_INFO.id)
+                    }
                     return@Function3 currentWaves
                 })
     }

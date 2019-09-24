@@ -674,31 +674,25 @@
     <string name="trade_order_dialog_positive_place_order">Place Order</string>
     <string name="trade_order_dialog_negative_cancel">Cancel</string>
     <string name="trade_order_dialog_subtitle_proceed">Do you want to proceed?</string>
-
-
     <string name="market_widget_update">Update</string>
-    <string name="market_widget_updating">Updating</string>
+    <string name="market_widget_updating">Updating…</string>
     <string name="market_widget_currency_text">USD / EUR</string>
-
     <string name="market_widget_config_update_interval">Update interval</string>
     <string name="market_widget_config_interval_1_min">1 minute</string>
     <string name="market_widget_config_interval_5_min">5 minutes</string>
     <string name="market_widget_config_interval_10_min">10 minutes</string>
-    <string name="market_widget_config_interval_manually">Update manually</string>
-
+    <string name="market_widget_config_interval_manually">Manually</string>
     <string name="market_widget_config_widget_style">Widget style</string>
     <string name="market_widget_config_classic">Classic</string>
     <string name="market_widget_config_dark">Dark</string>
-
     <string name="market_widget_config_title">Market pulse</string>
     <string name="market_widget_config_interval">Interval</string>
     <string name="market_widget_config_add_token">Add token</string>
     <string name="market_widget_config_style">Style</string>
-
-    <string name="market_widget_config_error_add_asset">This asset already added</string>
+    <string name="market_widget_config_error_add_asset">This token already added</string>
     <string name="market_widget_config_added">Added</string>
-    <string name="market_widget_config_cant_find_currency_pair">Can\'t find any currency pair</string>
-
+    <string name="market_widget_config_cant_find_currency_pair">No tokens matching your search</string>
+    <string name="choose_account_new_account_dialog_title">Please select</string>
     <string name="keeper_title_confirm_request">Confirm request</string>
     <string name="keeper_from">From</string>
     <string name="keeper_to">To</string>
@@ -712,5 +706,4 @@
     <string name="keeper_approve">Approve</string>
     <string name="keeper_sign">Sign</string>
     <string name="keeper_send">Send</string>
-    <string name="choose_account_new_account_dialog_title">Please select</string>
 </resources>
