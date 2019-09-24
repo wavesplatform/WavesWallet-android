@@ -681,7 +681,7 @@
   <string name="market_widget_config_interval_1_min">1 минута</string>
   <string name="market_widget_config_interval_5_min">5 минут</string>
   <string name="market_widget_config_interval_10_min">10 минут</string>
-  <string name="market_widget_config_interval_manually">Обновлять вручную</string>
+  <string name="market_widget_config_interval_manually">Вручную</string>
   <string name="market_widget_config_widget_style">Стиль виджета</string>
   <string name="market_widget_config_classic">Классический</string>
   <string name="market_widget_config_dark">Тёмный</string>
