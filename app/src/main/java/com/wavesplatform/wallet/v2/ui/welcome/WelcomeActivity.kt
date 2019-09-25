@@ -6,30 +6,31 @@
 package com.wavesplatform.wallet.v2.ui.welcome
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.asksira.loopingviewpager.LoopingViewPager
-import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.ClientEnvironment
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.click
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
@@ -46,12 +47,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun askPassCode() = false
 
-    private fun createDataBundle(): Bundle {
-        val options = Bundle()
-        options.putString("animation", "left_slide")
-        return options
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -62,30 +57,26 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 
-        relative_sign_in.click {
-            launchActivity<ChooseAccountActivity>(requestCode = REQUEST_SIGN_IN)
-            overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
-        }
-
         relative_import_acc.click {
             launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
             overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 
-        view_pager.setPageTransformer(false) { page, position ->
+        view_pager_tutorial.setPageTransformer(false) { page, position ->
             val root = page.findViewById<LinearLayout>(R.id.linear_root)
             if (position <= -1.0F || position >= 1.0F) {
                 root.alpha = 0.0F
             } else if (position == 0.0F) {
                 root.alpha = 1.0F
             } else {
-                root.alpha = 1.0F - Math.abs(position)
+                root.alpha = 1.0F - abs(position)
             }
         }
-        view_pager.adapter = WelcomeItemsPagerAdapter(this, populateList(), true)
-        view_pager.offscreenPageLimit = 5
-        view_pager_indicator.count = view_pager.indicatorCount
-        view_pager.setIndicatorPageChangeListener(object : LoopingViewPager.IndicatorPageChangeListener {
+
+        view_pager_tutorial.adapter = WelcomeItemsPagerAdapter(this, presenter.getTutorialSliderData(), true)
+        view_pager_tutorial.offscreenPageLimit = 5
+        view_pager_indicator.count = view_pager_tutorial.indicatorCount
+        view_pager_tutorial.setIndicatorPageChangeListener(object : LoopingViewPager.IndicatorPageChangeListener {
             override fun onIndicatorProgress(selectingPosition: Int, progress: Float) {
                 view_pager_indicator.setProgress(selectingPosition, progress)
             }
@@ -93,49 +84,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             override fun onIndicatorPageChange(newIndicatorPosition: Int) {
             }
         })
-        setEnvButton()
-    }
-
-    private fun setEnvButton() {
-        if (BuildConfig.DEBUG || preferencesHelper.isDeveloper()) {
-            button_switch_net.visiable()
-            val newEnvironment = when (EnvironmentManager.environmentName) {
-                ClientEnvironment.KEY_ENV_MAIN_NET -> {
-                    button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    ClientEnvironment.TEST_NET
-                }
-                ClientEnvironment.KEY_ENV_TEST_NET -> {
-                    button_switch_net.text = getString(R.string.welcome_switch_to_stage)
-                    ClientEnvironment.STAGE_NET
-                }
-                ClientEnvironment.KEY_ENV_STAGE_NET -> {
-                    button_switch_net.text = getString(R.string.welcome_switch_to_prod)
-                    ClientEnvironment.MAIN_NET
-                }
-                else -> {
-                    button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    ClientEnvironment.TEST_NET
-                }
-            }
-            button_switch_net.click {
-                button_switch_net.isEnabled = false
-                EnvironmentManager.setCurrentEnvironment(newEnvironment)
-            }
-        }
-    }
-
-    private fun populateList(): ArrayList<WelcomeItem> {
-        return arrayListOf(
-                WelcomeItem(R.drawable.userimg_blockchain_80,
-                        getString(R.string.welcome_blockchain_title),
-                        getString(R.string.welcome_blockchain_description)),
-                WelcomeItem(R.drawable.userimg_wallet_80,
-                        getString(R.string.welcome_wallet_title),
-                        getString(R.string.welcome_wallet_description)),
-                WelcomeItem(R.drawable.userimg_dex_80,
-                        getString(R.string.welcome_dex_title),
-                        getString(R.string.welcome_dex_description))
-        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -153,13 +101,39 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                 dialog.show(supportFragmentManager, dialog::class.java.simpleName)
                 return true
             }
+            R.id.action_change_env -> {
+                showChooseEnvironmentDialog()
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showChooseEnvironmentDialog() {
+        val servers = ClientEnvironment.environments
+        val serversTitles = servers.map { getString(it.externalProperties.environmentDisplayName) }.toTypedArray()
+
+        var selectedServer = EnvironmentManager.environment
+        val selectedServerPosition = servers.indexOfFirst { it.name == selectedServer.name }
+
+        val chooseEnvironmentDialog = AlertDialog.Builder(this)
+                .setTitle(getString(R.string.choose_environment_dialog_title))
+                .setSingleChoiceItems(serversTitles, selectedServerPosition) { dialog, which ->
+                    selectedServer = servers[which]
+                }
+                .setPositiveButton(getString(R.string.choose_environment_dialog_positive_txt)) { dialog, which ->
+                    EnvironmentManager.setCurrentEnvironment(selectedServer)
+                }
+                .setNegativeButton(getString(R.string.choose_environment_dialog_negative_txt), null)
+                .create()
+
+        chooseEnvironmentDialog.show()
+        chooseEnvironmentDialog.makeStyled()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         this.menu = menu
         menuInflater.inflate(R.menu.menu_language, menu)
+        menu.findItem(R.id.action_change_env).isVisible = BuildConfig.DEBUG || preferencesHelper.isDeveloper()
         updateMenuTitle()
         return super.onCreateOptionsMenu(menu)
     }
@@ -174,6 +148,12 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         } else {
             exit()
         }
+    }
+
+    private fun createDataBundle(): Bundle {
+        val options = Bundle()
+        options.putString("animation", "left_slide")
+        return options
     }
 
     companion object {
