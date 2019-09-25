@@ -118,7 +118,14 @@ class MarketWidgetConfigurePresenter @Inject constructor() : BasePresenter<Marke
                 MarketWidgetSettings.assetsSettings().queryAll(context, widgetId)
 
         if (assetsList.isEmpty()) {
-            Constants.defaultCrypto().toList().forEach {
+            val crypto = Constants.defaultCrypto().toList()
+            val limitedCrypto = if (crypto.size > INIT_WIDGET_VIEW_ASSETS_MAX_COUNT) {
+                crypto.subList(0, INIT_WIDGET_VIEW_ASSETS_MAX_COUNT)
+            } else {
+                crypto
+            }
+
+            limitedCrypto.forEach {
                 if (it.isWavesId()) {
                     assets.add(WavesConstants.WAVES_ASSET_ID_FILLED)
                 } else {
