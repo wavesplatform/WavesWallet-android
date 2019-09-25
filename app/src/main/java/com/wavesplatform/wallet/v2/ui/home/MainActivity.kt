@@ -32,7 +32,8 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerInfoActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerLoginActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -51,7 +52,7 @@ import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedListener {
+class MainActivity : BaseDrawerLoginActivity(), MainView, TabLayout.OnTabSelectedListener {
 
     @Inject
     @InjectPresenter

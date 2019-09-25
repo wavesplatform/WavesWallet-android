@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 25/9/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="24dp"
+    android:paddingBottom="24dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        app:srcCompat="@drawable/text_logo" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:lineSpacingExtra="4sp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:text="@string/left_drawer_description"
+        android:textColor="@color/basic500"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_site"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:text="@string/left_drawer_site"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_whitepaper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="64dp"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:paddingStart="24dp"
+        android:paddingTop="13dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
+        android:text="@string/left_drawer_whitepaper"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="64dp"
+        android:background="@color/accent50" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_terms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:paddingStart="24dp"
+        android:paddingTop="13dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
+        android:text="@string/left_drawer_terms_and_conditions"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="64dp"
+        android:background="@color/accent50" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_support"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:paddingStart="24dp"
+        android:paddingTop="13dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
+        android:text="@string/left_drawer_support"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="64dp"
+        android:background="@color/accent50" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:lineSpacingExtra="4sp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:text="@string/left_drawer_join_the_waves_community"
+        android:textColor="@color/basic500"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_github"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_s_github_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_telegram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_s_telegram_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_discord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_s_discord_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_twitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_s_twitter_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_reddit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_s_reddit_28" />
+
+    </LinearLayout>
+
+</LinearLayout>

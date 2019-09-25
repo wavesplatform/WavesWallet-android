@@ -18,7 +18,7 @@ import com.yarolegovich.slidingrootnav.callback.DragStateListener
 import kotlinx.android.synthetic.main.content_app_info.view.*
 import pers.victor.ext.*
 
-abstract class BaseDrawerActivity : BaseActivity() {
+abstract class BaseDrawerLoginActivity : BaseActivity() {
 
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
@@ -70,7 +70,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
     }
 
     private fun createCloseView() {
-        view = View(this@BaseDrawerActivity)
+        view = View(this@BaseDrawerLoginActivity)
 
         val params: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, // This will define text view width

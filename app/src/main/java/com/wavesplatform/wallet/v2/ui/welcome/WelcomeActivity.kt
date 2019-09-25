@@ -21,7 +21,7 @@ import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerInfoActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.ClientEnvironment
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -31,7 +31,7 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
+class WelcomeActivity : BaseDrawerInfoActivity(), WelcomeView {
 
     @Inject
     @InjectPresenter
