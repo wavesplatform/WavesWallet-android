@@ -57,6 +57,10 @@ class AssetsAdapter @Inject constructor() :
 
     override fun convert(helper: BaseViewHolder, item: MultiItemEntity) {
         when (helper.itemViewType) {
+            TYPE_SEARCH -> {
+                helper.addOnClickListener(R.id.image_assets_sorting)
+                        .addOnClickListener(R.id.search_view)
+            }
             TYPE_HEADER -> {
                 val item = item as WalletSectionItem
                 helper.setText(R.id.text_header, item.header)
