@@ -350,147 +350,7 @@
             </FrameLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="14dp"
-            android:text="@string/profile_general_other"
-            android:textColor="@color/disabled500" />
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_rate_app"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="14dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profile_general_rate_app"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    app:srcCompat="@drawable/ic_arrow_right" />
-
-            </FrameLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="14dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profile_general_feedback"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    app:srcCompat="@drawable/ic_arrow_right" />
-
-            </FrameLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_support"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="14dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profile_general_support_wavesplatform"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    app:srcCompat="@drawable/ic_arrow_right" />
-
-            </FrameLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp"
-            android:visibility="gone">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="14dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Dev Settings"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    app:srcCompat="@drawable/ic_arrow_right" />
-
-            </FrameLayout>
-        </android.support.v7.widget.CardView>
+        <include layout="@layout/content_app_info"/>
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/view_line_3"
@@ -499,7 +359,7 @@
             android:layout_marginBottom="24dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/shape_dashed_line"
             android:layerType="software" />
 
@@ -555,7 +415,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_delete_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
