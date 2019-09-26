@@ -9,7 +9,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.App
@@ -30,14 +30,6 @@ import javax.inject.Inject
 
 @InjectViewState
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
-
-    var checkedAboutFundsOnDevice = false
-    var checkedAboutBackup = false
-    var checkedAboutTerms = false
-
-    fun isAllCheckedToStart(): Boolean {
-        return checkedAboutBackup && checkedAboutFundsOnDevice && checkedAboutTerms
-    }
 
     fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
         runAsync {
@@ -112,5 +104,9 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                 .subscribe {
                     viewState.showNews(it)
                 })
+    }
+
+    fun getWalletName(): String {
+        return App.getAccessManager().getWalletName(App.getAccessManager().getLoggedInGuid())
     }
 }

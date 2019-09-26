@@ -67,8 +67,10 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                     }
                     viewState.afterSuccessLoadMarkets(markets)
                 }, {
-                    viewState.afterFailedLoadPairInfo()
+                    viewState.stopLoading()
                     it.printStackTrace()
+                }, {
+                    viewState.stopLoading()
                 }))
     }
 

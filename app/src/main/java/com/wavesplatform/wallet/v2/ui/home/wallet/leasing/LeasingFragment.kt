@@ -167,23 +167,6 @@ class LeasingFragment : BaseFragment(), LeasingView, WalletTabShadowListener {
         presenter.getActiveLeasing()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_leasing, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_your_address -> {
-                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
-                launchActivity<MyAddressQRActivity>()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun showBalances(wavesAsset: AssetBalanceResponse) {
         skeletonScreen?.hide()
         if (wavesAsset.getAvailableBalance() > 0) {

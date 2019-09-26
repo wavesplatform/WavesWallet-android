@@ -33,8 +33,8 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
 
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
-    private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
     private var counter = 0
+    private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +42,8 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
         slidingRootNav = SlidingRootNavBuilder(this)
                 .withDragDistance(px2dp(screenWidth) - dp2px(18))
                 .withRootViewScale(0.87f)
-                .withRootViewElevation(10)
                 .withToolbarMenuToggle(toolbar)
+                .withRootViewElevation(10)
                 .addDragStateListener(object : DragStateListener {
                     override fun onDragEnd(isMenuOpened: Boolean) {
                         if (isMenuOpened) {
@@ -75,7 +75,6 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
                 .inject()
 
         toolbar.navigationIcon = drawerIcon
-
         createCloseView()
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
@@ -235,9 +234,5 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
     override fun onPause() {
         SimpleChromeCustomTabs.getInstance().disconnectFrom(this)
         super.onPause()
-    }
-
-    fun changeDrawerMenuIcon(icon: Drawable?) {
-        drawerIcon = icon
     }
 }

@@ -166,11 +166,7 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            if (position == 0) {
-                analytics.trackEvent(AnalyticEvents.WalletTokenSearchEvent)
-                launchActivity<SearchAssetActivity>(withoutAnimation = true)
-                activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            } else {
+            if (position != SEARCH_VIEW_POSITION) {
                 val item = this.adapter.getItem(position)
                 if (item is AssetBalanceMultiItemEntity) {
                     val positionWithoutSection = when {
@@ -191,6 +187,20 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
                         putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
                         putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection - 1)
                     }
+                }
+            }
+        }
+
+        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+            when (view.id) {
+                R.id.search_view -> {
+                    analytics.trackEvent(AnalyticEvents.WalletTokenSearchEvent)
+                    launchActivity<SearchAssetActivity>(withoutAnimation = true)
+                    activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                }
+                R.id.image_assets_sorting -> {
+                    analytics.trackEvent(AnalyticEvents.WalletTokenSortingPageEvent)
+                    launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
                 }
             }
         }
@@ -276,27 +286,6 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_assets, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_sorting -> {
-                analytics.trackEvent(AnalyticEvents.WalletTokenSortingPageEvent)
-                launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
-            }
-            R.id.action_your_address -> {
-                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
-                launchActivity<MyAddressQRActivity>()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun isShadowEnable(): Boolean {
         return if (::presenter.isInitialized) presenter.enableElevation
         else false
@@ -306,6 +295,7 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
         const val RESULT_NEED_UPDATE = "need_update"
         const val REQUEST_SORTING = 111
         const val REQUEST_ASSET_DETAILS = 112
+        const val SEARCH_VIEW_POSITION = 0
 
         fun newInstance(): AssetsFragment {
             return AssetsFragment()

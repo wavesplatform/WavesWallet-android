@@ -196,7 +196,7 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
-    override fun afterFailedLoadPairInfo() {
+    override fun stopLoading() {
         swipe_container.isRefreshing = false
     }
 

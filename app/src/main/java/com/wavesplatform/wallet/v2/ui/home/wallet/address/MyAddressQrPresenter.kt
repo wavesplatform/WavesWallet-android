@@ -48,11 +48,11 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     }
 
     fun generateAvatars(address: String?, image: AppCompatImageView) {
-        Observable.fromCallable { return@fromCallable identicon.create(address) }
+        addSubscription(Observable.fromCallable { return@fromCallable identicon.create(address) }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     viewState.afterSuccessGenerateAvatar(it, image)
-                }
+                })
     }
 
     fun generateQRCode(text: String?, size: Int) {

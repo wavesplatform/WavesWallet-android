@@ -12,5 +12,5 @@ interface DexView : BaseMvpView {
     fun afterSuccessLoadMarkets(list: MutableList<WatchMarketResponse>)
     fun afterFailedLoadMarkets()
     fun afterSuccessLoadPairInfo(watchMarket: WatchMarketResponse, index: Int)
-    fun afterFailedLoadPairInfo()
+    fun stopLoading()
 }
