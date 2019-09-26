@@ -706,4 +706,7 @@
     <string name="keeper_approve">Approve</string>
     <string name="keeper_sign">Sign</string>
     <string name="keeper_send">Send</string>
+    <string name="choose_environment_dialog_title">Please choose environment</string>
+    <string name="choose_environment_dialog_positive_txt">Apply</string>
+    <string name="choose_environment_dialog_negative_txt">Cancel</string>
 </resources>
