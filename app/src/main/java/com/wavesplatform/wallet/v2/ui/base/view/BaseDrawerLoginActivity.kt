@@ -15,14 +15,13 @@ import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
-import kotlinx.android.synthetic.main.content_app_info.view.*
+import kotlinx.android.synthetic.main.content_menu_left_drawer.view.*
 import pers.victor.ext.*
 
 abstract class BaseDrawerLoginActivity : BaseActivity() {
 
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
-    private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,6 @@ abstract class BaseDrawerLoginActivity : BaseActivity() {
                 .withDragDistance(px2dp(screenWidth) - dp2px(18))
                 .withRootViewScale(0.87f)
                 .withRootViewElevation(10)
-                .withToolbarMenuToggle(toolbar)
                 .addDragStateListener(object : DragStateListener {
                     override fun onDragEnd(isMenuOpened: Boolean) {
                         if (isMenuOpened) {
@@ -59,10 +57,8 @@ abstract class BaseDrawerLoginActivity : BaseActivity() {
                 }
                 .withMenuOpened(false)
                 .withSavedState(savedInstanceState)
-                .withMenuLayout(R.layout.content_app_info) // TODO: Change to correct layout
+                .withMenuLayout(R.layout.content_menu_left_drawer) // TODO: Change to correct layout
                 .inject()
-
-        toolbar.navigationIcon = drawerIcon
 
         createCloseView()
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f

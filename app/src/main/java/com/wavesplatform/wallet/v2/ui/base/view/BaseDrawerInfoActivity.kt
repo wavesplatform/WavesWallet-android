@@ -34,6 +34,7 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
     private var counter = 0
+    private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
         slidingRootNav = SlidingRootNavBuilder(this)
                 .withDragDistance(px2dp(screenWidth) - dp2px(18))
                 .withRootViewScale(0.87f)
+                .withToolbarMenuToggle(toolbar)
                 .withRootViewElevation(10)
                 .addDragStateListener(object : DragStateListener {
                     override fun onDragEnd(isMenuOpened: Boolean) {
@@ -72,6 +74,7 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
                 .withMenuLayout(R.layout.content_menu_left_drawer)
                 .inject()
 
+        toolbar.navigationIcon = drawerIcon
         createCloseView()
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
