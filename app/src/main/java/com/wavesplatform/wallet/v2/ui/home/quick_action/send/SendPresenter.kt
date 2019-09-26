@@ -22,7 +22,7 @@ import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable

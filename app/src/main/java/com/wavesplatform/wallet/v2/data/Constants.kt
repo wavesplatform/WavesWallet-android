@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 
 object Constants {

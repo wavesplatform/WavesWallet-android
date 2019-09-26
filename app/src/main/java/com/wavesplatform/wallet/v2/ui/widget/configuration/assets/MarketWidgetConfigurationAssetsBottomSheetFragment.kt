@@ -29,7 +29,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
