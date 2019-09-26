@@ -11,7 +11,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb

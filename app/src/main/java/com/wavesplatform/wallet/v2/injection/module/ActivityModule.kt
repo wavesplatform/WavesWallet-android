@@ -39,6 +39,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
@@ -48,7 +49,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.Con
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity
 import com.wavesplatform.wallet.v2.ui.keeper.send.KeeperSendTransactionActivity
@@ -56,7 +56,6 @@ import com.wavesplatform.wallet.v2.ui.keeper.KeeperTransactionActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
-import com.wavesplatform.wallet.v2.ui.whats_new.WhatsNewActivity
 import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -235,10 +234,6 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun tradeBuyAndSendSucessActivity(): TradeBuyAndSendSuccessActivity
-
-    @PerActivity
-    @ContributesAndroidInjector
-    internal abstract fun whatsNewActivity(): WhatsNewActivity
 
     @PerActivity
     @ContributesAndroidInjector

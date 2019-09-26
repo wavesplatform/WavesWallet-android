@@ -12,7 +12,7 @@ import com.wavesplatform.sdk.model.response.node.AssetsDetailsResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import com.wavesplatform.wallet.v2.util.executeInBackground
