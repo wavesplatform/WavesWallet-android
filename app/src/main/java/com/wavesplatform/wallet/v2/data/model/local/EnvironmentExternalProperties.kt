@@ -5,7 +5,10 @@
 
 package com.wavesplatform.wallet.v2.data.model.local
 
+import android.support.annotation.StringRes
+
 data class EnvironmentExternalProperties(
+        @StringRes var environmentDisplayName: Int,
         var vostokNetCode: Char,
         var usdId: String,
         var eurId: String,
