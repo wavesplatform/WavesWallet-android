@@ -29,7 +29,7 @@ import com.yarolegovich.slidingrootnav.callback.DragStateListener
 import kotlinx.android.synthetic.main.content_menu_left_drawer.view.*
 import pers.victor.ext.*
 
-abstract class BaseDrawerActivity : BaseActivity() {
+abstract class BaseDrawerInfoActivity : BaseActivity() {
 
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
@@ -145,7 +145,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
     }
 
     private fun createCloseView() {
-        view = View(this@BaseDrawerActivity)
+        view = View(this@BaseDrawerInfoActivity)
 
         val params: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, // This will define text view width
@@ -161,7 +161,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         view?.gone()
     }
 
-    fun openUrlWithIntent(url: String) {
+    private fun openUrlWithIntent(url: String) {
         if (isNetworkConnected()) {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
@@ -170,22 +170,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
         }
     }
 
-    fun openFacebook(url: String) {
-        var uri = Uri.parse(url)
-        try {
-            val applicationInfo = packageManager.getApplicationInfo("com.facebook.katana", 0)
-            if (applicationInfo.enabled) {
-                // http://stackoverflow.com/a/24547437/1048340
-                uri = Uri.parse("fb://facewebmodal/f?href=$url")
-            }
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
-        } catch (ignored: Exception) {
-            openUrlWithChromeTab(url)
-        }
-    }
-
-    fun openTwitter(url: String) {
-        var intent: Intent? = null
+    private fun openTwitter(url: String) {
+        val intent: Intent?
         try {
             // get the Twitter app if possible
             this.packageManager.getPackageInfo("com.twitter.android", 0)
@@ -198,8 +184,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
         }
     }
 
-    fun openDiscord(url: String) {
-        var intent: Intent? = null
+    private fun openDiscord(url: String) {
+        val intent: Intent?
         try {
             this.packageManager.getPackageInfo("com.discord", 0)
             intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -210,8 +196,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
         }
     }
 
-    fun openReddit(url: String) {
-        var intent: Intent? = null
+    private fun openReddit(url: String) {
+        val intent: Intent?
         try {
             this.packageManager.getPackageInfo("com.reddit.frontpage", 0)
             intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -222,8 +208,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
         }
     }
 
-    fun openTelegram(url: String) {
-        var intent: Intent? = null
+    private fun openTelegram(url: String) {
+        var intent: Intent?
         try {
             this.packageManager.getPackageInfo("org.telegram.messenger", 0)
             intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$url"))
