@@ -21,6 +21,8 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
@@ -68,7 +70,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.white)
-        setupToolbar(toolbar_general)
+        setupToolbar(toolbar_general, homeEnable = false)
 
         setupBottomNavigation()
 
@@ -89,6 +91,21 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                         presenter.reloadTransactionsAfterSpamSettingsChanged(true)
                     }
                 })
+
+        image_account_avatar.click {
+            slidingRootNav.openMenu(true)
+        }
+    }
+
+    private fun setToolbarTitle(title: String) {
+        toolbar_title.text = title
+    }
+
+    private fun applyAccountAvatar() {
+        Glide.with(this)
+                .load(Identicon().create(App.getAccessManager().getWallet()?.address))
+                .apply(RequestOptions().circleCrop().dontAnimate())
+                .into(image_account_avatar)
     }
 
     private fun logFirstOpen() {
@@ -107,6 +124,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         showBackUpSeedWarning()
         if (App.getAccessManager().isAuthenticated()) {
             presenter.loadNews()
+            applyAccountAvatar()
+            setToolbarTitle(presenter.getWalletName())
         }
     }
 
@@ -123,15 +142,15 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun setupBottomNavigation() {
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(
-                getCustomView(R.drawable.ic_tabbar_wallet_default)).setTag(TAG_NOT_CENTRAL_TAB))
+                getCustomView(R.drawable.ic_tabbar_wallet)).setTag(TAG_NOT_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(
-                getCustomView(R.drawable.ic_tabbar_dex_default)).setTag(TAG_NOT_CENTRAL_TAB))
+                getCustomView(R.drawable.ic_tabbar_dex)).setTag(TAG_NOT_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(
-                getCenterTabLayout(R.drawable.ic_tabbar_waves_default)).setTag(TAG_CENTRAL_TAB))
+                getCenterTabLayout(R.drawable.ic_tabbar_action)).setTag(TAG_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(
-                getCustomView(R.drawable.ic_tabbar_history_default)).setTag(TAG_NOT_CENTRAL_TAB))
+                getCustomView(R.drawable.ic_tabbar_history)).setTag(TAG_NOT_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(
-                getCustomView(R.drawable.ic_tabbar_profile_default)).setTag(TAG_NOT_CENTRAL_TAB))
+                getCustomView(R.drawable.ic_tabbar_profile)).setTag(TAG_NOT_CENTRAL_TAB))
 
         tab_navigation.addOnTabSelectedListener(this)
 
@@ -195,22 +214,22 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         when (tab?.position) {
             WALLET_SCREEN -> {
                 showNewTabFragment(fragments[WALLET_SCREEN])
-                toolbar_general.title = getString(R.string.wallet_toolbar_title)
+                setToolbarTitle(presenter.getWalletName())
             }
             DEX_SCREEN -> {
                 showNewTabFragment(fragments[DEX_SCREEN])
-                toolbar_general.title = getString(R.string.dex_toolbar_title)
+                setToolbarTitle(getString(R.string.dex_toolbar_title))
             }
             QUICK_ACTION_SCREEN -> {
                 showQuickActionDialog()
             }
             HISTORY_SCREEN -> {
                 showNewTabFragment(fragments[HISTORY_SCREEN])
-                toolbar_general.title = getString(R.string.history_toolbar_title)
+                setToolbarTitle(getString(R.string.history_toolbar_title))
             }
             PROFILE_SCREEN -> {
                 showNewTabFragment(fragments[PROFILE_SCREEN])
-                toolbar_general.title = getString(R.string.profile_toolbar_title)
+                setToolbarTitle(getString(R.string.profile_toolbar_title))
             }
         }
 

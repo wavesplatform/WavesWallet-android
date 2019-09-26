@@ -18,7 +18,7 @@ import javax.inject.Inject
 @InjectViewState
 class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
 
-    var pairSubscriptions = CompositeDisposable()
+    private var pairSubscriptions = CompositeDisposable()
     var hideShadow: Boolean = true
 
     fun loadActiveMarkets() {
@@ -42,8 +42,10 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                 .subscribe({
                     viewState.afterSuccessLoadPairInfo(it, index)
                 }, {
-                    viewState.afterFailedLoadPairInfo()
+                    viewState.stopLoading()
                     it.printStackTrace()
+                }, {
+                    viewState.stopLoading()
                 }))
     }
 

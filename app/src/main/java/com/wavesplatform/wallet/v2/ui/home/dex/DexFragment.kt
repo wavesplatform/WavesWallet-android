@@ -132,7 +132,7 @@ class DexFragment : BaseFragment(), DexView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarketResponse>) {
+    override fun afterSuccessLoadMarkets(list: MutableList<WatchMarketResponse>) {
         swipe_container.isRefreshing = false
         presenter.clearOldPairsSubscriptions()
 
@@ -207,7 +207,7 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
-    override fun afterFailedLoadPairInfo() {
+    override fun stopLoading() {
         swipe_container.isRefreshing = false
     }
 

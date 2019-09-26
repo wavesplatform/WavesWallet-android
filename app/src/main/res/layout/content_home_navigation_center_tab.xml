@@ -5,7 +5,7 @@
 
     <ImageView
         android:id="@+id/image_tab_icon"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_gravity="center" />
 </FrameLayout>

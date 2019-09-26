@@ -9,8 +9,8 @@ import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface DexView : BaseMvpView {
-    fun afterSuccessLoadMarkets(list: ArrayList<WatchMarketResponse>)
+    fun afterSuccessLoadMarkets(list: MutableList<WatchMarketResponse>)
     fun afterFailedLoadMarkets()
     fun afterSuccessLoadPairInfo(watchMarket: WatchMarketResponse, index: Int)
-    fun afterFailedLoadPairInfo()
+    fun stopLoading()
 }
