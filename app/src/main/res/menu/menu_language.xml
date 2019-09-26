@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:auto="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_change_env"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title=""
+        auto:showAsAction="always" />
+
     <item
         android:id="@+id/action_change_language"
-        auto:showAsAction="always"
-        android:title="" />
+        android:title=""
+        auto:showAsAction="always" />
+
 </menu>

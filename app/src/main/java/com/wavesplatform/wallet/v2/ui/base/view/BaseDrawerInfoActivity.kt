@@ -125,11 +125,11 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
             counter++
             if (counter > 3) {
                 if (preferencesHelper.isDeveloper()) {
-                    Toast.makeText(this, "No need. You are already developer!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.developer_already), Toast.LENGTH_LONG).show()
                 } else {
                     if (counter == 10) {
                         counter = 0
-                        Toast.makeText(this, "You are developer!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.developer_success), Toast.LENGTH_LONG).show()
                         preferencesHelper.setDeveloper(true)
 
                         App.getAccessManager().resetWallet()
@@ -137,7 +137,7 @@ abstract class BaseDrawerInfoActivity : BaseActivity() {
                         finish()
                         launchActivity<WelcomeActivity>(clear = true)
                     } else {
-                        Toast.makeText(this, "You are almost developer! (${10 - counter})", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.developer_in_progress, 10 - counter), Toast.LENGTH_LONG).show()
                     }
                 }
             }
