@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -42,11 +43,10 @@ import com.wavesplatform.wallet.v2.ui.home.profile.settings.DevOptionsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
+import kotlinx.android.synthetic.main.content_app_info.*
+import kotlinx.android.synthetic.main.content_app_info.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import pers.victor.ext.click
-import pers.victor.ext.finish
-import pers.victor.ext.telephonyManager
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -115,6 +115,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
             sendFeedbackToSupport()
         }
 
+        configOtherButtons()
+
         if (BuildConfig.DEBUG) {
             settings.visiable()
             settings.click {
@@ -123,6 +125,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         button_delete_account.click {
+            // TODO: Need to new logic of delete account
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
@@ -167,6 +170,116 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
         }
     }
+
+    private fun configOtherButtons() {
+        text_site.paintFlags = text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        text_site.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuForumEvent)
+            openUrlWithChromeTab(Constants.URL_WAVES_FORUM)
+        }
+
+        card_whitepaper.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuWhitepaperEvent)
+            openUrlWithIntent(Constants.URL_WHITEPAPER)
+        }
+        card_terms.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuTermsAndConditionsEvent)
+            openUrlWithIntent(Constants.URL_TERMS)
+        }
+        card_support.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuSupportEvent)
+            openUrlWithChromeTab(Constants.SUPPORT_SITE)
+        }
+        image_discord.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuDiscordEvent)
+            openDiscord(Constants.URL_DISCORD)
+        }
+        image_reddit.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuRedditEvent)
+            openReddit(Constants.URL_REDDIT)
+        }
+        image_github.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuGithubEvent)
+            openUrlWithChromeTab(Constants.URL_GITHUB)
+        }
+        image_telegram.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuTelegramEvent)
+            openTelegram(Constants.ACC_TELEGRAM)
+        }
+        image_twitter.click {
+            analytics.trackEvent(AnalyticEvents.WavesMenuTwitterEvent)
+            openTwitter(Constants.ACC_TWITTER)
+        }
+
+    }
+
+
+    private fun openUrlWithIntent(url: String) {
+        if (isNetworkConnected()) {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
+        } else {
+            showNetworkError()
+        }
+    }
+
+    private fun openTwitter(url: String) {
+        val intent: Intent?
+        try {
+            // get the Twitter app if possible
+            requireActivity().packageManager.getPackageInfo("com.twitter.android", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=$url"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            // no Twitter app, revert to browser
+            openUrlWithChromeTab(Constants.URL_TWITTER)
+        }
+    }
+
+    private fun openDiscord(url: String) {
+        val intent: Intent?
+        try {
+            requireActivity().packageManager.getPackageInfo("com.discord", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            openUrlWithChromeTab(Constants.URL_DISCORD)
+        }
+    }
+
+    private fun openReddit(url: String) {
+        val intent: Intent?
+        try {
+            requireActivity().packageManager.getPackageInfo("com.reddit.frontpage", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            openUrlWithChromeTab(url)
+        }
+    }
+
+    private fun openTelegram(url: String) {
+        var intent: Intent?
+        try {
+            requireActivity().packageManager.getPackageInfo("org.telegram.messenger", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$url"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } catch (e: Exception) {
+            try {
+                requireActivity().packageManager.getPackageInfo("org.thunderdog.challegram", 0)
+                intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$url"))
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            } catch (e: Exception) {
+                openUrlWithChromeTab(Constants.URL_TELEGRAM)
+            }
+        }
+    }
+
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
@@ -305,10 +418,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        App.getAccessManager().resetWallet()
-        App.getAccessManager().setLastLoggedInGuid("")
-        finish()
-        launchActivity<WelcomeActivity>(clear = true)
+        // TODO: Check if logic of logout is correct
+        val guid = App.getAccessManager().getLastLoggedInGuid()
+
+        launchActivity<EnterPassCodeActivity>(requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+            putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -389,7 +504,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     companion object {
-
         fun newInstance(): ProfileFragment {
             return ProfileFragment()
         }
