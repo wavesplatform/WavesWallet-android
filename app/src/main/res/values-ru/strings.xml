@@ -610,7 +610,7 @@
   <string name="wallet_sorting_toolbar_title">Сортировка</string>
   <string name="wallet_sorting_toolbar_visibility_action">Видимость</string>
   <string name="wallet_toolbar_title">Кошелёк</string>
-  <string name="welcome_blockchain_description">Станьте частью быстро растущего криптомира. Только вы можете получить доступ к своим средствам.</string>
+  <string name="welcome_blockchain_description">Станьте частью быстрорастущего криптомира. Только вы можете получить доступ к своим средствам.</string>
   <string name="welcome_blockchain_title">Начните работать с блокчейном</string>
   <string name="welcome_create_import_description">через QR-код или вручную</string>
   <string name="welcome_create_import_title">Импортировать</string>
@@ -674,7 +674,36 @@
   <string name="trade_order_dialog_positive_place_order">Поставить ордер</string>
   <string name="trade_order_dialog_negative_cancel">Отмена</string>
   <string name="trade_order_dialog_subtitle_proceed">Вы действительно хотите продолжить?</string>
-
   <string name="market_widget_update">Обновить</string>
   <string name="market_widget_updating">Обновление…</string>
+  <string name="market_widget_currency_text">USD / EUR</string>
+  <string name="market_widget_config_update_interval">Интервал обновления</string>
+  <string name="market_widget_config_interval_1_min">1 минута</string>
+  <string name="market_widget_config_interval_5_min">5 минут</string>
+  <string name="market_widget_config_interval_10_min">10 минут</string>
+  <string name="market_widget_config_interval_manually">Вручную</string>
+  <string name="market_widget_config_widget_style">Стиль виджета</string>
+  <string name="market_widget_config_classic">Классический</string>
+  <string name="market_widget_config_dark">Тёмный</string>
+  <string name="market_widget_config_title">Маркет пульс</string>
+  <string name="market_widget_config_interval">Интервал</string>
+  <string name="market_widget_config_add_token">Добавить токен</string>
+  <string name="market_widget_config_style">Стиль</string>
+  <string name="market_widget_config_error_add_asset">Этот токен уже добавлен</string>
+  <string name="market_widget_config_added">Добавлено</string>
+  <string name="market_widget_config_cant_find_currency_pair">Токенов соответствующих вашему запросу не найдено</string>
+  <string name="choose_account_new_account_dialog_title">Пожалуйста, выберите</string>
+  <string name="keeper_title_confirm_request">Подтверждение запроса</string>
+  <string name="keeper_from">Куда</string>
+  <string name="keeper_to">Откуда</string>
+  <string name="keeper_tx_id">TXID</string>
+  <string name="keeper_function">Функция</string>
+  <string name="keeper_script_address">Адрес скрипта</string>
+  <string name="keeper_fee">Комиссия</string>
+  <string name="keeper_payment">Платёж</string>
+  <string name="keeper_tx_time">Время TX</string>
+  <string name="keeper_reject">Отменить</string>
+  <string name="keeper_approve">Подтвердить</string>
+  <string name="keeper_sign">Подписать</string>
+  <string name="keeper_send">Отправить</string>
 </resources>

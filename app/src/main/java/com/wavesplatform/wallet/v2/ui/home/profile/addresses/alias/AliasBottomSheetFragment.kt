@@ -25,6 +25,7 @@ import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click
@@ -98,7 +99,6 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
                 }
 
                 buttonCreateAlias.click {
-                    logEvent()
                     launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
                         putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
                     }
@@ -134,7 +134,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
             }
 
             override fun showCommissionSuccess(unscaledAmount: Long) {
-                feeTransaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
+                feeTransaction.text = MoneyUtil.getScaledText(unscaledAmount, 8).stripZeros()
                 progressBarFee.hide()
                 feeTransaction.visiable()
                 buttonCreateAlias.isEnabled = true
@@ -168,6 +168,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
         if (requestCode == REQUEST_CREATE_ALIAS && resultCode == Constants.RESULT_OK) {
             val aliasModel = data?.getParcelableExtra<AliasTransactionResponse>(CreateAliasActivity.RESULT_ALIAS)
             aliasModel.notNull { alias ->
+                logEvent()
                 onCreateAliasListener?.onSuccess(alias)
             }
         }

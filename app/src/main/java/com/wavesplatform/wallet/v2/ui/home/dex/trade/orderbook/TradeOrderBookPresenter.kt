@@ -11,11 +11,13 @@ import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
+import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookBidMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.util.errorBody
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -40,14 +42,25 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                             return@flatMap Observable.zip(matcherServiceManager.loadOrderBook(
                                     market?.amountAsset!!,
                                     market.priceAsset),
-                                    dataServiceManager.getLastTradeByPair(watchMarket),
+                                    dataServiceManager.getLastExchangesByPair(watchMarket?.market?.amountAsset,
+                                            watchMarket?.market?.priceAsset,
+                                            DEFAULT_LIMIT),
                                     BiFunction { orderBook: OrderBookResponse,
                                                  lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }
                         .doOnError {
-                            runOnUiThread { viewState.afterFailedOrderbook() }
+                            if (it is NetworkException) {
+                                val errorMessage = it.errorBody()?.message ?: ""
+                                if (errorMessage.isEmpty()) {
+                                    runOnUiThread { viewState.afterFailedOrderbook() }
+                                } else {
+                                    runOnUiThread { viewState.afterFailedOrderbook(errorMessage) }
+                                }
+                            } else {
+                                runOnUiThread { viewState.afterFailedOrderbook() }
+                            }
                         }
                         .onErrorResumeNext(Observable.empty())
                         .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -110,5 +123,9 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
 
     fun clearSubscriptions() {
         subscriptions.clear()
+    }
+
+    companion object {
+        var DEFAULT_LIMIT = 1
     }
 }

@@ -60,12 +60,16 @@ class EnvironmentManager(var current: ClientEnvironment) {
                 "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
         const val URL_CONFIG_TEST_NET = BASE_PROXY_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
+        const val URL_CONFIG_STAGE_NET = BASE_PROXY_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_stagenet.json"
         const val URL_COMMISSION_MAIN_NET = "/$BRANCH/fee.json"
 
         const val URL_RAW_CONFIG_MAIN_NET = BASE_RAW_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
         const val URL_RAW_CONFIG_TEST_NET = BASE_RAW_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
+        const val URL_RAW_CONFIG_STAGE_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/environment_stagenet.json"
         const val URL_RAW_COMMISSION_MAIN_NET = BASE_RAW_CONFIG_URL +
                 "wavesplatform/waves-client-config/$BRANCH/fee.json"
 
@@ -291,6 +295,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             return when (currentEnvName) {
                 ClientEnvironment.MAIN_NET.name -> getConfiguration(preferences, ClientEnvironment.MAIN_NET)
                 ClientEnvironment.TEST_NET.name -> getConfiguration(preferences, ClientEnvironment.TEST_NET)
+                ClientEnvironment.STAGE_NET.name -> getConfiguration(preferences, ClientEnvironment.STAGE_NET)
                 else -> getConfiguration(preferences, ClientEnvironment.MAIN_NET)
             }
         }

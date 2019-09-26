@@ -71,12 +71,8 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         finish()
     }
 
-    private fun failResult(message: String? = "Fail"): KeeperIntentResult {
-        return if (presenter.actionType == KeeperActionType.SIGN) {
-            KeeperIntentResult.ErrorSignResult("ErrorSignResult: $message")
-        } else {
-            KeeperIntentResult.ErrorSendResult("ErrorSendResult: $message")
-        }
+    private fun failResult(message: String? = "Failed"): KeeperIntentResult {
+        return KeeperIntentResult.ErrorSignResult(message ?: "Failed")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -110,6 +106,8 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
     override fun onError(error: Throwable) {
         showProgressBar(false)
         showError(error.localizedMessage, R.id.content)
+        KeeperIntentHelper.exitToRootWithResult(this, failResult(error.localizedMessage))
+        finish()
     }
 
     override fun onReceiveTransactionData(transaction: KeeperTransaction?,

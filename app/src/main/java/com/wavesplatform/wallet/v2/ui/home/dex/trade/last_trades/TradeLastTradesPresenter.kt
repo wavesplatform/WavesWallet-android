@@ -16,7 +16,9 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
     var watchMarket: WatchMarketResponse? = null
 
     fun loadLastTrades() {
-        addSubscription(dataServiceManager.loadLastTradesByPair(watchMarket)
+        addSubscription(dataServiceManager.getLastExchangesByPair(watchMarket?.market?.amountAsset,
+                watchMarket?.market?.priceAsset,
+                DEFAULT_LAST_TRADES_LIMIT)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     val sortedByTimestamp = it.sortedByDescending { it.timestamp }
@@ -25,5 +27,9 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
                     it.printStackTrace()
                     viewState.afterFailedLoadLastTrades()
                 }))
+    }
+
+    companion object {
+        var DEFAULT_LAST_TRADES_LIMIT = 50
     }
 }

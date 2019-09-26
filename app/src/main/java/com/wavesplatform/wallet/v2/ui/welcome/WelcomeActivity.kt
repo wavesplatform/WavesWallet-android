@@ -105,6 +105,10 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                     ClientEnvironment.TEST_NET
                 }
                 ClientEnvironment.KEY_ENV_TEST_NET -> {
+                    button_switch_net.text = getString(R.string.welcome_switch_to_stage)
+                    ClientEnvironment.STAGE_NET
+                }
+                ClientEnvironment.KEY_ENV_STAGE_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_prod)
                     ClientEnvironment.MAIN_NET
                 }

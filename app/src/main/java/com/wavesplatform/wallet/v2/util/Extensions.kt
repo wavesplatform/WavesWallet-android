@@ -411,6 +411,7 @@ fun Fragment.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? 
     view.notNull { v ->
         Snackbar.make(v.findViewById(viewId), msg, Snackbar.LENGTH_LONG)
                 .withColor(color)
+                .withMultiline()
                 .show()
     }
 }
@@ -418,6 +419,7 @@ fun Fragment.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? 
 fun Activity.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
     Snackbar.make(findViewById(android.R.id.content), getString(msg), during)
             .withColor(color)
+            .withMultiline()
             .show()
 }
 
@@ -425,6 +427,7 @@ fun View.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during:
     if (context is Activity) {
         Snackbar.make(this, context.getString(msg), during)
                 .withColor(color)
+                .withMultiline()
                 .show()
     }
 }
@@ -448,12 +451,14 @@ fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = 
 fun Activity.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
     Snackbar.make(findViewById(viewId), msg, Snackbar.LENGTH_LONG)
             .withColor(color)
+            .withMultiline()
             .show()
 }
 
 fun showMessage(msg: String, view: View, @ColorRes color: Int? = null) {
     Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
             .withColor(color)
+            .withMultiline()
             .show()
 }
 
@@ -587,6 +592,12 @@ fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
     return this
 }
 
+fun Snackbar.withMultiline(line: Int = 8): Snackbar {
+    val textView = view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+    textView.maxLines = line
+    return this
+}
+
 inline fun <reified T : Any> newIntent(context: Context): Intent = Intent(context, T::class.java)
 
 inline fun <reified T : Any> newClearIntent(context: Context): Intent {
@@ -677,7 +688,7 @@ fun loadDbWavesBalance(): AssetBalanceResponse {
 }
 
 fun getDeviceId(): String {
-    return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
+    return "android:${Settings.Secure.getString(ctx.contentResolver, Settings.Secure.ANDROID_ID)}"
 }
 
 fun Throwable.errorBody(): ErrorResponse? {
@@ -1042,4 +1053,56 @@ fun String?.isValidErgoAddress(): Boolean {
         return false
     }
     return this.matches(Regex("^9[a-km-zA-HJ-NP-Z1-9]{5,}"))
+}
+
+fun mapCorrectPairs(settingsIdsPairs: List<String>, pairs: List<Pair<String, String>>)
+        : List<Pair<String, String>> {
+    return pairs.map { pair ->
+        correctPair(settingsIdsPairs, pair)
+    }
+}
+
+fun correctPair(settingsIdsPairs: List<String>, pair: Pair<String, String>): Pair<String, String> {
+    val amountIndex = settingsIdsPairs.indexOf(pair.first)
+    val priceIndex = settingsIdsPairs.indexOf(pair.second)
+
+    val amount: String
+    val price: String
+
+    val isFirstInList = amountIndex != -1
+    val isSecondInList = priceIndex != -1
+
+    if (isFirstInList && isSecondInList) {
+        if (amountIndex > priceIndex) {
+            amount = pair.first
+            price = pair.second
+        } else {
+            amount = pair.second
+            price = pair.first
+        }
+    } else if (isFirstInList && !isSecondInList) {
+        amount = pair.second
+        price = pair.first
+    } else if (!isFirstInList && isSecondInList) {
+        amount = pair.first
+        price = pair.second
+    } else {
+        val amountBytes = WavesCrypto.base58decode(input = pair.first).toHexString()
+        val priceBytes = WavesCrypto.base58decode(input = pair.second).toHexString()
+
+        if (amountBytes > priceBytes) {
+            amount = pair.first
+            price = pair.second
+        } else {
+            amount = pair.second
+            price = pair.first
+        }
+    }
+    return Pair(amount, price)
+}
+
+private fun ByteArray.toHexString(): String {
+    return this.joinToString("") {
+        java.lang.String.format("%02x", it)
+    }
 }

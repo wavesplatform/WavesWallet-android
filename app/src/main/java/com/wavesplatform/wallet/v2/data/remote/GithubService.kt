@@ -25,7 +25,7 @@ interface GithubService {
     fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url): Observable<GlobalConfigurationResponse>
 
     @GET("{newsPath}")
-    fun news(@Path("newsPath") newsPath: String? = NewsResponse.URL): Observable<NewsResponse>
+    fun news(@Path("newsPath") newsPath: String? = Constants.News.URL): Observable<NewsResponse>
 
     @GET("{commissionPath}")
     fun globalCommission(@Path("commissionPath") commissionPath: String?

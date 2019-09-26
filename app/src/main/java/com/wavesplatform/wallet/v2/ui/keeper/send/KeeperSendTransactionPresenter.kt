@@ -74,11 +74,6 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
             return
         }
 
-        val errorMessage = if (errorBody.isSmartError()) {
-            App.getAppContext().getString(R.string.scripted_account_error_dialog_title)
-        } else {
-            errorBody.message
-        }
-        viewState.onError(Throwable(errorMessage))
+        viewState.onError(Throwable(errorBody.message))
     }
 }
