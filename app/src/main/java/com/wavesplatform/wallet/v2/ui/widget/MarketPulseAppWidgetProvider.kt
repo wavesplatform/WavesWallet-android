@@ -100,7 +100,7 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
     private fun loadPrice(context: Context, widgetId: Int) {
         if (isNetworkConnected()) {
             updateWidgetProgress(context, widgetId, MarketWidgetProgressState.PROGRESS)
-            if (EnvironmentManager.isUpdateCompleted()) {
+            if (EnvironmentManager.isAlive() && !EnvironmentManager.isUpdating()) {
                 marketWidgetDataManager.loadMarketsPrices(context, widgetId, successListener = {
                     updateWidget(context, AppWidgetManager.getInstance(context), widgetId, MarketWidgetProgressState.IDLE)
                 }, errorListener = {
@@ -108,16 +108,18 @@ class MarketPulseAppWidgetProvider : AppWidgetProvider() {
                 })
             } else {
                 EnvironmentManager.update()
-                onUpdateCompleteListener = object : EnvironmentManager.Companion.OnUpdateCompleteListener {
+                if (onUpdateCompleteListener == null) {
+                    onUpdateCompleteListener = object : EnvironmentManager.Companion.OnUpdateCompleteListener {
 
-                    override fun onComplete() {
-                        EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener!!)
-                        loadPrice(context, widgetId)
-                    }
+                        override fun onComplete() {
+                            EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener!!)
+                            loadPrice(context, widgetId)
+                        }
 
-                    override fun onError() {
-                        EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener!!)
-                        updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+                        override fun onError() {
+                            EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener!!)
+                            updateWidgetProgress(context, widgetId, MarketWidgetProgressState.IDLE)
+                        }
                     }
                 }
                 EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener!!)

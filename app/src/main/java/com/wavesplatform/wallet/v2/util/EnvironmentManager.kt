@@ -41,7 +41,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
     private var versionDisposable: Disposable? = null
     private var gateWayHostInterceptor: HostInterceptor? = null
     private val onUpdateCompleteListeners: MutableList<OnUpdateCompleteListener> = mutableListOf()
-    private var updateCompleted = false
+    private var updating = false
 
     companion object {
 
@@ -136,33 +136,37 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
         @JvmStatic
         fun update() {
-            var initEnvironment: ClientEnvironment = ClientEnvironment.MAIN_NET
-            for (environment in ClientEnvironment.environments) {
-                if (environmentName!!.equals(environment.name, ignoreCase = true)) {
-                    initEnvironment = environment
-                    break
+            if (instance == null) {
+                var initEnvironment: ClientEnvironment = ClientEnvironment.MAIN_NET
+                for (environment in ClientEnvironment.environments) {
+                    if (environmentName!!.equals(environment.name, ignoreCase = true)) {
+                        initEnvironment = environment
+                        break
+                    }
                 }
+                instance = EnvironmentManager(initEnvironment)
+
+                getDefaultConfig()
+
+                val timeCorrection = PreferenceManager
+                        .getDefaultSharedPreferences(App.getAppContext())
+                        .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0)
+                val config = getLocalSavedConfig()
+
+                val environment = Environment(
+                        Environment.Server.Custom(
+                                config.servers.nodeUrl,
+                                config.servers.matcherUrl,
+                                config.servers.dataUrl,
+                                config.scheme[0].toByte()),
+                        timeCorrection)
+
+                WavesSdk.setEnvironment(environment)
             }
-            instance = EnvironmentManager(initEnvironment)
 
-            getDefaultConfig()
-
-            val timeCorrection = PreferenceManager
-                    .getDefaultSharedPreferences(App.getAppContext())
-                    .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0)
-            val config = getLocalSavedConfig()
-
-            val environment = Environment(
-                    Environment.Server.Custom(
-                            config.servers.nodeUrl,
-                            config.servers.matcherUrl,
-                            config.servers.dataUrl,
-                            config.scheme[0].toByte()),
-                    timeCorrection)
-
-            WavesSdk.setEnvironment(environment)
-
-            loadConfiguration(GithubServiceManager.create(null))
+            if (instance?.updating != true) {
+                loadConfiguration(GithubServiceManager.create(null))
+            }
         }
 
         fun getDefaultConfig(): GlobalConfiguration? {
@@ -191,7 +195,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         private fun loadConfiguration(githubService: GithubService) {
-            instance?.updateCompleted = false
+            instance?.updating = true
             instance!!.configurationDisposable =
                     Observable.zip(
                             githubService.globalConfiguration(environment.url),
@@ -240,7 +244,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({
-                                instance?.updateCompleted = true
+                                instance?.updating = false
                                 instance?.onUpdateCompleteListeners?.forEach {
                                     it.onComplete()
                                 }
@@ -249,7 +253,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
                                 error.printStackTrace()
                                 setConfiguration(environment.configuration)
-                                instance?.updateCompleted = true
+                                instance?.updating = false
                                 instance?.onUpdateCompleteListeners?.forEach {
                                     it.onError()
                                 }
@@ -282,8 +286,12 @@ class EnvironmentManager(var current: ClientEnvironment) {
             instance?.onUpdateCompleteListeners?.remove(listener)
         }
 
-        fun isUpdateCompleted(): Boolean {
-            return instance?.updateCompleted ?: false
+        fun isUpdating(): Boolean {
+            return instance?.updating ?: false
+        }
+
+        fun isAlive(): Boolean {
+            return instance != null
         }
 
         private fun getLocalSavedConfig(): GlobalConfigurationResponse {

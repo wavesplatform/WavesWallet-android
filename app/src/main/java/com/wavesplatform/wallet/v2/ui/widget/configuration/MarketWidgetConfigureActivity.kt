@@ -38,10 +38,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.widget.MarketWidgetActiveAssetStore
-import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetActiveAsset
-import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetSettings
-import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetStyle
-import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInterval
+import com.wavesplatform.wallet.v2.data.model.local.widget.*
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
@@ -195,6 +192,11 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         finish()
     }
 
+    override fun onResume() {
+        super.onResume()
+        EnvironmentManager.addOnUpdateCompleteListener(onUpdateCompleteListener)
+    }
+
     override fun onPause() {
         super.onPause()
         EnvironmentManager.removeOnUpdateCompleteListener(onUpdateCompleteListener)
@@ -222,7 +224,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
     private fun loadAssetsPairs() {
         if (isNetworkConnected()) {
-            if (EnvironmentManager.isUpdateCompleted()) {
+            if (EnvironmentManager.isAlive() && !EnvironmentManager.isUpdating()) {
                 if (adapter.data.isEmpty()) {
                     presenter.loadAssetsPairs(this, widgetId)
                 }

@@ -195,8 +195,11 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
             }
             else -> {
                 observableAmount = dataServiceManager.assets(ids = defaultAssets)
-                observablePrice = dataServiceManager.assets(
-                        ids = defaultAssets.subList(0, FIRST_MAIN_ASSETS_ID))
+                observablePrice = if (defaultAssets.size < FIRST_MAIN_ASSETS_ID) {
+                    dataServiceManager.assets(ids = defaultAssets)
+                } else {
+                    dataServiceManager.assets(ids = defaultAssets.subList(0, FIRST_MAIN_ASSETS_ID))
+                }
             }
         }
         return Pair(observableAmount, observablePrice)
