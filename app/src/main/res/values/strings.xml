@@ -709,4 +709,8 @@
     <string name="choose_environment_dialog_title">Please choose environment</string>
     <string name="choose_environment_dialog_positive_txt">Apply</string>
     <string name="choose_environment_dialog_negative_txt">Cancel</string>
+
+    <string name="new_level_of_security_title">New level of security</string>
+    <string name="new_level_of_security_description">Keep all accounts in one multi account with one secure password</string>
+    <string name="new_level_of_security_btn_txt">Let\'s start</string>
 </resources>

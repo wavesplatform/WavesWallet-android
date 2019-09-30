@@ -96,6 +96,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
+            android:name=".v2.ui.auth.migration.new_security_level.NewLevelOfSecurityActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
             android:name=".v2.ui.home.wallet.assets.sorting.AssetsSortingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.AssetsSoring" />
