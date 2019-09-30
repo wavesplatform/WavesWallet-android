@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhras
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.forgot_password.ForgotPasswordActivity
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
@@ -70,6 +71,10 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun chooseLanguageActivity(): ChooseLanguageActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun forgotPasswordActivity(): ForgotPasswordActivity
 
     @PerActivity
     @ContributesAndroidInjector
