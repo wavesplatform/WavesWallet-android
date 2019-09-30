@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -16,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -41,11 +43,13 @@ import com.wavesplatform.wallet.v2.data.model.local.widget.MarketWidgetUpdateInt
 import com.wavesplatform.wallet.v2.ui.widget.configuration.MarketWidgetConfigureActivity
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
+import kotlinx.android.synthetic.main.item_skeleton_asset.*
 import pers.victor.ext.inflate
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
 
-class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOnClickListener {
+class ChooseAccountActivity : BaseActivity(), ChooseAccountView {
 
     @Inject
     @InjectPresenter
@@ -61,13 +65,14 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun askPassCode() = false
 
-    private var link = ""
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
-        setupToolbar(toolbar_view, true,
-                getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, title = getString(R.string.choose_account))
+
+        if (intent.getBooleanExtra(KEY_INTENT_WITH_BACK_ACTION, true)) {
+            setupToolbarIconAndAction()
+        }
 
         presenter.checkKeeperIntent(intent)
 
@@ -78,9 +83,34 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             }
         })
         adapter.bindToRecyclerView(recycle_addresses)
-        adapter.chooseAccountOnClickListener = this
+
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            this.adapter.getItem(position)?.let { item ->
+                val guid = App.getAccessManager().findGuidBy(item.address)
+                if (MonkeyTest.isTurnedOn()) {
+                    MonkeyTest.startIfNeed()
+                } else {
+                    launchActivity<EnterPassCodeActivity>(
+                            requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                        putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+                        putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
+                    }
+                }
+            }
+        }
 
         presenter.getAddresses()
+    }
+
+    private fun setupToolbarIconAndAction() {
+        mActionBar?.setHomeButtonEnabled(true)
+        mActionBar?.setDisplayHomeAsUpEnabled(true)
+        mActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, R.drawable.ic_toolbar_back_black))
+
+        toolbar.setNavigationOnClickListener {
+            hideKeyboard()
+            onBackPressed()
+        }
     }
 
     override fun afterSuccessGetAddress(list: ArrayList<AddressBookUserDb>) {
@@ -94,58 +124,6 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.choose_account_empty_state)
         return view
-    }
-
-    override fun onItemClicked(item: AddressBookUserDb) {
-        val guid = App.getAccessManager().findGuidBy(item.address)
-        if (MonkeyTest.isTurnedOn()) {
-            MonkeyTest.startIfNeed()
-        } else {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
-                putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-                putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
-            }
-        }
-    }
-
-    override fun onEditClicked(position: Int) {
-        analytics.trackEvent(AnalyticEvents.StartAccountEditEvent)
-
-        val item = adapter.getItem(position) as AddressBookUserDb
-        launchActivity<EditAccountNameActivity>(REQUEST_EDIT_ACCOUNT_NAME) {
-            putExtra(KEY_INTENT_ITEM_ADDRESS, item)
-            putExtra(KEY_INTENT_ITEM_POSITION, position)
-        }
-    }
-
-    override fun onDeleteClicked(position: Int) {
-        analytics.trackEvent(AnalyticEvents.StartAccountDeleteEvent)
-
-        val item = adapter.getItem(position) as AddressBookUserDb
-        val guid = App.getAccessManager().findGuidBy(item.address)
-
-        val alertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setTitle(getString(R.string.choose_account_delete_title))
-        alertDialog.setMessage(getString(R.string.choose_account_delete_msg))
-        if (prefsUtil.getGuidValue(guid, PrefsUtil.KEY_SKIP_BACKUP, true)) {
-            alertDialog.setView(inflate(R.layout.content_delete_account_warning_layout, null))
-        }
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
-                getString(R.string.choose_account_yes)) { dialog, which ->
-            dialog.dismiss()
-
-            App.getAccessManager().deleteWavesWallet(item.address)
-            adapter.remove(position)
-
-            showSuccess(R.string.choose_account_deleted, R.id.content)
-        }
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
-                getString(R.string.choose_account_cancel)) { dialog, which ->
-            dialog.dismiss()
-        }
-        alertDialog.show()
-        alertDialog.makeStyled()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -191,55 +169,58 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_choose_account, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_add -> {
-                showCreateAccountDialog()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun showCreateAccountDialog() {
-        val optionBottomSheetFragment = OptionsBottomSheetFragment<NewAccountDialogItem>()
-
-        val options = NewAccountDialogItem.values().toMutableList()
-
-        optionBottomSheetFragment.configureDialog(options,
-                getString(R.string.choose_account_new_account_dialog_title),
-                NO_POSITION)
-
-        optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<NewAccountDialogItem> {
-            override fun onSelected(data: NewAccountDialogItem) {
-                when (data) {
-                    NewAccountDialogItem.CREATE_ACCOUNT -> {
-                        launchActivity<NewAccountActivity>(requestCode = WelcomeActivity.REQUEST_NEW_ACCOUNT)
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
-                    }
-                    NewAccountDialogItem.IMPORT_ACCOUNT -> {
-                        launchActivity<ImportAccountActivity>(WelcomeActivity.REQUEST_IMPORT_ACC)
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
-                    }
-                }
-            }
-        }
-
-        optionBottomSheetFragment.show(supportFragmentManager, optionBottomSheetFragment::class.java.simpleName)
-    }
+    // TODO: Remove after complete migration if not need
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.menu_choose_account, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.action_add -> {
+//                showCreateAccountDialog()
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
+//
+//    private fun showCreateAccountDialog() {
+//        val optionBottomSheetFragment = OptionsBottomSheetFragment<NewAccountDialogItem>()
+//
+//        val options = NewAccountDialogItem.values().toMutableList()
+//
+//        optionBottomSheetFragment.configureDialog(options,
+//                getString(R.string.choose_account_new_account_dialog_title),
+//                NO_POSITION)
+//
+//        optionBottomSheetFragment.onOptionSelectedListener = object : OptionsBottomSheetFragment.OnSelectedListener<NewAccountDialogItem> {
+//            override fun onSelected(data: NewAccountDialogItem) {
+//                when (data) {
+//                    NewAccountDialogItem.CREATE_ACCOUNT -> {
+//                        launchActivity<NewAccountActivity>(requestCode = WelcomeActivity.REQUEST_NEW_ACCOUNT)
+//                        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+//                    }
+//                    NewAccountDialogItem.IMPORT_ACCOUNT -> {
+//                        launchActivity<ImportAccountActivity>(WelcomeActivity.REQUEST_IMPORT_ACC)
+//                        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+//                    }
+//                }
+//            }
+//        }
+//
+//        optionBottomSheetFragment.show(supportFragmentManager, optionBottomSheetFragment::class.java.simpleName)
+//    }
 
     override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        if (intent.getBooleanExtra(KEY_INTENT_WITH_BACK_ACTION, true)) {
+            finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        }
     }
 
     companion object {
         const val REQUEST_EDIT_ACCOUNT_NAME = 999
-        const val NO_POSITION = -1
+        const val KEY_INTENT_WITH_BACK_ACTION = "intent_with_back_action"
         const val KEY_INTENT_ITEM_ADDRESS = "intent_item_address"
         const val KEY_INTENT_ITEM_POSITION = "intent_item_position"
     }

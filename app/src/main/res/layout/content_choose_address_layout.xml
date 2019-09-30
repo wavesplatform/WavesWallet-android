@@ -1,115 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_layout"
-    android:layout_width="match_parent"
+<FrameLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:drag_edge="right">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_edit_address"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:paddingBottom="10dp"
-                android:paddingEnd="14dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                app:srcCompat="@drawable/ic_edit_address_submit_300" />
-
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_delete_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_margin="10dp"
-                android:paddingBottom="10dp"
-                android:paddingEnd="14dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                app:srcCompat="@drawable/ic_deladdress_24_error_400" />
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <FrameLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/asset_item_radius"
+        app:cardElevation="2dp">
 
-        <android.support.v7.widget.CardView
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="2dp"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp">
+            android:padding="14dp">
 
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_asset"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                app:srcCompat="@drawable/asset_gray_icon"
+                android:adjustViewBounds="true"
+                android:background="@drawable/shape_circle_dot_basic100"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="14dp">
+                android:layout_toStartOf="@+id/image_lock"
+                android:layout_toEndOf="@+id/image_asset"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="Alex Jeff" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_asset"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="8dp"
-                    app:srcCompat="@drawable/asset_gray_icon"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/shape_circle_dot_basic100"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_address"
+                android:layout_width="match_parent"
+                android:layout_toStartOf="@+id/image_lock"
+                android:layout_marginEnd="8dp"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_below="@+id/text_name"
+                android:layout_marginTop="2dp"
+                android:layout_toEndOf="@+id/image_asset"
+                android:singleLine="true"
+                android:textColor="@color/basic500"
+                android:textSize="12sp"
+                tools:text="pjoqwfjohf2wopjfqopqfoqfwlqfwjnfwkjnlqwfl" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/image_asset"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    tools:text="Alex Jeff" />
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:id="@+id/image_lock"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@drawable/ic_draglock_22_disabled_400"/>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_name"
-                    android:layout_marginTop="2dp"
-                    android:layout_toEndOf="@+id/image_asset"
-                    android:singleLine="true"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp"
-                    tools:text="pjoqwfjohf2wopjfqopqfoqfwlqfwjnfwkjnlqwfl" />
+        </RelativeLayout>
 
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-    </FrameLayout>
-
-</com.daimajia.swipe.SwipeLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>
