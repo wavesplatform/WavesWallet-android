@@ -709,4 +709,11 @@
     <string name="choose_environment_dialog_title">Please choose environment</string>
     <string name="choose_environment_dialog_positive_txt">Apply</string>
     <string name="choose_environment_dialog_negative_txt">Cancel</string>
+
+    <string name="add_account_title">Add Account</string>
+    <string name="add_account_description">Store, manage and receive interest on your digital assets balance, easily and securely.</string>
+    <string name="add_account_create_account_title">Create a new account</string>
+    <string name="add_account_create_account_subtitle">Fast and free</string>
+    <string name="add_account_import_account_title">Import account</string>
+    <string name="add_account_import_account_subtitle">via Seed phrase</string>
 </resources>

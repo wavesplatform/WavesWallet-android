@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basic50">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/userimg_wallet_80" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_backup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:gravity="center_horizontal"
+        android:text="@string/add_account_title"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:fontFamily="@font/roboto_medium" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_title"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:text="@string/add_account_description"
+        android:textColor="@color/basic500" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_create_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="24dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_below="@+id/text_subtitle"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/asset_item_radius"
+        app:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="14dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_action_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_userimg_create_24" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_arrow_right" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_create_description"
+                android:layout_width="wrap_content"
+                android:layout_toEndOf="@+id/image_action_create"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_below="@+id/text_create_title"
+                android:text="@string/add_account_create_account_subtitle"
+                android:textColor="@color/basic500"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_create_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_toEndOf="@+id/image_action_create"
+                android:text="@string/add_account_create_account_title"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_import_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_below="@+id/card_create_account"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/asset_item_radius"
+        app:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="14dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_userimg_import_24" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_arrow_right" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_import_description"
+                android:layout_width="wrap_content"
+                android:layout_toEndOf="@+id/image_action"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_below="@+id/text_import_title"
+                android:text="@string/add_account_import_account_subtitle"
+                android:textColor="@color/basic500"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_import_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_toEndOf="@+id/image_action"
+                android:text="@string/add_account_import_account_title"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/white" />
+
+</RelativeLayout>

@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerActivity
+import com.wavesplatform.wallet.v2.ui.auth.add_account.AddAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
@@ -70,6 +71,10 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun chooseLanguageActivity(): ChooseLanguageActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun addAccountActivity(): AddAccountActivity
 
     @PerActivity
     @ContributesAndroidInjector
