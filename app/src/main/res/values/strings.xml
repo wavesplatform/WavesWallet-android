@@ -713,4 +713,10 @@
     <string name="new_level_of_security_title">New level of security</string>
     <string name="new_level_of_security_description">Keep all accounts in one multi account with one secure password</string>
     <string name="new_level_of_security_btn_txt">Let\'s start</string>
+
+    <string name="migrate_account_title">Migrate Accounts</string>
+    <string name="migrate_account_description">You need to enter a password to transfer your account to a new, more secure place</string>
+    <string name="migrate_account_successfully_unlocked_header">Successfully unlocked</string>
+    <string name="migrate_account_pending_unlock_header">Pending unlock</string>
+    <string name="migrate_account_confirm_button_txt">Proceed</string>
 </resources>

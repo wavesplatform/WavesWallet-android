@@ -11,4 +11,4 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class NewLevelOfSecurityPresenter @Inject constructor() : BasePresenter<SecretPhraseView>()
+class NewLevelOfSecurityPresenter @Inject constructor() : BasePresenter<NewLevelOfSecurityView>()

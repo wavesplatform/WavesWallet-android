@@ -16,14 +16,14 @@ import kotlinx.android.synthetic.main.activity_new_level_of_security.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-class NewLevelOfSecurityActivity : BaseActivity(), SecretPhraseView {
+class NewLevelOfSecurityActivity : BaseActivity(), NewLevelOfSecurityView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: SecretPhrasePresenter
+    lateinit var presenter: NewLevelOfSecurityPresenter
 
     @ProvidePresenter
-    fun providePresenter(): SecretPhrasePresenter = presenter
+    fun providePresenter(): NewLevelOfSecurityPresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_new_level_of_security
 
@@ -35,6 +35,8 @@ class NewLevelOfSecurityActivity : BaseActivity(), SecretPhraseView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view)
 
         button_confirm.click {
