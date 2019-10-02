@@ -56,7 +56,9 @@ class WelcomeActivity : BaseDrawerInfoActivity(), WelcomeView {
         }
 
         relative_import_acc.click {
-            launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
+            launchActivity<ChooseAccountActivity>(REQUEST_IMPORT_ACC) {
+                putExtra(ChooseAccountActivity.KEY_INTENT_WITH_BACK_ACTION, false)
+            }
             overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 

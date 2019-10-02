@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Eduard Zaydel on 30/9/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/basic50"
+    android:paddingTop="14dp"
+    android:paddingBottom="6dp">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/basic500"
+        tools:text="@string/migrate_account_successfully_unlocked_header" />
+
+</FrameLayout>

@@ -1,339 +1,348 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.wavesplatform.wallet"
-    android:installLocation="auto">
+<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+package="com.wavesplatform.wallet"
+android:installLocation="auto">
 
-    <application
-        android:name=".App"
-        android:allowBackup="false"
-        android:hardwareAccelerated="true"
-        android:icon="${appIcon}"
-        android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="${appIconRound}"
-        android:theme="@style/AppTheme"
-        tools:replace="allowBackup">
+<application
+    android:name=".App"
+    android:allowBackup="false"
+    android:hardwareAccelerated="true"
+    android:icon="${appIcon}"
+    android:label="@string/app_name"
+    android:networkSecurityConfig="@xml/network_security_config"
+    android:roundIcon="${appIconRound}"
+    android:theme="@style/AppTheme"
+    tools:replace="allowBackup">
 
-        <activity
-            android:name=".v2.ui.widget.configuration.MarketWidgetConfigureActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+    <activity
+        android:name=".v2.ui.widget.configuration.MarketWidgetConfigureActivity"
+        android:noHistory="true"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
+        <intent-filter>
+            <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+        </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".v2.ui.splash.SplashActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+    <activity
+        android:name=".v2.ui.splash.SplashActivity"
+        android:launchMode="singleTask"
+        android:noHistory="true"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.DEFAULT" />
 
-                <category android:name="android.intent.category.BROWSABLE" />
+            <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="waves" />
-            </intent-filter>
-        </activity>
+            <data android:scheme="waves" />
+        </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".v2.ui.home.MainActivity"
-            android:configChanges="orientation|locale|layoutDirection"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustResize" />
+    <activity
+        android:name=".v2.ui.home.MainActivity"
+        android:configChanges="orientation|locale|layoutDirection"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".v2.ui.language.choose.ChooseLanguageActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.tutorial.TutorialActivity"
-            android:configChanges="orientation|locale"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.welcome.WelcomeActivity"
-            android:configChanges="orientation|locale"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.language.choose.ChooseLanguageActivity"
+        android:noHistory="true"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.tutorial.TutorialActivity"
+        android:configChanges="orientation|locale"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.welcome.WelcomeActivity"
+        android:configChanges="orientation|locale"
+        android:launchMode="singleInstance"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.add_account.AddAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.addresses.AddressesAndKeysActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.addresses.alias.create.CreateAliasActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.backup.BackupPhraseActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.new_account.NewAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.wallet.assets.sorting.AssetsSortingActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.AssetsSoring" />
+    <activity
+        android:name=".v2.ui.home.wallet.assets.details.AssetDetailsActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.wallet.address.MyAddressQRActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.address_book.AddressBookActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="stateHidden" />
+    <activity
+        android:name=".v2.ui.home.profile.address_book.add.AddAddressActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="stateHidden" />
+    <activity
+        android:name=".v2.ui.home.profile.address_book.edit.EditAddressActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="stateHidden" />
+    <activity
+        android:name=".v2.ui.language.change_welcome.ChangeLanguageActivity"
+        android:configChanges="orientation|locale"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.change_password.ChangePasswordActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.profile.network.NetworkActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.passcode.create.CreatePassCodeActivity"
+        android:noHistory="true"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.passcode.enter.EnterPassCodeActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.fingerprint.UseFingerprintActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.choose_account.edit.EditAccountNameActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="adjustResize" />
+    <activity
+        android:name=".v2.ui.auth.choose_account.ChooseAccountActivity"
+        android:launchMode="singleInstance"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
+        <intent-filter>
+            <action android:name="com.wavesplatform.wallet.action.KEEPER" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
+    <activity
+        android:name=".v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.passcode.enter.use_account_password.forgot_password.ForgotPasswordActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.wallet.leasing.start.StartLeasingActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="adjustPan" />
+    <activity
+        android:name=".v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.import_account.ImportAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.qr_scanner.QrCodeScannerActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.import_account.protect_account.ProtectAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.quick_action.send.SendActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="adjustPan" />
+    <activity
+        android:name=".v2.ui.home.wallet.your_assets.YourAssetsActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="adjustPan" />
+    <activity
+        android:name=".v2.ui.home.quick_action.receive.ReceiveActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
+        android:windowSoftInputMode="adjustResize|stateHidden" />
+    <activity
+        android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.home.dex.sorting.ActiveMarketsSortingActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.dex.markets.DexMarketsActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.dex.trade.TradeActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.home.wallet.assets.token_burn.TokenBurnActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="adjustPan" />
+    <activity
+        android:name=".v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.home.history.HistoryActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.web.WebActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.migration.new_security_level.NewLevelOfSecurityActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.migration.migrate_account.MigrateAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+    <activity
+        android:name=".v2.ui.home.wallet.assets.search_asset.SearchAssetActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+        android:windowSoftInputMode="stateVisible" />
+    <activity
+        android:name=".v2.ui.home.profile.settings.DevOptionsActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.keeper.KeeperTransactionActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.keeper.send.KeeperSendTransactionActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
+        android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <activity
-            android:name=".v2.ui.home.profile.addresses.AddressesAndKeysActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.profile.addresses.alias.create.CreateAliasActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.profile.backup.BackupPhraseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.new_account.NewAccountActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.add_account.AddAccountActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.wallet.assets.sorting.AssetsSortingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.AssetsSoring" />
-        <activity
-            android:name=".v2.ui.home.wallet.assets.details.AssetDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.wallet.address.MyAddressQRActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.profile.address_book.AddressBookActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v2.ui.home.profile.address_book.add.AddAddressActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v2.ui.home.profile.address_book.edit.EditAddressActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v2.ui.language.change_welcome.ChangeLanguageActivity"
-            android:configChanges="orientation|locale"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.profile.change_password.ChangePasswordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.profile.network.NetworkActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.passcode.create.CreatePassCodeActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.passcode.enter.EnterPassCodeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.fingerprint.UseFingerprintActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.choose_account.edit.EditAccountNameActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v2.ui.auth.choose_account.ChooseAccountActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
-            <intent-filter>
-                <action android:name="com.wavesplatform.wallet.action.KEEPER" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.wallet.leasing.start.StartLeasingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.import_account.ImportAccountActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.qr_scanner.QrCodeScannerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.auth.import_account.protect_account.ProtectAccountActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.quick_action.send.SendActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".v2.ui.home.wallet.your_assets.YourAssetsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".v2.ui.home.quick_action.receive.ReceiveActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.home.dex.sorting.ActiveMarketsSortingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.dex.markets.DexMarketsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.dex.trade.TradeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.home.wallet.assets.token_burn.TokenBurnActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.home.history.HistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.web.WebActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.home.wallet.assets.search_asset.SearchAssetActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateVisible" />
-        <activity
-            android:name=".v2.ui.home.profile.settings.DevOptionsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.keeper.KeeperTransactionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
-            android:name=".v2.ui.keeper.send.KeeperSendTransactionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+    <meta-data
+        android:name="preloaded_fonts"
+        android:resource="@array/preloaded_fonts" />
+    <meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="${fabricApiKey}" />
+
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="${applicationId}.fileProvider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/provider_paths" />
+    </provider>
+
+    <receiver android:name=".v2.ui.widget.MarketPulseAppWidgetProvider">
+        <intent-filter>
+            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        </intent-filter>
 
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="${fabricApiKey}" />
+            android:name="android.appwidget.provider"
+            android:resource="@xml/market_widget_info" />
+    </receiver>
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
+    <receiver
+        android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="com.android.vending.INSTALL_REFERRER" />
+        </intent-filter>
+    </receiver>
 
-        <receiver
-            android:name=".v2.ui.widget.MarketPulseAppWidgetProvider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+    <service
+        android:name=".v2.ui.widget.MarketWidgetAdapterService"
+        android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/market_widget_info" />
-        </receiver>
+    <service
+        android:name=".v2.data.service.UpdateApiDataService"
+        android:stopWithTask="true" />
+</application>
 
-        <receiver
-            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".v2.ui.widget.MarketWidgetAdapterService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <service
-            android:name=".v2.data.service.UpdateApiDataService"
-            android:stopWithTask="true" />
-    </application>
-
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER" />
-    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.VIBRATE" />
+<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.GET_TASKS" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.USE_FINGERPRINT" />
+<uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER" />
+<uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>
