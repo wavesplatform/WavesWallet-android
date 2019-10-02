@@ -9,16 +9,22 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.local.MigrateAccountItem
+import com.wavesplatform.wallet.v2.data.model.local.widget.MyAccountItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.getTransactionType
@@ -108,5 +114,27 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
     fun getWalletName(): String {
         return App.getAccessManager().getWalletName(App.getAccessManager().getLoggedInGuid())
+    }
+
+    fun getAddresses() {
+        // TODO: Multi account logic here
+        val list = arrayListOf<MyAccountItem>()
+
+        list.add(MyAccountItem(R.string.migrate_account_successfully_unlocked_header))
+
+        val guids = prefsUtil.getGlobalValueList(
+                EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
+        for (i in guids.indices) {
+            val publicKey = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_PUB_KEY, "")
+            val name = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_WALLET_NAME, "")
+            val address = WavesCrypto.addressFromPublicKey(WavesCrypto.base58decode(publicKey), EnvironmentManager.netCode)
+            list.add(MyAccountItem(AddressBookUserDb(address, name), locked = false, active = true))
+        }
+
+        //TODO: Remove test
+        list.add(MyAccountItem(R.string.migrate_account_pending_unlock_header))
+        list.add(MyAccountItem(AddressBookUserDb("test", "test"), locked = true, active = false))
+
+        viewState.afterSuccessGetAddress(list)
     }
 }

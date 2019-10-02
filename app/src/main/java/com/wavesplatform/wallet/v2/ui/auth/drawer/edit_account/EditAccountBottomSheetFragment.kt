@@ -73,6 +73,7 @@ class EditAccountBottomSheetFragment : BaseBottomSheetDialogFragment(), EditAcco
                 presenter.account?.let { account ->
                     listener?.onSuccess(arguments?.getInt(KEY_INTENT_ITEM_POSITION, NO_POSITION)
                             ?: NO_POSITION, account)
+                    dismiss()
                 }
             }
         }

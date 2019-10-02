@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
@@ -21,21 +22,24 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
-import com.wavesplatform.wallet.v2.data.model.service.configs.NewsResponse
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.sdk.utils.Identicon
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerInfoActivity
-import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerLoginActivity
+import com.wavesplatform.wallet.v2.data.model.local.MigrateAccountItem
+import com.wavesplatform.wallet.v2.data.model.local.widget.MyAccountItem
+import com.wavesplatform.wallet.v2.data.model.service.configs.NewsResponse
+import com.wavesplatform.wallet.v2.ui.auth.drawer.AbstractDrawerLoginActivity
+import com.wavesplatform.wallet.v2.ui.auth.drawer.MyAccountsAdapter
+import com.wavesplatform.wallet.v2.ui.auth.drawer.edit_account.EditAccountBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -43,18 +47,15 @@ import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
-import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.isNetworkConnected
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-class MainActivity : BaseDrawerLoginActivity(), MainView, TabLayout.OnTabSelectedListener {
+class MainActivity : AbstractDrawerLoginActivity(), MainView, TabLayout.OnTabSelectedListener {
 
     @Inject
     @InjectPresenter
@@ -96,6 +97,80 @@ class MainActivity : BaseDrawerLoginActivity(), MainView, TabLayout.OnTabSelecte
         image_account_avatar.click {
             slidingRootNav.openMenu(true)
         }
+
+        setupSwitchAccounts()
+    }
+
+    private fun setupSwitchAccounts() {
+        presenter.getAddresses()
+
+        accountsAdapter.chooseAccountOnClickListener = object : MyAccountsAdapter.MyAccountOnClickListener {
+            override fun onEditClicked(position: Int, item: AddressBookUserDb) {
+                processAccountEdit(position, item)
+            }
+
+            override fun onDeleteClicked(position: Int, item: AddressBookUserDb) {
+                processAccountDelete(position, item)
+            }
+
+            override fun onItemClicked(position: Int, item: AddressBookUserDb) {
+                processAccountClick(item)
+            }
+        }
+    }
+
+    private fun processAccountClick(item: AddressBookUserDb) {
+        val guid = App.getAccessManager().findGuidBy(item.address)
+        if (MonkeyTest.isTurnedOn()) {
+            MonkeyTest.startIfNeed()
+        } else {
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+                putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
+            }
+        }
+    }
+
+    private fun processAccountDelete(position: Int, item: AddressBookUserDb) {
+        analytics.trackEvent(AnalyticEvents.StartAccountDeleteEvent)
+
+        val guid = App.getAccessManager().findGuidBy(item.address)
+
+        val alertDialog = AlertDialog.Builder(this@MainActivity).create()
+        alertDialog.setTitle(getString(R.string.choose_account_delete_title))
+        alertDialog.setMessage(getString(R.string.choose_account_delete_msg))
+        if (prefsUtil.getGuidValue(guid, PrefsUtil.KEY_SKIP_BACKUP, true)) {
+            alertDialog.setView(inflate(R.layout.content_delete_account_warning_layout, null))
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.choose_account_yes)) { dialog, which ->
+            dialog.dismiss()
+
+            App.getAccessManager().deleteWavesWallet(item.address)
+            accountsAdapter.remove(position)
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+                getString(R.string.choose_account_cancel)) { dialog, which ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
+        alertDialog.makeStyled()
+    }
+
+    private fun processAccountEdit(position: Int, item: AddressBookUserDb) {
+        analytics.trackEvent(AnalyticEvents.StartAccountEditEvent)
+
+        val editAccountDialog = EditAccountBottomSheetFragment.newInstance(position, item)
+        editAccountDialog.listener = object : EditAccountBottomSheetFragment.EditAccountListener {
+            override fun onSuccess(position: Int, account: AddressBookUserDb) {
+                accountsAdapter.setData(position, MyAccountItem(account,
+                        accountsAdapter.getItem(position)?.locked ?: false,
+                        accountsAdapter.getItem(position)?.active ?: false))
+                App.getAccessManager().storeWalletName(item.address, item.name)
+            }
+        }
+        editAccountDialog.show(supportFragmentManager, editAccountDialog::class.java.simpleName)
     }
 
     private fun setToolbarTitle(title: String) {
@@ -424,6 +499,22 @@ class MainActivity : BaseDrawerLoginActivity(), MainView, TabLayout.OnTabSelecte
                     accountFirstOpenDialog.show()
 
                     anyNewsShowed = true
+                }
+            }
+        }
+    }
+
+    override fun afterSuccessGetAddress(accounts: MutableList<MyAccountItem>) {
+        accountsAdapter.setNewData(accounts)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
+                if (resultCode == Constants.RESULT_OK) {
+//                    TODO: Multi account logic here
+//                    adapter.addUnlockedAccount(item, position)
                 }
             }
         }

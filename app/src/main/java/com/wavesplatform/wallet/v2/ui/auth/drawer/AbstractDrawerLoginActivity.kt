@@ -1,27 +1,35 @@
 /*
- * Created by Eduard Zaydel on 1/4/2019
+ * Created by Eduard Zaydel on 2/10/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.base.view
+package com.wavesplatform.wallet.v2.ui.auth.drawer
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.ui.auth.add_account.AddAccountActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
-import kotlinx.android.synthetic.main.content_menu_left_drawer.view.*
+import kotlinx.android.synthetic.main.content_login_drawer.view.*
 import pers.victor.ext.*
+import javax.inject.Inject
 
-abstract class BaseDrawerLoginActivity : BaseActivity() {
+abstract class AbstractDrawerLoginActivity : BaseActivity() {
 
     lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
+
+    @Inject
+    lateinit var accountsAdapter: MyAccountsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +52,8 @@ abstract class BaseDrawerLoginActivity : BaseActivity() {
                     }
                 })
                 .addDragListener { progress ->
-                    slidingRootNav.layout.linear_drawer.scaleX = 1.5f - (progress / 2)
-                    slidingRootNav.layout.linear_drawer.scaleY = 1.5f - (progress / 2)
+                    slidingRootNav.layout.root_drawer.scaleX = 1.5f - (progress / 2)
+                    slidingRootNav.layout.root_drawer.scaleY = 1.5f - (progress / 2)
 
                     if (progress > 0.02) {
                         if (window.statusBarColor != R.color.white)
@@ -57,16 +65,23 @@ abstract class BaseDrawerLoginActivity : BaseActivity() {
                 }
                 .withMenuOpened(false)
                 .withSavedState(savedInstanceState)
-                .withMenuLayout(R.layout.content_menu_left_drawer) // TODO: Change to correct layout
+                .withMenuLayout(R.layout.content_login_drawer)
                 .inject()
 
+        slidingRootNav.layout.recycle_accounts.layoutManager = LinearLayoutManager(this)
+        accountsAdapter.bindToRecyclerView(slidingRootNav.layout.recycle_accounts)
+
+        slidingRootNav.layout.linear_add_account.click {
+            launchActivity<AddAccountActivity>(REQUEST_ADD_ACCOUNT)
+        }
+
         createCloseView()
-        slidingRootNav.layout.linear_drawer.scaleX = 1.5f
-        slidingRootNav.layout.linear_drawer.scaleY = 1.5f
+        slidingRootNav.layout.root_drawer.scaleX = 1.5f
+        slidingRootNav.layout.root_drawer.scaleY = 1.5f
     }
 
     private fun createCloseView() {
-        view = View(this@BaseDrawerLoginActivity)
+        view = View(this@AbstractDrawerLoginActivity)
 
         val params: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, // This will define text view width
@@ -80,5 +95,9 @@ abstract class BaseDrawerLoginActivity : BaseActivity() {
         slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).addView(view)
 
         view?.gone()
+    }
+
+    companion object {
+        private const val REQUEST_ADD_ACCOUNT = 432
     }
 }

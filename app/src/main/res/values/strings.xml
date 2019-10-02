@@ -745,4 +745,8 @@
     <string name="forgot_password_dialog_description">Are you sure you want to reset this account? All information will be deleted</string>
     <string name="forgot_password_dialog_confirm">Yes</string>
     <string name="forgot_password_dialog_cancel">Cancel</string>
+
+    <string name="login_drawer_title">My Accounts</string>
+    <string name="login_drawer_add_account_btn">Add account</string>
+
 </resources>
