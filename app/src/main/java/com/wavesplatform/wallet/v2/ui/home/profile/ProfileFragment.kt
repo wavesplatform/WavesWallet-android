@@ -125,7 +125,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         button_delete_account.click {
-            // TODO: Need to new logic of delete account
+            // TODO: Multi account logic here
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
@@ -418,7 +418,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        // TODO: Check if logic of logout is correct
+        // TODO: Multi account logic here (or already valid?)
         val guid = App.getAccessManager().getLastLoggedInGuid()
 
         launchActivity<EnterPassCodeActivity>(requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {

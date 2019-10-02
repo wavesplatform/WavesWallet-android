@@ -14,16 +14,17 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.forgot_password.ForgotPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.onAction
 import com.wavesplatform.wallet.v2.util.showError
@@ -96,6 +97,11 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
         button_sign_in.click {
             goNext()
+        }
+
+        text_reset_password.click {
+            // TODO: Multi account logic here (need pass some data here?)
+            launchActivity<ForgotPasswordActivity>()
         }
     }
 

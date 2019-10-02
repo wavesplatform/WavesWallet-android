@@ -709,4 +709,19 @@
     <string name="choose_environment_dialog_title">Please choose environment</string>
     <string name="choose_environment_dialog_positive_txt">Apply</string>
     <string name="choose_environment_dialog_negative_txt">Cancel</string>
+
+
+    <string name="use_account_password_forgot_password">Forgot password?</string>
+    <string name="use_account_password_reset_password">Reset password to account</string>
+
+    <string name="forgot_password_title">Attention!</string>
+    <string name="forgot_password_description">To recover the password, you need to reset all accounts, set a new password, import each account from the Seed phrase or via Private key.</string>
+    <string name="forgot_password_warning">If you have not saved the Seed phrase or Private key, then you will not be able to recover access to your account.</string>
+    <string name="forgot_password_reset_button_txt">Reset all</string>
+    <string name="forgot_password_cancel_button_txt">Cancel</string>
+
+    <string name="forgot_password_dialog_title">Reset account</string>
+    <string name="forgot_password_dialog_description">Are you sure you want to reset this account? All information will be deleted</string>
+    <string name="forgot_password_dialog_confirm">Yes</string>
+    <string name="forgot_password_dialog_cancel">Cancel</string>
 </resources>
