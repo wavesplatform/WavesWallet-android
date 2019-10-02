@@ -252,6 +252,14 @@ android:installLocation="auto">
         android:screenOrientation="portrait"
         android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     <activity
+        android:name=".v2.ui.auth.migration.new_security_level.NewLevelOfSecurityActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
+        android:name=".v2.ui.auth.migration.migrate_account.MigrateAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+    <activity
         android:name=".v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity"
         android:screenOrientation="portrait"
         android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />

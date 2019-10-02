@@ -1,0 +1,67 @@
+<!--
+  ~ Created by Eduard Zaydel on 30/9/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basic50">
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_confirm"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_subtitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/new_level_of_security_btn_txt" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"
+        android:src="@drawable/sign_up" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_title"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:text="@string/new_level_of_security_description"
+        android:textColor="@color/disabled500" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_backup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:gravity="center_horizontal"
+        android:text="@string/new_level_of_security_title"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:fontFamily="@font/roboto_medium" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/white" />
+
+</RelativeLayout>
