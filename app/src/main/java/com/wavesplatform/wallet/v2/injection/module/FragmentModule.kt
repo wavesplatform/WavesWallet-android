@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerFragment
+import com.wavesplatform.wallet.v2.ui.auth.drawer.edit_account.EditAccountBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.auth.import_account.manually.EnterSeedManuallyFragment
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -48,6 +49,11 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun dexFragment(): DexFragment
+
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun editAccountBottomSheetFragment(): EditAccountBottomSheetFragment
 
     @PerFragment
     @ContributesAndroidInjector

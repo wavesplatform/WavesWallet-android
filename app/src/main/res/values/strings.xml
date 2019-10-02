@@ -716,4 +716,8 @@
     <string name="add_account_create_account_subtitle">Fast and free</string>
     <string name="add_account_import_account_title">Import account</string>
     <string name="add_account_import_account_subtitle">via Seed phrase</string>
+
+
+    <string name="edit_account_name_input_hint">New name</string>
+    <string name="edit_account_name_btn_text">Save</string>
 </resources>
