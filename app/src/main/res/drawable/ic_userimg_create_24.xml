@@ -1,0 +1,55 @@
+<!--
+  ~ Created by Eduard Zaydel on 1/10/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M0,0h24v24H0z"
+      android:fillColor="#D8D8D8"
+      android:fillAlpha="0"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M17.833,24v-6.414c0,-4.228 -3.45,-7.655 -7.708,-7.655h-0.417C5.451,9.931 2,13.358 2,17.586L2,24"
+      android:fillType="nonZero">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="9.931"
+          android:startX="9.9165"
+          android:endY="24"
+          android:endX="9.9165"
+          android:type="linear">
+        <item android:offset="0" android:color="#FFCAD9FF"/>
+        <item android:offset="1" android:color="#FFDFE8FF"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M15.75,5.793c0,3.2 -2.612,5.793 -5.833,5.793 -3.222,0 -5.834,-2.593 -5.834,-5.793S6.695,0 9.917,0c3.221,0 5.833,2.594 5.833,5.793z"
+      android:fillType="nonZero">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="5.793"
+          android:startX="15.75"
+          android:endY="5.793"
+          android:endX="4.0829997"
+          android:type="linear">
+        <item android:offset="0" android:color="#FFDFE8FF"/>
+        <item android:offset="1" android:color="#FFCAD9FF"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M12.834,17.793a4.583,4.552 0,1 0,9.166 0a4.583,4.552 0,1 0,-9.166 0z"
+      android:fillColor="#2A65FF"
+      android:fillType="nonZero"/>
+  <path
+      android:pathData="M19.917,16.966v1.655L18.25,18.621v1.655h-1.667L16.583,18.62h-1.666v-1.655h1.666L16.583,15.31h1.667v1.656z"
+      android:fillColor="#FFF"
+      android:fillType="nonZero"/>
+</vector>

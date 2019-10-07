@@ -17,7 +17,6 @@ import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerInfoActivity
@@ -28,7 +27,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.click
-import pers.victor.ext.visiable
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -58,9 +56,7 @@ class WelcomeActivity : BaseDrawerInfoActivity(), WelcomeView {
         }
 
         relative_import_acc.click {
-            launchActivity<ChooseAccountActivity>(REQUEST_IMPORT_ACC) {
-                putExtra(ChooseAccountActivity.KEY_INTENT_WITH_BACK_ACTION, false)
-            }
+            launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
             overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 

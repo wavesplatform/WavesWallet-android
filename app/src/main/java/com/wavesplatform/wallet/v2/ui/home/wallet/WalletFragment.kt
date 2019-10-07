@@ -155,13 +155,13 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     private fun setScrollAlert(scroll: Boolean) {
-        val params = info_alert?.layoutParams as AppBarLayout.LayoutParams
-        params.scrollFlags = if (scroll) {
-            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        val params = info_alert?.layoutParams as? AppBarLayout.LayoutParams
+        params?.scrollFlags = if (scroll) {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         } else {
             AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         }
-        info_alert.layoutParams = params
+        info_alert?.layoutParams = params
     }
 
     private fun openAppInPlayMarket() {

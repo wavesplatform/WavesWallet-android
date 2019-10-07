@@ -28,7 +28,7 @@ import pers.victor.ext.screenHeight
 import pers.victor.ext.setHeight
 import javax.inject.Inject
 
-open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpView {
+open class BaseBottomSheetDialogFragment : BaseMvpBottomDialogFragment(), BaseMvpView {
 
     open var fullScreenHeightEnable = false
     var extraTopMargin = 0

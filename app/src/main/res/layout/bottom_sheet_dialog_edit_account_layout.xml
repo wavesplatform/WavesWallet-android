@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Eduard Zaydel on 1/10/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear_top_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_asset"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/asset_gray_icon"
+            android:adjustViewBounds="true"
+            android:background="@drawable/shape_circle_dot_basic100"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_name"
+            android:maxLines="1"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="Alex Jeff" />
+
+    </LinearLayout>
+
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:id="@+id/til_account_name"
+        android:layout_below="@+id/linear_top_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColorHint="@color/basic500"
+        app:errorEnabled="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:hintTextAppearance="@style/TextLabel">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/SubmitEditText"
+            android:backgroundTint="@color/accent50"
+            android:hint="@string/edit_account_name_input_hint"
+            android:imeOptions="actionDone"
+            android:paddingBottom="20dp"
+            android:singleLine="true"
+            android:textColorHint="@color/basic500" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_save"
+        style="@style/WavesButton"
+        android:background="@drawable/shape_btn_waves_blue_default_without_radius"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/til_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_account_name_btn_text" />
+</RelativeLayout>

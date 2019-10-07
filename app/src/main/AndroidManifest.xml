@@ -69,7 +69,10 @@ android:installLocation="auto">
         android:launchMode="singleInstance"
         android:screenOrientation="portrait"
         android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-
+    <activity
+        android:name=".v2.ui.auth.add_account.AddAccountActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     <activity
         android:name=".v2.ui.home.profile.addresses.AddressesAndKeysActivity"
         android:screenOrientation="portrait"

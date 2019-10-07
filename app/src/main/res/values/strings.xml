@@ -710,6 +710,17 @@
     <string name="choose_environment_dialog_positive_txt">Apply</string>
     <string name="choose_environment_dialog_negative_txt">Cancel</string>
 
+    <string name="add_account_title">Add Account</string>
+    <string name="add_account_description">Store, manage and receive interest on your digital assets balance, easily and securely.</string>
+    <string name="add_account_create_account_title">Create a new account</string>
+    <string name="add_account_create_account_subtitle">Fast and free</string>
+    <string name="add_account_import_account_title">Import account</string>
+    <string name="add_account_import_account_subtitle">via Seed phrase</string>
+
+
+    <string name="edit_account_name_input_hint">New name</string>
+    <string name="edit_account_name_btn_text">Save</string>
+
     <string name="new_level_of_security_title">New level of security</string>
     <string name="new_level_of_security_description">Keep all accounts in one multi account with one secure password</string>
     <string name="new_level_of_security_btn_txt">Let\'s start</string>
@@ -734,4 +745,8 @@
     <string name="forgot_password_dialog_description">Are you sure you want to reset this account? All information will be deleted</string>
     <string name="forgot_password_dialog_confirm">Yes</string>
     <string name="forgot_password_dialog_cancel">Cancel</string>
+
+    <string name="login_drawer_title">My Accounts</string>
+    <string name="login_drawer_add_account_btn">Add account</string>
+
 </resources>
