@@ -26,12 +26,12 @@ import com.github.mikephil.charting.utils.EntryXComparator
 import com.github.mikephil.charting.utils.ObjectPool
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
-import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
 import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
