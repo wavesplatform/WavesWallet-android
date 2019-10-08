@@ -19,7 +19,11 @@ class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarketResponse, B
     override fun convert(helper: BaseViewHolder, item: WatchMarketResponse) {
         if (item.pairResponse != null) {
             item.pairResponse.notNull { data ->
-                val deltaPercent = (data.lastPrice.minus(data.firstPrice)).times(BigDecimal(100))
+                val deltaPercent = if (data.firstPrice > data.lastPrice) {
+                    (data.firstPrice.minus(data.lastPrice)).times(BigDecimal(100))
+                } else {
+                    (data.lastPrice.minus(data.firstPrice)).times(BigDecimal(100))
+                }
 
                 val percent = if (deltaPercent != BigDecimal.ZERO) {
                     deltaPercent / data.lastPrice
@@ -28,13 +32,13 @@ class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarketResponse, B
                 }
 
                 val tradeIcon = when {
-                    percent > BigDecimal.ZERO -> {
+                    data.lastPrice > data.firstPrice -> {
                         findDrawable(R.drawable.ic_chartarrow_success_400)
                     }
-                    percent < BigDecimal.ZERO -> {
+                    data.firstPrice > data.lastPrice -> {
                         findDrawable(R.drawable.ic_chartarrow_error_500)
                     }
-                    percent == BigDecimal.ZERO -> {
+                    data.lastPrice == data.firstPrice -> {
                         findDrawable(R.drawable.ic_chartarrow_accent_100)
                     }
                     else -> findDrawable(R.drawable.ic_chartarrow_accent_100)
