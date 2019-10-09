@@ -15,7 +15,7 @@
     app:cardCornerRadius="@dimen/asset_item_radius"
     app:cardElevation="2dp">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="68dp"
         android:paddingLeft="14dp"
@@ -34,82 +34,87 @@
             android:id="@+id/text_asset_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/image_asset_icon"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/image_asset_icon"
             android:textColor="@color/disabled500"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/image_asset_icon"
-            app:layout_constraintTop_toTopOf="@+id/image_asset_icon"
             tools:text="Waves" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_my_asset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_asset_name"
             android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/text_asset_name"
             android:text="@string/wallet_assets_my_asset"
             android:textColor="@color/info500"
             android:textSize="12sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/text_asset_name"
-            app:layout_constraintStart_toEndOf="@+id/text_asset_name"
-            app:layout_constraintTop_toTopOf="@+id/text_asset_name" />
+            tools:visibility="visible" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/text_my_asset"
+            android:layout_alignBottom="@+id/text_my_asset"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/text_my_asset"
-            app:layout_constraintStart_toEndOf="@+id/text_my_asset"
-            app:layout_constraintTop_toTopOf="@+id/text_my_asset"
+            android:layout_toEndOf="@+id/text_my_asset"
             app:srcCompat="@drawable/ic_favorite_mini" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_asset_value"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="3dp"
-            android:text="Waves"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_asset_icon"
-            app:layout_constraintStart_toEndOf="@+id/image_asset_icon" />
-
-        <com.wavesplatform.wallet.v2.ui.custom.SpamTag
-            android:id="@+id/text_tag_spam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_alignBottom="@+id/image_asset_icon"
+            android:layout_marginBottom="2dp"
             android:layout_marginStart="4dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/text_asset_value"
-            app:layout_constraintStart_toEndOf="@+id/text_asset_value"
-            app:layout_constraintTop_toTopOf="@+id/text_asset_value" />
+            android:layout_toEndOf="@+id/image_asset_icon"
+            android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_bitcoin_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/asset_price_border"
-            android:paddingStart="4dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="4dp"
-            android:paddingBottom="2dp"
-            android:text="$ 00.00"
-            android:textColor="@color/info500"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/text_asset_value"
-            app:layout_constraintStart_toEndOf="@+id/text_asset_value"
-            app:layout_constraintTop_toTopOf="@+id/text_asset_value" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_asset_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:text="Waves"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-    </android.support.constraint.ConstraintLayout>
+            <com.wavesplatform.wallet.v2.ui.custom.SpamTag
+                android:id="@+id/text_tag_spam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Spam" />
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_bitcoin_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/asset_price_border"
+                android:paddingStart="4dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="2dp"
+                android:text="$ 00.00"
+                android:textColor="@color/info500"
+                android:textSize="12sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
