@@ -117,9 +117,16 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         } else {
             attachment_layout.visiable()
             eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
+                    .map { text -> text.toString() }
+                    .map { text ->
+                        val isValidDescription = validateDescription(text)
+
+                        return@map isValidDescription to text
+                    }
+                    .filter { (isValid, _) -> isValid }
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        presenter.attachment = it.toString()
+                    .subscribe { (_, description) ->
+                        presenter.attachment = description
                     })
             if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
                 edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
@@ -132,6 +139,16 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         }
 
         button_confirm.click { goNext() }
+    }
+
+    private fun validateDescription(text: String): Boolean {
+        val isValid = text.length <= 140
+        button_confirm.isEnabled = isValid
+
+        if (isValid) text_description_error.gone()
+        else text_description_error.visiable()
+
+        return isValid
     }
 
     override fun failedSendCauseSmart() {
