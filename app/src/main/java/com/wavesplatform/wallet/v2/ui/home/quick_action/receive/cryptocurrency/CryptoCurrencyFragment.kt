@@ -27,6 +27,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceF
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.safeThrottledClick
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
 import kotlinx.android.synthetic.main.content_asset_card.*
@@ -170,8 +171,8 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            text_asset.click { launchAssets() }
-            container_asset.click { launchAssets() }
+            text_asset.safeThrottledClick { launchAssets() }
+            container_asset.safeThrottledClick { launchAssets() }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(edit_asset_card, dp2px(2).toFloat())
             edit_asset_layout.background = null
