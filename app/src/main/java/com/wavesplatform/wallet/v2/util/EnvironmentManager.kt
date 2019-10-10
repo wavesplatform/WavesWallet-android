@@ -13,6 +13,7 @@ import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.model.request.data.AssetsRequest
 import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
@@ -224,7 +225,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
                                 globalConfiguration.generalAssets.map { it.assetId }
                             }
-                            .flatMap { WavesSdk.service().getDataService().assets(ids = it) }
+                            .flatMap { WavesSdk.service().getDataService().assets(AssetsRequest(ids = it)) }
                             .map { info ->
                                 setDefaultAssets(info)
                             }

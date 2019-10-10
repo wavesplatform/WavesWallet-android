@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.sdk.model.request.data.AssetsRequest
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.*
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
@@ -57,7 +58,7 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
     fun assets(ids: List<String?>? = null, search: String? = null, limit: Int? = null): Observable<List<AssetInfoResponse>> {
         if (ids != null && ids.isNotEmpty()
                 || search != null && search.isNotEmpty()) {
-            return dataService.assets(ids = ids, search = search, limit = limit)
+            return dataService.assets(AssetsRequest(ids = ids, search = search, limit = limit) )
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
