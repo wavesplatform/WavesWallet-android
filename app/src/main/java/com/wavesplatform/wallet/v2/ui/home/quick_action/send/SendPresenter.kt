@@ -134,7 +134,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         } else {
             val validFee = if (tx.feeAssetId.isWaves()) {
                 tx.fee <= queryFirst<AssetBalanceDb> {
-                    equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
+                    equalTo("assetId", "")
+                }?.convertFromDb()?.balance ?: 0
             } else {
                 true
             }
@@ -258,6 +259,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                         }, {
                             viewState.showLoadAssetError(R.string.common_server_error)
                         }))
+    }
+
+    fun isAmountValid(amount: BigDecimal): Boolean {
+        val tx = getTxRequest()
+        tx.amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset)
+        return isFundSufficient(tx)
     }
 
     companion object {
