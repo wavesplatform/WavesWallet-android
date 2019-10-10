@@ -5,16 +5,19 @@
 
 package com.wavesplatform.wallet.v2.util
 
-import android.support.annotation.DrawableRes
+import android.view.View
 import android.widget.EditText
-import com.flyco.tablayout.SlidingTabLayout
-
-fun SlidingTabLayout.setTabIcon(position: Int, @DrawableRes tabIcon: Int, iconPadding: Int = 0) {
-    val tabTitleView = getTitleView(position)
-    tabTitleView.setCompoundDrawablesWithIntrinsicBounds(tabIcon, 0, 0, 0)
-    tabTitleView.compoundDrawablePadding = iconPadding
-}
 
 fun EditText.clearText() {
     setText("")
+}
+
+fun View.safeThrottledClick(waitMillis: Long = 500, listener: (View) -> Unit) {
+    var lastClickTime = 0L
+    setOnClickListener { view ->
+        if (System.currentTimeMillis() > lastClickTime + waitMillis) {
+            listener.invoke(view)
+            lastClickTime = System.currentTimeMillis()
+        }
+    }
 }

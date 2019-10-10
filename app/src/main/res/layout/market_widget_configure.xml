@@ -34,7 +34,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_check_18_success_400" />
+        app:srcCompat="@drawable/ic_check_18_black" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/tokensCountLayout"
