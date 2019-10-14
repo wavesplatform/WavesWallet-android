@@ -106,6 +106,15 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 .subscribe {
                     presenter.reloadAssetDetails()
                 })
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateAssetsDetailsHistory::class.java)
+                .subscribe {
+                    if (historyAdapter.items.isEmpty()) {
+                        presenter.assetBalance.notNull {
+                            presenter.loadLastTransactionsFor(it, (activity as AssetDetailsActivity).getAllTransactions())
+                        }
+                    }
+                })
     }
 
     override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalanceResponse) {

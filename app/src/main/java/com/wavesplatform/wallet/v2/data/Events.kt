@@ -10,7 +10,6 @@ import io.reactivex.subjects.PublishSubject
 
 
 class Events {
-
     class ErrorEvent(val retrofitException: NetworkException, val retrySubject: PublishSubject<Events.RetryEvent>)
 
     class RetryEvent
@@ -28,4 +27,5 @@ class Events {
     class UpdateButtonsPrice(var askPrice: Long?, var bidPrice: Long?)
 
     class UpdateAssetsBalance
+    object UpdateAssetsDetailsHistory
 }
