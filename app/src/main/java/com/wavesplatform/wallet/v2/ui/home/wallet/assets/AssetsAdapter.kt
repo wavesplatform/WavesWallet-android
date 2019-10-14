@@ -96,6 +96,7 @@ class AssetsAdapter @Inject constructor() :
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)
                         .setGone(R.id.text_tag_spam, item.isSpam)
+                        .setGone(R.id.text_asset_value, item.isSpam.not())
 
                 helper.itemView.image_asset_icon.setAsset(item)
                 helper.itemView.text_asset_value.makeTextHalfBold()

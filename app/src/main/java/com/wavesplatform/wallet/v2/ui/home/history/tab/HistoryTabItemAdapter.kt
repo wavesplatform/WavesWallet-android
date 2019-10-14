@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.item_history.view.*
+import pers.victor.ext.dp
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -154,6 +155,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                     if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
                         if (isSpam(item.data.assetId)) {
                             view.text_tag_spam.visiable()
+                            view.text_transaction_value.gone()
+                            view.linear_tags.margin(left = 0)
                         } else {
                             if (isShowTicker(item.data.assetId)) {
                                 val ticker = item.data.asset?.getTokenTicker()

@@ -20,6 +20,11 @@ import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.item_assets_detailed_history.view.*
+import kotlinx.android.synthetic.main.item_assets_detailed_history.view.image_transaction
+import kotlinx.android.synthetic.main.item_assets_detailed_history.view.text_tag
+import kotlinx.android.synthetic.main.item_assets_detailed_history.view.text_tag_spam
+import kotlinx.android.synthetic.main.item_assets_detailed_history.view.text_transaction_name
+import kotlinx.android.synthetic.main.item_assets_detailed_history.view.text_transaction_value
 import pers.victor.ext.*
 
 class HistoryTransactionPagerAdapter constructor(
@@ -127,6 +132,8 @@ class HistoryTransactionPagerAdapter constructor(
         if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
             if (isSpamConsidered(item.data.assetId, prefsUtil)) {
                 layout.text_tag_spam.visiable()
+                layout.text_transaction_value.gone()
+                layout.linear_tags.margin(left = 0)
             } else {
                 if (isShowTicker(item.data.assetId)) {
                     val ticker = item.data.asset?.getTokenTicker()
