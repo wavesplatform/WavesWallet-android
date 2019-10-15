@@ -20,6 +20,7 @@ import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -118,6 +119,11 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         } else {
             presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
         }
+
+        eventSubscriptions.add(mRxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
+                .subscribe {
+                    presenter.reloadTransactions()
+                })
     }
 
     private fun configureTitleForAssets(position: Int) {
@@ -179,6 +185,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
                     false)
         }
+    }
+
+    override fun afterSuccessLoadTransaction() {
+        mRxEventBus.post(Events.UpdateAssetsDetailsHistory)
     }
 
     fun showFavorite(currentItem: Int) {

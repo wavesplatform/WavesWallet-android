@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/img_brand"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -22,24 +22,24 @@
         android:id="@+id/card_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="-2dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="-2dp"
         app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="3dp">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_send"
@@ -68,11 +68,11 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
-                        android:visibility="gone"
-                        tools:visibility="visible"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="4dp"
-                        tools:text="WAVES" />
+                        android:visibility="gone"
+                        tools:text="WAVES"
+                        tools:visibility="visible" />
 
                 </LinearLayout>
 
@@ -93,8 +93,8 @@
                     android:id="@+id/image_line_1"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_marginBottom="14dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginBottom="14dp"
                     android:background="@drawable/shape_dashed_line"
                     android:layerType="software" />
 
@@ -130,8 +130,8 @@
                     android:id="@+id/image_line_2"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_marginBottom="14dp"
                     android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
                     android:background="@drawable/shape_dashed_line"
                     android:layerType="software" />
 
@@ -209,24 +209,35 @@
                         android:background="@drawable/shape_dashed_line"
                         android:layerType="software" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_description_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="@string/send_confirmation_description"
-                        android:textColor="@color/basic500"
-                        android:textSize="14sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_description_error"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="@string/send_confirmation_the_description_is_too_long"
-                        android:textColor="@color/error500"
-                        android:textSize="14sp"
-                        android:visibility="gone" />
+                        android:layout_marginBottom="6dp">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_description_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/send_confirmation_description"
+                            android:textColor="@color/basic500"
+                            android:textSize="14sp" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_description_error"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="center_vertical"
+                            android:text="@string/send_confirmation_the_description_is_too_long"
+                            android:textColor="@color/error500"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </RelativeLayout>
+
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edit_optional_message"
@@ -238,8 +249,6 @@
                         android:hint="@string/send_confirmation_write_an_optional_message"
                         android:imeOptions="actionDone"
                         android:inputType="text"
-                        android:maxLength="140"
-                        android:paddingBottom="20dp"
                         android:singleLine="true"
                         android:textColorHint="@color/basic500" />
 

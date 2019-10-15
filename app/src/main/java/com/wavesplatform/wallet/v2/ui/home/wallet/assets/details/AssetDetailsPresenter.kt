@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.executeInBackground
 import com.wavesplatform.wallet.v2.util.findAssetBalanceInDb
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -30,7 +31,7 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var scrollRange: Float = -1f
     var allTransaction: List<HistoryTransactionResponse> = emptyList()
     private var findAssetList = listOf<AssetBalanceResponse>()
-
+    private var triedUpdate = false
 
     fun loadSearchAssets(query: String) {
         runAsync {
@@ -101,6 +102,22 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
                     }, {
                         it.printStackTrace()
                     }))
+        }
+    }
+
+    fun reloadTransactions() {
+        if (triedUpdate.not()) {
+            runAsync {
+                addSubscription(queryAllAsSingle<TransactionDb>()
+                        .map { allTransaction = TransactionDb.convertFromDb(it) }
+                        .executeInBackground()
+                        .subscribe({
+                            triedUpdate = true
+                            viewState.afterSuccessLoadTransaction()
+                        }, {
+                            Timber.e(it)
+                        }))
+            }
         }
     }
 }

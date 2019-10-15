@@ -118,22 +118,35 @@ class SendActivity : BaseActivity(), SendView {
             else -> assetEnable(true)
         }
 
-        edit_amount.addTextChangedListener {
-            on { s, _, _, _ ->
-                if (s.isNotEmpty()) {
-                    horizontal_amount_suggestion.visiable()
-                    linear_fees_error.gone()
-                }
-                val amount = edit_amount.text?.toString() ?: "0"
-                if (amount.isNotBlank()) {
-                    if (amount == "." || amount == "-") {
-                        presenter.amount = BigDecimal.ZERO
-                    } else {
-                        presenter.amount = BigDecimal(amount)
+        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .map { text ->
+                    if (text.isNotEmpty()) {
+                        horizontal_amount_suggestion.visiable()
+                        linear_fees_error.gone()
                     }
                 }
-            }
-        }
+                .filter { presenter.selectedAsset != null }
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .map {
+                    val amount = edit_amount.text?.toString() ?: "0"
+                    return@map if (amount.isNotBlank()) {
+                        if (amount == "." || amount == "-") {
+                            BigDecimal.ZERO
+                        } else {
+                            BigDecimal(amount)
+                        }
+                    } else {
+                        BigDecimal.ZERO
+                    }
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { amount -> validateAmount(amount) to amount }
+                .filter { (isValid, _) -> isValid }
+                .subscribe { (_, amount) ->
+                    presenter.amount = amount
+                })
 
         image_view_recipient_action.click {
             if (it.tag == R.drawable.ic_deladdress_24_error_400) {
@@ -165,6 +178,17 @@ class SendActivity : BaseActivity(), SendView {
 
         setRecipientSuggestions()
         commission_card.gone()
+    }
+
+    private fun validateAmount(amount: BigDecimal): Boolean {
+        val isAmountValid = presenter.isAmountValid(amount)
+
+        if (isAmountValid) text_amount_error.gone()
+        else text_amount_error.visiable()
+
+        button_continue.isEnabled = isAmountValid
+
+        return isAmountValid
     }
 
     private fun setupCommissionBlock() {
@@ -667,12 +691,6 @@ class SendActivity : BaseActivity(), SendView {
 
 //            clearAddressField()
         }
-    }
-
-    private fun clearAddressField() {
-        edit_address.setText("")
-        presenter.recipient = ""
-        presenter.recipientAssetId = ""
     }
 
     private fun loadGatewayXRate(assetId: String) {

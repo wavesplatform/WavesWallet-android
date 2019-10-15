@@ -64,7 +64,6 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     }
 
     private fun loadFromDb(): Single<ArrayList<HistoryItem>> {
-        Log.d("historydev", "on presenter")
         val singleData: Single<List<TransactionDb>> = when (type) {
             HistoryTabFragment.all -> {
                 queryAllAsSingle<TransactionDb>()
