@@ -14,26 +14,28 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:elevation="0dp">
 
-        <com.flyco.tablayout.SlidingTabLayout
+        <!--Custom realization, look original at com.flyco.tablayout-->
+        <com.wavesplatform.wallet.v2.ui.custom.SlidingTabLayout
             android:id="@+id/stl_history"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="2dp"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
-            tl:tl_bar_stroke_width="0dp"
-            tl:tl_tab_padding="24dp"
-            tl:tl_divider_width="10dp"
-            tl:tl_divider_color="@color/basic50"
-            tl:tl_indicator_anim_enable="true"
-            tl:tl_indicator_bounce_enable="false"
             tl:tl_indicator_color="@color/submit400"
             tl:tl_indicator_corner_radius="@dimen/tab_corner_radius"
-            tl:tl_indicator_style="BLOCK"
-            tl:tl_textSelectColor="@color/white"
-            tl:tl_textUnselectColor="@color/basic500" />
+            tl:tl_indicator_height="2dp"
+            tl:tl_indicator_margin_left="12dp"
+            tl:tl_indicator_margin_right="12dp"
+            tl:tl_indicator_style="NORMAL"
+            tl:tl_tab_padding="12dp"
+            tl:tl_textBold="BOTH"
+            tl:tl_textSelectColor="@color/black"
+            tl:tl_textUnselectColor="@color/basic500"
+            tl:tl_textsize="14sp"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"/>
 
     </android.support.design.widget.AppBarLayout>
 
