@@ -266,7 +266,6 @@
 # End Apache commons.io ---------------------------------------
 
 # Android architecture components: Lifecycle -----------------#
-# todo не уверен что это нужно (legacy)
 # LifecycleObserver's empty constructor is considered to be unused by proguard
 -keepclassmembers class * implements android.arch.lifecycle.LifecycleObserver {
     <init>(...);
@@ -298,9 +297,6 @@
 -dontwarn android.arch.**
 # End Android architecture components: Lifecycle --------------
 
-# Keep custom components in XML ------------------------------#
-# todo не уверен что это нужно (legacy)
--keep public class custom.components.**
 -keepclasseswithmembernames class * {
     public <init>(android.content.Context, android.util.AttributeSet);
 }

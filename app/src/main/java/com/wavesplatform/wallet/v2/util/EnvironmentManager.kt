@@ -25,7 +25,6 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.data.remote.GithubService
 import io.reactivex.Observable
@@ -45,34 +44,18 @@ class EnvironmentManager(var current: ClientEnvironment) {
     private var updateCompleted = false
 
     companion object {
-
-        private const val BASE_PROXY_CONFIG_URL = "https://github-proxy.wvservices.com/"
         private const val BASE_RAW_CONFIG_URL = "https://raw.githubusercontent.com/"
 
-        private const val BRANCH = "mobile/v2.6"
+        private const val BRANCH = "master"
 
-        private const val KEY_ENV_TEST_NET = "env_testnet"
-        private const val KEY_ENV_MAIN_NET = "env_prod"
-
-        private const val FILENAME_TEST_NET = "environment_testnet.json"
-        private const val FILENAME_MAIN_NET = "environment_mainnet.json"
-
-        const val URL_CONFIG_MAIN_NET = BASE_PROXY_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
-        const val URL_CONFIG_TEST_NET = BASE_PROXY_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
-        const val URL_CONFIG_STAGE_NET = BASE_PROXY_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/environment_stagenet.json"
-        const val URL_COMMISSION_MAIN_NET = "/$BRANCH/fee.json"
-
-        const val URL_RAW_CONFIG_MAIN_NET = BASE_RAW_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
-        const val URL_RAW_CONFIG_TEST_NET = BASE_RAW_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
-        const val URL_RAW_CONFIG_STAGE_NET = BASE_RAW_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/environment_stagenet.json"
-        const val URL_RAW_COMMISSION_MAIN_NET = BASE_RAW_CONFIG_URL +
-                "wavesplatform/waves-client-config/$BRANCH/fee.json"
+        const val URL_CONFIG_MAIN_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/${ClientEnvironment.FILENAME_MAIN_NET}"
+        const val URL_CONFIG_TEST_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/${ClientEnvironment.FILENAME_TEST_NET}"
+        const val URL_CONFIG_STAGE_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/${ClientEnvironment.FILENAME_STAGE_NET}"
+        const val URL_COMMISSION_MAIN_NET = BASE_RAW_CONFIG_URL +
+                "wavesplatform/waves-client-config/$BRANCH/${Constants.GITHUB_FEE_FILE}"
 
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
@@ -166,22 +149,27 @@ class EnvironmentManager(var current: ClientEnvironment) {
             loadConfiguration(GithubServiceManager.create(null))
         }
 
-        fun getDefaultConfig(): GlobalConfiguration? {
+        fun getDefaultConfig(): GlobalConfigurationResponse? {
             return when (environmentName) {
-                KEY_ENV_MAIN_NET -> {
+                ClientEnvironment.KEY_ENV_MAIN_NET -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), FILENAME_MAIN_NET),
-                            GlobalConfiguration::class.java)
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_MAIN_NET),
+                            GlobalConfigurationResponse::class.java)
                 }
-                KEY_ENV_TEST_NET -> {
+                ClientEnvironment.KEY_ENV_TEST_NET -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), FILENAME_TEST_NET),
-                            GlobalConfiguration::class.java)
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_TEST_NET),
+                            GlobalConfigurationResponse::class.java)
+                }
+                ClientEnvironment.KEY_ENV_STAGE_NET -> {
+                    Gson().fromJson(
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_STAGE_NET),
+                            GlobalConfigurationResponse::class.java)
                 }
                 else -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), FILENAME_TEST_NET),
-                            GlobalConfiguration::class.java)
+                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_TEST_NET),
+                            GlobalConfigurationResponse::class.java)
                 }
             }
         }
