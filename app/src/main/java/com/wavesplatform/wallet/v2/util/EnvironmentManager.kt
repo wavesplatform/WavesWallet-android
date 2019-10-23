@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.data.AssetsRequest
+import com.wavesplatform.sdk.model.response.data.AssetsInfoDataResponse
 import com.wavesplatform.sdk.model.response.data.AssetsInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.IssueTransactionResponse
@@ -229,6 +230,24 @@ class EnvironmentManager(var current: ClientEnvironment) {
                             .map { info ->
                                 setDefaultAssets(info)
                             }
+                            .onErrorReturn {
+                                Timber.e(it, "EnvironmentManager: Can't download general assets!")
+                                val info = AssetsInfoResponse()
+                                val list = mutableListOf<AssetsInfoDataResponse>()
+                                environment.configuration.generalAssets.forEach { generalAsset ->
+                                    val asset = AssetsInfoDataResponse()
+                                    asset.assetInfo.id = generalAsset.assetId
+                                    asset.assetInfo.name = generalAsset.displayName
+                                    asset.assetInfo.precision = if (generalAsset.isFiat) {
+                                        2
+                                    } else {
+                                        8
+                                    }
+                                    list.add(asset)
+                                }
+                                info.data = list
+                                setDefaultAssets(info)
+                            }
                             .flatMap {
                                 WavesSdk.service().getMatcher().matcherPublicKey()
                             }
@@ -238,6 +257,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                         WavesCrypto.base58decode(matcherPublicKey
                                                 .replace("\"", "")),
                                         netCode)
+                            }
+                            .onErrorReturn {
+                                Timber.e(it, "EnvironmentManager: Can't download matcher address!")
                             }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe({

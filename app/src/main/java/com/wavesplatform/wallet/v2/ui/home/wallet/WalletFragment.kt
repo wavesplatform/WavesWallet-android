@@ -88,8 +88,10 @@ class WalletFragment : BaseFragment(), WalletView {
             }
 
             override fun onPageSelected(position: Int) {
-                presenter.shadowEnable = (adapter.fragments[position] as WalletTabShadowListener).isShadowEnable()
-                enableElevation(presenter.shadowEnable)
+                presenter.notNull {
+                    presenter.shadowEnable = (adapter.fragments[position] as WalletTabShadowListener).isShadowEnable()
+                    enableElevation(presenter.shadowEnable)
+                }
             }
         })
 

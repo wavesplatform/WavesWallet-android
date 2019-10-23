@@ -40,8 +40,8 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 433
-        versionName "2.6.0"
+        versionCode 434
+        versionName "2.6.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -242,7 +242,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.9"
     implementation "com.google.firebase:firebase-database:17.0.0"
     implementation "com.google.firebase:firebase-messaging:18.0.0"
-    implementation "com.google.firebase:firebase-inappmessaging-display:17.1.1"
+    implementation "com.google.firebase:firebase-inappmessaging-display:17.2.0"
     releaseImplementation "com.google.firebase:firebase-crash:16.2.1"
     implementation 'commons-io:commons-io:2.4'
 
