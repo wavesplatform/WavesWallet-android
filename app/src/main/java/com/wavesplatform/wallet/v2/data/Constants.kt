@@ -15,10 +15,9 @@ object Constants {
     // Production
     const val URL_COINOMAT = "https://coinomat.com/api/"
     const val URL_GITHUB = "https://github.com/wavesplatform/"
-    const val URL_GITHUB_PROXY = "https://github-proxy.wvservices.com"
-    const val URL_GITHUB_CONFIG = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/"
+    const val URL_GITHUB_PROXY = "https://raw.githubusercontent.com"
+    const val URL_GITHUB_CONFIG = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/"
     const val URL_GITHUB_CONFIG_VERSION = "master/version_android.json"
-    const val URL_GITHUB_CONFIG_SPAM_FILE = "master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_privacy_policy.pdf"
     const val URL_TERMS_AND_CONDITIONS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
@@ -28,6 +27,9 @@ object Constants {
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
     const val URL_REDDIT = "https://www.reddit.com/r/WavesSdk/"
+
+    const val GITHUB_SPAM_FILE = "spam_tokens.csv"
+    const val GITHUB_FEE_FILE = "fee.json"
 
     const val ACC_TWITTER = "wavesplatform"
     const val ACC_TELEGRAM = "wavesnews"
