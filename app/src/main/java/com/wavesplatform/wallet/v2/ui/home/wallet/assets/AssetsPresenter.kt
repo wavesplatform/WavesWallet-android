@@ -153,7 +153,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun reloadAssetsAfterSpamUrlChanged() {
         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, true)
         runAsync {
-            addSubscription(nodeServiceManager.loadSpamAssets()
+            addSubscription(githubServiceManager.loadSpamAssets()
                     .flatMap { newSpamAssets ->
                         Observable.zip(
                                 queryAllAsSingle<AssetBalanceDb>().toObservable(),
