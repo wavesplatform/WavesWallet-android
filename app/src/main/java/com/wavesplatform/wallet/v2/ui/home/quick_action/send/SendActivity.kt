@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatTextView
@@ -31,6 +32,7 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
@@ -64,6 +66,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private var xRateSkeletonView: SkeletonScreen? = null
     private var assetsSkeletonView: SkeletonScreen? = null
+    private val handler = Handler()
 
     @ProvidePresenter
     fun providePresenter(): SendPresenter = presenter
@@ -114,6 +117,13 @@ class SendActivity : BaseActivity(), SendView {
                 edit_amount.setText(amount)
                 presenter.attachment = attachment
                 presenter.amount = BigDecimal(amount)
+            }
+            intent.hasExtra(KEY_INTENT_DEEP_SEND) -> {
+                handler.postDelayed({
+                    setDataFromUrl(intent.getStringExtra(KEY_INTENT_DEEP_SEND_LINK))
+                }, 400)
+                setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
+                        R.drawable.ic_toolbar_back_black) { launchActivity<MainActivity>(clear = true) }
             }
             else -> assetEnable(true)
         }
@@ -790,6 +800,8 @@ class SendActivity : BaseActivity(), SendView {
         const val REQUEST_SCAN_RECEIVE = 44
         const val REQUEST_SCAN_MONERO = 45
         const val REQUEST_SEND = 46
+        const val KEY_INTENT_DEEP_SEND = "deep_send"
+        const val KEY_INTENT_DEEP_SEND_LINK = "deep_send_link"
         const val KEY_INTENT_ASSET_DETAILS = "asset_details"
         const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
         const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"

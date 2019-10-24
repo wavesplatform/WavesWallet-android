@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.splash
 
+import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface SplashView : BaseMvpView {
@@ -12,4 +13,6 @@ interface SplashView : BaseMvpView {
     fun onNotLoggedIn()
 
     fun onStartMainActivity(publicKey: String)
+
+    fun openDex(marketResponse: MarketResponse)
 }
