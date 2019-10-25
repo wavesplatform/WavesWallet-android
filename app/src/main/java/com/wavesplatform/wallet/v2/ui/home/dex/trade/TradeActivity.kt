@@ -21,6 +21,8 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTrades
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.TradeMyOrdersFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookFragment
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_trade.*
 import javax.inject.Inject
 
@@ -44,7 +46,15 @@ class TradeActivity : BaseActivity(), TradeView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = intent.getParcelableExtra(BUNDLE_MARKET)
 
-        setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
+        if (intent.hasExtra(KEY_INTENT_OPEN_FROM_LINK)) {
+            setupToolbar(toolbar_view, true, getToolbarTitle(),
+                    R.drawable.ic_toolbar_back_white) { launchActivity<MainActivity>(clear = true)}
+        } else {
+            setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
+        }
+
+        setupToolbar(toolbar_view, true, getToolbarTitle(),
+                R.drawable.ic_toolbar_back_white) { launchActivity<MainActivity>(clear = true)}
 
         presenter.loadAssetsInfoOfPair()
 
@@ -106,5 +116,6 @@ class TradeActivity : BaseActivity(), TradeView {
 
     companion object {
         var BUNDLE_MARKET = "watchMarket"
+        const val KEY_INTENT_OPEN_FROM_LINK = "intent_open_from_link"
     }
 }
