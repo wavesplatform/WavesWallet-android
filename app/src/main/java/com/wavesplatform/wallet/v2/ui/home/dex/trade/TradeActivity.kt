@@ -46,6 +46,13 @@ class TradeActivity : BaseActivity(), TradeView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = intent.getParcelableExtra(BUNDLE_MARKET)
 
+        if (intent.hasExtra(KEY_INTENT_OPEN_FROM_LINK)) {
+            setupToolbar(toolbar_view, true, getToolbarTitle(),
+                    R.drawable.ic_toolbar_back_white) { launchActivity<MainActivity>(clear = true)}
+        } else {
+            setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
+        }
+
         setupToolbar(toolbar_view, true, getToolbarTitle(),
                 R.drawable.ic_toolbar_back_white) { launchActivity<MainActivity>(clear = true)}
 
@@ -109,5 +116,6 @@ class TradeActivity : BaseActivity(), TradeView {
 
     companion object {
         var BUNDLE_MARKET = "watchMarket"
+        const val KEY_INTENT_OPEN_FROM_LINK = "intent_open_from_link"
     }
 }

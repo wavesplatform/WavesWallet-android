@@ -99,6 +99,7 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun openDex(marketResponse: MarketResponse) {
         val args = Bundle()
         args.classLoader = WatchMarketResponse::class.java.classLoader
+        args.putBoolean(TradeActivity.KEY_INTENT_OPEN_FROM_LINK, true)
         args.putParcelable(TradeActivity.BUNDLE_MARKET, WatchMarketResponse(marketResponse))
         launchActivity<TradeActivity>(options = args)
     }
