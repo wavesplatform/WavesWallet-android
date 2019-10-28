@@ -371,7 +371,8 @@ class SendActivity : BaseActivity(), SendView {
         xRateSkeletonView?.hide()
 
         gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
-                metadata.fee.toString(), gatewayTicket)
+                metadata.fee.toPlainString().stripZeros(),
+                gatewayTicket)
         gateway_limits?.text = getString(R.string.send_gateway_info_gateway_limits,
                 gatewayTicket, metadata.minLimit, metadata.maxLimit)
         gateway_warning?.text = getString(R.string.send_gateway_info_gateway_warning,
