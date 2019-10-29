@@ -148,8 +148,8 @@ object Constants {
 
     val WeGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
             assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
-            gatewayId = "WE",
-            displayName = "WE") // github returns gatewayId = "Vostok"
+            gatewayId = "Vostok",
+            displayName = "WE")
 
     // HistoryTransactionResponse view types non HistoryTransactionResponse block-chain type
     const val ID_RECEIVED_TYPE = 0

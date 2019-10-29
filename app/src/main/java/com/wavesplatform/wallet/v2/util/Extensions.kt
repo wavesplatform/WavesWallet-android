@@ -663,7 +663,7 @@ fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
 
 fun findInConstantsGeneralAssets(ticker: String): AssetBalanceResponse? {
     for (asset in listOf(Constants.MrtGeneralAsset, Constants.WctGeneralAsset, Constants.WeGeneralAsset)) {
-        if (asset.gatewayId.contains(ticker)) {
+        if (asset.gatewayId.contains(ticker) || asset.displayName.contains(ticker)) {
             return find(asset.assetId)
         }
     }
@@ -765,7 +765,7 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
         val queryLower = query!!.toLowerCase()
         list.filter { !it.isSpam }
                 .filter {
-                    it.assetId.toLowerCase().equals(queryLower)
+                    it.assetId.toLowerCase() == queryLower
                             || it.getName().toLowerCase().contains(queryLower)
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
                             || it.issueTransaction?.assetId?.toLowerCase()?.equals(queryLower) ?: false
