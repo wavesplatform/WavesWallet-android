@@ -617,29 +617,38 @@ class SendActivity : BaseActivity(), SendView {
                 }
 
                 val params = uri.query.split("&")
-                for (parameter in params) {
-                    if (parameter.contains("recipient=")) {
-                        val recipient = parameter.replace("recipient=", "")
-                        edit_address.setText(recipient)
-                        recipientEnable(false)
-                    }
-                    if (parameter.contains("amount=")) {
-                        val amount = BigDecimal(parameter.replace("amount=", "")
-                                .stripZeros())
-                        if (amount == BigDecimal.ZERO) {
-                            edit_amount.setText("")
-                            amountEnable(true)
-                        } else {
-                            edit_amount.setText(amount.toPlainString().stripZeros())
-                            amountEnable(false)
-                            if (amount.toDouble() <
-                                    MoneyUtil.getScaledText(1, assetBalance).toDouble()) {
-                                showError(R.string.invalid_amount, R.id.root)
+                params.forEach { parameter ->
+                    when  {
+                        parameter.contains(QUERY_PARAM_AMOUNT) -> {
+                            try {
+                                val amount = BigDecimal(parameter.replace(QUERY_PARAM_AMOUNT, "")
+                                        .stripZeros())
+                                if (amount == BigDecimal.ZERO) {
+                                    edit_amount.setText("")
+                                    amountEnable(true)
+                                } else {
+                                    edit_amount.setText(amount.toPlainString().stripZeros())
+                                    amountEnable(false)
+                                    if (amount.toDouble() > assetBalance.getAvailableBalance().toDouble()) {
+                                        amountEnable(true)
+                                    }
+                                }
+                            } catch (e: Throwable) {
+                                edit_amount.setText("")
+                                amountEnable(true)
                             }
                         }
-                    } else {
-                        edit_amount.setText("")
-                        amountEnable(true)
+                        parameter.contains(QUERY_PARAM_ATTACHMENT) -> {
+                            val attachment = parameter.replace(QUERY_PARAM_ATTACHMENT, "")
+                            if (attachment.isEmpty().not()) {
+                                presenter.attachment = attachment
+                            }
+                        }
+                        parameter.contains(QUERY_PARAM_RECIPIENT) -> {
+                            val recipient = parameter.replace(QUERY_PARAM_RECIPIENT, "")
+                            edit_address.setText(recipient)
+                            recipientEnable(false)
+                        }
                     }
                 }
             } catch (error: Exception) {
@@ -797,6 +806,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     companion object {
+        const val QUERY_PARAM_RECIPIENT = "recipient="
+        const val QUERY_PARAM_AMOUNT = "amount="
+        const val QUERY_PARAM_ATTACHMENT = "attachment="
         const val REQUEST_YOUR_ASSETS = 43
         const val REQUEST_SCAN_RECEIVE = 44
         const val REQUEST_SCAN_MONERO = 45
