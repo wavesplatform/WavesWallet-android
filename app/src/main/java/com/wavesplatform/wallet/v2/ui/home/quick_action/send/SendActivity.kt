@@ -596,6 +596,9 @@ class SendActivity : BaseActivity(), SendView {
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))
             try {
+                val params = uri.query.split("&")
+                val strict = params.any { param -> param == QUERY_PARAM_STRICT }
+
                 var assetId = uri.path.split("/")[2]
                 if (WavesConstants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
@@ -613,12 +616,12 @@ class SendActivity : BaseActivity(), SendView {
                 } else {
                     showLoadAssetSuccess(assetBalance)
                     setAsset(assetBalance)
-                    assetEnable(false)
+                    assetEnable(!strict)
                 }
 
-                val params = uri.query.split("&")
+
                 params.forEach { parameter ->
-                    when  {
+                    when {
                         parameter.contains(QUERY_PARAM_AMOUNT) -> {
                             try {
                                 val amount = BigDecimal(parameter.replace(QUERY_PARAM_AMOUNT, "")
@@ -628,7 +631,7 @@ class SendActivity : BaseActivity(), SendView {
                                     amountEnable(true)
                                 } else {
                                     edit_amount.setText(amount.toPlainString().stripZeros())
-                                    amountEnable(false)
+                                    amountEnable(!strict)
                                     if (amount.toDouble() > assetBalance.getAvailableBalance().toDouble()) {
                                         amountEnable(true)
                                     }
@@ -647,7 +650,7 @@ class SendActivity : BaseActivity(), SendView {
                         parameter.contains(QUERY_PARAM_RECIPIENT) -> {
                             val recipient = parameter.replace(QUERY_PARAM_RECIPIENT, "")
                             edit_address.setText(recipient)
-                            recipientEnable(false)
+                            recipientEnable(!strict)
                         }
                     }
                 }
@@ -809,6 +812,7 @@ class SendActivity : BaseActivity(), SendView {
         const val QUERY_PARAM_RECIPIENT = "recipient="
         const val QUERY_PARAM_AMOUNT = "amount="
         const val QUERY_PARAM_ATTACHMENT = "attachment="
+        const val QUERY_PARAM_STRICT = "strict"
         const val REQUEST_YOUR_ASSETS = 43
         const val REQUEST_SCAN_RECEIVE = 44
         const val REQUEST_SCAN_MONERO = 45
