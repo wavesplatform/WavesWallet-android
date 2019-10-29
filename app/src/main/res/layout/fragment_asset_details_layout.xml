@@ -308,55 +308,9 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/exchange"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:clickable="false"
-                            android:foreground="?attr/selectableItemBackgroundBorderless"
-                            android:orientation="vertical"
-                            android:paddingTop="24dp"
-                            android:paddingBottom="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="center_horizontal"
-                                    app:srcCompat="@drawable/ic_soonline_28" />
-
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_gravity="center_horizontal"
-                                    app:srcCompat="@drawable/ic_t_soon_exchange_28" />
-
-                            </RelativeLayout>
-
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="8dp"
-                                android:gravity="center_horizontal"
-                                android:lineSpacingExtra="4sp"
-                                android:text="@string/asset_details_coming_soon"
-                                android:textColor="@color/black"
-                                android:textSize="14sp" />
-
-                        </LinearLayout>
-
                     </LinearLayout>
 
                 </LinearLayout>
-
 
             </LinearLayout>
 
