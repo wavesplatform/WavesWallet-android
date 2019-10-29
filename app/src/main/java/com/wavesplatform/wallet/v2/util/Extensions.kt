@@ -662,8 +662,8 @@ fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
 }
 
 fun findInConstantsGeneralAssets(ticker: String): AssetBalanceResponse? {
-    for (asset in listOf(Constants.MrtGeneralAsset, Constants.WctGeneralAsset, Constants.VstGeneralAsset)) {
-        if (asset.gatewayId.contains(ticker)) {
+    for (asset in listOf(Constants.MrtGeneralAsset, Constants.WctGeneralAsset, Constants.WeGeneralAsset)) {
+        if (asset.gatewayId.contains(ticker) || asset.displayName.contains(ticker)) {
             return find(asset.assetId)
         }
     }
@@ -765,7 +765,7 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
         val queryLower = query!!.toLowerCase()
         list.filter { !it.isSpam }
                 .filter {
-                    it.assetId.toLowerCase().equals(queryLower)
+                    it.assetId.toLowerCase() == queryLower
                             || it.getName().toLowerCase().contains(queryLower)
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
                             || it.issueTransaction?.assetId?.toLowerCase()?.equals(queryLower) ?: false
@@ -1028,13 +1028,13 @@ fun HistoryTransactionResponse.transactionType(): TransactionType {
     return TransactionType.getTypeById(this.transactionTypeId)
 }
 
-fun String?.isValidVostokAddress(): Boolean {
+fun String?.isValidWavesEnterpriseAddress(): Boolean {
     if (this.isNullOrEmpty()) return false
     return try {
         val bytes = WavesCrypto.base58decode(this)
         if (bytes.size == WavesCrypto.ADDRESS_LENGTH &&
                 bytes[0] == WavesCrypto.ADDRESS_VERSION &&
-                bytes[1] == EnvironmentManager.vostokNetCode) {
+                bytes[1] == EnvironmentManager.wavesEnterpriseNetCode) {
             val checkSum = Arrays.copyOfRange(bytes,
                     bytes.size - WavesCrypto.CHECK_SUM_LENGTH, bytes.size)
             val checkSumGenerated = calcCheckSum(

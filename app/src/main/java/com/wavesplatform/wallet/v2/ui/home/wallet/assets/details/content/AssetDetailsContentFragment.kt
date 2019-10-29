@@ -188,9 +188,11 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 if (assetBalance?.reissuable == true) getString(R.string.asset_details_reissuable)
                 else getString(R.string.asset_details_not_reissuable)
 
-        text_description_value.text =
-                if (assetBalance?.issueTransaction?.description.isNullOrEmpty()) getString(R.string.common_dash)
-                else assetBalance?.issueTransaction?.description
+        text_description_value.text = when {
+            assetBalance?.assetId == Constants.WeGeneralAsset.assetId -> "WE Platform System Token"
+            assetBalance?.issueTransaction?.description.isNullOrEmpty() -> getString(R.string.common_dash)
+            else -> assetBalance?.issueTransaction?.description
+        }
 
         text_view_issuer_value.text =
                 if (assetBalance?.issueTransaction?.sender.isNullOrEmpty()) getString(R.string.common_dash)

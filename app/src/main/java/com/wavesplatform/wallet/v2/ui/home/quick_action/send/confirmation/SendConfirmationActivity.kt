@@ -25,7 +25,6 @@ import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
@@ -76,7 +75,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 ?: find(WavesConstants.WAVES_ASSET_ID_EMPTY)
 
         if (presenter.type == SendPresenter.Type.GATEWAY
-                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.WAVES_ENTERPRISE
                 || presenter.type == SendPresenter.Type.ERGO) {
             presenter.gatewayCommission = BigDecimal(
                     intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
@@ -111,7 +110,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 presenter.feeAsset?.getName()
 
         if (presenter.type == SendPresenter.Type.GATEWAY
-                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.WAVES_ENTERPRISE
                 || presenter.type == SendPresenter.Type.ERGO) {
             attachment_layout.gone()
         } else {
