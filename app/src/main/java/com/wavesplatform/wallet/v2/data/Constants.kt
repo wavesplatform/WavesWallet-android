@@ -62,7 +62,7 @@ object Constants {
         const val FULL_GONE = 0f
     }
 
-    object Vostok {
+    object WavesEnterprise {
         const val PROD_GATEWAY_URL = "https://gateways-dev.wvservices.com/api/v1/"
         const val TEST_GATEWAY_URL = "https://gw.wavesplatform.com"
         const val MAIN_NET_CODE = 'V'
@@ -146,10 +146,10 @@ object Constants {
             gatewayId = "WCT",
             displayName = "WavesCommunity")
 
-    val VstGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
+    val WeGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
             assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
-            gatewayId = "VST",
-            displayName = "Vostok") // github returns gatewayId = "Vostok"
+            gatewayId = "WE",
+            displayName = "WE") // github returns gatewayId = "Vostok"
 
     // HistoryTransactionResponse view types non HistoryTransactionResponse block-chain type
     const val ID_RECEIVED_TYPE = 0

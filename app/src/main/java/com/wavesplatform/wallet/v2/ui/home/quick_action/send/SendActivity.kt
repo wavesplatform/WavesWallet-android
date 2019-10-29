@@ -316,7 +316,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalanceResponse) {
         if (presenter.type == SendPresenter.Type.GATEWAY
-                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.WAVES_ENTERPRISE
                 || presenter.type == SendPresenter.Type.ERGO) {
             val total = BigDecimal.valueOf(amount,
                     assetBalance.getDecimals())
@@ -410,13 +410,13 @@ class SendActivity : BaseActivity(), SendView {
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
                 }
-                recipient.isValidVostokAddress() -> {
+                recipient.isValidWavesEnterpriseAddress() -> {
                     presenter.recipientAssetId = EnvironmentManager.globalConfiguration.generalAssets
                             .firstOrNull { it.assetId == presenter.selectedAsset?.assetId }?.assetId
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         onNotValidAssetForAddress()
                     } else {
-                        presenter.type = SendPresenter.Type.VOSTOK
+                        presenter.type = SendPresenter.Type.WAVES_ENTERPRISE
                         setRecipientValid(true)
                         loadGatewayXRate(presenter.recipientAssetId!!)
                     }

@@ -68,8 +68,8 @@ class EnvironmentManager(var current: ClientEnvironment) {
         val netCode: Byte
             get() = environment.configuration.scheme[0].toByte()
 
-        val vostokNetCode: Byte
-            get() = environment.externalProperties.vostokNetCode.toByte()
+        val wavesEnterpriseNetCode: Byte
+            get() = environment.externalProperties.wavesEnterpriseNetCode.toByte()
 
         val globalConfiguration: GlobalConfigurationResponse
             get() = environment.configuration
