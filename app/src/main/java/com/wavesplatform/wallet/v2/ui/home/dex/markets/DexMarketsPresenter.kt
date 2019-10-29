@@ -180,8 +180,8 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
             : Pair<Observable<List<AssetInfoResponse>>, Observable<List<AssetInfoResponse>>> {
         val observableAmount: Observable<List<AssetInfoResponse>>
         val observablePrice: Observable<List<AssetInfoResponse>>
-        when {
-            assetPair.size == 2 -> {
+        when (assetPair.size) {
+            2 -> {
                 observableAmount = dataServiceManager.assets(search = assetPair[0])
                 observablePrice = if (assetPair[1] == "") {
                     dataServiceManager.assets(ids = defaultAssets)
@@ -189,7 +189,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                     dataServiceManager.assets(search = assetPair[1])
                 }
             }
-            assetPair.size == 1 -> {
+            1 -> {
                 observableAmount = dataServiceManager.assets(search = assetPair[0])
                 observablePrice = dataServiceManager.assets(ids = defaultAssets)
             }

@@ -250,7 +250,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         if (networkConnected) {
             enableView(send)
             enableView(receive)
-            enableView(exchange)
             enableView(card_burn_container)
             enableView(spam_card_burn_container)
             card_burn_container.isClickable = true
@@ -258,7 +257,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         } else {
             disableView(send)
             disableView(receive)
-            disableView(exchange)
             disableView(card_burn_container)
             disableView(spam_card_burn_container)
             card_burn_container.isClickable = false
