@@ -148,8 +148,8 @@ object Constants {
 
     val WeGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
             assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
-            gatewayId = "Vostok",
-            displayName = "WE")
+            gatewayId = "Vostok", // not actual, was used for Coinomat
+            displayName = "WEST")
 
     // HistoryTransactionResponse view types non HistoryTransactionResponse block-chain type
     const val ID_RECEIVED_TYPE = 0
