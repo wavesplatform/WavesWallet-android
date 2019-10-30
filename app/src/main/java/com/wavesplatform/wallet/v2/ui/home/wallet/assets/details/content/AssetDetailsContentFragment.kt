@@ -189,7 +189,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 else getString(R.string.asset_details_not_reissuable)
 
         text_description_value.text = when {
-            assetBalance?.assetId == Constants.WeGeneralAsset.assetId -> "WE Platform System Token"
+            assetBalance?.assetId == Constants.WeGeneralAsset.assetId -> "WEST Platform System Token"
             assetBalance?.issueTransaction?.description.isNullOrEmpty() -> getString(R.string.common_dash)
             else -> assetBalance?.issueTransaction?.description
         }
