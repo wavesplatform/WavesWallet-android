@@ -192,9 +192,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     protected open fun askPassCode() = true
 
     private fun askPassCodeIfNeed() {
-        val guid = App.getAccessManager().getLastLoggedInGuid()
+        val guid = App.accessManager.getLastLoggedInGuid()
 
-        val notAuthenticated = !App.getAccessManager().isAuthenticated()
+        val notAuthenticated = !App.accessManager.isAuthenticated()
         val hasGuidToLogin = !TextUtils.isEmpty(guid)
 
         if (!MonkeyTest.isTurnedOn() && hasGuidToLogin && notAuthenticated && askPassCode()) {
@@ -313,8 +313,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     protected fun clearAndLogout() {
-        App.getAccessManager().setLastLoggedInGuid("")
-        App.getAccessManager().resetWallet()
+        App.accessManager.setLastLoggedInGuid("")
+        App.accessManager.resetWallet()
         launchActivity<WelcomeActivity>(clear = true)
     }
 

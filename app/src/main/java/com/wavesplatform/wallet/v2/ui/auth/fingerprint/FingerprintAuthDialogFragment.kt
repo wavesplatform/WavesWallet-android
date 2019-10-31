@@ -102,7 +102,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
             }
 
             override fun onFailed(isDeviceLocked: Boolean) {
-                App.getAccessManager().setUseFingerPrint(guid, false)
+                App.accessManager.setUseFingerPrint(guid, false)
                 onFingerprintLocked()
             }
 
@@ -162,7 +162,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun onErrorGetKey(throwable: SecureStorageException, errMessage: String) {
-        App.getAccessManager().setUseFingerPrint(guid, false)
+        App.accessManager.setUseFingerPrint(guid, false)
         showErrorMessage(throwable.message, errMessage, throwable)
     }
 

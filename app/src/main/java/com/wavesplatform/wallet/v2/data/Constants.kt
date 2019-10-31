@@ -101,7 +101,7 @@ object Constants {
         const val STAGE_NET = "3MiZL2gvmPcX4hwjpCUYnHxXEJ95kHBfCws"
     }
 
-    val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
+    val alphabetColor: IntArray = App.appContext.resources.getIntArray(R.array.abc_colors)
 
     fun defaultAssetsAvatar(): MutableMap<String, String> {
         val allConfigAssets = EnvironmentManager.globalConfiguration.generalAssets

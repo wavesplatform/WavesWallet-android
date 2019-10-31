@@ -103,7 +103,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         val address = if (intent.hasExtra(YourAssetsActivity.BUNDLE_ADDRESS)) {
             intent.getStringExtra(YourAssetsActivity.BUNDLE_ADDRESS)
         } else {
-            App.getAccessManager().getWallet()?.address ?: ""
+            App.accessManager.getWallet()?.address ?: ""
         }
         text_address.text = address
 

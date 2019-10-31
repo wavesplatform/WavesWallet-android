@@ -94,7 +94,7 @@ class AssetsAdapter @Inject constructor() :
                                 item.getAvailableBalance(), item.getDecimals()))
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
-                                == App.getAccessManager().getWallet()?.address)
+                                == App.accessManager.getWallet()?.address)
                         .setGone(R.id.text_tag_spam, item.isSpam)
                         .setGone(R.id.text_asset_value, item.isSpam.not())
 

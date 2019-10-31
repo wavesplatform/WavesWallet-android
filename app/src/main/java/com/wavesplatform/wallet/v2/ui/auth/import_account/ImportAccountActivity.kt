@@ -64,7 +64,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                     val seed = result.contents.replace(WAVES_PREFIX, "")
                     if (!TextUtils.isEmpty(seed)) {
                         when {
-                            App.getAccessManager().isAccountWithSeedExist(seed) -> {
+                            App.accessManager.isAccountWithSeedExist(seed) -> {
                                 showError(R.string.enter_seed_manually_validation_seed_exists_error, R.id.root_view)
                             }
                             seed.length < 24 -> {

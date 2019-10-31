@@ -53,7 +53,7 @@ class GithubServiceManager @Inject constructor() : BaseServiceManager() {
     fun loadSpamAssets(): Observable<ArrayList<SpamAssetResponse>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
                 .onErrorReturn {
-                    ClientEnvironment.loadJsonFromAsset(App.getAppContext(), Constants.GITHUB_SPAM_FILE)
+                    ClientEnvironment.loadJsonFromAsset(App.appContext, Constants.GITHUB_SPAM_FILE)
                 }
                 .map {
                     val scanner = Scanner(it)
@@ -84,7 +84,7 @@ class GithubServiceManager @Inject constructor() : BaseServiceManager() {
         return githubService.globalCommission()
                 .onErrorReturn {
                     return@onErrorReturn Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), Constants.GITHUB_FEE_FILE),
+                            ClientEnvironment.loadJsonFromAsset(App.appContext, Constants.GITHUB_FEE_FILE),
                             GlobalTransactionCommissionResponse::class.java)
                 }
     }

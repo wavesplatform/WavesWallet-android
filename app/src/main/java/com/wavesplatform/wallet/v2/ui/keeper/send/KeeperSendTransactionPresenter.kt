@@ -52,7 +52,7 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
                         }))
             }
             else -> {
-                viewState.onError(Throwable(App.getAppContext().getString(R.string.common_server_error)))
+                viewState.onError(Throwable(App.appContext.getString(R.string.common_server_error)))
             }
         }
     }

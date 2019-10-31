@@ -60,7 +60,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                             }
                         }
                     }, {
-                        viewState.showError(App.getAppContext()
+                        viewState.showError(App.appContext
                                 .getString(R.string.receive_error_network))
                     }))
         }
@@ -119,7 +119,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                 }
             }, {
                 runOnUiThread {
-                    viewState.showError(App.getAppContext()
+                    viewState.showError(App.appContext
                             .getString(R.string.receive_error_network))
                 }
             }))

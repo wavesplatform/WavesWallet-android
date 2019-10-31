@@ -105,7 +105,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
-        if (App.getAccessManager().isAuthenticated()) {
+        if (App.accessManager.isAuthenticated()) {
             presenter.loadNews()
         }
     }
@@ -302,8 +302,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun showBackUpSeedWarning() {
         if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true) &&
-                App.getAccessManager().isCurrentAccountBackupSkipped()) {
-            val currentGuid = App.getAccessManager().getLastLoggedInGuid()
+                App.accessManager.isCurrentAccountBackupSkipped()) {
+            val currentGuid = App.accessManager.getLastLoggedInGuid()
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = EnvironmentManager.getTime()
             if (now > lastTime + MIN_15) {
@@ -325,7 +325,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (App.accessManager.isCurrentAccountBackupSkipped()) {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.visiable()
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()

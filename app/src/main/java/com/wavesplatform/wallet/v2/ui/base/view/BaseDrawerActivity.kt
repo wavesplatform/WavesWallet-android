@@ -132,8 +132,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
                         Toast.makeText(this, "You are developer!", Toast.LENGTH_LONG).show()
                         preferencesHelper.setDeveloper(true)
 
-                        App.getAccessManager().resetWallet()
-                        App.getAccessManager().setLastLoggedInGuid("")
+                        App.accessManager.resetWallet()
+                        App.accessManager.setLastLoggedInGuid("")
                         finish()
                         launchActivity<WelcomeActivity>(clear = true)
                     } else {

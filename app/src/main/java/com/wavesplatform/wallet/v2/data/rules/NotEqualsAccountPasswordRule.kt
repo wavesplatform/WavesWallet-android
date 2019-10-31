@@ -27,7 +27,7 @@ class NotEqualsAccountPasswordRule : BaseRule {
         if (value is String) {
             return try {
                 val oldWallet = WavesWallet(
-                        App.getAccessManager().getCurrentWavesWalletEncryptedData(),
+                        App.accessManager.getCurrentWavesWalletEncryptedData(),
                         value
                 )
                 false
