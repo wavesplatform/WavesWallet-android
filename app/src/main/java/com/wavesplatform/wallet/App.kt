@@ -50,11 +50,11 @@ class App : DaggerApplication() {
 
         if (initDebugTools()) return
 
+        initExtension()
+        initLocalProperties()
         intiAnalytics()
         initRealm()
         initFirebaseServices()
-        initLocalProperties()
-        initExtension()
         initWavesSdk()
         initVectorSupport()
         initChromeTabs()
