@@ -77,7 +77,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         text_fee_value.click {
             val dialog = SponsoredFeeBottomSheetFragment()
             dialog.configureData(
-                    selectedAssetId = WavesConstants.WAVES_ASSET_ID_EMPTY,
+                    selectedAssetId = presenter.feeAssetId,
                     wavesFee = 10000,
                     exchange = true,
                     priceAssetId = presenter.data?.watchMarket?.market?.amountAsset,
