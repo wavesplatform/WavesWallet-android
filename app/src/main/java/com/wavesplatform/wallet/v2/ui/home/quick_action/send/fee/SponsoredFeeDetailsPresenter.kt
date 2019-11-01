@@ -93,12 +93,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                                 return@Function3 Triple(settings, rates, balances)
                             })
                 }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ triple ->
-                    val matcherSettings = triple.first
-                    val settingsRates = triple.second
-                    val assets = triple.third
-
+                .map { (matcherSettings, settingsRates, assets) ->
                     val sponsoredAssetItems = mutableListOf<SponsoredAssetItem>()
                     settingsRates.forEach { (assetId, rate) ->
 
@@ -130,6 +125,22 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                             }
                         }
                     }
+                    return@map sponsoredAssetItems
+                }
+                .flatMap { items ->
+                    val ids = items.map { it.assetBalance.assetId }.filter { it.isNotEmpty() }
+                    dataServiceManager.assets(ids = ids)
+                            .map { response ->
+                                val assetsInfoMap = response.associateBy { it.id }
+                                items.forEach { item ->
+                                    item.assetBalance.issueTransaction?.name = assetsInfoMap[item.assetBalance.assetId]?.name
+                                            ?: item.assetBalance.getName()
+                                }
+                                return@map items
+                            }
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ sponsoredAssetItems ->
                     listener.invoke(sponsoredAssetItems)
                     viewState.showProgressBar(false)
                 }, {
@@ -137,7 +148,6 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                     viewState.showNetworkError()
                 }))
     }
-
 
     private fun executedScripts(matcherFeeAssetScripted: Boolean,
                                 matcherAddressScripted: Boolean,
@@ -180,11 +190,11 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
         return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal()
                 && availableBalance >= feeDecimalValue)
                 || (sponsorBalance >= MoneyUtil.getScaledText(
-                        wavesFee, WavesConstants.WAVES_ASSET_INFO.precision)
-                        .clearBalance()
-                        .toBigDecimal()
-                        && availableBalance >= feeDecimalValue
-                        && item.isMyWavesToken(WavesWallet.getAddress()))
+                wavesFee, WavesConstants.WAVES_ASSET_INFO.precision)
+                .clearBalance()
+                .toBigDecimal()
+                && availableBalance >= feeDecimalValue
+                && item.isMyWavesToken(WavesWallet.getAddress()))
                 || item.isWaves())
     }
 
