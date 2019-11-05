@@ -43,6 +43,7 @@ class App : DaggerApplication() {
     lateinit var mPrefsUtil: PrefsUtil
     @Inject
     lateinit var authHelper: AuthHelper
+
     private val localizationDelegate by lazy { LocalizationApplicationDelegate(this) }
 
     override fun onCreate() {
