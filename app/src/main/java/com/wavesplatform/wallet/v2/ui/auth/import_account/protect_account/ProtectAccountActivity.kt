@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account
 
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.v2.util.WavesWallet

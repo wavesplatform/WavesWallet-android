@@ -7,12 +7,12 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.widget.LinearLayout
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
@@ -85,8 +85,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(com.wavesplatform.wallet.R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recycle_assets.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 appbar_layout.isSelected = recycle_assets.canScrollVertically(-1)
             }
         })
@@ -94,7 +94,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         common_tab_layout.setTabData(tabs)
         common_tab_layout.setOnTabSelectListener(tabSelectListener)
 
-        recycle_assets.layoutManager = LinearLayoutManager(this)
+        recycle_assets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recycle_assets.itemAnimator = itemAnimator
 
         adapter.bindToRecyclerView(recycle_assets)
@@ -186,16 +186,16 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         itemTouchHelper.attachToRecyclerView(recycle_assets)
 
         adapter.dragStartListener = object : ItemDragListener {
-            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
+            override fun onStartDrag(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
                 setTabsEnable(false)
                 itemTouchHelper.startDrag(viewHolder)
             }
 
-            override fun onMoved(fromHolder: RecyclerView.ViewHolder?, fromPosition: Int, toHolder: RecyclerView.ViewHolder?, toPosition: Int) {
+            override fun onMoved(fromHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder?, fromPosition: Int, toHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder?, toPosition: Int) {
                 presenter.needToUpdate = true
             }
 
-            override fun onEndDrag(viewHolder: RecyclerView.ViewHolder) {
+            override fun onEndDrag(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
                 applyCorrectCardBg(viewHolder)
                 setTabsEnable(true)
             }
@@ -214,7 +214,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         this.adapter.checkEmptyViews()
     }
 
-    private fun applyCorrectCardBg(holder: RecyclerView.ViewHolder) {
+    private fun applyCorrectCardBg(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
         if (holder.adapterPosition != POSITION_NONE) {
             val item = adapter.getItem(holder.adapterPosition) as AssetSortingItem
             val type = adapter.resolveType(holder.adapterPosition)

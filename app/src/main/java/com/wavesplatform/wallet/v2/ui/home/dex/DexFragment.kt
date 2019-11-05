@@ -7,14 +7,14 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
 import com.wavesplatform.wallet.R
@@ -55,7 +55,7 @@ class DexFragment : BaseFragment(), DexView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         swipe_container.setColorSchemeResources(R.color.submit400)
 
-        val linearLayoutManager = LinearLayoutManager(baseActivity)
+        val linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(baseActivity)
 
         recycle_dex.layoutManager = linearLayoutManager
         recycle_dex.adapter = adapter
@@ -87,8 +87,8 @@ class DexFragment : BaseFragment(), DexView {
             }
         }
 
-        recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recycle_dex.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 presenter.hideShadow = !recycle_dex.canScrollVertically(-1)
                 onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
             }
@@ -114,8 +114,8 @@ class DexFragment : BaseFragment(), DexView {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_sorting -> {
                 launchActivity<ActiveMarketsSortingActivity>(REQUEST_SORTING)
             }

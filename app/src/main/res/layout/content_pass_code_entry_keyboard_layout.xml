@@ -13,19 +13,19 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="1"
                 android:id="@+id/button1"
                 android:text="1" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="2"
                 android:id="@+id/button2"
                 android:text="2" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="3"
                 android:id="@+id/button3"
@@ -38,19 +38,19 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="4"
                 android:id="@+id/button4"
                 android:text="4" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="5"
                 android:id="@+id/button5"
                 android:text="5" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="6"
                 android:id="@+id/button6"
@@ -63,19 +63,19 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="7"
                 android:id="@+id/button7"
                 android:text="7" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="8"
                 android:id="@+id/button8"
                 android:text="8" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="9"
                 android:id="@+id/button9"
@@ -88,20 +88,20 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 app:srcCompat="@drawable/ic_fingerprint_48_submit_300"
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="fingerprint"
                 android:visibility="invisible"
                 android:id="@+id/button_fingerprint" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="0"
                 android:id="@+id/button0"
                 android:text="0" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 app:srcCompat="@drawable/ic_backspace_48_disabled_900"
                 style="@style/PassCodeEntryButtonNumberText"
                 android:tag="delete"

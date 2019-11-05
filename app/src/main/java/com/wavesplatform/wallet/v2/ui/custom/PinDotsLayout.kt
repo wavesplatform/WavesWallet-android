@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.custom
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
-import android.support.v7.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater

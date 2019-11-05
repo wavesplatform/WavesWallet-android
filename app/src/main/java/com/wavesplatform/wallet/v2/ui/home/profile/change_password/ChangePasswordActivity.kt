@@ -8,8 +8,8 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.rules.EqualRule

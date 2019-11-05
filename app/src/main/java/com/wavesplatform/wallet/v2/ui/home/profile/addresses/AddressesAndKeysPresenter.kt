@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

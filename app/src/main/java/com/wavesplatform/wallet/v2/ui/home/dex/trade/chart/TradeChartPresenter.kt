@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 
-import com.arellomobile.mvp.InjectViewState
 import com.crashlytics.android.Crashlytics
+import moxy.InjectViewState
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter

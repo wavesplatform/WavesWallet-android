@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.wallet.App
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse

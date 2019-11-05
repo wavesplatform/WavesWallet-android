@@ -5,9 +5,9 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -19,9 +19,9 @@ import com.wavesplatform.wallet.v2.util.isGateway
 import pers.victor.ext.app
 
 class ReceivePageAdapter(
-    fm: FragmentManager?,
-    var assetBalance: AssetBalanceResponse?
-) : FragmentStatePagerAdapter(fm) {
+        fm: FragmentManager,
+        var assetBalance: AssetBalanceResponse?
+) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     var data: MutableList<BaseFragment>
     private var titles: Array<String>

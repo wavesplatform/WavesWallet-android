@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

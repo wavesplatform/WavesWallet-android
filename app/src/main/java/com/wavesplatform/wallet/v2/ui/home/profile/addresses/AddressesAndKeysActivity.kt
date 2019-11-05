@@ -6,18 +6,18 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding3.view.clicks
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.showSuccess
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -46,21 +46,21 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         text_address.text = App.getAccessManager().getWallet()?.address
         text_public_key.text = App.getAccessManager().getWallet()?.publicKeyStr
 
-        eventSubscriptions.add(RxView.clicks(image_address_copy)
+        eventSubscriptions.add(image_address_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     image_address_copy.copyToClipboard(text_address.text.toString())
                 })
 
-        eventSubscriptions.add(RxView.clicks(image_public_key_copy)
+        eventSubscriptions.add(image_public_key_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     image_public_key_copy.copyToClipboard(text_public_key.text.toString())
                 })
 
-        eventSubscriptions.add(RxView.clicks(image_private_key_copy)
+        eventSubscriptions.add(image_private_key_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

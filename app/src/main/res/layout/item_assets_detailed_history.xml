@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/card_transaction"
@@ -27,7 +27,7 @@
             android:paddingRight="14dp"
             android:paddingBottom="10dp">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_transaction"
                 android:layout_width="@dimen/asset_icon_size"
                 android:layout_height="@dimen/asset_icon_size"
@@ -35,7 +35,7 @@
                 tools:srcCompat="@drawable/ic_t_startlease_48" />
 
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_transaction_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 android:layout_toEndOf="@+id/image_transaction">
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_transaction_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                     android:orientation="horizontal">
 
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
                         android:layout_gravity="center_vertical"
@@ -107,7 +107,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,5 +117,5 @@
                 app:srcCompat="@drawable/icon_info_basic_300" />
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.model.local
 
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 

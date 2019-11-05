@@ -7,16 +7,16 @@
     android:background="@color/white"
     android:fillViewport="true"
     android:orientation="vertical"
-    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:stateListAnimator="@animator/toolbar_elevation">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,9 +25,9 @@
             android:fitsSystemWindows="true"
             app:title="@string/sponsored_fee_dialog_title"
             app:titleMarginStart="24dp" />
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_sponsored_fee_assets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -5,26 +5,29 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details
 
-import android.support.v7.widget.AppCompatTextView
 import android.view.View
-import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
+import androidx.appcompat.widget.AppCompatTextView
+import com.jakewharton.rxbinding3.view.clicks
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.matcher.AssetPairOrderResponse
-import com.wavesplatform.wallet.v2.data.model.local.TransactionType
-import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.MatcherServiceManager
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
-import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import kotlinx.android.synthetic.main.content_bottom_sheet_my_orders_body.view.*
+import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import kotlinx.android.synthetic.main.content_my_orders_bottom_sheet_bottom_btns.view.*
+import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -170,7 +173,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
         val view = inflater?.inflate(R.layout.content_my_orders_bottom_sheet_bottom_btns, null, false)
 
         view?.let {
-            eventSubscriptions.add(RxView.clicks(view.image_close)
+            eventSubscriptions.add(view.image_close.clicks()
                     .throttleFirst(1500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
@@ -180,7 +183,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             if (!arrayOf(OrderStatus.Cancelled, OrderStatus.Filled).contains(data.orderResponse.getStatus())) {
                 view.text_cancel_order.visiable()
 
-                eventSubscriptions.add(RxView.clicks(view.text_cancel_order)
+                eventSubscriptions.add(view.text_cancel_order.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {

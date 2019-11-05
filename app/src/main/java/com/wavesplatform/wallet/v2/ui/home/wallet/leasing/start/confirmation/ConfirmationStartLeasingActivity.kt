@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
 import android.app.Activity
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R

@@ -8,23 +8,22 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
-import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.clearText
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
@@ -61,7 +60,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             adapter.currentAssetId = assetId
         }
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+        eventSubscriptions.add(edit_search.textChanges()
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
@@ -91,7 +90,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             }
         })
 
-        recycle_assets.layoutManager = LinearLayoutManager(this)
+        recycle_assets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recycle_assets.adapter = adapter
         adapter.bindToRecyclerView(recycle_assets)
 

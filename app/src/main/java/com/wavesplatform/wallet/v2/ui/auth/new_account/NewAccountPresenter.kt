@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.auth.new_account
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.AppCompatImageView
-import com.arellomobile.mvp.InjectViewState
+import androidx.appcompat.widget.AppCompatImageView
+import moxy.InjectViewState
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

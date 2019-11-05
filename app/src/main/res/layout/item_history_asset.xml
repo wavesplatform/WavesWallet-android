@@ -30,7 +30,7 @@
                 android:layout_height="@dimen/asset_icon_size"
                 android:background="@color/white_60" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -40,7 +40,7 @@
     </FrameLayout>
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_asset_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

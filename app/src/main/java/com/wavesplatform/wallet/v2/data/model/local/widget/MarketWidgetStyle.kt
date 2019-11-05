@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.data.model.local.widget
 
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.annotation.StringRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import com.wavesplatform.wallet.v2.data.model.local.OptionsDialogModel

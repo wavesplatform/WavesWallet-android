@@ -10,13 +10,13 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.design.widget.TabLayout
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatTextView
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.annotation.StringRes
+import com.google.android.material.tabs.TabLayout
+import androidx.core.content.ContextCompat
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
@@ -24,8 +24,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
@@ -125,7 +125,7 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
         }
 
 
-        tokensList.layoutManager = LinearLayoutManager(this)
+        tokensList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         tokensList.itemAnimator = FadeInWithoutDelayAnimator()
         adapter.bindToRecyclerView(tokensList)
         adapter.onItemChildClickListener =
@@ -153,16 +153,16 @@ class MarketWidgetConfigureActivity : BaseActivity(), TabLayout.OnTabSelectedLis
 
         adapter.enableDragItem(itemTouchHelper, R.id.image_drag, false)
         adapter.setOnItemDragListener(object : OnItemDragListener {
-            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+            override fun onItemDragStart(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, pos: Int) {
                 // do nothing
             }
 
-            override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int,
-                                          target: RecyclerView.ViewHolder, to: Int) {
+            override fun onItemDragMoving(source: androidx.recyclerview.widget.RecyclerView.ViewHolder, from: Int,
+                                          target: androidx.recyclerview.widget.RecyclerView.ViewHolder, to: Int) {
                 // do nothing
             }
 
-            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+            override fun onItemDragEnd(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, pos: Int) {
                 updateWidgetAssetPairs()
             }
         })

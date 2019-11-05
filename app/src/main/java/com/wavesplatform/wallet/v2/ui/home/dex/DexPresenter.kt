@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse

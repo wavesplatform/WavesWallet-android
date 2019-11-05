@@ -6,13 +6,13 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
@@ -50,9 +50,9 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
         super.onCreateView(inflater, container, savedInstanceState)
         rootView = inflater.inflate(R.layout.fragment_sponsored_fee_bottom_sheet_dialog, container, false)
 
-        rootView?.recycle_sponsored_fee_assets?.layoutManager = LinearLayoutManager(requireActivity())
-        rootView?.recycle_sponsored_fee_assets?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        rootView?.recycle_sponsored_fee_assets?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireActivity())
+        rootView?.recycle_sponsored_fee_assets?.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 rootView?.appbar_layout?.isSelected = rootView?.recycle_sponsored_fee_assets!!.canScrollVertically(-1)
             }
         })

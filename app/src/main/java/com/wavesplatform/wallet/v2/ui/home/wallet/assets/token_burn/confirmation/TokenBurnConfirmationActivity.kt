@@ -8,8 +8,8 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmatio
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.transaction.BurnTransactionResponse
 import com.wavesplatform.sdk.utils.getScaledAmount

@@ -5,20 +5,23 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url "https://jitpack.io" }
         maven { url 'http://dl.bintray.com/dev-fingerlinks/maven' }
         maven { url "http://dl.bintray.com/novoda/maven" }
         maven { url "https://plugins.gradle.org/m2/" }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.1'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
-        classpath 'com.google.gms:google-services:4.3.0'
+        classpath 'com.google.gms:google-services:4.3.2'
         classpath "io.realm:realm-gradle-plugin:5.9.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'io.sentry:sentry-android-gradle-plugin:1.7.16'
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0-RC14"
+        classpath 'io.fabric.tools:gradle:1.31.2'  // Crashlytics plugin
         // classpath 'io.sentry:sentry-android-gradle-plugin:1.7.16'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -29,9 +32,12 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url "https://jitpack.io" }
         maven { url 'http://dl.bintray.com/dev-fingerlinks/maven' }
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://www.jitpack.io" }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
 }
 

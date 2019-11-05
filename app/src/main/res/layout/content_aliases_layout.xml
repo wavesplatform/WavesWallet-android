@@ -8,7 +8,7 @@
     android:paddingStart="16dp"
     android:paddingTop="6dp">
 
-    <android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/text_alias_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         tools:text="makstorch"
         android:textColor="@color/disabled900" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_copy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:padding="8dp"
         app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/view_dashed"
         android:layout_width="match_parent"
         android:layout_height="2dp"

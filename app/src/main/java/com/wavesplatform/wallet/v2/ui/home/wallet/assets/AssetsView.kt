@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.StateStrategyType
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
