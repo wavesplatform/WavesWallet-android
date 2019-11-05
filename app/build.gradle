@@ -256,7 +256,7 @@ dependencies {
 
     implementation 'commons-codec:commons-codec:1.10'
     implementation 'org.apache.commons:commons-lang3:3.4'
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'org.thoughtcrime.ssl.pinning:AndroidPinning:1.0.0'
     implementation 'com.neovisionaries:nv-websocket-client:1.19'
     implementation('com.google.zxing:core:3.3.0') {
