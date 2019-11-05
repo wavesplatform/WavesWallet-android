@@ -16,16 +16,16 @@ import javax.inject.Inject
 class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscodeView>() {
 
     fun validate(guid: String, passCode: String) {
-        addSubscription(App.getAccessManager()
+        addSubscription(App.accessManager
                 .validatePassCodeObservable(guid, passCode)
                 .subscribe({ password ->
-                    App.getAccessManager().resetPassCodeInputFails(guid)
+                    App.accessManager.resetPassCodeInputFails(guid)
                     viewState.onSuccessValidatePassCode(password, passCode)
                 }, { error ->
                     if (error !is PinStoreService.IncorrectPinException) {
                         Timber.e(error, "Failed to validate pin")
                     } else {
-                        App.getAccessManager().incrementPassCodeInputFails(guid)
+                        App.accessManager.incrementPassCodeInputFails(guid)
                     }
                     viewState.onFailValidatePassCode(overMaxWrongPassCodes(guid), error.message)
                 }))
@@ -35,7 +35,7 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
         private const val MAX_AVAILABLE_TIMES = 5
 
         fun overMaxWrongPassCodes(guid: String): Boolean {
-            return App.getAccessManager().getPassCodeInputFails(guid) >= MAX_AVAILABLE_TIMES
+            return App.accessManager.getPassCodeInputFails(guid) >= MAX_AVAILABLE_TIMES
         }
     }
 }

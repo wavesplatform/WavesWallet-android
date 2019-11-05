@@ -53,6 +53,6 @@ open class BasePresenter<T : MvpView> @Inject constructor() : MvpPresenter<T>() 
     }
 
     fun getWavesAddress(): String {
-        return App.getAccessManager().getWallet()?.address ?: ""
+        return App.accessManager.getWallet()?.address ?: ""
     }
 }

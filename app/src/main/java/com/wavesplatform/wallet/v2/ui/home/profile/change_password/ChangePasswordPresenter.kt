@@ -24,18 +24,18 @@ class ChangePasswordPresenter @Inject constructor() : BasePresenter<ChangePasswo
     }
 
     fun writePassword(oldPassword: String?, newPassword: String?) {
-        val guid = App.getAccessManager().getLoggedInGuid()
+        val guid = App.accessManager.getLoggedInGuid()
         val oldWallet = WavesWallet(
-                App.getAccessManager().getCurrentWavesWalletEncryptedData(),
+                App.accessManager.getCurrentWavesWalletEncryptedData(),
                 oldPassword
         )
         val newWallet = WavesWallet(oldWallet.seed)
 
-        App.getAccessManager().storePassword(
+        App.accessManager.storePassword(
                 guid, newWallet.publicKeyStr,
                 newWallet.getEncryptedData(newPassword))
 
-        addSubscription(App.getAccessManager()
+        addSubscription(App.accessManager
                 .writePassCodeObservable(guid, newPassword, passCode)
                 .subscribe({
                     viewState.afterSuccessChangePassword()

@@ -256,7 +256,7 @@ class TransactionSaver @Inject constructor() {
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
-        if (App.getAccessManager().isAuthenticated()) {
+        if (App.accessManager.isAuthenticated()) {
             alias.notNull {
                 subscriptions.add(dataServiceManager.loadAlias(it)
                         .compose(RxUtil.applyObservableDefaultSchedulers())

@@ -33,7 +33,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
                 assetId = assetBalance!!.assetId,
                 quantity = quantity)
         request.fee = fee
-        request.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        request.sign(App.accessManager.getWallet()?.seedStr ?: "")
 
         addSubscription(nodeServiceManager.burn(request, totalBurn)
                 .executeInBackground()

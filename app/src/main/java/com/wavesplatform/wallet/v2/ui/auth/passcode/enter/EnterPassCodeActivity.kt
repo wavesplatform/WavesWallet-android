@@ -61,7 +61,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         useFingerprint = isAvailable &&
                 !isProcessSetFingerprint &&
                 !TextUtils.isEmpty(guid) &&
-                App.getAccessManager().isGuidUseFingerPrint(guid)
+                App.accessManager.isGuidUseFingerPrint(guid)
 
         if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
             startUsePasswordScreen(true)
@@ -81,7 +81,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     }
 
                     override fun onFingerprintClicked() {
-                        if (App.getAccessManager().isUseFingerPrint(guid)) {
+                        if (App.accessManager.isUseFingerPrint(guid)) {
                             showFingerPrint()
                         }
                     }
@@ -120,8 +120,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             exitFromScreen()
         } else {
             if (intent.hasExtra(KEY_INTENT_GUID)) {
-                text_title.text = App.getAccessManager().getWalletName(guid)
-                text_subtitle.text = App.getAccessManager().getWalletAddress(guid)
+                text_title.text = App.accessManager.getWalletName(guid)
+                text_subtitle.text = App.accessManager.getWalletAddress(guid)
                 text_subtitle.visiable()
                 logout.visiable()
                 logout.click {
@@ -149,8 +149,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     private fun getGuid(): String {
         return if (intent.hasExtra(KEY_INTENT_GUID)) {
             intent.extras.getString(KEY_INTENT_GUID, "")
-        } else if (!TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
-            App.getAccessManager().getLastLoggedInGuid()
+        } else if (!TextUtils.isEmpty(App.accessManager.getLastLoggedInGuid())) {
+            App.accessManager.getLastLoggedInGuid()
         } else {
             ""
         }
@@ -178,7 +178,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         data.putExtra(KEY_INTENT_GUID, getGuid())
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
-        App.getAccessManager().setWallet(getGuid(), password)
+        App.accessManager.setWallet(getGuid(), password)
         exitFromScreen()
     }
 

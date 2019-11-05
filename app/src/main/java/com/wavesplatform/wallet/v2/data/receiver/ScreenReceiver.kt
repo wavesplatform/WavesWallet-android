@@ -14,7 +14,7 @@ class ScreenReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_SCREEN_OFF) {
-            App.getAccessManager().resetWallet()
+            App.accessManager.resetWallet()
         }
     }
 }

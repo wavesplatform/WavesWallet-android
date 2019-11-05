@@ -52,7 +52,7 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onNotLoggedIn() {
         if (preferencesHelper.isTutorialPassed()) {
-            if (TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
+            if (TextUtils.isEmpty(App.accessManager.getLastLoggedInGuid())) {
                 launchActivity<WelcomeActivity>()
                 overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
             } else {

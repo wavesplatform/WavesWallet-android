@@ -14,7 +14,7 @@ class AppLifecycleObserver : LifecycleObserver {
 
     private var handler: Handler = Handler()
     private var resetWalletTask = Runnable {
-        App.getAccessManager().resetWallet()
+        App.accessManager.resetWallet()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

@@ -111,7 +111,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     it.isNotEmpty()
                 }
                 .map {
-                    val isValid = it.isValidWavesAddress() && it != App.getAccessManager().getWallet()?.address
+                    val isValid = it.isValidWavesAddress() && it != App.accessManager.getWallet()?.address
                     presenter.nodeAddressValidation = isValid
                     if (isValid) {
                         text_address_error.text = ""

@@ -36,7 +36,7 @@ class SearchAssetAdapter  @Inject constructor() :
                                 assetBalance.getAvailableBalance(), assetBalance.getDecimals()))
                         .setGone(R.id.image_favourite, assetBalance.isFavorite)
                         .setGone(R.id.text_my_asset, assetBalance.issueTransaction?.sender
-                                == App.getAccessManager().getWallet()?.address)
+                                == App.accessManager.getWallet()?.address)
                         .setGone(R.id.text_tag_spam, assetBalance.isSpam)
 
                 helper.itemView.image_asset_icon.setAsset(assetBalance)

@@ -146,7 +146,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             if (transaction.convertFromDb().transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
                 true
             } else {
-                transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
+                transaction.lease?.recipientAddress != App.accessManager.getWallet()?.address
             }
         }
     }
