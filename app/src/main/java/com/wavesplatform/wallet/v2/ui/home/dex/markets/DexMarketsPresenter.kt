@@ -21,10 +21,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.util.mapCorrectPairs
-import com.wavesplatform.wallet.v2.util.safeLet
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -65,7 +62,8 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                 .flatMap {
                     pricesOrder.clear()
                     pricesOrder.addAll(it.priceAssets)
-                    getAllAssetInfoObservable(observablePair) }
+                    getAllAssetInfoObservable(observablePair)
+                }
                 .flatMap { (amountAssetInfoList,
                                    priceAssetInfoList) ->
 
@@ -147,11 +145,16 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
             }
         }
 
+        val pairsKeys = arrayListOf<String>()
         val pairsMap = hashMapOf<String, Pair<String, String>>()
-        mapCorrectPairs(pricesOrder, pairs).forEach {
-            pairsMap[it.first + "/" + it.second] = it
+        pairs.forEach {
+            val correctPair = correctPair(pricesOrder, it)
+            val key = correctPair.first + "/" + correctPair.second
+            if (!pairsKeys.contains(key)) {
+                pairsKeys.add(key)
+            }
+            pairsMap[key] = correctPair
         }
-        val pairsKeys = pairsMap.keys.toList()
         return Observable.zip(
                 Observable.just(pairsKeys),
                 Observable.just(pairsMap),
