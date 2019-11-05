@@ -62,7 +62,8 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                 .flatMap {
                     pricesOrder.clear()
                     pricesOrder.addAll(it.priceAssets)
-                    getAllAssetInfoObservable(observablePair) }
+                    getAllAssetInfoObservable(observablePair)
+                }
                 .flatMap { (amountAssetInfoList,
                                    priceAssetInfoList) ->
 
@@ -149,7 +150,9 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
         pairs.forEach {
             val correctPair = correctPair(pricesOrder, it)
             val key = correctPair.first + "/" + correctPair.second
-            pairsKeys.add(key)
+            if (!pairsKeys.contains(key)) {
+                pairsKeys.add(key)
+            }
             pairsMap[key] = correctPair
         }
         return Observable.zip(
