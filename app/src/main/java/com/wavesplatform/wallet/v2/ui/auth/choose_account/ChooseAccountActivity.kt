@@ -97,7 +97,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onItemClicked(item: AddressBookUserDb) {
-        val guid = App.getAccessManager().findGuidBy(item.address)
+        val guid = App.accessManager.findGuidBy(item.address)
         if (MonkeyTest.isTurnedOn()) {
             MonkeyTest.startIfNeed()
         } else {
@@ -123,7 +123,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         analytics.trackEvent(AnalyticEvents.StartAccountDeleteEvent)
 
         val item = adapter.getItem(position) as AddressBookUserDb
-        val guid = App.getAccessManager().findGuidBy(item.address)
+        val guid = App.accessManager.findGuidBy(item.address)
 
         val alertDialog = AlertDialog.Builder(this).create()
         alertDialog.setTitle(getString(R.string.choose_account_delete_title))
@@ -135,7 +135,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 getString(R.string.choose_account_yes)) { dialog, which ->
             dialog.dismiss()
 
-            App.getAccessManager().deleteWavesWallet(item.address)
+            App.accessManager.deleteWavesWallet(item.address)
             adapter.remove(position)
 
             showSuccess(R.string.choose_account_deleted, R.id.content)
@@ -157,7 +157,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
-                        App.getAccessManager()
+                        App.accessManager
                                 .storeWalletName(item!!.address, item.name)
                     }
                 }

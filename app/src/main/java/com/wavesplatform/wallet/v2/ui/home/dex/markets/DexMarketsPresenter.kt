@@ -97,7 +97,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                     viewState.afterSuccessGetMarkets(foundMarkets)
                 }, {
                     if (it.message == ERROR_CANT_FIND_ASSETS) {
-                        viewState.afterFailGetMarkets(App.getAppContext().getString(
+                        viewState.afterFailGetMarkets(App.appContext.getString(
                                 R.string.market_widget_config_cant_find_currency_pair))
                     } else {
                         viewState.afterFailGetMarkets()

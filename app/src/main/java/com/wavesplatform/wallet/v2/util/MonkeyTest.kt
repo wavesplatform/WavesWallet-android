@@ -19,27 +19,27 @@ class MonkeyTest {
             if (isTurnedOn()) {
                 val guid = getGuid()
                 if (TextUtils.isEmpty(guid)) {
-                    App.getAccessManager().storeWalletData(
+                    App.accessManager.storeWalletData(
                             BuildConfig.MONKEY_TEST_SEED,
                             "11111111",
                             "monkey0",
                             true)
-                    App.getAccessManager().setLastLoggedInGuid(App.getAccessManager().getLoggedInGuid())
-                    PreferencesHelper(App.getAppContext()).setTutorialPassed(true)
-                    App.getAccessManager().setCurrentAccountBackupDone()
+                    App.accessManager.setLastLoggedInGuid(App.accessManager.getLoggedInGuid())
+                    PreferencesHelper(App.appContext).setTutorialPassed(true)
+                    App.accessManager.setCurrentAccountBackupDone()
                 } else {
-                    App.getAccessManager().setWallet(guid, "11111111")
+                    App.accessManager.setWallet(guid, "11111111")
                 }
-                App.getAppContext().launchActivity<MainActivity>(clear = true)
+                App.appContext.launchActivity<MainActivity>(clear = true)
             }
         }
 
         private fun getGuid(): String {
-            val lastGuid = App.getAccessManager().getLastLoggedInGuid()
+            val lastGuid = App.accessManager.getLastLoggedInGuid()
             return if (TextUtils.isEmpty(lastGuid)) {
                 lastGuid
             } else {
-                val guids = PrefsUtil(App.getAppContext()).getGlobalValueList(
+                val guids = PrefsUtil(App.appContext).getGlobalValueList(
                         EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
                 if (guids.isNotEmpty()) {
                     guids[0]

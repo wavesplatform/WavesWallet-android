@@ -22,7 +22,7 @@ class ClientEnvironment internal constructor(
 
     init {
         configuration = Gson().fromJson(
-                loadJsonFromAsset(App.getAppContext(), jsonFileName),
+                loadJsonFromAsset(App.appContext, jsonFileName),
                 GlobalConfigurationResponse::class.java)
     }
 

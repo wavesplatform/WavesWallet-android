@@ -24,7 +24,7 @@ class AccountNameRule : BaseRule {
         }
 
         if (value is String) {
-            return !App.getAccessManager().isAccountNameExist(value)
+            return !App.accessManager.isAccountNameExist(value)
         }
 
         throw ClassCastException("Required String value")

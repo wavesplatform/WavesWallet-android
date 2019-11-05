@@ -49,7 +49,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            App.getAccessManager().setUseFingerPrint(guid, true)
+                            App.accessManager.setUseFingerPrint(guid, true)
                             launchActivity<MainActivity>(clear = true)
                         }
 
@@ -70,7 +70,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     }
 
     override fun onBackPressed() {
-        App.getAccessManager().setUseFingerPrint(guid, false)
+        App.accessManager.setUseFingerPrint(guid, false)
         if (WavesSdk.keeper().isKeeperIntent(intent)) {
             launchActivity<KeeperTransactionActivity>()
         } else {
