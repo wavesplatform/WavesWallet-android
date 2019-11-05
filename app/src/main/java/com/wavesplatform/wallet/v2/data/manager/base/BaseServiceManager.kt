@@ -28,8 +28,8 @@ open class BaseServiceManager @Inject constructor() {
     var githubService: GithubService = GithubServiceManager.create()
     var coinomatService: CoinomatService = CoinomatDataManager.create()
     var gatewayService: GatewayService = GatewayDataManager.create()
-    var preferencesHelper: PreferencesHelper = PreferencesHelper(App.getAppContext())
-    var prefsUtil: PrefsUtil = PrefsUtil(App.getAppContext())
+    var preferencesHelper: PreferencesHelper = PreferencesHelper(App.appContext)
+    var prefsUtil: PrefsUtil = PrefsUtil(App.appContext)
     var rxEventBus: RxEventBus = RxEventBus()
 
 

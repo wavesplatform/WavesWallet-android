@@ -126,7 +126,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
-            if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+            if (App.accessManager.isCurrentAccountBackupSkipped()) {
                 alertDialog.setView(LayoutInflater.from(baseActivity)
                         .inflate(R.layout.content_delete_account_warning_layout, null))
             }
@@ -135,7 +135,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 if (!MonkeyTest.isTurnedOn()) {
                     analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
 
-                    App.getAccessManager().deleteCurrentWavesWallet()
+                    App.accessManager.deleteCurrentWavesWallet()
 
                     presenter.prefsUtil.logOut()
                     restartApp()
@@ -194,7 +194,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun checkBackUp() {
-        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (App.accessManager.isCurrentAccountBackupSkipped()) {
             skip_backup_indicator.setBackgroundColor(ContextCompat
                     .getColor(context!!, R.color.error500))
             skip_backup_indicator_image.setImageDrawable(ContextCompat
@@ -247,8 +247,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun initFingerPrintControl() {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.setOnCheckedChangeListener(null)
-            val guid = App.getAccessManager().getLoggedInGuid()
-            fingerprint_switch.isChecked = App.getAccessManager().isUseFingerPrint(guid)
+            val guid = App.accessManager.getLoggedInGuid()
+            fingerprint_switch.isChecked = App.accessManager.isUseFingerPrint(guid)
             fingerprint_switch.setOnCheckedChangeListener { _, enable ->
                 launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT) {
@@ -305,8 +305,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        App.getAccessManager().resetWallet()
-        App.getAccessManager().setLastLoggedInGuid("")
+        App.accessManager.resetWallet()
+        App.accessManager.setLastLoggedInGuid("")
         finish()
         launchActivity<WelcomeActivity>(clear = true)
     }
@@ -317,7 +317,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    setFingerprint(App.getAccessManager().getLoggedInGuid(),
+                    setFingerprint(App.accessManager.getLoggedInGuid(),
                             data!!.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
                 } else {
                     initFingerPrintControl()
@@ -331,7 +331,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     launchActivity<CreatePassCodeActivity> {
                         putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
                         putExtra(EnterPassCodeActivity.KEY_INTENT_GUID,
-                                App.getAccessManager().getLoggedInGuid())
+                                App.accessManager.getLoggedInGuid())
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                         putExtra(EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
                     }
@@ -347,8 +347,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun setFingerprint(guid: String, passCode: String) {
-        if (App.getAccessManager().isUseFingerPrint(guid)) {
-            App.getAccessManager().setUseFingerPrint(guid, false)
+        if (App.accessManager.isUseFingerPrint(guid)) {
+            App.accessManager.setUseFingerPrint(guid, false)
         } else {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
@@ -356,8 +356,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            App.getAccessManager().setUseFingerPrint(guid,
-                                    !App.getAccessManager().isUseFingerPrint(guid))
+                            App.accessManager.setUseFingerPrint(guid,
+                                    !App.accessManager.isUseFingerPrint(guid))
                             initFingerPrintControl()
                         }
 

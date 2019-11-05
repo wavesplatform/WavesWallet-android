@@ -283,7 +283,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
 
                 exchangeView?.let {
                     val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                            App.getAccessManager().getWallet()?.address ?: "")
+                            App.accessManager.getWallet()?.address ?: "")
 
                     if (myOrder.getType() == OrderType.BUY) {
                         exchangeView.history_details_type?.text = getString(R.string.history_exchange_sell)
@@ -629,11 +629,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
             if (transaction.type == BaseTransaction.EXCHANGE) {
                 var feeText = ""
 
-                if (App.getAccessManager().getWallet()?.address == transaction.order1?.sender) {
+                if (App.accessManager.getWallet()?.address == transaction.order1?.sender) {
                     feeText = getExchangeFeeText(transaction, transaction.order1)
                 }
 
-                if (App.getAccessManager().getWallet()?.address == transaction.order2?.sender) {
+                if (App.accessManager.getWallet()?.address == transaction.order2?.sender) {
                     if (feeText.isNotBlank()) {
                         feeText += "\n"
                     }
@@ -798,7 +798,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
-                App.getAccessManager().getWallet()?.address)
+                App.accessManager.getWallet()?.address)
         val secondOrder = if (myOrder.id == transaction.order1!!.id) {
             transaction.order2!!
         } else {

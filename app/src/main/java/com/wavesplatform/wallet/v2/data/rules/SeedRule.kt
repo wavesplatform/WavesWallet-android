@@ -24,7 +24,7 @@ class SeedRule : BaseRule {
         }
 
         if (value is String) {
-            return !App.getAccessManager().isAccountWithSeedExist(value.trim())
+            return !App.accessManager.isAccountWithSeedExist(value.trim())
         }
 
         throw ClassCastException("Required String value")

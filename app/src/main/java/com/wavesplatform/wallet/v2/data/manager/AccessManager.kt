@@ -39,7 +39,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
         return readPassCodeObservable(
-                guid, passCode, App.getAccessManager().getPassCodeInputFails(guid))
+                guid, passCode, App.accessManager.getPassCodeInputFails(guid))
                 .flatMap { password ->
                     writePassCodeObservable(guid, password, passCode)
                             .andThen(Observable.just<String>(password))
@@ -255,7 +255,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
     }
 
     fun deleteWavesWallet(address: String) {
-        val searchWalletGuid = App.getAccessManager().findGuidBy(address)
+        val searchWalletGuid = App.accessManager.findGuidBy(address)
 
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_PUB_KEY)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_WALLET_NAME)

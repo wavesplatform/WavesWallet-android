@@ -39,7 +39,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
-    override fun askPassCode() = !App.getAccessManager().isAuthenticated()
+    override fun askPassCode() = !App.accessManager.isAuthenticated()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
@@ -109,7 +109,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
                             launchActivity<CreatePassCodeActivity>(options = intent.extras)
                         } else {
-                            App.getAccessManager().setCurrentAccountBackupDone()
+                            App.accessManager.setCurrentAccountBackupDone()
                             setResult(Constants.RESULT_OK)
                             finish()
                         }

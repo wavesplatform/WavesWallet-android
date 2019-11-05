@@ -25,7 +25,7 @@ class SplashPresenter @Inject constructor() : BasePresenter<SplashView>() {
     }
 
     fun resolveNextAction() {
-        if (TextUtils.isEmpty(App.getAccessManager().getLoggedInGuid())) {
+        if (TextUtils.isEmpty(App.accessManager.getLoggedInGuid())) {
             viewState.onNotLoggedIn()
         } else {
             val pubKey = prefsUtil.getValue(PrefsUtil.KEY_PUB_KEY, "")

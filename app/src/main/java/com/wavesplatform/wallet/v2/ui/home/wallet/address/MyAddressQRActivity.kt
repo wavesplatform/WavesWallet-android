@@ -52,7 +52,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
 
-        val address = App.getAccessManager().getWallet()?.address
+        val address = App.accessManager.getWallet()?.address
         text_address.text = address
         Glide.with(image_avatar.context)
                 .load(Identicon().create(address))
@@ -84,8 +84,8 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
                     }
                 })
 
-        presenter.generateAvatars(App.getAccessManager().getWallet()?.address, image_avatar)
-        presenter.generateQRCode(App.getAccessManager().getWallet()?.address, resources.getDimension(R.dimen._200sdp).toInt())
+        presenter.generateAvatars(App.accessManager.getWallet()?.address, image_avatar)
+        presenter.generateQRCode(App.accessManager.getWallet()?.address, resources.getDimension(R.dimen._200sdp).toInt())
 
         presenter.loadAliases()
     }

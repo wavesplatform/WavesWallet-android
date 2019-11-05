@@ -94,7 +94,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
                                 override fun onValidateFailed() {
                                     setSkeleton()
-                                    if (App.getAccessManager().isAccountWithSeedExist(edit_seed.text.toString().trim())) {
+                                    if (App.accessManager.isAccountWithSeedExist(edit_seed.text.toString().trim())) {
                                         val wallet = WavesWallet(edit_seed.text.toString().trim().toByteArray(Charsets.UTF_8))
                                         Glide.with(baseActivity)
                                                 .load(identicon.create(wallet.address))

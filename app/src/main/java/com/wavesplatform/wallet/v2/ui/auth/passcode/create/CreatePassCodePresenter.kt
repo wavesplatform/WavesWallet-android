@@ -25,17 +25,17 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
         val guid = when {
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE) -> {
                 val guid = extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
-                App.getAccessManager().setWallet(guid, password)
+                App.accessManager.setWallet(guid, password)
                 guid
             }
             else -> {
                 val accountName = extras.getString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME)
                 val seed = extras.getString(NewAccountActivity.KEY_INTENT_SEED)
                 val skipBackup = extras.getBoolean(NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
-                val guid = App.getAccessManager()
+                val guid = App.accessManager
                         .storeWalletData(seed, password, accountName, skipBackup)
                 if (extras.containsKey(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT)) {
-                    App.getAccessManager().setCurrentAccountBackupDone()
+                    App.accessManager.setCurrentAccountBackupDone()
                 }
                 guid
             }
@@ -44,14 +44,14 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
     }
 
     private fun writePassCodeToRemoteDb(guid: String, password: String, passCode: String) {
-        addSubscription(App.getAccessManager()
+        addSubscription(App.accessManager
                 .writePassCodeObservable(guid, password, passCode)
                 .subscribe({
-                    App.getAccessManager().resetPassCodeInputFails(guid)
+                    App.accessManager.resetPassCodeInputFails(guid)
                     viewState.onSuccessCreatePassCode(guid, passCode)
                 }, { throwable ->
                     Log.e("CreatePassCodeActivity", throwable.message)
-                    App.getAccessManager().deleteCurrentWavesWallet()
+                    App.accessManager.deleteCurrentWavesWallet()
                     viewState.onFailCreatePassCode()
                 }))
     }

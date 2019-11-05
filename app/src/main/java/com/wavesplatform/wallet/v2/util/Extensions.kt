@@ -733,7 +733,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isSpam(assetId: String?): Boolean {
-    return (App.getAccessManager().isAuthenticated()
+    return (App.accessManager.isAuthenticated()
             && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
@@ -746,9 +746,9 @@ fun AssetBalanceResponse.getItemType(): Int {
 }
 
 fun restartApp() {
-    val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
+    val intent = Intent(App.appContext, com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    App.getAppContext().startActivity(intent)
+    App.appContext.startActivity(intent)
 }
 
 fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
