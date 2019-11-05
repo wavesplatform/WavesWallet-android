@@ -10,8 +10,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
-import android.support.v4.view.PagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R

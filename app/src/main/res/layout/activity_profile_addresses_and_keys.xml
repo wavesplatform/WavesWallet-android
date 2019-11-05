@@ -6,7 +6,7 @@
     android:id="@+id/root"
     android:background="@color/white">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title" />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_view"
@@ -47,7 +47,7 @@
                 android:paddingRight="14dp"
                 android:paddingTop="10dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_startlease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                     android:layout_toRightOf="@+id/image_startlease"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_leasing_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                         android:textSize="12sp"
                         app:fontFamily="@font/roboto_bold" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_alias_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                         android:textSize="12sp" />
 
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -103,7 +103,7 @@
                 android:paddingEnd="8dp"
                 android:paddingStart="16dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/addresses_and_keys_your_address"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                         android:textColor="@color/disabled900"
                         tools:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_address_copy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/view_line_2"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -157,7 +157,7 @@
                 android:paddingEnd="8dp"
                 android:paddingStart="16dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/addresses_and_keys_public_key"
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_public_key"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                         android:textColor="@color/disabled900"
                         tools:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_public_key_copy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/view_line_3"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -202,7 +202,7 @@
                 android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -219,7 +219,7 @@
                 android:paddingStart="16dp"
                 android:visibility="gone">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_private_key"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
                     android:textColor="@color/disabled900"
                     tools:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ_private" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_private_key_copy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -256,6 +256,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

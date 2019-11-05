@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.language.change_welcome
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
@@ -50,13 +50,13 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.profile_language_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        recycle_language.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recycle_language.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 appbar_layout.isSelected = recycle_language.canScrollVertically(-1)
             }
         })
 
-        recycle_language.layoutManager = LinearLayoutManager(this)
+        recycle_language.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recycle_language.adapter = adapter
         adapter.changeRootPadding = true
 

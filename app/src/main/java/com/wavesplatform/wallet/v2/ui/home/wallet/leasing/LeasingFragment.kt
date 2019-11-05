@@ -6,14 +6,14 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import android.os.Bundle
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.LinearLayoutManager
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
@@ -140,7 +140,7 @@ class LeasingFragment : BaseFragment(), LeasingView, WalletTabShadowListener {
             }
         }
 
-        recycle_active_leasing.layoutManager = LinearLayoutManager(baseActivity)
+        recycle_active_leasing.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(baseActivity)
         recycle_active_leasing.adapter = adapterActiveAdapter
         recycle_active_leasing.isNestedScrollingEnabled = false
 
@@ -150,7 +150,7 @@ class LeasingFragment : BaseFragment(), LeasingView, WalletTabShadowListener {
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
             bottomSheetFragment.configureData(historyItem, position)
-            bottomSheetFragment.show(fragmentManager, bottomSheetFragment::class.java.simpleName)
+            bottomSheetFragment.show(requireFragmentManager(), bottomSheetFragment::class.java.simpleName)
         }
 
         skeletonScreen = Skeleton.bind(root)
@@ -173,8 +173,8 @@ class LeasingFragment : BaseFragment(), LeasingView, WalletTabShadowListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_your_address -> {
                 analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()

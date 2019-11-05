@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
@@ -56,7 +56,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
             loadOrders()
         }
 
-        recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
+        recycle_my_orders.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_my_orders)
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position)
@@ -75,7 +75,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
                         loadOrders()
                     }
                 }
-                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+                bottomSheetFragment.show(requireFragmentManager(), bottomSheetFragment.tag)
             }
         }
 

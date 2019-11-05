@@ -6,20 +6,19 @@
 package com.wavesplatform.wallet.v2.ui.tutorial
 
 import android.content.Context
-import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ScrollView
-import com.jakewharton.rxbinding2.view.RxView
+import androidx.viewpager.widget.PagerAdapter
+import com.jakewharton.rxbinding3.view.clicks
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.item_tutorial_6_card_confirm.view.*
 import java.util.concurrent.TimeUnit
-import com.wavesplatform.sdk.utils.notNull
 import javax.inject.Inject
 
 
@@ -62,14 +61,14 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
                 listener?.canBegin(isAllCheckedToStart())
             }
 
-            subscriptions.add(RxView.clicks(view.text_terms_of_use)
+            subscriptions.add(view.text_terms_of_use.clicks()
                     .throttleFirst(1500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         listener?.onSiteClicked(Constants.URL_TERMS)
                     })
 
-            subscriptions.add(RxView.clicks(view.text_terms_and_conditions)
+            subscriptions.add(view.text_terms_and_conditions.clicks()
                     .throttleFirst(1500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {

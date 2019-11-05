@@ -20,17 +20,17 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
 import android.provider.Settings
-import android.support.annotation.ColorRes
-import android.support.annotation.IdRes
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatButton
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
+import androidx.annotation.ColorRes
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import android.text.*
 import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
@@ -593,7 +593,7 @@ fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
 }
 
 fun Snackbar.withMultiline(line: Int = 8): Snackbar {
-    val textView = view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+    val textView = view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
     textView.maxLines = line
     return this
 }

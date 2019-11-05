@@ -8,27 +8,23 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import android.widget.LinearLayout
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
-import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -50,6 +46,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.content_asset_card.*
 import kotlinx.android.synthetic.main.content_commission.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
@@ -85,7 +83,7 @@ class SendActivity : BaseActivity(), SendView {
 
         setupCommissionBlock()
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_address)
+        eventSubscriptions.add(edit_address.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)
@@ -118,7 +116,7 @@ class SendActivity : BaseActivity(), SendView {
             else -> assetEnable(true)
         }
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+        eventSubscriptions.add(edit_amount.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .map { text ->
@@ -461,7 +459,7 @@ class SendActivity : BaseActivity(), SendView {
     private fun checkMonero(assetId: String?) {
         if (assetId == findByGatewayId("XMR")!!.assetId) {
             monero_layout.visiable()
-            eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
+            eventSubscriptions.add(edit_monero_payment_id.textChanges()
                     .subscribe { paymentId ->
                         presenter.moneroPaymentId = paymentId.toString()
                         if (paymentId.isNullOrEmpty()) {

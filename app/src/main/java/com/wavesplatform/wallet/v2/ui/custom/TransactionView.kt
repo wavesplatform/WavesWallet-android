@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.constraint.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction

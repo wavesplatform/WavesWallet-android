@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.model.request.matcher.CreateOrderRequest
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse

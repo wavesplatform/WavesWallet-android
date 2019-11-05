@@ -6,9 +6,9 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.recyclerview.widget.LinearLayoutManager
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
@@ -39,7 +39,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     @Inject
     lateinit var adapter: HistoryTabItemAdapter
-    lateinit var layoutManager: LinearLayoutManager
+    lateinit var layoutManager: androidx.recyclerview.widget.LinearLayoutManager
     var changeTabBarVisibilityListener: ChangeTabBarVisibilityListener? = null
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var skeletonShow = false
@@ -123,7 +123,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 val selectedPositionWithoutHeaders = position - sectionSize
 
                 bottomSheetFragment.configureData(historyItem.data, selectedPositionWithoutHeaders)
-                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+                bottomSheetFragment.show(requireFragmentManager(), bottomSheetFragment.tag)
             }
         }
 

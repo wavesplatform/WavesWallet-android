@@ -8,22 +8,18 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.ViewSkeletonScreen
-import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.R
+import com.jakewharton.rxbinding3.view.clicks
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.stripZeros
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -34,15 +30,18 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsAct
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.copyToClipboard
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_asset_details_layout.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
@@ -69,14 +68,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         view_pager_transaction_history.setPadding(dp2px(14), 0, dp2px(14), 0)
         view_pager_transaction_history.pageMargin = dp2px(7)
 
-        eventSubscriptions.add(RxView.clicks(image_copy_issuer)
+        eventSubscriptions.add(image_copy_issuer.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     image_copy_issuer.copyToClipboard(text_view_issuer_value.text.toString())
                 })
 
-        eventSubscriptions.add(RxView.clicks(image_copy_id)
+        eventSubscriptions.add(image_copy_id.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

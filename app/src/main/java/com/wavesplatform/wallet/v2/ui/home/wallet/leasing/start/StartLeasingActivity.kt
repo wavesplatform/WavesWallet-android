@@ -8,12 +8,9 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.AppCompatTextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.widget.AppCompatTextView
 import com.google.zxing.integration.android.IntentIntegrator
-import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.sdk.utils.WavesConstants
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
@@ -26,12 +23,13 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
 import kotlinx.android.synthetic.main.content_commission.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -88,7 +86,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 WavesConstants.WAVES_ASSET_INFO.precision,
                 Double.MAX_VALUE))
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_address)
+        eventSubscriptions.add(edit_address.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)
@@ -168,7 +166,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     it.printStackTrace()
                 }))
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+        eventSubscriptions.add(edit_amount.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)

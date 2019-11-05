@@ -7,15 +7,15 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
@@ -109,7 +109,7 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
             presenter.loadAssetsBalance()
         }
 
-        recycle_assets.layoutManager = LinearLayoutManager(activity)
+        recycle_assets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         adapter.bindToRecyclerView(recycle_assets)
 
         val headerClickListener = object : OnHeaderClickAdapter() {
@@ -125,9 +125,9 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
                 .create()
         recycle_assets.addItemDecoration(headerItemDecoration!!)
 
-        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        recycle_assets.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 if (!swipe_container.isRefreshing) {
                     swipe_container.isEnabled = !recycle_assets.canScrollVertically(-1)
                 }
@@ -138,8 +138,8 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
                 }
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
+                if (newState == androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE) {
                     if (presenter.needToScroll) {
                         presenter.needToScroll = false
                         recycle_assets.smoothScrollBy(0, -dp2px(1))
@@ -248,8 +248,8 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
     }
 
     private fun setElevationListener() {
-        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recycle_assets.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 presenter.enableElevation = recyclerView.computeVerticalScrollOffset() > 4
                 elevationAppBarChangeListener?.onChange(presenter.enableElevation)
@@ -282,8 +282,8 @@ class AssetsFragment : BaseFragment(), AssetsView, WalletTabShadowListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_sorting -> {
                 analytics.trackEvent(AnalyticEvents.WalletTokenSortingPageEvent)
                 launchActivity<AssetsSortingActivity>(REQUEST_SORTING)

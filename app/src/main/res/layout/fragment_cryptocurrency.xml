@@ -18,7 +18,7 @@
         android:orientation="vertical">
 
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -48,7 +48,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     app:srcCompat="@drawable/ic_info_18_warning_600" />
@@ -59,7 +59,7 @@
                     android:layout_marginLeft="14dp"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/attention_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                         app:fontFamily="@font/roboto_bold"
                         tools:text="@string/receive_minimum_amount" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/attention_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     app:srcCompat="@drawable/ic_warning_18_disabled_500" />
@@ -102,7 +102,7 @@
                     android:layout_marginLeft="14dp"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/warning_crypto_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                         app:fontFamily="@font/roboto_bold"
                         tools:text="@string/receive_warning_crypto" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/warning_crypto_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/view_line_3"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"

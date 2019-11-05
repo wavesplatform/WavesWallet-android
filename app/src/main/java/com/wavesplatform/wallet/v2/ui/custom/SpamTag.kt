@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
+import androidx.appcompat.widget.AppCompatTextView
 import android.util.AttributeSet
 import com.wavesplatform.wallet.R
 import pers.victor.ext.findColor

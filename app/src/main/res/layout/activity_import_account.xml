@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title" />
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             tl:tl_textsize="14sp"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"/>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
         android:id="@+id/viewpager_import"

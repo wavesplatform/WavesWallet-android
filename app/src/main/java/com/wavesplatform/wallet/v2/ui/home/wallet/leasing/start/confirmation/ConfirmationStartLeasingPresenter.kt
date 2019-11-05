@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.model.request.node.LeaseTransaction
 import com.wavesplatform.sdk.utils.isSmartError

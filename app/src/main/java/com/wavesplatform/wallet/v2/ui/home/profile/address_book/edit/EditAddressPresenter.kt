@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save

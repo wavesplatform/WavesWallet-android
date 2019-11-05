@@ -20,13 +20,13 @@
         android:paddingEnd="16dp"
         android:paddingBottom="14dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_no_internet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_refresh_18_white" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_no_internet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

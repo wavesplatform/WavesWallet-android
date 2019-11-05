@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.model.local
 
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 
 data class WelcomeItem(
     @DrawableRes var image: Int,

@@ -9,7 +9,7 @@
     android:paddingTop="24dp"
     android:paddingBottom="24dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:paddingEnd="48dp"
         app:srcCompat="@drawable/text_logo" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:textColor="@color/basic500"
         android:textSize="14sp" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_site"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:textColor="@color/black"
         android:textSize="16sp" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_whitepaper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:layout_marginEnd="64dp"
         android:background="@color/accent50" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_terms"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         android:layout_marginEnd="64dp"
         android:background="@color/accent50" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_support"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
         android:layout_marginEnd="64dp"
         android:background="@color/accent50" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
@@ -127,7 +127,7 @@
         android:paddingStart="24dp"
         android:paddingEnd="48dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_github"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
             android:clickable="true"
             app:srcCompat="@drawable/ic_s_github_28" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_telegram"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
             android:clickable="true"
             app:srcCompat="@drawable/ic_s_telegram_28" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_discord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
             android:clickable="true"
             app:srcCompat="@drawable/ic_s_discord_28" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_twitter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
             android:clickable="true"
             app:srcCompat="@drawable/ic_s_twitter_28" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_reddit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

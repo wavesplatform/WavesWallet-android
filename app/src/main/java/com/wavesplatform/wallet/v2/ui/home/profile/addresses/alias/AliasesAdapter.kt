@@ -7,9 +7,9 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.R
+import com.jakewharton.rxbinding3.view.clicks
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +25,7 @@ class AliasesAdapter @Inject constructor() : BaseQuickAdapter<AliasTransactionRe
     override fun convert(helper: BaseViewHolder, item: AliasTransactionResponse) {
         helper.itemView.text_alias_name.text = item.alias
 
-        subscriptions?.add(RxView.clicks(helper.itemView.image_copy)
+        subscriptions?.add(helper.itemView.image_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.ui.custom
 
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import android.view.animation.Interpolator
 
 import jp.wasabeef.recyclerview.animators.BaseItemAnimator
@@ -21,7 +21,7 @@ class FadeInWithoutDelayAnimator : BaseItemAnimator {
         mInterpolator = interpolator
     }
 
-    override fun animateRemoveImpl(holder: RecyclerView.ViewHolder) {
+    override fun animateRemoveImpl(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
         if (animationEnable) {
             ViewCompat.animate(holder.itemView)
                     .alpha(0f)
@@ -32,13 +32,13 @@ class FadeInWithoutDelayAnimator : BaseItemAnimator {
         }
     }
 
-    override fun preAnimateAddImpl(holder: RecyclerView.ViewHolder?) {
+    override fun preAnimateAddImpl(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder?) {
         if (animationEnable) {
             ViewCompat.setAlpha(holder!!.itemView, 0f)
         }
     }
 
-    override fun animateAddImpl(holder: RecyclerView.ViewHolder) {
+    override fun animateAddImpl(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
         if (animationEnable) {
             ViewCompat.animate(holder.itemView)
                     .alpha(1f)

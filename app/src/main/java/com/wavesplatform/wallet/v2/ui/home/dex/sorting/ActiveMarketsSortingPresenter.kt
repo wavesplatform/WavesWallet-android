@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse

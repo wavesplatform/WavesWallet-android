@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout

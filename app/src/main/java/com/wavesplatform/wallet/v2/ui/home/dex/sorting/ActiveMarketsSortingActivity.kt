@@ -7,13 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
@@ -56,12 +56,12 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         setupToolbar(toolbar_view, true, getString(R.string.dex_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
 
-        recycle_markets.layoutManager = LinearLayoutManager(this)
+        recycle_markets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recycle_markets.itemAnimator = FadeInWithoutDelayAnimator()
         adapter.bindToRecyclerView(recycle_markets)
 
-        recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recycle_markets.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 appbar_layout.isSelected = recycle_markets.canScrollVertically(-1)
             }
         })
@@ -91,7 +91,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         // allow drag and manage background of view
         adapter.enableDragItem(itemTouchHelper, R.id.image_drag, false)
         adapter.setOnItemDragListener(object : OnItemDragListener {
-            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+            override fun onItemDragStart(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, pos: Int) {
                 if (view_drag_bg.height == 0) {
                     view_drag_bg.setHeight(viewHolder.itemView.card_market.height - dp2px(1))
                     view_drag_bg.setWidth(viewHolder.itemView.card_market.width - dp2px(1))
@@ -105,7 +105,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
                 viewHolder.itemView.card_market.cardElevation = dp2px(4).toFloat()
             }
 
-            override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
+            override fun onItemDragMoving(source: androidx.recyclerview.widget.RecyclerView.ViewHolder, from: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, to: Int) {
                 presenter.needToUpdate = true
 
                 val originalPos = IntArray(2)
@@ -113,7 +113,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
             }
 
-            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+            override fun onItemDragEnd(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, pos: Int) {
                 viewHolder.itemView.card_market.cardElevation = dp2px(2).toFloat()
                 view_drag_bg.gone()
             }

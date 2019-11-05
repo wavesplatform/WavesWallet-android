@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -57,7 +57,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         }
     }
 
-    override fun onDragEnd(viewHolder: RecyclerView.ViewHolder) {
+    override fun onDragEnd(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
         dragStartListener?.onEndDrag(viewHolder)
     }
 

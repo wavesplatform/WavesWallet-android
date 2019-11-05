@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.network
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import javax.inject.Inject

@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.splash
 
 import android.content.Intent
 import android.text.TextUtils
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

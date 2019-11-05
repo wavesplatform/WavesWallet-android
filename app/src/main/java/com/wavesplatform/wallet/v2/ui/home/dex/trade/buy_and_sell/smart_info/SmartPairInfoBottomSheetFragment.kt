@@ -38,12 +38,12 @@ class SmartPairInfoBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
         rootView.button_continue.click {
             listener.onContinueClicked(rootView.checkbox_not_show_again.isChecked)
-            dialog.dismiss()
+            dialog?.dismiss()
         }
 
         rootView.button_cancel.click {
             listener.onCancelClicked(rootView.checkbox_not_show_again.isChecked)
-            dialog.dismiss()
+            dialog?.dismiss()
         }
 
         return rootView

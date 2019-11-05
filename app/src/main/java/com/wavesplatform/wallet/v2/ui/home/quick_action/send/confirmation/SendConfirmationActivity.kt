@@ -10,28 +10,27 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.transaction.TransferTransactionResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
-import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import java.math.BigDecimal
@@ -116,7 +115,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             attachment_layout.gone()
         } else {
             attachment_layout.visiable()
-            eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
+            eventSubscriptions.add(edit_optional_message.textChanges()
                     .map { text -> text.toString() }
                     .map { text ->
                         val isValidDescription = validateDescription(text)

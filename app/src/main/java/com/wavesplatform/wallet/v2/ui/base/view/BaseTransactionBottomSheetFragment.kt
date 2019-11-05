@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.content.ClipData
 import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.widget.AppCompatImageView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.appcompat.widget.AppCompatImageView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,9 +60,9 @@ abstract class BaseTransactionBottomSheetFragment<T> : BaseSuperBottomSheetDialo
             val closeOriginalPos = IntArray(2)
             close.getLocationOnScreen(closeOriginalPos)
 
-            val dialogHeight = dialog.findViewById<CoordinatorLayout>(R.id.coordinator).height
+            val dialogHeight = dialog?.findViewById<CoordinatorLayout>(R.id.coordinator)?.height
             val imageCloseBottomY = (closeOriginalPos[1] + close.height)
-            val difference = dialogHeight - imageCloseBottomY
+            val difference = dialogHeight!! - imageCloseBottomY
 
             if (imageCloseBottomY < dialogHeight && difference > 0) {
                 val lp = close.layoutParams as RelativeLayout.LayoutParams

@@ -5,20 +5,19 @@
 
 package com.wavesplatform.wallet;
 
-import android.arch.lifecycle.ProcessLifecycleOwner;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate;
 import com.crashlytics.android.Crashlytics;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
-import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.sdk.WavesSdk;
 import com.wavesplatform.sdk.utils.Environment;
 import com.wavesplatform.wallet.v2.data.analytics.Analytics;
@@ -56,10 +55,6 @@ public class App extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        LeakCanary.install(this);
 
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());

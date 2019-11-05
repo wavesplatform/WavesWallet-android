@@ -11,14 +11,14 @@
     android:paddingEnd="12dp"
     android:paddingBottom="24dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_transaction_type"
         android:layout_width="@dimen/asset_icon_size"
         android:layout_height="@dimen/asset_icon_size"
         android:layout_gravity="center_horizontal"
         app:srcCompat="@drawable/ic_t_startlease_48" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_transaction_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:layout_toEndOf="@+id/image_transaction_type"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_transaction_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             android:textSize="20sp"
             tools:text="1.99800118" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_tag"
             style="@style/TickerTag"
             android:layout_gravity="center_vertical"
