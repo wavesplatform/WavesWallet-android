@@ -13,4 +13,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 @StateStrategyType(SkipStrategy::class)
 interface AssetDetailsView : BaseMvpView {
     fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalanceResponse>)
+    fun afterSuccessLoadTransaction()
 }

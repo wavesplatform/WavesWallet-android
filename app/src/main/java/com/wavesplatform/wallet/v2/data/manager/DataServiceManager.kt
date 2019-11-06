@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.sdk.model.request.data.AssetsRequest
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.*
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
@@ -16,12 +17,11 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
+import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTradesPresenter.Companion.DEFAULT_LAST_TRADES_LIMIT
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,20 +40,6 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
                 }
     }
 
-    fun loadDexPairInfo(watchMarket: WatchMarketResponse): Observable<WatchMarketResponse> {
-        return Observable.interval(0, 30, TimeUnit.SECONDS)
-                .retry(3)
-                .flatMap {
-                    dataService.pairs(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
-                            .map {
-                                prefsUtil.setValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, EnvironmentManager.getTime())
-                                watchMarket.pairResponse = it
-                                return@map watchMarket
-                            }
-                }
-                .onErrorResumeNext(Observable.empty())
-    }
-
     fun loadAlias(alias: String): Observable<AliasTransactionResponse> {
         val localAlias = queryFirst<AliasDb> { equalTo("alias", alias) }
 
@@ -69,10 +55,10 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    fun assets(ids: List<String?>? = null, search: String? = null, limit: Int? = null): Observable<List<AssetInfoResponse>> {
+    fun assets(ids: List<String?>? = mutableListOf(), search: String? = ""): Observable<List<AssetInfoResponse>> {
         if (ids != null && ids.isNotEmpty()
                 || search != null && search.isNotEmpty()) {
-            return dataService.assets(ids = ids, search = search, limit = limit)
+            return dataService.assets(AssetsRequest(ids = ids, search = search))
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {

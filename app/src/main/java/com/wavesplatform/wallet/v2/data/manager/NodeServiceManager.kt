@@ -27,8 +27,8 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -52,24 +52,6 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     lateinit var matcherServiceManager: MatcherServiceManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-
-    fun loadSpamAssets(): Observable<ArrayList<SpamAssetResponse>> {
-        return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
-                .map {
-                    val scanner = Scanner(it)
-                    val spam = arrayListOf<SpamAssetResponse>()
-                    while (scanner.hasNextLine()) {
-                        spam.add(SpamAssetResponse(scanner.nextLine().split(",")[0]))
-                    }
-                    scanner.close()
-
-                    // clear old spam list and save new
-                    deleteAll<SpamAssetDb>()
-                    SpamAssetDb.convertToDb(spam).saveAll()
-
-                    return@map spam
-                }
-    }
 
     fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransactionResponse> {
         tx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
@@ -99,7 +81,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
 
     fun loadAssets(assetsFromDb: List<AssetBalanceResponse>? = null)
             : Observable<Pair<List<AssetBalanceResponse>, List<SpamAssetResponse>>> {
-        return loadSpamAssets()
+        return githubServiceManager.loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->

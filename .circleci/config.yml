@@ -42,6 +42,15 @@ jobs:
           name: Add android.jks
           command: echo $KEYSTORE_FILE | base64 -di > app/android.jks
       - run:
+          name: Load app configurations files
+          command: |
+            curl \
+            https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv --output app/src/main/assets/spam_tokens.csv \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/fee.json --output app/src/main/assets/fee.json \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_mainnet.json --output WavesSDK-android/wavesplatform/src/main/assets/environment_mainnet.json \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_testnet.json --output WavesSDK-android/wavesplatform/src/main/assets/environment_testnet.json \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_stagenet.json --output WavesSDK-android/wavesplatform/src/main/assets/environment_stagenet.json
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
@@ -104,6 +113,15 @@ jobs:
       - run:
           name: Add android.jks
           command: echo $KEYSTORE_FILE | base64 -di > app/android.jks
+      - run:
+          name: Load app configurations files
+          command: |
+            curl \
+            https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv --output app/src/main/assets/spam_tokens.csv \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/fee.json --output app/src/main/assets/fee.json \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_mainnet.json --output WavesSDK-android/wavesplatform/src/main/assets/environment_mainnet.json \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_testnet.json --output WavesSDK-android/wavesplatform/src/main/assets/environment_testnet.json \
+            https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_stagenet.json --output WavesSDK-android/wavesplatform/src/main/assets/environment_stagenet.json
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies

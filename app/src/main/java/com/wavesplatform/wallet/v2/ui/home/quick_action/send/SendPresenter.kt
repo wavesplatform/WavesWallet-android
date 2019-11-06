@@ -22,7 +22,7 @@ import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayMetadataArgs
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
@@ -116,7 +116,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun isGatewayAmountError(): Boolean {
-        if ((type == Type.ERGO || type == Type.VOSTOK || type == Type.GATEWAY)
+        if ((type == Type.ERGO || type == Type.WAVES_ENTERPRISE || type == Type.GATEWAY)
                 && selectedAsset != null && gatewayMetadata.maxLimit.toFloat() > 0) {
             val totalAmount = amount + gatewayMetadata.fee
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
@@ -134,7 +134,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         } else {
             val validFee = if (tx.feeAssetId.isWaves()) {
                 tx.fee <= queryFirst<AssetBalanceDb> {
-                    equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
+                    equalTo("assetId", "")
+                }?.convertFromDb()?.balance ?: 0
             } else {
                 true
             }
@@ -182,7 +183,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return true
         }
 
-        if (type == Type.VOSTOK && recipient.isValidVostokAddress() && selectedAsset!!.assetId == recipientAssetId) {
+        if (type == Type.WAVES_ENTERPRISE && recipient.isValidWavesEnterpriseAddress() && selectedAsset!!.assetId == recipientAssetId) {
             return true
         }
 
@@ -260,6 +261,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                         }))
     }
 
+    fun isAmountValid(amount: BigDecimal): Boolean {
+        val tx = getTxRequest()
+        tx.amount = MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset)
+        return isFundSufficient(tx)
+    }
+
     companion object {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
@@ -278,7 +285,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     enum class Type {
         ALIAS,
         WAVES,
-        VOSTOK,
+        WAVES_ENTERPRISE,
         ERGO,
         GATEWAY,
         UNKNOWN

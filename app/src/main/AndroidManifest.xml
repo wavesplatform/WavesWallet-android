@@ -44,6 +44,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="waves" />
+                <data
+                    android:host="client.wavesplatform.com"
+                    android:scheme="https" />
+                <data
+                    android:host="beta.wavesplatform.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
@@ -240,10 +246,6 @@
             android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity
-            android:name=".v2.ui.whats_new.WhatsNewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.history.HistoryActivity"
             android:screenOrientation="portrait"

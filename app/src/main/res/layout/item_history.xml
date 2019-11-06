@@ -28,13 +28,13 @@
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_t_startlease_48" />
 
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_transaction_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
             android:gravity="center_vertical"
             android:layout_marginEnd="4dp"
             android:layout_toStartOf="@+id/image_info"
@@ -49,11 +49,12 @@
             tools:text="Started Leasing" />
 
         <RelativeLayout
-            android:layout_below="@+id/text_transaction_name"
-            android:layout_marginStart="8dp"
+            android:layout_alignBottom="@+id/image_transaction"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_toStartOf="@+id/image_info"
+            android:layout_marginBottom="3dp"
             android:layout_toEndOf="@+id/image_transaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -64,12 +65,14 @@
                 android:lines="1"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
+                android:layout_marginStart="4dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:autoSizeMaxTextSize="16sp"
                 app:autoSizeMinTextSize="10sp"
+                android:visibility="visible"
                 android:layout_marginEnd="55dp"
                 app:autoSizeStepGranularity="1sp"
                 app:autoSizeTextType="uniform"
@@ -78,10 +81,10 @@
             <LinearLayout
                 android:id="@+id/linear_tags"
                 android:layout_marginEnd="4dp"
-                android:layout_marginStart="-55dp"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
+                android:layout_marginStart="-55dp"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/text_transaction_value"
                 android:orientation="horizontal">
@@ -102,6 +105,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
                     tools:visibility="visible"
+                    tools:text="Spam"
                     android:visibility="gone" />
 
             </LinearLayout>

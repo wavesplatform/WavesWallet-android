@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.SpamAssetResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey

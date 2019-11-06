@@ -2,23 +2,19 @@ package com.wavesplatform.wallet.v2.util
 
 import android.app.Application
 import com.google.gson.Gson
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.EnvironmentExternalProperties
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.URL_CONFIG_MAIN_NET
 import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.URL_CONFIG_STAGE_NET
 import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.URL_CONFIG_TEST_NET
-import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.URL_RAW_CONFIG_MAIN_NET
-import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.URL_RAW_CONFIG_STAGE_NET
-import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.URL_RAW_CONFIG_TEST_NET
 import java.io.IOException
 import java.nio.charset.Charset
 
 class ClientEnvironment internal constructor(
         val name: String,
         val url: String,
-        val rawUrl: String,
         jsonFileName: String,
         val externalProperties: EnvironmentExternalProperties) {
 
@@ -35,38 +31,36 @@ class ClientEnvironment internal constructor(
     }
 
     companion object {
-
         const val KEY_ENV_STAGE_NET = "env_stagenet"
         const val KEY_ENV_TEST_NET = "env_testnet"
         const val KEY_ENV_MAIN_NET = "env_prod"
 
-        private const val FILENAME_TEST_NET = "environment_testnet.json"
-        private const val FILENAME_MAIN_NET = "environment_mainnet.json"
-        private const val FILENAME_STAGE_NET = "environment_stagenet.json"
+        const val FILENAME_TEST_NET = "environment_testnet.json"
+        const val FILENAME_MAIN_NET = "environment_mainnet.json"
+        const val FILENAME_STAGE_NET = "environment_stagenet.json"
 
         var STAGE_NET = ClientEnvironment(KEY_ENV_STAGE_NET,
                 URL_CONFIG_STAGE_NET,
-                URL_RAW_CONFIG_STAGE_NET,
                 FILENAME_STAGE_NET,
                 EnvironmentExternalProperties(
-                        Constants.Vostok.STAGE_NET_CODE,
+                        Constants.WavesEnterprise.STAGE_NET_CODE,
                         Constants.Fiat.StageNet.USD_ID,
                         Constants.Fiat.StageNet.EUR_ID,
                         Constants.MatcherAddress.STAGE_NET))
 
         var TEST_NET = ClientEnvironment(KEY_ENV_TEST_NET,
                 URL_CONFIG_TEST_NET,
-                URL_RAW_CONFIG_MAIN_NET, FILENAME_TEST_NET,
+                FILENAME_TEST_NET,
                 EnvironmentExternalProperties(
-                        Constants.Vostok.TEST_NET_CODE,
+                        Constants.WavesEnterprise.TEST_NET_CODE,
                         Constants.Fiat.TestNet.USD_ID,
                         Constants.Fiat.TestNet.EUR_ID,
                         Constants.MatcherAddress.TEST_NET))
 
         var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET,
-                URL_RAW_CONFIG_TEST_NET, FILENAME_MAIN_NET,
+                FILENAME_MAIN_NET,
                 EnvironmentExternalProperties(
-                        Constants.Vostok.MAIN_NET_CODE,
+                        Constants.WavesEnterprise.MAIN_NET_CODE,
                         Constants.Fiat.MainNet.USD_ID,
                         Constants.Fiat.MainNet.EUR_ID,
                         Constants.MatcherAddress.MAIN_NET))

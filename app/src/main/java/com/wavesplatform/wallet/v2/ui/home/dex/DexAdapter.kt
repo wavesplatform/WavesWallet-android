@@ -5,10 +5,11 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex
 
+import android.graphics.drawable.Drawable
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.data.WatchMarketResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
 import com.wavesplatform.sdk.utils.notNull
 import pers.victor.ext.findDrawable
 import java.math.BigDecimal
@@ -17,32 +18,44 @@ import javax.inject.Inject
 class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarketResponse, BaseViewHolder>(R.layout.item_dex_layout, null) {
 
     override fun convert(helper: BaseViewHolder, item: WatchMarketResponse) {
-        if (item.pairResponse?.data != null) {
-            item.pairResponse?.data.notNull { data ->
-                val deltaPercent = (data.lastPrice.minus(data.firstPrice)).times(BigDecimal(100))
+        if (item.pairResponse != null) {
+            item.pairResponse.notNull { data ->
+                val deltaPercent = if (data.firstPrice > data.lastPrice) {
+                    (data.firstPrice.minus(data.lastPrice)).times(BigDecimal(100))
+                } else {
+                    (data.lastPrice.minus(data.firstPrice)).times(BigDecimal(100))
+                }
 
-                val percent = if (deltaPercent != BigDecimal.ZERO) {
+                val percent = if (data.lastPrice != BigDecimal.ZERO) {
                     deltaPercent / data.lastPrice
                 } else {
                     BigDecimal.ZERO
                 }
 
-                val tradeIcon = when {
-                    percent > BigDecimal.ZERO -> {
-                        findDrawable(R.drawable.ic_chartarrow_success_400)
+
+                val tradeIconDrawable: Drawable?
+                var tradeSymbol = ""
+
+                when {
+                    data.lastPrice > data.firstPrice -> {
+                        tradeIconDrawable = findDrawable(R.drawable.ic_chartarrow_success_400)
+                        tradeSymbol = "+"
                     }
-                    percent < BigDecimal.ZERO -> {
-                        findDrawable(R.drawable.ic_chartarrow_error_500)
+                    data.firstPrice > data.lastPrice -> {
+                        tradeIconDrawable = findDrawable(R.drawable.ic_chartarrow_error_500)
+                        tradeSymbol = "-"
                     }
-                    percent == BigDecimal.ZERO -> {
-                        findDrawable(R.drawable.ic_chartarrow_accent_100)
+                    data.lastPrice == data.firstPrice -> {
+                        tradeIconDrawable = findDrawable(R.drawable.ic_chartarrow_accent_100)
                     }
-                    else -> findDrawable(R.drawable.ic_chartarrow_accent_100)
+                    else -> {
+                        tradeIconDrawable = findDrawable(R.drawable.ic_chartarrow_accent_100)
+                    }
                 }
 
-                helper.setImageDrawable(R.id.image_dex_trade, tradeIcon)
+                helper.setImageDrawable(R.id.image_dex_trade, tradeIconDrawable)
                         .setText(R.id.text_price, data.lastPrice.stripTrailingZeros().toPlainString())
-                        .setText(R.id.text_percent, "${"%.2f".format(percent)}%")
+                        .setText(R.id.text_percent, "$tradeSymbol${"%.2f".format(percent)}%")
             }
         } else {
             helper.setImageDrawable(R.id.image_dex_trade, findDrawable(R.drawable.ic_chartarrow_accent_100))

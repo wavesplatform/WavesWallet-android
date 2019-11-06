@@ -45,8 +45,8 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         viewpager_import.adapter = ImportAccountFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.import_account_tab_scan),
                 getString(R.string.import_account_tab_manually)))
 
-        stl_history.setViewPager(viewpager_import)
-        stl_history.currentTab = 0
+        stl_import_tabs.setViewPager(viewpager_import)
+        stl_import_tabs.currentTab = 0
     }
 
     override fun onBackPressed() {

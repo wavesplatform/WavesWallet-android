@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 
 object Constants {
@@ -15,10 +15,9 @@ object Constants {
     // Production
     const val URL_COINOMAT = "https://coinomat.com/api/"
     const val URL_GITHUB = "https://github.com/wavesplatform/"
-    const val URL_GITHUB_PROXY = "https://github-proxy.wvservices.com"
-    const val URL_GITHUB_CONFIG = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/"
+    const val URL_GITHUB_PROXY = "https://raw.githubusercontent.com"
+    const val URL_GITHUB_CONFIG = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/"
     const val URL_GITHUB_CONFIG_VERSION = "master/version_android.json"
-    const val URL_GITHUB_CONFIG_SPAM_FILE = "master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_privacy_policy.pdf"
     const val URL_TERMS_AND_CONDITIONS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
@@ -28,6 +27,9 @@ object Constants {
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
     const val URL_REDDIT = "https://www.reddit.com/r/WavesSdk/"
+
+    const val GITHUB_SPAM_FILE = "spam_tokens.csv"
+    const val GITHUB_FEE_FILE = "fee.json"
 
     const val ACC_TWITTER = "wavesplatform"
     const val ACC_TELEGRAM = "wavesnews"
@@ -60,7 +62,7 @@ object Constants {
         const val FULL_GONE = 0f
     }
 
-    object Vostok {
+    object WavesEnterprise {
         const val PROD_GATEWAY_URL = "https://gateways-dev.wvservices.com/api/v1/"
         const val TEST_GATEWAY_URL = "https://gw.wavesplatform.com"
         const val MAIN_NET_CODE = 'V'
@@ -144,10 +146,10 @@ object Constants {
             gatewayId = "WCT",
             displayName = "WavesCommunity")
 
-    val VstGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
+    val WeGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
             assetId = "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
-            gatewayId = "VST",
-            displayName = "Vostok") // github returns gatewayId = "Vostok"
+            gatewayId = "Vostok", // not actual, was used for Coinomat
+            displayName = "WEST")
 
     // HistoryTransactionResponse view types non HistoryTransactionResponse block-chain type
     const val ID_RECEIVED_TYPE = 0

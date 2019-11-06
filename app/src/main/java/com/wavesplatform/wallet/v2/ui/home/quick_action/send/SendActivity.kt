@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatTextView
@@ -31,6 +32,7 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMetadata
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
@@ -64,6 +66,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private var xRateSkeletonView: SkeletonScreen? = null
     private var assetsSkeletonView: SkeletonScreen? = null
+    private val handler = Handler()
 
     @ProvidePresenter
     fun providePresenter(): SendPresenter = presenter
@@ -115,25 +118,45 @@ class SendActivity : BaseActivity(), SendView {
                 presenter.attachment = attachment
                 presenter.amount = BigDecimal(amount)
             }
+            intent.hasExtra(KEY_INTENT_DEEP_SEND) -> {
+                handler.postDelayed({
+                    setDataFromUrl(intent.getStringExtra(KEY_INTENT_DEEP_SEND_LINK))
+                }, 400)
+                setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
+                        R.drawable.ic_toolbar_back_black) { launchActivity<MainActivity>(clear = true) }
+            }
             else -> assetEnable(true)
         }
 
-        edit_amount.addTextChangedListener {
-            on { s, _, _, _ ->
-                if (s.isNotEmpty()) {
-                    horizontal_amount_suggestion.visiable()
-                    linear_fees_error.gone()
-                }
-                val amount = edit_amount.text?.toString() ?: "0"
-                if (amount.isNotBlank()) {
-                    if (amount == "." || amount == "-") {
-                        presenter.amount = BigDecimal.ZERO
-                    } else {
-                        presenter.amount = BigDecimal(amount)
+        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .map { text ->
+                    if (text.isNotEmpty()) {
+                        horizontal_amount_suggestion.visiable()
+                        linear_fees_error.gone()
                     }
                 }
-            }
-        }
+                .filter { presenter.selectedAsset != null }
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .map {
+                    val amount = edit_amount.text?.toString() ?: "0"
+                    return@map if (amount.isNotBlank()) {
+                        if (amount == "." || amount == "-") {
+                            BigDecimal.ZERO
+                        } else {
+                            BigDecimal(amount)
+                        }
+                    } else {
+                        BigDecimal.ZERO
+                    }
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { amount -> validateAmount(amount) to amount }
+                .filter { (isValid, _) -> isValid }
+                .subscribe { (_, amount) ->
+                    presenter.amount = amount
+                })
 
         image_view_recipient_action.click {
             if (it.tag == R.drawable.ic_deladdress_24_error_400) {
@@ -165,6 +188,17 @@ class SendActivity : BaseActivity(), SendView {
 
         setRecipientSuggestions()
         commission_card.gone()
+    }
+
+    private fun validateAmount(amount: BigDecimal): Boolean {
+        val isAmountValid = presenter.isAmountValid(amount)
+
+        if (isAmountValid) text_amount_error.gone()
+        else text_amount_error.visiable()
+
+        button_continue.isEnabled = isAmountValid
+
+        return isAmountValid
     }
 
     private fun setupCommissionBlock() {
@@ -282,7 +316,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalanceResponse) {
         if (presenter.type == SendPresenter.Type.GATEWAY
-                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.WAVES_ENTERPRISE
                 || presenter.type == SendPresenter.Type.ERGO) {
             val total = BigDecimal.valueOf(amount,
                     assetBalance.getDecimals())
@@ -337,7 +371,8 @@ class SendActivity : BaseActivity(), SendView {
         xRateSkeletonView?.hide()
 
         gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
-                metadata.fee.toString(), gatewayTicket)
+                metadata.fee.toPlainString().stripZeros(),
+                gatewayTicket)
         gateway_limits?.text = getString(R.string.send_gateway_info_gateway_limits,
                 gatewayTicket, metadata.minLimit, metadata.maxLimit)
         gateway_warning?.text = getString(R.string.send_gateway_info_gateway_warning,
@@ -375,13 +410,13 @@ class SendActivity : BaseActivity(), SendView {
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
                 }
-                recipient.isValidVostokAddress() -> {
+                recipient.isValidWavesEnterpriseAddress() -> {
                     presenter.recipientAssetId = EnvironmentManager.globalConfiguration.generalAssets
                             .firstOrNull { it.assetId == presenter.selectedAsset?.assetId }?.assetId
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         onNotValidAssetForAddress()
                     } else {
-                        presenter.type = SendPresenter.Type.VOSTOK
+                        presenter.type = SendPresenter.Type.WAVES_ENTERPRISE
                         setRecipientValid(true)
                         loadGatewayXRate(presenter.recipientAssetId!!)
                     }
@@ -561,6 +596,9 @@ class SendActivity : BaseActivity(), SendView {
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))
             try {
+                val params = uri.query.split("&")
+                val strict = params.any { param -> param == QUERY_PARAM_STRICT }
+
                 var assetId = uri.path.split("/")[2]
                 if (WavesConstants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
@@ -578,33 +616,42 @@ class SendActivity : BaseActivity(), SendView {
                 } else {
                     showLoadAssetSuccess(assetBalance)
                     setAsset(assetBalance)
-                    assetEnable(false)
+                    assetEnable(!strict)
                 }
 
-                val params = uri.query.split("&")
-                for (parameter in params) {
-                    if (parameter.contains("recipient=")) {
-                        val recipient = parameter.replace("recipient=", "")
-                        edit_address.setText(recipient)
-                        recipientEnable(false)
-                    }
-                    if (parameter.contains("amount=")) {
-                        val amount = BigDecimal(parameter.replace("amount=", "")
-                                .stripZeros())
-                        if (amount == BigDecimal.ZERO) {
-                            edit_amount.setText("")
-                            amountEnable(true)
-                        } else {
-                            edit_amount.setText(amount.toPlainString().stripZeros())
-                            amountEnable(false)
-                            if (amount.toDouble() <
-                                    MoneyUtil.getScaledText(1, assetBalance).toDouble()) {
-                                showError(R.string.invalid_amount, R.id.root)
+
+                params.forEach { parameter ->
+                    when {
+                        parameter.contains(QUERY_PARAM_AMOUNT) -> {
+                            try {
+                                val amount = BigDecimal(parameter.replace(QUERY_PARAM_AMOUNT, "")
+                                        .stripZeros())
+                                if (amount == BigDecimal.ZERO) {
+                                    edit_amount.setText("")
+                                    amountEnable(true)
+                                } else {
+                                    edit_amount.setText(amount.toPlainString().stripZeros())
+                                    amountEnable(!strict)
+                                    if (amount.toDouble() > assetBalance.getAvailableBalance().toDouble()) {
+                                        amountEnable(true)
+                                    }
+                                }
+                            } catch (e: Throwable) {
+                                edit_amount.setText("")
+                                amountEnable(true)
                             }
                         }
-                    } else {
-                        edit_amount.setText("")
-                        amountEnable(true)
+                        parameter.contains(QUERY_PARAM_ATTACHMENT) -> {
+                            val attachment = parameter.replace(QUERY_PARAM_ATTACHMENT, "")
+                            if (attachment.isEmpty().not()) {
+                                presenter.attachment = attachment
+                            }
+                        }
+                        parameter.contains(QUERY_PARAM_RECIPIENT) -> {
+                            val recipient = parameter.replace(QUERY_PARAM_RECIPIENT, "")
+                            edit_address.setText(recipient)
+                            recipientEnable(!strict)
+                        }
                     }
                 }
             } catch (error: Exception) {
@@ -667,12 +714,6 @@ class SendActivity : BaseActivity(), SendView {
 
 //            clearAddressField()
         }
-    }
-
-    private fun clearAddressField() {
-        edit_address.setText("")
-        presenter.recipient = ""
-        presenter.recipientAssetId = ""
     }
 
     private fun loadGatewayXRate(assetId: String) {
@@ -768,10 +809,16 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     companion object {
+        const val QUERY_PARAM_RECIPIENT = "recipient="
+        const val QUERY_PARAM_AMOUNT = "amount="
+        const val QUERY_PARAM_ATTACHMENT = "attachment="
+        const val QUERY_PARAM_STRICT = "strict"
         const val REQUEST_YOUR_ASSETS = 43
         const val REQUEST_SCAN_RECEIVE = 44
         const val REQUEST_SCAN_MONERO = 45
         const val REQUEST_SEND = 46
+        const val KEY_INTENT_DEEP_SEND = "deep_send"
+        const val KEY_INTENT_DEEP_SEND_LINK = "deep_send_link"
         const val KEY_INTENT_ASSET_DETAILS = "asset_details"
         const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
         const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"

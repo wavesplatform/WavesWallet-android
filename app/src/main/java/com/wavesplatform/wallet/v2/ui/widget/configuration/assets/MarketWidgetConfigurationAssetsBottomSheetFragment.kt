@@ -28,8 +28,9 @@ import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
-import com.wavesplatform.wallet.v2.data.model.service.cofigs.SpamAssetResponse
+import com.wavesplatform.wallet.v2.data.model.service.configs.SpamAssetResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.isFiat
 import com.wavesplatform.wallet.v2.util.showError
@@ -50,6 +51,8 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
     private val defaultAssets: MutableList<String> = mutableListOf()
     @Inject
     lateinit var dataServiceManager: DataServiceManager
+    @Inject
+    lateinit var githubServiceManager: GithubServiceManager
     @Inject
     lateinit var nodeDataManager: NodeServiceManager
     @Inject
@@ -179,7 +182,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         eventSubscriptions.add(
                 Observable.zip(dataServiceManager.assets(ids = defaultAssets),
                         if (spams.isEmpty()) {
-                            nodeDataManager.loadSpamAssets()
+                            githubServiceManager.loadSpamAssets()
                         } else {
                             Observable.fromArray(spams.values.toList())
                         },
