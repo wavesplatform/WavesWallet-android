@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view
 
 import android.graphics.Bitmap
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.wavesplatform.wallet.v2.util.zxing.Contents

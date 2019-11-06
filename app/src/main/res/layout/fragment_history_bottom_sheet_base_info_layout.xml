@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/view_line_1"
         style="@style/DashedLine"
         android:layout_marginStart="16dp"
@@ -28,14 +28,14 @@
             android:layout_marginTop="14dp"
             android:layout_marginBottom="9dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_block_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/history_details_block"
                 android:textColor="@color/basic500" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_block"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,14 +51,14 @@
             android:layout_marginTop="9dp"
             android:layout_marginBottom="9dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_confirmations_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/history_details_confirmations"
                 android:textColor="@color/basic500" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_confirmations"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
             android:layout_marginTop="9dp"
             android:layout_marginBottom="9dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_fee_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_fee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                     android:gravity="end"
                     tools:text="0.00000001 NodeTX2\n0.0001 Bitcoin" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_base_info_tag"
                     style="@style/TickerTag"
                     android:layout_marginStart="4dp"
@@ -112,14 +112,14 @@
             android:layout_marginTop="9dp"
             android:layout_marginBottom="9dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_timestamp_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/history_details_timestamp"
                 android:textColor="@color/basic500" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,14 +135,14 @@
             android:layout_marginTop="9dp"
             android:layout_marginBottom="14dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_status_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/history_details_status"
                 android:textColor="@color/basic500" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/view_line_2"
         style="@style/DashedLine"
         android:layout_marginStart="16dp"

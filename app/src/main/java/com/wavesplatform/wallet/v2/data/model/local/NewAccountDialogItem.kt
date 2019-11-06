@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.model.local
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.wavesplatform.wallet.R
 
 enum class NewAccountDialogItem(@StringRes var title: Int) : OptionsDialogModel {

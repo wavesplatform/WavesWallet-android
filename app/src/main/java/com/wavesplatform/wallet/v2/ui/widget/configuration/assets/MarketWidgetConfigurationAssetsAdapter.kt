@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 
-import android.support.v7.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatCheckBox
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse

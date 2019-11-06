@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.request.node.LeaseCancelTransaction
 import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse

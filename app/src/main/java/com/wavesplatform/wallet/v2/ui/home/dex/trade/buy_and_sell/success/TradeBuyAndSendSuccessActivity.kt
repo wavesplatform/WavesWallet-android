@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success
 
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics

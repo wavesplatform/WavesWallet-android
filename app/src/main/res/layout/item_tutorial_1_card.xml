@@ -12,7 +12,7 @@
         android:background="@android:color/transparent"
         android:padding="24dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_1_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:textSize="34sp"
             app:fontFamily="@font/roboto_bold" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/card_1_title"

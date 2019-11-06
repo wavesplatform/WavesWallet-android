@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -91,7 +91,7 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/view_line_3"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -120,7 +120,7 @@
                 </RelativeLayout>
 
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/view_line_1"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -139,14 +139,14 @@
         </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <FrameLayout
         android:alpha="0.6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_view_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/skeleton_basic_100_round_7" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </FrameLayout>
 </LinearLayout>

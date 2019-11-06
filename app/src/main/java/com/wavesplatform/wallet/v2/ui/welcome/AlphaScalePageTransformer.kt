@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.welcome
 
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import android.view.View
 import kotlinx.android.synthetic.main.item_asset_details_avatar.view.*
 import pers.victor.ext.dp2px

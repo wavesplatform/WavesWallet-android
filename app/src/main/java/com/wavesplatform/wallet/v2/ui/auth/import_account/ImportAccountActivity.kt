@@ -9,8 +9,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.sdk.utils.WAVES_PREFIX
 import com.wavesplatform.wallet.App

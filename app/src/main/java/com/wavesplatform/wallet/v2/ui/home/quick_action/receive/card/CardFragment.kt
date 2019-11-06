@@ -9,28 +9,33 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RadioButton
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.wallet.R
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection.SuccessRedirectionActivity
-import com.wavesplatform.wallet.v2.util.*
-import kotlinx.android.synthetic.main.fragment_card.*
+import com.wavesplatform.wallet.v2.util.applyFilterStartWithDot
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.content_asset_card.*
-import pers.victor.ext.*
+import kotlinx.android.synthetic.main.fragment_card.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -64,7 +69,7 @@ class CardFragment : BaseFragment(), CardView {
 
         edit_amount.applyFilterStartWithDot()
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+        eventSubscriptions.add(edit_amount.textChanges()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe { string ->
                     presenter.amountChanged(string.toString())

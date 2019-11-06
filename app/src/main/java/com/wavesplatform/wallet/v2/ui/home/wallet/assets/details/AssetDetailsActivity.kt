@@ -7,12 +7,12 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
+import com.google.android.material.appbar.AppBarLayout
+import androidx.core.content.ContextCompat
+import androidx.viewpager.widget.ViewPager
 import android.view.Menu
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save

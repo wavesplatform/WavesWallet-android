@@ -8,12 +8,12 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import android.text.TextUtils
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull

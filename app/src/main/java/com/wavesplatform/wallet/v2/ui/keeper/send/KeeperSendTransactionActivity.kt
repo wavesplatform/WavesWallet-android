@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
 import com.wavesplatform.sdk.model.request.node.DataTransaction
 import com.wavesplatform.sdk.model.request.node.InvokeScriptTransaction

@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.os.Bundle
 import android.util.Log
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity

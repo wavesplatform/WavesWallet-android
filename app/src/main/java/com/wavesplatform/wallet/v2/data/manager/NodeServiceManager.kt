@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.request.node.*

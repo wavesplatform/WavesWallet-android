@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/basic50">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
             android:orientation="vertical"
             android:paddingBottom="16dp">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -40,7 +40,7 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="24dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_asset_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/text_available_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                             android:textSize="16sp" />
 
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/text_dollar_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp">
 
-                            <android.support.v7.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/text_leased"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                                 android:textColor="@color/disabled900" />
 
 
-                            <android.support.v7.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -127,7 +127,7 @@
                                 android:textColor="@color/disabled500" />
                         </RelativeLayout>
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/view_line_3"
                             android:layout_width="match_parent"
                             android:layout_height="2dp"
@@ -140,7 +140,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="14dp">
 
-                            <android.support.v7.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/text_total"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
                                 android:textColor="@color/disabled900" />
 
 
-                            <android.support.v7.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -162,7 +162,7 @@
                         </RelativeLayout>
 
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/view_line_1"
                             android:layout_width="match_parent"
                             android:layout_height="2dp"
@@ -185,9 +185,9 @@
                 </LinearLayout>
 
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/card_view_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                 app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_view_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
                     android:text="@string/wallet_leasing_view_history"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/linear_active_leasing"
@@ -231,7 +231,7 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_active_leasing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
                         android:text="Hidden assets (2)"
                         android:textColor="@color/basic500" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_active_leasing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
                     app:el_expanded="true"
                     app:el_parallax="0.5">
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycle_active_leasing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -281,14 +281,14 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="8dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_hidden_assets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/wallet_leasing_quick_note"
                     android:textColor="@color/basic500" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_arrowup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -315,7 +315,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto"
@@ -324,7 +324,7 @@
                         android:textSize="16sp" />
 
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/view_line_4"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
@@ -333,7 +333,7 @@
                         android:layerType="software"
                         android:src="@drawable/shape_dashed_line" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_closelease_disabled_500"
@@ -344,7 +344,7 @@
                         android:textSize="16sp" />
 
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/view_line_5"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
@@ -353,7 +353,7 @@
                         android:layerType="software"
                         android:src="@drawable/shape_dashed_line" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto"
@@ -363,5 +363,5 @@
                 </LinearLayout>
             </net.cachapa.expandablelayout.ExpandableLayout>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

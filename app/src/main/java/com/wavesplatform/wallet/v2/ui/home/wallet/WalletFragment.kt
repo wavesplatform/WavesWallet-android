@@ -8,11 +8,11 @@ package com.wavesplatform.wallet.v2.ui.home.wallet
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.v4.view.ViewCompat
-import android.support.v4.view.ViewPager
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.android.material.appbar.AppBarLayout
+import androidx.core.view.ViewCompat
+import androidx.viewpager.widget.ViewPager
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents

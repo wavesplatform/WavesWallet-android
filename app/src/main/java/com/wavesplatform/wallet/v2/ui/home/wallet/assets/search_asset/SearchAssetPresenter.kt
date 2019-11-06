@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse

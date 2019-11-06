@@ -11,11 +11,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
 import android.view.*
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -292,8 +292,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_logout -> {
                 if (!MonkeyTest.isTurnedOn()) {
                     analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/img_brand">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_success"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,14 +23,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="44dp"
                 app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -59,7 +59,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -67,7 +67,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="11sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_time_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -94,7 +94,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="11sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_status_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -121,7 +121,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="11sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_price_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -148,7 +148,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="11sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_amount_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -179,6 +179,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

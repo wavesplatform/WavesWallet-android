@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:errorEnabled="true"
         app:hintTextAppearance="@style/TextLabel">
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edit_node_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
         app:errorEnabled="true"
         app:hintTextAppearance="@style/TextLabel">
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edit_matcher_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         app:errorEnabled="true"
         app:hintTextAppearance="@style/TextLabel">
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edit_spam_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
         android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
         android:text="@string/network_switch_off_spam_filtering"
         />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_spam_filter"
             android:layout_width="wrap_content"
             android:layout_centerVertical="true"
@@ -128,7 +128,7 @@
     </RelativeLayout>
 
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_save"
         style="@style/WavesButton"
         android:layout_width="match_parent"
@@ -140,7 +140,7 @@
         android:enabled="false"
         android:text="@string/network_save" />
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_set_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

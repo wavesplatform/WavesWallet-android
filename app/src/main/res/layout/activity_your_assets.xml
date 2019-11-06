@@ -16,7 +16,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,19 +25,19 @@
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/black" />
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar_view">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:fitsSystemWindows="true">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -65,10 +65,10 @@
                     android:textSize="16sp"
                     android:visibility="gone" />
 
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_assets"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -77,7 +77,7 @@
             android:clipToPadding="false"
             android:paddingBottom="12dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_your_assets"
             tools:orientation="vertical" />
 
@@ -89,6 +89,6 @@
             app:progress_image="@drawable/ic_loader_24_submit_400" />
 
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </RelativeLayout>

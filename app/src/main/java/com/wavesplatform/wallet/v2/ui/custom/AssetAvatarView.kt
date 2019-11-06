@@ -8,9 +8,9 @@ package com.wavesplatform.wallet.v2.ui.custom
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.support.annotation.NonNull
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.AppCompatImageView
+import androidx.annotation.NonNull
+import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.widget.AppCompatImageView
 import android.text.TextPaint
 import android.text.TextUtils
 import android.util.AttributeSet

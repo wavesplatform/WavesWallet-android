@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.keeper.send
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse

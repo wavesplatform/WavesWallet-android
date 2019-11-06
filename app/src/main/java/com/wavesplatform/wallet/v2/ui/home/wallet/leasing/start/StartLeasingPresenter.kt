@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.model.response.node.ScriptInfoResponse

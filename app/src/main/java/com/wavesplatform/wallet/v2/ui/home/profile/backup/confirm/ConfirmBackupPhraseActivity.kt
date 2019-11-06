@@ -7,13 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.CardView
+import androidx.cardview.widget.CardView
 import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants

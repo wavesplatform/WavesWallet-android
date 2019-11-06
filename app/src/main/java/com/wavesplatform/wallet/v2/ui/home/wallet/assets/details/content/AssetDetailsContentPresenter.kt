@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v2.data.model.local.TransactionType

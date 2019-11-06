@@ -12,7 +12,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,9 +49,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     override fun onCreateView(
@@ -67,14 +67,14 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
     private fun cancelDialog() {
         context.notNull {
-            fingerPrintDialogListener?.onCancelButtonClicked(this.dialog)
+            fingerPrintDialogListener?.onCancelButtonClicked(this.dialog!!)
         }
         fingerprintIdentify.cancelIdentify()
     }
 
     override fun onResume() {
         super.onResume()
-        dialog.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
+        dialog?.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
             if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
                 cancelDialog()
                 return@OnKeyListener true
@@ -91,7 +91,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun startIdentify() {
         onDefaultState()
         fingerprintIdentify = FingerprintIdentify(context)
-        fingerprintIdentify.startIdentify(AVAILABLE_TIMES, object : BaseFingerprint.FingerprintIdentifyListener {
+        fingerprintIdentify.startIdentify(AVAILABLE_TIMES, object : BaseFingerprint.IdentifyListener{
 
             override fun onSucceed() {
                 when (mode) {

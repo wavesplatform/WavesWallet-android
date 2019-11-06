@@ -7,18 +7,16 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
 import android.content.Intent
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showAlertAboutScriptedAccount
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
@@ -29,6 +27,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.activity_create_alias.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.app
 import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
@@ -79,7 +79,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
 
         presenter.fee = intent.getLongExtra(BUNDLE_BLOCKCHAIN_COMMISSION, 0L)
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_new_alias_symbol)
+        eventSubscriptions.add(edit_new_alias_symbol.textChanges()
                 .skipInitialValue()
                 .map {
                     presenter.aliasValidation = false

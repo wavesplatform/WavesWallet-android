@@ -8,23 +8,23 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.address
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v7.widget.AppCompatImageView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding3.view.clicks
+import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
+import com.wavesplatform.sdk.utils.Identicon
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -59,14 +59,14 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
                 .apply(RequestOptions().circleCrop())
                 .into(image_avatar)
 
-        eventSubscriptions.add(RxView.clicks(frame_share)
+        eventSubscriptions.add(frame_share.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     shareAddress()
                 })
 
-        eventSubscriptions.add(RxView.clicks(frame_copy)
+        eventSubscriptions.add(frame_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

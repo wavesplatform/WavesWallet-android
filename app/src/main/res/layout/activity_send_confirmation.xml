@@ -9,7 +9,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_send"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                     android:layout_marginTop="14dp"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_sum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                         android:textSize="16sp"
                         tools:text="-00000000.00000000" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
                         android:layout_gravity="center_vertical"
@@ -77,7 +77,7 @@
                 </LinearLayout>
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_sum_in_dollar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                     tools:text="≈ 00 000.00 US Dollar" />
 
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_line_1"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
@@ -99,7 +99,7 @@
                     android:layerType="software" />
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_sent_to_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                     android:textColor="@color/basic500"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_sent_to_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                     android:textSize="14sp"
                     tools:text="Mr. Big Mike" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_sent_to_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                     tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0" />
 
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_line_2"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
@@ -135,7 +135,7 @@
                     android:background="@drawable/shape_dashed_line"
                     android:layerType="software" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_fee_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_fee_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="5dp"
                         android:layout_marginTop="14dp"
@@ -175,7 +175,7 @@
                         android:background="@drawable/shape_dashed_line"
                         android:layerType="software" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_gateway_fee_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -184,7 +184,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="14sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_gateway_fee_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                     android:layout_marginTop="14dp"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_line_3"
                         android:layout_width="match_parent"
                         android:layout_height="5dp"
@@ -215,7 +215,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/text_description_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                             android:textColor="@color/basic500"
                             android:textSize="14sp" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/text_description_error"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
                     </RelativeLayout>
 
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edit_optional_message"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <android.support.v7.widget.AppCompatButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/button_confirm"
                         style="@style/WavesButton"
                         android:layout_width="match_parent"
@@ -274,7 +274,7 @@
 
         </ScrollView>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <RelativeLayout
         android:id="@+id/relative_success"
@@ -283,7 +283,7 @@
         android:layout_marginTop="24dp"
         android:visibility="gone">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_success"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -300,14 +300,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="44dp"
                     app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -317,7 +317,7 @@
                     android:textSize="16sp"
                     app:fontFamily="@font/roboto_medium" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_transaction_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -342,10 +342,10 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/add_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -366,7 +366,7 @@
                 android:layout_marginBottom="24dp"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_do_you_want"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -376,7 +376,7 @@
                     android:textColor="@color/disabled900"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sent_to_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -387,7 +387,7 @@
                     android:textColor="@color/basic700"
                     tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_add_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -399,11 +399,11 @@
 
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -424,7 +424,7 @@
             android:layout_marginBottom="24dp"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_loader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -433,7 +433,7 @@
                 android:padding="28dp"
                 app:srcCompat="@drawable/ic_loader_24_submit_400" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image_loader"
@@ -446,6 +446,6 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

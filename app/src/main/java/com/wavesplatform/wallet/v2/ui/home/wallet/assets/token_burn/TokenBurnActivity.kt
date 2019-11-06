@@ -7,9 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import android.content.Intent
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -21,6 +19,8 @@ import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
 import kotlinx.android.synthetic.main.content_commission.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.isNetworkConnected
@@ -68,7 +68,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                 presenter.assetBalance.getDecimals(),
                 Double.MAX_VALUE))
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+        eventSubscriptions.add(edit_amount.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)

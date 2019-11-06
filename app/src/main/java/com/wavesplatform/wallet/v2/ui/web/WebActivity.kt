@@ -10,8 +10,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.webkit.WebViewClient
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_web.*

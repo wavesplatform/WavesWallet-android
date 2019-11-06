@@ -12,14 +12,14 @@
     android:paddingStart="32dp"
     android:paddingTop="16dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_flag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         tools:src="@drawable/ic_flag_18_britain"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_language"
         android:layout_width="wrap_content"
         android:textSize="16sp"
@@ -30,7 +30,7 @@
         android:layout_toEndOf="@+id/image_flag"
         tools:text="English" />
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/checkbox_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.SkipStrategy
+import moxy.viewstate.strategy.StateStrategyType
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 

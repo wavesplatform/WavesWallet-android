@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
@@ -23,7 +23,7 @@
             android:text="@string/profile_general_setting"
             android:textColor="@color/disabled500" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_addresses_and_keys"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,23 +40,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_addresses_and_keys"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_address_book"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,23 +73,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_addresses_book"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -101,7 +101,7 @@
             android:textColor="@color/accent100"
             android:textSize="16sp" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_language"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,14 +118,14 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_language"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_language_flag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                     android:layout_toLeftOf="@+id/image_arrow"
                     app:srcCompat="@drawable/ic_flag_18_britain" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,10 +143,10 @@
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
@@ -155,7 +155,7 @@
             android:text="@string/profile_general_security"
             android:textColor="@color/disabled500" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_backup_phrase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:padding="14dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/profile_general_backup_phrase"
@@ -191,7 +191,7 @@
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/skip_backup_indicator_image"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -200,7 +200,7 @@
                         android:layout_toLeftOf="@+id/image_arrow_1"
                         app:srcCompat="@drawable/ic_info_error_500" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_arrow_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -212,9 +212,9 @@
             </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_change_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -232,23 +232,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_change_password"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_change_passcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -266,23 +266,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_change_passcode"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_fingerprint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -300,7 +300,7 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_fingerprint"
@@ -314,9 +314,9 @@
                     android:layout_gravity="right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_network"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -334,23 +334,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_metwork"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
@@ -359,7 +359,7 @@
             android:text="@string/profile_general_other"
             android:textColor="@color/disabled500" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_rate_app"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -376,23 +376,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_rate_app"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -409,23 +409,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_feedback"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_support"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -442,23 +442,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_support_wavesplatform"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -476,23 +476,23 @@
                 android:layout_height="wrap_content"
                 android:padding="14dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Dev Settings"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     app:srcCompat="@drawable/ic_arrow_right" />
 
             </FrameLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/view_line_3"
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -517,13 +517,13 @@
                 android:orientation="vertical">
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_current_height"
                     android:textColor="@color/disabled500" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -539,13 +539,13 @@
                 android:orientation="vertical">
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_general_current_version"
                     android:textColor="@color/disabled500" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -591,7 +591,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -9,9 +9,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding3.view.clicks
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -86,7 +86,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
             }
         }
 
-        eventSubscriptions.add(RxView.clicks(image_copy)
+        eventSubscriptions.add(image_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

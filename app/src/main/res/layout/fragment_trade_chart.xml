@@ -11,7 +11,7 @@
     android:background="@android:color/transparent">
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +36,7 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_change_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                     android:textColor="@color/basic500"
                     android:textSize="11sp" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
             layout="@layout/content_empty_data"
             android:visibility="gone" />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>

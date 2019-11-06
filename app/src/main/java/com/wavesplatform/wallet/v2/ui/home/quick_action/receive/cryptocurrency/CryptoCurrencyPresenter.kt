@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.data.manager.gateway.provider.GatewayProvider
 import com.wavesplatform.wallet.v2.data.model.local.gateway.GatewayDepositArgs

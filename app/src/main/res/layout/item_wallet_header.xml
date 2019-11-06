@@ -9,7 +9,7 @@
     android:layout_marginBottom="8dp"
     android:paddingTop="8dp">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         android:text="Hidden assets (2)"
         android:textColor="@color/basic500" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

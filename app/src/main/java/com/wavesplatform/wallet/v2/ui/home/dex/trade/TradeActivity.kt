@@ -6,12 +6,12 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import android.view.Menu
 import android.view.MenuItem
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity

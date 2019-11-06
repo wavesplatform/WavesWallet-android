@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.widget.configuration.options
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +39,7 @@ class OptionsBottomSheetFragment<T : OptionsDialogModel> : BottomSheetDialogFrag
 
         rootView.option_title.text = title
 
-        rootView.recycle_options.layoutManager = LinearLayoutManager(this.context)
+        rootView.recycle_options.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this.context)
         rootView.recycle_options.adapter = adapter
 
         adapter.bindToRecyclerView(rootView.recycle_options)

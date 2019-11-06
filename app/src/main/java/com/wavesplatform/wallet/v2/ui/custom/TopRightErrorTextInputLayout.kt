@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
-import android.support.design.widget.TextInputLayout
-import android.support.v4.content.ContextCompat
+import com.google.android.material.textfield.TextInputLayout
+import androidx.core.content.ContextCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.RelativeLayout
@@ -18,7 +18,7 @@ import pers.victor.ext.gone
 import pers.victor.ext.sp2px
 
 class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : TextInputLayout(context, attrs) {
-    var topRightAlignedErrorText: TextView = TextView(context)
+    private var topRightAlignedErrorText: TextView = TextView(context)
 
     init {
         topRightAlignedErrorText.setTextColor(ContextCompat.getColor(context, R.color.error500))

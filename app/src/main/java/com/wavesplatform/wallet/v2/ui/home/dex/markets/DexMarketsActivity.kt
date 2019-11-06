@@ -7,20 +7,16 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
@@ -30,6 +26,8 @@ import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
@@ -59,7 +57,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.dex_markets_list_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        recycle_markets.layoutManager = LinearLayoutManager(this)
+        recycle_markets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_markets)
 
         edit_search.setDrawableClickListener(object : OnDrawableClickListener {
@@ -72,7 +70,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
             }
         })
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+        eventSubscriptions.add(edit_search.textChanges()
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {

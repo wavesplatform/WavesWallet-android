@@ -6,14 +6,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
         app:srcCompat="@drawable/ic_information_22_multy" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         app:fontFamily="@font/roboto_medium" />
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_popular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_marginTop="24dp"
         android:background="@color/accent50" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_amount_asset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="8dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_amount_asset_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
             android:textColor="@color/disabled900"
             android:textSize="14sp" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_copy_amount_asset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginStart="16dp"
@@ -90,7 +90,7 @@
         android:layerType="software" />
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_price_asset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="8dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_price_asset_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
             android:textColor="@color/disabled900"
             android:textSize="14sp" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_copy_price_asset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

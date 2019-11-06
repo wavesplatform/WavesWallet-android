@@ -7,13 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -76,7 +76,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
                 adapter = AliasesAdapter()
                 adapter.subscriptions = eventSubscriptions
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_layout, container, false)
-                rootView.recycle_aliases.layoutManager = LinearLayoutManager(this.context)
+                rootView.recycle_aliases.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this.context)
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
                 rootView.recycle_aliases.adapter = adapter
 

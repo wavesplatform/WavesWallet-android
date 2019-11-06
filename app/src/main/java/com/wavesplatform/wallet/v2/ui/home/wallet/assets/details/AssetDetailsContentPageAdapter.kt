@@ -5,14 +5,16 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 
-class AssetDetailsContentPageAdapter(fm: FragmentManager?, var assets: List<AssetBalanceResponse>) : FragmentStatePagerAdapter(fm) {
+@SuppressLint("WrongConstant")
+class AssetDetailsContentPageAdapter(fm: FragmentManager, var assets: List<AssetBalanceResponse>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         val bundle = Bundle()

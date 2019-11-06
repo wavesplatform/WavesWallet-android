@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/view_line_1"
         style="@style/DashedLine"
         android:layout_marginStart="16dp"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_orders_details_filled_hint"
@@ -32,7 +32,7 @@
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_filled_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textColor="@color/disabled900"
                 tools:text="1.99800118" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_filled_tag"
                 style="@style/TickerTag"
                 android:layout_gravity="center_vertical"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/my_orders_details_amount_hint"
@@ -82,7 +82,7 @@
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_amount_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     android:textColor="@color/disabled900"
                     tools:text="1.99800118" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_amount_tag"
                     style="@style/TickerTag"
                     android:layout_gravity="center_vertical"
@@ -111,7 +111,7 @@
             android:layout_marginTop="14dp"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/history_details_btc_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_price_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                     android:textColor="@color/disabled900"
                     tools:text="1.99800118" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_price_tag"
                     style="@style/TickerTag"
                     android:layout_gravity="center_vertical"
@@ -150,7 +150,7 @@
                 android:layout_marginTop="14dp"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/my_orders_details_total_hint"
@@ -162,7 +162,7 @@
                     android:layout_marginTop="4dp"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_total_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -171,7 +171,7 @@
                         android:textColor="@color/disabled900"
                         tools:text="1.99800118" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_total_tag"
                         style="@style/TickerTag"
                         android:layout_gravity="center_vertical"

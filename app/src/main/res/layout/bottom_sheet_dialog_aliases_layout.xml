@@ -11,7 +11,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +24,7 @@
             android:descendantFocusability="blocksDescendants">
 
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_alias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:layout_marginTop="24dp"
                 app:srcCompat="@drawable/ic_t_alias_48" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:textSize="16sp"
                 app:fontFamily="@font/roboto_medium" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycle_aliases"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -54,7 +54,7 @@
                 android:paddingTop="32dp" />
 
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/linear_bottom_block"
@@ -78,7 +78,7 @@
             android:paddingStart="16dp"
             android:paddingTop="14dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_hidden_assets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_arrowup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -115,14 +115,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/alias_dialog_description_1"
                     android:textColor="@color/disabled500"
                     android:textSize="12sp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
@@ -131,7 +131,7 @@
                     android:textSize="12sp" />
 
 
-                <android.support.v7.widget.AppCompatButton
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_create_alias"
                     style="@style/WavesButton"
                     android:layout_width="match_parent"

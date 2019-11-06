@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.model.local.widget
 
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.wavesplatform.wallet.R
 
 enum class MarketWidgetStyleColors(@ColorRes var currencyActiveColor: Int, // color for active text on switch of USD / EUR

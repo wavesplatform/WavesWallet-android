@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.widget.configuration
 
 import android.content.Context
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.data.SearchPairResponse
 import com.wavesplatform.sdk.utils.*

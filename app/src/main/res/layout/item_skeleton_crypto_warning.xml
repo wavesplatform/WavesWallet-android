@@ -13,7 +13,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             app:srcCompat="@drawable/ic_info_18_warning_600" />
@@ -54,7 +54,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             app:srcCompat="@drawable/ic_warning_18_disabled_500" />
@@ -87,7 +87,7 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:layout_marginLeft="16dp"

@@ -3,7 +3,7 @@
   ~ Copyright © 2019 Waves Platform. All rights reserved.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/toolbar_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_check_18_black" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tokensCountLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -73,16 +73,16 @@
             tools:text="9/10" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/errorSnackBarRoot"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/tab_navigation"
         app:layout_constraintTop_toBottomOf="@+id/tokensCountLayout">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tokensList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -91,9 +91,9 @@
             android:paddingBottom="24dp"
             tools:listitem="@layout/widget_drag_asset_item" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_navigation"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -107,4 +107,4 @@
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,15 +6,12 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.LayoutInflater
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.core.view.ViewCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -24,6 +21,8 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_search_asset.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -58,7 +57,7 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
             presenter.search("")
         }
         cancel_button.click { onBackPressed() }
-        recycle_assets.layoutManager = LinearLayoutManager(this)
+        recycle_assets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_assets)
 
         val emptyView = LayoutInflater.from(this)
@@ -82,7 +81,7 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
             }
         }
 
-        eventSubscriptions.add(RxTextView.textChanges(search_view)
+        eventSubscriptions.add(search_view.textChanges()
                 .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe { search ->
                     if (TextUtils.isEmpty(search)) {

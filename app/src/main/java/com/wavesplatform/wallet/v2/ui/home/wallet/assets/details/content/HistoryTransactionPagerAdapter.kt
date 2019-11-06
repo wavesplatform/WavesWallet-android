@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 import android.graphics.Typeface
-import android.support.v4.app.FragmentManager
-import android.support.v4.view.PagerAdapter
+import androidx.fragment.app.FragmentManager
+import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.sdk.utils.WavesConstants
@@ -28,8 +28,8 @@ import kotlinx.android.synthetic.main.item_assets_detailed_history.view.text_tra
 import pers.victor.ext.*
 
 class HistoryTransactionPagerAdapter constructor(
-    var fragmentManager: FragmentManager?,
-    var prefsUtil: PrefsUtil
+        var fragmentManager: FragmentManager,
+        var prefsUtil: PrefsUtil
 ) : PagerAdapter() {
 
     var items: List<HistoryItem> = arrayListOf()

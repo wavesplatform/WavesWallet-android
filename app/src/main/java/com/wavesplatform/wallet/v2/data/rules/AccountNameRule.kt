@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.rules
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.wavesplatform.wallet.App
 
 import io.github.anderscheow.validator.rules.BaseRule

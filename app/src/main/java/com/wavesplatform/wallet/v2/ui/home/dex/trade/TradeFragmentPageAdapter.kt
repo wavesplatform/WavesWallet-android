@@ -5,11 +5,13 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.annotation.SuppressLint
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 
-class TradeFragmentPageAdapter(fm: FragmentManager?, private var pages: ArrayList<Pair<Fragment, String>>) : FragmentStatePagerAdapter(fm) {
+@SuppressLint("WrongConstant")
+class TradeFragmentPageAdapter(fm: FragmentManager, private var pages: ArrayList<Pair<Fragment, String>>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         return pages[position].first
     }

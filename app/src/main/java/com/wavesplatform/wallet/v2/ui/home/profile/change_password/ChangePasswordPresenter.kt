@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 
 import android.util.Log
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

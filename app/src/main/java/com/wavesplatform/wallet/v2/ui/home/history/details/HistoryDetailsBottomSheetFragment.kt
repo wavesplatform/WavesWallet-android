@@ -8,37 +8,37 @@ package com.wavesplatform.wallet.v2.ui.home.history.details
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.jakewharton.rxbinding2.view.RxView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import com.jakewharton.rxbinding3.view.clicks
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.local.TransactionType
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.model.response.node.HistoryTransactionResponse
 import com.wavesplatform.sdk.model.response.node.OrderResponse
 import com.wavesplatform.sdk.model.response.node.TransferResponse
-import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
-import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.local.TransactionType
+import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
@@ -50,11 +50,11 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.Co
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_script_invocation_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
-import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 
@@ -203,7 +203,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 val textAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
                 val spamTag = receiveView?.findViewById<SpamTag>(R.id.spam_tag)
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -239,7 +239,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 }
                 sentAddress?.text = recipient
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -264,7 +264,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                     textLeasingToAddress?.text = nodeLeasingRecipient
                 }
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -326,7 +326,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                     textCancelLeasingFromAddress?.text = transaction.sender
                 }
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -352,7 +352,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                     textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
                 }
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -410,7 +410,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                     }
                     textSentAddress?.text = recipient
 
-                    eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                    eventSubscriptions.add(imageCopy!!.clicks()
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
@@ -447,7 +447,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                                 }
                                 textSentAddress?.text = recipient
 
-                                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                                eventSubscriptions.add(imageCopy!!.clicks()
                                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe {
@@ -497,7 +497,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                         ?: 0, transaction.asset?.precision ?: 0)
                 } ${transaction.asset?.name}"
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -530,7 +530,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                         view.relative_payment.gone()
                     }
 
-                    eventSubscriptions.add(RxView.clicks(view.image_copy)
+                    eventSubscriptions.add(view.image_copy.clicks()
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
@@ -570,7 +570,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 // force hide for this types of transaction
                 commentBlock.gone()
 
-                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                eventSubscriptions.add(imageCopy!!.clicks()
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -689,21 +689,21 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
             view.layoutParams = llp
         }
 
-        eventSubscriptions.add(RxView.clicks(view!!.image_close)
+        eventSubscriptions.add(view!!.image_close.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     dismiss()
                 })
 
-        eventSubscriptions.add(RxView.clicks(view.text_copy_tx_id)
+        eventSubscriptions.add(view.text_copy_tx_id.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     copyToClipboard(transaction.id, view?.text_copy_tx_id, R.string.history_details_copy_tx_id)
                 })
 
-        eventSubscriptions.add(RxView.clicks(view.text_copy_all_data)
+        eventSubscriptions.add(view.text_copy_all_data.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -716,7 +716,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
             view.check_box_staging_on_explorer.visibility = View.VISIBLE
         }
 
-        eventSubscriptions.add(RxView.clicks(view.text_view_on_explorer)
+        eventSubscriptions.add(view.text_view_on_explorer.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -742,7 +742,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
                 }?.convertFromDb()
                 if (assetBalance != null && (nonGateway(assetBalance, transaction)
                                 || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
-                    eventSubscriptions.add(RxView.clicks(view.text_send_again)
+                    eventSubscriptions.add(view.text_send_again.clicks()
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
@@ -771,7 +771,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<His
 
                     changeViewMargin(view.text_view_on_explorer)
 
-                    eventSubscriptions.add(RxView.clicks(view.text_cancel_leasing)
+                    eventSubscriptions.add(view.text_cancel_leasing.clicks()
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {

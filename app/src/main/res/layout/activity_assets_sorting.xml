@@ -1,4 +1,4 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,7 +8,7 @@
     android:descendantFocusability="blocksDescendants">
 
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:elevation="0dp"
         android:stateListAnimator="@animator/toolbar_elevation">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,10 +43,10 @@
             tl:tl_textSelectColor="@color/black"
             tl:tl_textUnselectColor="@color/basic500"
             tl:tl_textsize="14sp" />
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_assets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,4 +63,4 @@
         android:layout_gravity="center"
         app:progress_image="@drawable/ic_loader_24_submit_400" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

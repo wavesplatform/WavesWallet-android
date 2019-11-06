@@ -6,9 +6,9 @@
 package com.wavesplatform.wallet.v2.util.drag_helper
 
 import android.graphics.Canvas
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 
 
 class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter) : ItemTouchHelper.Callback() {
@@ -21,9 +21,9 @@ class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter
         return false
     }
 
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+    override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
         // Set movement flags based on the layout manager
-        return if (recyclerView.layoutManager is GridLayoutManager) {
+        return if (recyclerView.layoutManager is androidx.recyclerview.widget.GridLayoutManager) {
             val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             val swipeFlags = 0
             makeMovementFlags(dragFlags, swipeFlags)
@@ -34,7 +34,7 @@ class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter
         }
     }
 
-    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+    override fun onSelectedChanged(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder?, actionState: Int) {
         // We only want the active item to change
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
             if (viewHolder is ItemTouchHelperViewHolder) {
@@ -47,14 +47,14 @@ class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter
         super.onSelectedChanged(viewHolder, actionState)
     }
 
-    override fun onMove(recyclerView: RecyclerView, source: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+    override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, source: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
         // Notify the adapter of the move
         return mAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {}
+    override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, i: Int) {}
 
-    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+    override fun onChildDraw(c: Canvas, recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             // Fade out the view as it is swiped out of the parent's bounds
             val alpha = ALPHA_FULL - Math.abs(dX) / viewHolder.itemView.width.toFloat()
@@ -65,7 +65,7 @@ class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter
         }
     }
 
-    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+    override fun clearView(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         mAdapter.onDragEnd(viewHolder)
 

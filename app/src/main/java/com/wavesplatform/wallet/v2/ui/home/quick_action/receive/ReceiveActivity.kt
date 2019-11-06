@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive
 
 import android.os.Bundle
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity

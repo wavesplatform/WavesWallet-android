@@ -5,13 +5,13 @@
 
 package com.wavesplatform.wallet.v2.util.drag_helper
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 
 interface ItemDragListener {
-    fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int)
+    fun onStartDrag(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int)
 
-    fun onMoved(fromHolder: RecyclerView.ViewHolder?, fromPosition: Int,
-                toHolder: RecyclerView.ViewHolder?, toPosition: Int)
+    fun onMoved(fromHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder?, fromPosition: Int,
+                toHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder?, toPosition: Int)
 
-    fun onEndDrag(viewHolder: RecyclerView.ViewHolder)
+    fun onEndDrag(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder)
 }

@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
@@ -81,7 +81,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
             loadLastTrades()
         }
 
-        recycle_last_trades.layoutManager = LinearLayoutManager(baseActivity)
+        recycle_last_trades.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_last_trades)
 
         linear_buy.click {
