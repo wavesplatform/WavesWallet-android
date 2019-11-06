@@ -22,7 +22,7 @@ class ClientEnvironment internal constructor(
 
     init {
         configuration = Gson().fromJson(
-                loadJsonFromAsset(App.getAppContext(), jsonFileName),
+                loadJsonFromAsset(App.appContext, jsonFileName),
                 GlobalConfigurationResponse::class.java)
     }
 
@@ -43,7 +43,7 @@ class ClientEnvironment internal constructor(
                 URL_CONFIG_STAGE_NET,
                 FILENAME_STAGE_NET,
                 EnvironmentExternalProperties(
-                        Constants.Vostok.STAGE_NET_CODE,
+                        Constants.WavesEnterprise.STAGE_NET_CODE,
                         Constants.Fiat.StageNet.USD_ID,
                         Constants.Fiat.StageNet.EUR_ID,
                         Constants.MatcherAddress.STAGE_NET))
@@ -52,7 +52,7 @@ class ClientEnvironment internal constructor(
                 URL_CONFIG_TEST_NET,
                 FILENAME_TEST_NET,
                 EnvironmentExternalProperties(
-                        Constants.Vostok.TEST_NET_CODE,
+                        Constants.WavesEnterprise.TEST_NET_CODE,
                         Constants.Fiat.TestNet.USD_ID,
                         Constants.Fiat.TestNet.EUR_ID,
                         Constants.MatcherAddress.TEST_NET))
@@ -60,7 +60,7 @@ class ClientEnvironment internal constructor(
         var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET,
                 FILENAME_MAIN_NET,
                 EnvironmentExternalProperties(
-                        Constants.Vostok.MAIN_NET_CODE,
+                        Constants.WavesEnterprise.MAIN_NET_CODE,
                         Constants.Fiat.MainNet.USD_ID,
                         Constants.Fiat.MainNet.EUR_ID,
                         Constants.MatcherAddress.MAIN_NET))

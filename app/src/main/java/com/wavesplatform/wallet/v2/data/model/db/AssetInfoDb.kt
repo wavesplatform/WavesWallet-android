@@ -51,7 +51,9 @@ open class AssetInfoDb(
                 precision = precision,
                 description = description,
                 height = height,
-                timestamp = Date(timestamp.toLong()),
+                timestamp =
+                    if (timestamp.isNullOrEmpty()) Date()
+                    else Date(timestamp.toLong()),
                 sender = sender,
                 quantity = quantity,
                 reissuable = reissuable,
@@ -60,7 +62,7 @@ open class AssetInfoDb(
     }
 
     companion object {
-        
+
         fun convertToDb(assetInfo: List<AssetInfoResponse>): MutableList<AssetInfoDb> {
             val list = mutableListOf<AssetInfoDb>()
             assetInfo.forEach {

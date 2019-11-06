@@ -43,8 +43,8 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        text_address.text = App.getAccessManager().getWallet()?.address
-        text_public_key.text = App.getAccessManager().getWallet()?.publicKeyStr
+        text_address.text = App.accessManager.getWallet()?.address
+        text_public_key.text = App.accessManager.getWallet()?.publicKeyStr
 
         eventSubscriptions.add(image_address_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
@@ -69,7 +69,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
 
         button_show.click {
             button_show.gone()
-            val wallet = App.getAccessManager().getWallet()
+            val wallet = App.accessManager.getWallet()
             text_private_key.text = (wallet?.privateKeyStr)
             relative_private_key_block.visiable()
         }

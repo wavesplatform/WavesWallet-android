@@ -43,8 +43,6 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
             dismiss()
             launchActivity<ReceiveActivity> { }
         }
-        rootView.relative_exchange.click {
-        }
 
         return rootView
     }

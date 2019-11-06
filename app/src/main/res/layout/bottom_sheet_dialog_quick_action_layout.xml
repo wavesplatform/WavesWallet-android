@@ -67,52 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
     </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/relative_exchange"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ic_soonline_64"
-        android:clickable="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_exchange"
-            app:srcCompat="@drawable/ic_t_soon_exchange_48"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:textSize="20sp"
-            android:textColor="@color/disabled400"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/image_exchange"
-            android:layout_marginStart="18dp"
-            android:text="@string/quick_action_exchange"
-            android:id="@+id/text_exchange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:textSize="12sp"
-            android:textColor="@color/submit400"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:text="@string/quick_action_coming_soon"
-            android:id="@+id/text_coming_soon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </RelativeLayout>
-
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_close"
@@ -124,7 +79,5 @@
         app:srcCompat="@drawable/ic_tabbar_waves_active"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-
 
 </LinearLayout>
