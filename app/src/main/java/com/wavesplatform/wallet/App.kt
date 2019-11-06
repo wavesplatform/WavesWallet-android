@@ -5,18 +5,17 @@
 
 package com.wavesplatform.wallet
 
-import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Configuration
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate
 import com.crashlytics.android.Crashlytics
 import com.github.moduth.blockcanary.BlockCanary
 import com.google.firebase.FirebaseApp
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.squareup.leakcanary.LeakCanary
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.wallet.v2.data.analytics.Analytics
@@ -49,8 +48,7 @@ class App : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        if (initDebugTools()) return
-
+        initDebugTools()
         initExtension()
         initLocalProperties()
         intiAnalytics()
@@ -106,12 +104,7 @@ class App : DaggerApplication() {
         Sentry.init(AndroidSentryClientFactory(this.applicationContext))
     }
 
-    private fun initDebugTools(): Boolean {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return true
-        }
-
-        LeakCanary.install(this)
+    private fun initDebugTools() {
         BlockCanary.install(this, AppBlockCanaryContext()).start()
 
         if (BuildConfig.DEBUG) {
@@ -119,8 +112,6 @@ class App : DaggerApplication() {
         }
 
         RxJavaPlugins.setErrorHandler { Timber.e(it) }
-
-        return false
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
