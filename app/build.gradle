@@ -40,7 +40,7 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 434
+        versionCode 435
         versionName "2.6.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
