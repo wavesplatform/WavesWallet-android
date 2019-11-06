@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.gateway.GatewayMet
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface SendView : BaseMvpView {
-    fun onLoadMetadataSuccess(ticker: GatewayMetadata, gatewayTicket: String?)
+    fun onLoadMetadataSuccess(metadata: GatewayMetadata, gatewayTicket: String?)
     fun onLoadMetadataError()
 
     fun onShowError(errorMsgRes: Int)

@@ -55,10 +55,10 @@ class DataServiceManager @Inject constructor() : BaseServiceManager() {
         }
     }
 
-    fun assets(ids: List<String?>? = null, search: String? = null, limit: Int? = null): Observable<List<AssetInfoResponse>> {
+    fun assets(ids: List<String?>? = mutableListOf(), search: String? = ""): Observable<List<AssetInfoResponse>> {
         if (ids != null && ids.isNotEmpty()
                 || search != null && search.isNotEmpty()) {
-            return dataService.assets(AssetsRequest(ids = ids, search = search, limit = limit) )
+            return dataService.assets(AssetsRequest(ids = ids, search = search))
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {

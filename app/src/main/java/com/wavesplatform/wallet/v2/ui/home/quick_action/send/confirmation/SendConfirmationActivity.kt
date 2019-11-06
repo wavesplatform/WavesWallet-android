@@ -75,7 +75,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 ?: find(WavesConstants.WAVES_ASSET_ID_EMPTY)
 
         if (presenter.type == SendPresenter.Type.GATEWAY
-                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.WAVES_ENTERPRISE
                 || presenter.type == SendPresenter.Type.ERGO) {
             presenter.gatewayCommission = BigDecimal(
                     intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
@@ -110,7 +110,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 presenter.feeAsset?.getName()
 
         if (presenter.type == SendPresenter.Type.GATEWAY
-                || presenter.type == SendPresenter.Type.VOSTOK
+                || presenter.type == SendPresenter.Type.WAVES_ENTERPRISE
                 || presenter.type == SendPresenter.Type.ERGO) {
             attachment_layout.gone()
         } else {

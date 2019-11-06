@@ -187,9 +187,11 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 if (assetBalance?.reissuable == true) getString(R.string.asset_details_reissuable)
                 else getString(R.string.asset_details_not_reissuable)
 
-        text_description_value.text =
-                if (assetBalance?.issueTransaction?.description.isNullOrEmpty()) getString(R.string.common_dash)
-                else assetBalance?.issueTransaction?.description
+        text_description_value.text = when {
+            assetBalance?.assetId == Constants.WeGeneralAsset.assetId -> "Waves Enterprise System Token"
+            assetBalance?.issueTransaction?.description.isNullOrEmpty() -> getString(R.string.common_dash)
+            else -> assetBalance?.issueTransaction?.description
+        }
 
         text_view_issuer_value.text =
                 if (assetBalance?.issueTransaction?.sender.isNullOrEmpty()) getString(R.string.common_dash)
@@ -247,7 +249,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         if (networkConnected) {
             enableView(send)
             enableView(receive)
-            enableView(exchange)
             enableView(card_burn_container)
             enableView(spam_card_burn_container)
             card_burn_container.isClickable = true
@@ -255,7 +256,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         } else {
             disableView(send)
             disableView(receive)
-            disableView(exchange)
             disableView(card_burn_container)
             disableView(spam_card_burn_container)
             card_burn_container.isClickable = false
