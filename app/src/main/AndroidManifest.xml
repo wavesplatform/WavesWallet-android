@@ -44,6 +44,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="waves" />
+                <data
+                    android:host="client.wavesplatform.com"
+                    android:scheme="https" />
+                <data
+                    android:host="beta.wavesplatform.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
