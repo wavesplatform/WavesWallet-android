@@ -26,7 +26,12 @@ class NotificationsManager @Inject constructor(@ApplicationContext var context: 
             if (channelId.isNullOrEmpty().not()) {
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val channel = manager.getNotificationChannel(channelId)
-                return channel.importance != NotificationManager.IMPORTANCE_NONE && NotificationManagerCompat.from(context).areNotificationsEnabled()
+
+                return if (channel != null){
+                    channel.importance != NotificationManager.IMPORTANCE_NONE && NotificationManagerCompat.from(context).areNotificationsEnabled()
+                }else{
+                    NotificationManagerCompat.from(context).areNotificationsEnabled()
+                }
             }
             return false
         } else {
