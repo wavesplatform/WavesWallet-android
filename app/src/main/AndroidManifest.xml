@@ -276,6 +276,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".v2.ui.force_update.ForceUpdateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <meta-data
             android:name="com.google.android.gms.version"

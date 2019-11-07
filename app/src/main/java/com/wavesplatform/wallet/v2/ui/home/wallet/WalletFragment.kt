@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.openAppInPlayMarket
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.fragment_wallet.info_alert
 import kotlinx.android.synthetic.main.fragment_wallet.view.*
@@ -122,7 +123,7 @@ class WalletFragment : BaseFragment(), WalletView {
                 setActionIcon(R.drawable.ic_arrowright_14_basic_200)
                 onAlertClick {
                     analytics.trackEvent(AnalyticEvents.WalletUpdateBannerEvent)
-                    openAppInPlayMarket()
+                    openAppInPlayMarket(baseActivity)
                 }
             }.show()
             setScrollAlert(true)
@@ -159,14 +160,5 @@ class WalletFragment : BaseFragment(), WalletView {
             AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         }
         info_alert.layoutParams = params
-    }
-
-    private fun openAppInPlayMarket() {
-        val appPackageName = activity?.packageName
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
-        } catch (anfe: android.content.ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
-        }
     }
 }

@@ -271,6 +271,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
                         PreferencesHelper(App.appContext).lastAppVersion = version.lastVersion
+                        PreferencesHelper(App.appContext).forceUpdateAppVersion = version.forceUpdateVersion
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()

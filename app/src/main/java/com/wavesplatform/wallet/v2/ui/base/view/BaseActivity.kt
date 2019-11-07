@@ -34,6 +34,7 @@ import com.wavesplatform.sdk.net.NetworkException
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
@@ -44,6 +45,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
 import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.ui.force_update.ForceUpdateActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
@@ -157,6 +159,11 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     mErrorManager.showError(this,
                             errorEvent.retrofitException, errorEvent.retrySubject)
                 }, { t: Throwable? -> t?.printStackTrace() }))
+
+        val needForceUpdate = Version.needAppUpdate(BuildConfig.VERSION_NAME, preferencesHelper.lastAppVersion)
+        if (this !is ForceUpdateActivity && this !is SplashActivity && needForceUpdate) {
+            launchActivity<ForceUpdateActivity>()
+        }
     }
 
     private fun addErrorListener() {
