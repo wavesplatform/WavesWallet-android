@@ -8,8 +8,6 @@ package com.wavesplatform.wallet.v2.ui.splash
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -23,6 +21,8 @@ import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.MonkeyTest
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pyxis.uzuki.live.richutilskt.utils.setStatusNavBarColor
 import javax.inject.Inject
 

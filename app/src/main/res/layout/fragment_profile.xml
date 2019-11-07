@@ -89,17 +89,64 @@
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/shape_rect_outline_gray"
-            android:padding="14dp"
-            android:text="@string/profile_general_push_notifications"
-            android:textColor="@color/accent100"
-            android:textSize="16sp" />
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            app:cardCornerRadius="@dimen/asset_item_radius"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/view_notification_status"
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/error500" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="14dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_general_push_notifications"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_notification_warning"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="14dp"
+                        android:layout_toStartOf="@+id/image_notification_arrow"
+                        app:srcCompat="@drawable/ic_info_error_500" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_notification_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_arrow_right" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_language"

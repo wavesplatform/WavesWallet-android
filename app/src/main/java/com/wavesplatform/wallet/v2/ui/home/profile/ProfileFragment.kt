@@ -11,11 +11,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
 import android.view.*
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -26,6 +24,7 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NotificationsManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -43,10 +42,9 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActi
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import pers.victor.ext.click
-import pers.victor.ext.finish
-import pers.victor.ext.telephonyManager
-import pers.victor.ext.visiable
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -55,7 +53,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
     @Inject
-    lateinit var nodeServiceManager: NodeServiceManager
+    lateinit var notificationsManager: NotificationsManager
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
@@ -113,6 +111,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
         card_feedback.click {
             analytics.trackEvent(AnalyticEvents.ProfileFeedbackEvent)
             sendFeedbackToSupport()
+        }
+        card_notification.click {
+            notificationsManager.openNotificationSettings()
         }
 
         if (BuildConfig.DEBUG) {
@@ -273,7 +274,16 @@ class ProfileFragment : BaseFragment(), ProfileView {
         super.onResume()
         setCurrentLangFlag()
         initFingerPrintControl()
+        initNotificationButtonState()
         SimpleChromeCustomTabs.getInstance().connectTo(baseActivity)
+    }
+
+    private fun initNotificationButtonState() {
+        if (notificationsManager.isNotificationEnabled().not()) {
+            card_notification.visiable()
+        } else {
+            card_notification.gone()
+        }
     }
 
     override fun onPause() {
