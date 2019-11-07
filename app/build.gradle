@@ -356,6 +356,7 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation 'com.novoda:simple-chrome-custom-tabs:0.1.6'
+    implementation "io.noties.markwon:core:4.1.2"
 
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
