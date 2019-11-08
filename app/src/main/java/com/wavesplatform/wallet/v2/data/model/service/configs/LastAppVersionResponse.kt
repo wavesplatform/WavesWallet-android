@@ -9,5 +9,7 @@ import com.google.gson.annotations.SerializedName
 
 data class LastAppVersionResponse(
         @SerializedName("last_version")
-        var lastVersion: String
+        var lastVersion: String,
+        @SerializedName("force_update_version")
+        var forceUpdateVersion: String
 )

@@ -33,6 +33,10 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         get() = mPref.getString(KEY_LAST_APP_VERSION, BuildConfig.VERSION_NAME)
         set(value) = mPref.edit().putString(KEY_LAST_APP_VERSION, value).apply()
 
+    var forceUpdateAppVersion: String
+        get() = mPref.getString(KEY_FORCE_UPDATE_APP_VERSION, BuildConfig.VERSION_NAME)
+        set(value) = mPref.edit().putString(KEY_FORCE_UPDATE_APP_VERSION, value).apply()
+
     fun setTutorialPassed(value: Boolean) {
         mPref.edit().putBoolean(KEY_TUTORIAL, value).apply()
     }
@@ -75,6 +79,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         const val KEY_DEVELOPER = "keyDeveloper"
         const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
         const val KEY_LAST_APP_VERSION = "lastAppVersion"
+        const val KEY_FORCE_UPDATE_APP_VERSION = "forceUpdateAppVersion"
         const val KEY_LANGUAGE = "keyLanguage"
         const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
         const val KEY_USE_TEST_NEWS = "key_use_test_news"

@@ -270,7 +270,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
             instance!!.versionDisposable = githubService.loadLastAppVersion(Constants.URL_GITHUB_CONFIG_VERSION)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
-                        PreferencesHelper(App.appContext).lastAppVersion = version.lastVersion
+                        val prefs = PreferencesHelper(App.appContext)
+                        prefs.lastAppVersion = version.lastVersion
+                        prefs.forceUpdateAppVersion = version.forceUpdateVersion
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
