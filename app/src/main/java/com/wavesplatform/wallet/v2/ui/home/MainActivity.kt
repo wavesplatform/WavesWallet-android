@@ -41,6 +41,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
@@ -59,6 +60,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private val fragments = arrayListOf<Fragment>()
     private var activeFragment = Fragment()
     private var seedWarningBehavior: BottomSheetBehavior<LinearLayout>? = null
+    private val markwon: Markwon by lazy { Markwon.create(this) }
 
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
@@ -371,9 +373,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun showNews(news: NewsResponse) {
         val ids = prefsUtil.getGlobalValueList(PrefsUtil.SHOWED_NEWS_IDS).toHashSet()
-        var anyNewsShowed = false
+
         for (notification in news.notifications) {
-            if (!ids.contains(notification.id) && !anyNewsShowed) {
+            if (!ids.contains(notification.id) && !presenter.anyNewsShowed) {
 
                 val startDate = notification.startDate ?: Long.MAX_VALUE
                 val endDate = notification.endDate ?: Long.MAX_VALUE
@@ -389,8 +391,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
                     val langCode = preferencesHelper.getLanguage()
                     view.text_title.text = NewsResponse.getTitle(langCode, notification)
-                    view.text_subtitle.text = NewsResponse.getSubtitle(langCode, notification)
+                    markwon.setMarkdown(view.text_subtitle, NewsResponse.getSubtitle(langCode, notification))
                     view.button_ok.click {
+                        presenter.anyNewsShowed = false
                         prefsUtil.addGlobalListValue(PrefsUtil.SHOWED_NEWS_IDS, notification.id)
                         accountFirstOpenDialog?.dismiss()
                     }
@@ -403,7 +406,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                     accountFirstOpenDialog.window?.setGravity(Gravity.BOTTOM)
                     accountFirstOpenDialog.show()
 
-                    anyNewsShowed = true
+                    presenter.anyNewsShowed = true
                 }
             }
         }
