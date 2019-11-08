@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.openAppInPlayMarket
@@ -29,10 +30,10 @@ class ForceUpdateActivity : BaseActivity(), ForceUpdateView {
     override fun askPassCode() = false
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusNavBarColor(Color.WHITE)
+        setStatusNavBarColor(ContextCompat.getColor(this, R.color.basic50))
         setSystemBarTheme(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            this.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            button_open_play_market.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
 
         button_open_play_market.click {
