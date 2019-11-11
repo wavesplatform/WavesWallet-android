@@ -28,6 +28,10 @@ class WavesWallet(val seed: ByteArray) {
     val seedStr: String
         get() = String(seed, Charsets.UTF_8)
 
+    val aauid: String
+        get() = WavesCrypto.base64encode(WavesCrypto.blake2b(instance?.address?.toByteArray()
+                ?: byteArrayOf())).trim()
+
     init {
         address = WavesCrypto.addressFromPublicKey(account.publicKey, EnvironmentManager.netCode)
     }
@@ -122,6 +126,13 @@ class WavesWallet(val seed: ByteArray) {
 
         fun getPrivateKey(): ByteArray {
             return instance?.privateKey ?: byteArrayOf()
+        }
+
+        /**
+         * @return AUUID - Analytic universally unique identifier
+         */
+        fun getAuuid(): String {
+            return instance?.aauid.orEmpty()
         }
     }
 }
