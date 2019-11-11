@@ -5,6 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.analytics
 
+import com.wavesplatform.wallet.v2.util.WavesWallet
+
 sealed class AnalyticEvents(private var eventName: String) : EventType {
 
     // Нажата кнопка «Start Lease» на экране Wallet.
@@ -210,23 +212,24 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     }
 
     override fun provideParameters(provider: ProviderType): HashMap<String, Any> {
-        return when (this) {
+        val params = hashMapOf<String, Any>(AUUID_KEY to WavesWallet.getAuuid())
+        when (this) {
             is DexEvent -> {
-                hashMapOf(PAIR_KEY to "$amountAssetName/$priceAssetName")
+                params[PAIR_KEY] = "$amountAssetName/$priceAssetName"
             }
             is CurrencyEvent -> {
-                hashMapOf(CURRENCY_KEY to currency)
+                params[CURRENCY_KEY] = currency
             }
             is CountEvent -> {
-                hashMapOf(COUNT_KEY to count)
+                params[COUNT_KEY] = count
             }
             is MarketPulseSettingsChangedEvent -> {
-                hashMapOf(STYLE_KEY to style, INTERVAL_KEY to interval, ASSETS_KEY to assets)
-            }
-            else -> {
-                hashMapOf()
+                params[STYLE_KEY] = style
+                params[INTERVAL_KEY] = interval
+                params[ASSETS_KEY] = assets
             }
         }
+        return params
     }
 
     abstract class DexEvent(eventName: String, var amountAssetName: String, var priceAssetName: String) : AnalyticEvents(eventName)
@@ -234,6 +237,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     abstract class CountEvent(eventName: String, var count: Int) : AnalyticEvents(eventName)
 
     companion object {
+        const val AUUID_KEY = "AUUID"
         const val PAIR_KEY = "Pair"
         const val CURRENCY_KEY = "Currency"
         const val COUNT_KEY = "Count"
