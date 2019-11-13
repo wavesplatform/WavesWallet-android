@@ -19,10 +19,8 @@ import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.settings.DevOptionsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
-import com.wavesplatform.wallet.v2.util.ClientEnvironment
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.wallet.v2.util.EnvironmentManager.Companion.servers
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.activity_welcome.*
@@ -123,6 +121,9 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                     presenter.saveCurrentEnvironment()
                 }
                 .setNegativeButton(getString(R.string.choose_environment_dialog_negative_txt), null)
+                .setNeutralButton("Dev options") { _, _ ->
+                    launchActivity<DevOptionsActivity>()
+                }
                 .create()
 
         chooseEnvironmentDialog.show()

@@ -40,7 +40,8 @@ class ClientEnvironment internal constructor(
         const val FILENAME_MAIN_NET = "environment_mainnet.json"
         const val FILENAME_STAGE_NET = "environment_stagenet.json"
 
-        var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET,
+        var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET,
+                URL_CONFIG_MAIN_NET,
                 FILENAME_MAIN_NET,
                 EnvironmentExternalProperties(
                         R.string.environment_main_net,
@@ -50,7 +51,8 @@ class ClientEnvironment internal constructor(
                         Constants.MatcherAddress.MAIN_NET))
 
         var TEST_NET = ClientEnvironment(KEY_ENV_TEST_NET,
-                URL_CONFIG_TEST_NET, FILENAME_TEST_NET,
+                URL_CONFIG_TEST_NET,
+                FILENAME_TEST_NET,
                 EnvironmentExternalProperties(
                         R.string.environment_test_net,
                         Constants.WavesEnterprise.TEST_NET_CODE,

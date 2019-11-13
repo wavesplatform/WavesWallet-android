@@ -1,11 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.force_update
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.openAppInPlayMarket
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
@@ -35,6 +35,9 @@ class ForceUpdateActivity : BaseActivity(), ForceUpdateView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             button_open_play_market.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
+
+        force_update_subtitle?.text = getString(R.string.force_update_please_update_to_continue,
+                PreferencesHelper(this).forceUpdateAppVersion)
 
         button_open_play_market.click {
             openAppInPlayMarket(this)

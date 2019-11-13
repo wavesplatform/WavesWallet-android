@@ -23,6 +23,7 @@ import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
@@ -40,6 +41,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
     private var configurationDisposable: Disposable? = null
     private var versionDisposable: Disposable? = null
+    private var devConfigDisposable: Disposable? = null
     private var gateWayHostInterceptor: HostInterceptor? = null
     private val onUpdateCompleteListeners: MutableList<OnUpdateCompleteListener> = mutableListOf()
     private var updateCompleted = false
@@ -272,11 +274,30 @@ class EnvironmentManager(var current: ClientEnvironment) {
                     .subscribe({ version ->
                         val prefs = PreferencesHelper(App.appContext)
                         prefs.lastAppVersion = version.lastVersion
-                        prefs.forceUpdateAppVersion = version.forceUpdateVersion
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
                         instance!!.versionDisposable!!.dispose()
+                    })
+
+            val preferenceHelper = PreferencesHelper(App.appContext)
+            val devConfigPath = if (preferenceHelper.useTest) {
+                Constants.URL_GITHUB_TEST_CONFIG_DEV
+            } else {
+                Constants.URL_GITHUB_CONFIG_DEV
+            }
+
+            instance!!.devConfigDisposable = githubService.devConfig(devConfigPath)
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({ devConfig ->
+                        val prefs = PreferencesHelper(App.appContext)
+                        prefs.forceUpdateAppVersion = devConfig.forceUpdateVersion ?: BuildConfig.VERSION_NAME
+                        prefs.serviceAvailable = devConfig.serviceAvailable ?: true
+                        prefs.matcherSwapTimestamp = devConfig.matcherSwapTimestamp ?: 1575288000L
+                        instance!!.devConfigDisposable!!.dispose()
+                    }, { error ->
+                        error.printStackTrace()
+                        instance!!.devConfigDisposable!!.dispose()
                     })
         }
 
@@ -380,7 +401,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             instance!!.current.configuration = globalConfiguration
         }
 
-        private fun restartApp(application: Application) {
+        fun restartApp(application: Application) {
             handler.postDelayed({
                 val packageManager = application.packageManager
                 val intent = packageManager.getLaunchIntentForPackage(application.packageName)
