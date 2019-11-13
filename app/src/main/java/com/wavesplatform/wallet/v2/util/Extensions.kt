@@ -299,7 +299,7 @@ fun TransactionType.icon(): Drawable? {
     return ContextCompat.getDrawable(app, this.image)
 }
 
-fun AlertDialog.makeStyled() {
+fun AlertDialog.makeStyled(): AlertDialog {
     val titleTextView = this.findViewById<TextView>(R.id.alertTitle)
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
@@ -316,6 +316,8 @@ fun AlertDialog.makeStyled() {
 
     buttonPositive?.setTextColor(findColor(R.color.submit300))
     buttonNegative?.setTextColor(findColor(R.color.submit300))
+
+    return this
 }
 
 

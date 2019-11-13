@@ -706,6 +706,9 @@
     <string name="keeper_approve">Approve</string>
     <string name="keeper_sign">Sign</string>
     <string name="keeper_send">Send</string>
+    <string name="choose_environment_dialog_title">Please choose environment</string>
+    <string name="choose_environment_dialog_positive_txt">Apply</string>
+    <string name="choose_environment_dialog_negative_txt">Cancel</string>
     <string name="force_update_new_version_available">New Version Available</string>
     <string name="force_update_please_update_to_continue">Please update to continue using Waves App</string>
     <string name="force_update_update">Update</string>
