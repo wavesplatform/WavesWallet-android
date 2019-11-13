@@ -160,7 +160,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                             errorEvent.retrofitException, errorEvent.retrySubject)
                 }, { t: Throwable? -> t?.printStackTrace() }))
 
-        val needForceUpdate = Version.needAppUpdate(BuildConfig.VERSION_NAME, preferencesHelper.lastAppVersion)
+        val needForceUpdate = Version.needAppUpdate(BuildConfig.VERSION_NAME, preferencesHelper.forceUpdateAppVersion)
         if (this !is ForceUpdateActivity && this !is SplashActivity && needForceUpdate) {
             launchActivity<ForceUpdateActivity>()
         }

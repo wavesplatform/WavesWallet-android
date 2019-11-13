@@ -18,6 +18,8 @@ object Constants {
     const val URL_GITHUB_PROXY = "https://raw.githubusercontent.com"
     const val URL_GITHUB_CONFIG = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/"
     const val URL_GITHUB_CONFIG_VERSION = "master/version_android.json"
+    const val URL_GITHUB_CONFIG_DEV = "master/development_configs.json"
+    const val URL_GITHUB_TEST_CONFIG_DEV = "master/test_development_configs.json"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_privacy_policy.pdf"
     const val URL_TERMS_AND_CONDITIONS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"

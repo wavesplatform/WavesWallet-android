@@ -706,4 +706,10 @@
   <string name="keeper_approve">Подтвердить</string>
   <string name="keeper_sign">Подписать</string>
   <string name="keeper_send">Отправить</string>
+  <string name="choose_environment_dialog_title">Пожалуйста, выберите среду</string>
+  <string name="choose_environment_dialog_positive_txt">Применить</string>
+  <string name="choose_environment_dialog_negative_txt">Отмена</string>
+  <string name="force_update_new_version_available">Пора обновить ваше приложение Waves!</string>
+  <string name="force_update_please_update_to_continue">Для продолжения использования приложения вам необходимо обновиться до версии %1$s. Новая версия станет доступна для скачивания в Play Market в течение нескольких часов. В данный момент вы можете воспользоваться Web-версией для доступа к вашему Waves кошельку.</string>
+  <string name="force_update_update">Обновить</string>
 </resources>
