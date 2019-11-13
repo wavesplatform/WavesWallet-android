@@ -37,7 +37,7 @@ class ForceUpdateActivity : BaseActivity(), ForceUpdateView {
         }
 
         force_update_subtitle?.text = getString(R.string.force_update_please_update_to_continue,
-                PreferencesHelper(this).forceUpdateAppVersion)
+                preferencesHelper.forceUpdateAppVersion)
 
         button_open_play_market.click {
             openAppInPlayMarket(this)
