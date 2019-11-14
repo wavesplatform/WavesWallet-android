@@ -53,9 +53,6 @@ class TradeActivity : BaseActivity(), TradeView {
             setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
         }
 
-        setupToolbar(toolbar_view, true, getToolbarTitle(),
-                R.drawable.ic_toolbar_back_white) { launchActivity<MainActivity>(clear = true)}
-
         presenter.loadAssetsInfoOfPair()
 
         val pages = arrayListOf<Pair<Fragment, String>>(
