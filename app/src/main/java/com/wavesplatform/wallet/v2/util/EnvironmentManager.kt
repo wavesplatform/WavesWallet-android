@@ -273,7 +273,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             val versionPath = if (preferenceHelper.useTest) {
                 Constants.URL_GITHUB_TEST_CONFIG_VERSION
             } else {
-                Constants.URL_GITHUB_CONFIG_DEV
+                Constants.URL_GITHUB_CONFIG_VERSION
             }
 
             instance!!.versionDisposable = githubService.loadLastAppVersion(versionPath)
