@@ -269,18 +269,25 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 instance!!.configurationDisposable!!.dispose()
                             })
 
-            instance!!.versionDisposable = githubService.loadLastAppVersion(Constants.URL_GITHUB_CONFIG_VERSION)
+            val preferenceHelper = PreferencesHelper(App.appContext)
+            val versionPath = if (preferenceHelper.useTest) {
+                Constants.URL_GITHUB_TEST_CONFIG_VERSION
+            } else {
+                Constants.URL_GITHUB_CONFIG_DEV
+            }
+
+            instance!!.versionDisposable = githubService.loadLastAppVersion(versionPath)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
-                        val prefs = PreferencesHelper(App.appContext)
-                        prefs.lastAppVersion = version.lastVersion
+                        preferenceHelper.lastAppVersion = version.lastVersion
+                        preferenceHelper.forceUpdateAppVersion =
+                                version.forceUpdateVersion ?: BuildConfig.VERSION_NAME
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
                         instance!!.versionDisposable!!.dispose()
                     })
 
-            val preferenceHelper = PreferencesHelper(App.appContext)
             val devConfigPath = if (preferenceHelper.useTest) {
                 Constants.URL_GITHUB_TEST_CONFIG_DEV
             } else {
@@ -290,10 +297,9 @@ class EnvironmentManager(var current: ClientEnvironment) {
             instance!!.devConfigDisposable = githubService.devConfig(devConfigPath)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ devConfig ->
-                        val prefs = PreferencesHelper(App.appContext)
-                        prefs.forceUpdateAppVersion = devConfig.forceUpdateVersion ?: BuildConfig.VERSION_NAME
-                        prefs.serviceAvailable = devConfig.serviceAvailable ?: true
-                        prefs.matcherSwapTimestamp = devConfig.matcherSwapTimestamp ?: 1575288000L
+                        preferenceHelper.serviceAvailable = devConfig.serviceAvailable ?: true
+                        preferenceHelper.matcherSwapTimestamp =
+                                devConfig.matcherSwapTimestamp ?: 1575288000L
                         instance!!.devConfigDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
