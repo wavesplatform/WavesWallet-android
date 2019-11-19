@@ -91,6 +91,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun startIdentify() {
         onDefaultState()
         fingerprintIdentify = FingerprintIdentify(context)
+        fingerprintIdentify.init()
         fingerprintIdentify.startIdentify(AVAILABLE_TIMES, object : BaseFingerprint.IdentifyListener{
 
             override fun onSucceed() {
@@ -282,6 +283,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
         fun isAvailable(context: Context): Boolean {
             val mFingerprintIdentify = FingerprintIdentify(context)
+            mFingerprintIdentify.init()
             return !RootUtil.isDeviceRooted && mFingerprintIdentify.isFingerprintEnable
         }
     }

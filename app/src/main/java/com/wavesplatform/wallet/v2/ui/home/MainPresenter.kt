@@ -32,6 +32,7 @@ import javax.inject.Inject
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
     var anyNewsShowed = false
+    var backupEventAlreadySent = false
 
     fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
         runAsync {

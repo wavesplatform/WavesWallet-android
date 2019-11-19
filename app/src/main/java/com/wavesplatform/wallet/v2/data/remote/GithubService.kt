@@ -5,11 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v2.data.model.service.configs.LastAppVersionResponse
-import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalConfigurationResponse
-import com.wavesplatform.wallet.v2.data.model.service.configs.GlobalTransactionCommissionResponse
-import com.wavesplatform.wallet.v2.data.model.service.configs.NewsResponse
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.service.configs.*
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -35,4 +32,8 @@ interface GithubService {
     @GET("{versionPath}")
     fun loadLastAppVersion(@Path("versionPath") versionPath: String? = Constants.URL_GITHUB_CONFIG_VERSION)
             : Observable<LastAppVersionResponse>
+
+    @GET("{devConfigPath}")
+    fun devConfig(@Path("devConfigPath") devConfigPath: String? = Constants.URL_GITHUB_CONFIG_DEV)
+            : Observable<DevConfigResponse>
 }

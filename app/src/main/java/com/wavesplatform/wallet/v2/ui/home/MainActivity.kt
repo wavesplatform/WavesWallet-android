@@ -57,7 +57,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @Inject
     @InjectPresenter
     lateinit var presenter: MainPresenter
-    private val fragments = arrayListOf<Fragment>()
+    private var fragments = arrayListOf<Fragment>()
     private var activeFragment = Fragment()
     private var seedWarningBehavior: BottomSheetBehavior<LinearLayout>? = null
     private val markwon: Markwon by lazy { Markwon.create(this) }
@@ -335,7 +335,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun logBackUpAnalyticEvent() {
-        analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup(prefsUtil.backUpAlertCount()))
+        if (presenter.backupEventAlreadySent.not()) {
+            presenter.backupEventAlreadySent = true
+            analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup(prefsUtil.backUpAlertCount()))
+        }
         prefsUtil.incrementBackUpAlertCount()
     }
 
