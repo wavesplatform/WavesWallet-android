@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
@@ -31,13 +31,8 @@ import javax.inject.Inject
 @InjectViewState
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
-    var checkedAboutFundsOnDevice = false
-    var checkedAboutBackup = false
-    var checkedAboutTerms = false
-
-    fun isAllCheckedToStart(): Boolean {
-        return checkedAboutBackup && checkedAboutFundsOnDevice && checkedAboutTerms
-    }
+    var anyNewsShowed = false
+    var backupEventAlreadySent = false
 
     fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
         runAsync {

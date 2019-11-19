@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.ui.base.presenter
 
-import com.arellomobile.mvp.MvpPresenter
-import com.arellomobile.mvp.MvpView
+import moxy.MvpPresenter
+import moxy.MvpView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.DataServiceManager
@@ -53,6 +53,6 @@ open class BasePresenter<T : MvpView> @Inject constructor() : MvpPresenter<T>() 
     }
 
     fun getWavesAddress(): String {
-        return App.getAccessManager().getWallet()?.address ?: ""
+        return App.accessManager.getWallet()?.address ?: ""
     }
 }

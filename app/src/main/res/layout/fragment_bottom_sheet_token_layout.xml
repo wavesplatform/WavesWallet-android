@@ -14,14 +14,14 @@
         android:paddingTop="14dp"
         android:paddingEnd="24dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_id_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/history_details_id"
             android:textColor="@color/basic500" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_id_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textColor="@color/disabled900"
             android:visibility="visible" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_token_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         android:paddingStart="24dp"
         android:paddingEnd="16dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_copy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

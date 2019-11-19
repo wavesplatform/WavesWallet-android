@@ -10,8 +10,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.inputmethod.EditorInfo
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.App
@@ -102,7 +102,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     private fun goNext() {
         if (!TextUtils.isEmpty(guid)) {
             try {
-                WavesWallet(App.getAccessManager().getWalletData(guid),
+                WavesWallet(App.accessManager.getWalletData(guid),
                         edit_account_password.text.toString().trim())
                 launchActivity<CreatePassCodeActivity>(options = createDataBundle(),
                         requestCode = REQUEST_CREATE_PASS_CODE)
@@ -122,8 +122,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     }
 
     private fun setAccountData(guid: String) {
-        account_name.text = App.getAccessManager().getWalletName(guid)
-        val address = App.getAccessManager().getWalletAddress(guid)
+        account_name.text = App.accessManager.getWalletName(guid)
+        val address = App.accessManager.getWalletAddress(guid)
         account_address.text = address
         Glide.with(applicationContext)
                 .load(Identicon().create(address))

@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.success_redirection
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 

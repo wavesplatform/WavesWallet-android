@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse

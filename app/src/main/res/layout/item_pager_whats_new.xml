@@ -6,12 +6,12 @@
     android:background="@android:color/transparent"
     android:padding="24dp">
     
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_new_icon"
         android:layout_width="match_parent"
         android:layout_height="326dp" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_new_title"
         android:layout_width="wrap_content"
         android:layout_below="@+id/image_new_icon"
@@ -22,7 +22,7 @@
         android:textSize="20sp"
         app:fontFamily="@font/roboto_medium" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_new_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

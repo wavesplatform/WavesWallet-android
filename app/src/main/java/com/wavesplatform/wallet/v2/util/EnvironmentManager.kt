@@ -23,6 +23,7 @@ import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
@@ -40,6 +41,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
     private var configurationDisposable: Disposable? = null
     private var versionDisposable: Disposable? = null
+    private var devConfigDisposable: Disposable? = null
     private var gateWayHostInterceptor: HostInterceptor? = null
     private val onUpdateCompleteListeners: MutableList<OnUpdateCompleteListener> = mutableListOf()
     private var updateCompleted = false
@@ -89,7 +91,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         val environmentName: String?
             get() {
                 val preferenceManager = PreferenceManager
-                        .getDefaultSharedPreferences(App.getAppContext())
+                        .getDefaultSharedPreferences(App.appContext)
                 return preferenceManager.getString(
                         GLOBAL_CURRENT_ENVIRONMENT, ClientEnvironment.MAIN_NET.name)
             }
@@ -99,7 +101,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                 0L
             } else {
                 PreferenceManager
-                        .getDefaultSharedPreferences(App.getAppContext())
+                        .getDefaultSharedPreferences(App.appContext)
                         .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0L)
             }
             return currentTimeMillis + timeCorrection
@@ -110,12 +112,12 @@ class EnvironmentManager(var current: ClientEnvironment) {
         }
 
         fun setCurrentEnvironment(current: ClientEnvironment) {
-            PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
+            PreferenceManager.getDefaultSharedPreferences(App.appContext)
                     .edit()
                     .putString(GLOBAL_CURRENT_ENVIRONMENT, current.name)
                     .remove(GLOBAL_CURRENT_ENVIRONMENT_DATA)
                     .apply()
-            restartApp(App.getAppContext())
+            restartApp(App.appContext)
         }
 
 
@@ -133,7 +135,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             getDefaultConfig()
 
             val timeCorrection = PreferenceManager
-                    .getDefaultSharedPreferences(App.getAppContext())
+                    .getDefaultSharedPreferences(App.appContext)
                     .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0)
             val config = getLocalSavedConfig()
 
@@ -154,22 +156,22 @@ class EnvironmentManager(var current: ClientEnvironment) {
             return when (environmentName) {
                 ClientEnvironment.KEY_ENV_MAIN_NET -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_MAIN_NET),
+                            ClientEnvironment.loadJsonFromAsset(App.appContext, ClientEnvironment.FILENAME_MAIN_NET),
                             GlobalConfigurationResponse::class.java)
                 }
                 ClientEnvironment.KEY_ENV_TEST_NET -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_TEST_NET),
+                            ClientEnvironment.loadJsonFromAsset(App.appContext, ClientEnvironment.FILENAME_TEST_NET),
                             GlobalConfigurationResponse::class.java)
                 }
                 ClientEnvironment.KEY_ENV_STAGE_NET -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_STAGE_NET),
+                            ClientEnvironment.loadJsonFromAsset(App.appContext, ClientEnvironment.FILENAME_STAGE_NET),
                             GlobalConfigurationResponse::class.java)
                 }
                 else -> {
                     Gson().fromJson(
-                            ClientEnvironment.loadJsonFromAsset(App.getAppContext(), ClientEnvironment.FILENAME_TEST_NET),
+                            ClientEnvironment.loadJsonFromAsset(App.appContext, ClientEnvironment.FILENAME_TEST_NET),
                             GlobalConfigurationResponse::class.java)
                 }
             }
@@ -192,7 +194,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                             .onErrorReturn {
                                 Timber.e(it, "EnvironmentManager: Can't download global configuration!")
                                 val time = currentTimeMillis + PreferenceManager
-                                        .getDefaultSharedPreferences(App.getAppContext())
+                                        .getDefaultSharedPreferences(App.appContext)
                                         .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0L)
                                 Pair(environment.configuration, UtilsTimeResponse(time, time))
                             }
@@ -267,14 +269,41 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 instance!!.configurationDisposable!!.dispose()
                             })
 
-            instance!!.versionDisposable = githubService.loadLastAppVersion(Constants.URL_GITHUB_CONFIG_VERSION)
+            val preferenceHelper = PreferencesHelper(App.appContext)
+            val versionPath = if (preferenceHelper.useTest) {
+                Constants.URL_GITHUB_TEST_CONFIG_VERSION
+            } else {
+                Constants.URL_GITHUB_CONFIG_VERSION
+            }
+
+            instance!!.versionDisposable = githubService.loadLastAppVersion(versionPath)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
-                        PreferencesHelper(App.getAppContext()).lastAppVersion = version.lastVersion
+                        preferenceHelper.lastAppVersion = version.lastVersion
+                        preferenceHelper.forceUpdateAppVersion =
+                                version.forceUpdateVersion ?: BuildConfig.VERSION_NAME
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
                         instance!!.versionDisposable!!.dispose()
+                    })
+
+            val devConfigPath = if (preferenceHelper.useTest) {
+                Constants.URL_GITHUB_TEST_CONFIG_DEV
+            } else {
+                Constants.URL_GITHUB_CONFIG_DEV
+            }
+
+            instance!!.devConfigDisposable = githubService.devConfig(devConfigPath)
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({ devConfig ->
+                        preferenceHelper.serviceAvailable = devConfig.serviceAvailable ?: true
+                        preferenceHelper.matcherSwapTimestamp =
+                                devConfig.matcherSwapTimestamp ?: 1575288000L
+                        instance!!.devConfigDisposable!!.dispose()
+                    }, { error ->
+                        error.printStackTrace()
+                        instance!!.devConfigDisposable!!.dispose()
                     })
         }
 
@@ -299,7 +328,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
 
         private fun getLocalSavedConfig(): GlobalConfigurationResponse {
 
-            val preferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
+            val preferences = PreferenceManager.getDefaultSharedPreferences(App.appContext)
             val currentEnvName = preferences.getString(
                     GLOBAL_CURRENT_ENVIRONMENT, ClientEnvironment.MAIN_NET.name)
 
@@ -326,7 +355,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
         private fun setTimeCorrection(timeCorrection: Long) {
             if (abs(timeCorrection) > 30_000) {
                 PreferenceManager
-                        .getDefaultSharedPreferences(App.getAppContext())
+                        .getDefaultSharedPreferences(App.appContext)
                         .edit()
                         .putLong(GLOBAL_CURRENT_TIME_CORRECTION,
                                 timeCorrection)
@@ -370,7 +399,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             }
             instance!!.gateWayHostInterceptor!!.setHost(globalConfiguration.servers.gatewayUrl)
             PreferenceManager
-                    .getDefaultSharedPreferences(App.getAppContext())
+                    .getDefaultSharedPreferences(App.appContext)
                     .edit()
                     .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
                             Gson().toJson(globalConfiguration))
@@ -378,7 +407,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
             instance!!.current.configuration = globalConfiguration
         }
 
-        private fun restartApp(application: Application) {
+        fun restartApp(application: Application) {
             handler.postDelayed({
                 val packageManager = application.packageManager
                 val intent = packageManager.getLaunchIntentForPackage(application.packageName)

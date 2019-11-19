@@ -9,9 +9,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding3.view.clicks
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -41,7 +41,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_backup_pharse
 
-    override fun askPassCode() = !App.getAccessManager().isAuthenticated()
+    override fun askPassCode() = !App.accessManager.isAuthenticated()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
@@ -55,10 +55,10 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
             setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED, ""))
         } else {
-            setSeed(App.getAccessManager().getWallet()?.seedStr ?: "")
+            setSeed(App.accessManager.getWallet()?.seedStr ?: "")
         }
 
-        if (!App.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (!App.accessManager.isCurrentAccountBackupSkipped()) {
             button_written_down.invisiable()
             text_view_written_down_hint.invisiable()
         }
@@ -86,7 +86,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
             }
         }
 
-        eventSubscriptions.add(RxView.clicks(image_copy)
+        eventSubscriptions.add(image_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

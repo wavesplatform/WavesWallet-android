@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.request.node.BurnTransaction
 import com.wavesplatform.wallet.App
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
@@ -33,7 +33,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
                 assetId = assetBalance!!.assetId,
                 quantity = quantity)
         request.fee = fee
-        request.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        request.sign(App.accessManager.getWallet()?.seedStr ?: "")
 
         addSubscription(nodeServiceManager.burn(request, totalBurn)
                 .executeInBackground()

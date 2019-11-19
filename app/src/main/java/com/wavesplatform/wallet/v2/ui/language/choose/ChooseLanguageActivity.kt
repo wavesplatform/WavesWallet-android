@@ -6,9 +6,9 @@
 package com.wavesplatform.wallet.v2.ui.language.choose
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.recyclerview.widget.LinearLayoutManager
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.R
@@ -45,7 +45,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
     override fun askPassCode() = false
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        recycle_language.layoutManager = LinearLayoutManager(this)
+        recycle_language.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         val logo = layoutInflater
                 .inflate(R.layout.content_splash_text_logo, null)
         adapter.setHeaderView(logo)

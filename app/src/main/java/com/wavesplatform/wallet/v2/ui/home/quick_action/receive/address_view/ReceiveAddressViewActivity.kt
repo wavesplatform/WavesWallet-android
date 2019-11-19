@@ -9,20 +9,18 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding3.view.clicks
+import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
-import com.wavesplatform.wallet.v2.util.launchActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_receive_address_view.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.click
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
@@ -64,7 +62,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
             startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
         }
 
-        eventSubscriptions.add(RxView.clicks(frame_copy)
+        eventSubscriptions.add(frame_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -73,7 +71,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
                             copyColor = R.color.submit400)
                 })
 
-        eventSubscriptions.add(RxView.clicks(image_copy)
+        eventSubscriptions.add(image_copy.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -81,7 +79,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
                             copyIcon = R.drawable.ic_copy_18_submit_400)
                 })
 
-        eventSubscriptions.add(RxView.clicks(image_share)
+        eventSubscriptions.add(image_share.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -103,7 +101,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         val address = if (intent.hasExtra(YourAssetsActivity.BUNDLE_ADDRESS)) {
             intent.getStringExtra(YourAssetsActivity.BUNDLE_ADDRESS)
         } else {
-            App.getAccessManager().getWallet()?.address ?: ""
+            App.accessManager.getWallet()?.address ?: ""
         }
         text_address.text = address
 

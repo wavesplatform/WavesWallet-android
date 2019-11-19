@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import android.text.TextUtils
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.model.request.node.BaseTransaction

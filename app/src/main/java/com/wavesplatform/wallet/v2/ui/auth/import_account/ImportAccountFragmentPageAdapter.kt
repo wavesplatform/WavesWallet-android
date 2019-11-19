@@ -5,13 +5,15 @@
 
 package com.wavesplatform.wallet.v2.ui.auth.import_account
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.annotation.SuppressLint
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.wavesplatform.wallet.v2.ui.auth.import_account.manually.EnterSeedManuallyFragment
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 
-class ImportAccountFragmentPageAdapter(fm: FragmentManager?, var titles: Array<String>) : FragmentStatePagerAdapter(fm) {
+@SuppressLint("WrongConstant")
+class ImportAccountFragmentPageAdapter(fm: FragmentManager, var titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {

@@ -8,12 +8,12 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.wavesplatform.wallet.v2.util.WavesWallet
-import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
@@ -62,7 +62,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         edit_seed.applyFilterStartEmptySpace()
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_seed)
+        eventSubscriptions.add(edit_seed.textChanges()
                 .skipInitialValue()
                 .map { it.toString() }
                 .debounce(500, TimeUnit.MILLISECONDS)
@@ -94,7 +94,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
                                 override fun onValidateFailed() {
                                     setSkeleton()
-                                    if (App.getAccessManager().isAccountWithSeedExist(edit_seed.text.toString().trim())) {
+                                    if (App.accessManager.isAccountWithSeedExist(edit_seed.text.toString().trim())) {
                                         val wallet = WavesWallet(edit_seed.text.toString().trim().toByteArray(Charsets.UTF_8))
                                         Glide.with(baseActivity)
                                                 .load(identicon.create(wallet.address))

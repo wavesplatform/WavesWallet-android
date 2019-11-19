@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.keeper.send
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransaction
 import com.wavesplatform.sdk.keeper.interfaces.KeeperTransactionResponse
@@ -52,7 +52,7 @@ class KeeperSendTransactionPresenter @Inject constructor() : BasePresenter<Keepe
                         }))
             }
             else -> {
-                viewState.onError(Throwable(App.getAppContext().getString(R.string.common_server_error)))
+                viewState.onError(Throwable(App.appContext.getString(R.string.common_server_error)))
             }
         }
     }

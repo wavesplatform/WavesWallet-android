@@ -8,24 +8,21 @@ package com.wavesplatform.wallet.v2.ui.home.profile.address_book
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.AppCompatCheckBox
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.widget.AppCompatCheckBox
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
@@ -34,6 +31,8 @@ import com.wavesplatform.wallet.v2.util.showSnackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_address_book.*
 import kotlinx.android.synthetic.main.content_empty_data.view.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -62,7 +61,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+        eventSubscriptions.add(edit_search.textChanges()
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
@@ -89,7 +88,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
             }
         })
 
-        recycle_addresses.layoutManager = LinearLayoutManager(this)
+        recycle_addresses.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recycle_addresses.adapter = adapter
         adapter.screenType = intent.getIntExtra(BUNDLE_SCREEN_TYPE, AddressBookScreenType.EDIT.type)
         adapter.bindToRecyclerView(recycle_addresses)
@@ -106,7 +105,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                     putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
                 }
             } else if (this.adapter.screenType == AddressBookScreenType.CHOOSE.type) {
-                val viewItem = (recycle_addresses.layoutManager as LinearLayoutManager)
+                val viewItem = (recycle_addresses.layoutManager as androidx.recyclerview.widget.LinearLayoutManager)
                         .findViewByPosition(position)
                 val checkBox = viewItem?.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
                 checkBox?.isChecked = true

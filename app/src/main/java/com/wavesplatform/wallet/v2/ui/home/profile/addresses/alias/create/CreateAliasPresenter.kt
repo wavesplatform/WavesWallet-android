@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.request.node.AliasTransaction
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.isSmartError

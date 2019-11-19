@@ -6,20 +6,20 @@
 package com.wavesplatform.wallet.v2.ui.home
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.app.AlertDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.appcompat.app.AlertDialog
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.wavesplatform.wallet.v2.data.model.service.configs.NewsResponse
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
@@ -41,6 +41,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
@@ -56,9 +57,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @Inject
     @InjectPresenter
     lateinit var presenter: MainPresenter
-    private val fragments = arrayListOf<Fragment>()
+    private var fragments = arrayListOf<Fragment>()
     private var activeFragment = Fragment()
     private var seedWarningBehavior: BottomSheetBehavior<LinearLayout>? = null
+    private val markwon: Markwon by lazy { Markwon.create(this) }
 
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
@@ -105,7 +107,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
-        if (App.getAccessManager().isAuthenticated()) {
+        if (App.accessManager.isAuthenticated()) {
             presenter.loadNews()
         }
     }
@@ -302,8 +304,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun showBackUpSeedWarning() {
         if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true) &&
-                App.getAccessManager().isCurrentAccountBackupSkipped()) {
-            val currentGuid = App.getAccessManager().getLastLoggedInGuid()
+                App.accessManager.isCurrentAccountBackupSkipped()) {
+            val currentGuid = App.accessManager.getLastLoggedInGuid()
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = EnvironmentManager.getTime()
             if (now > lastTime + MIN_15) {
@@ -325,7 +327,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (App.accessManager.isCurrentAccountBackupSkipped()) {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.visiable()
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
@@ -333,7 +335,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun logBackUpAnalyticEvent() {
-        analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup(prefsUtil.backUpAlertCount()))
+        if (presenter.backupEventAlreadySent.not()) {
+            presenter.backupEventAlreadySent = true
+            analytics.trackEvent(AnalyticEvents.NewUserWithoutBackup(prefsUtil.backUpAlertCount()))
+        }
         prefsUtil.incrementBackUpAlertCount()
     }
 
@@ -371,9 +376,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun showNews(news: NewsResponse) {
         val ids = prefsUtil.getGlobalValueList(PrefsUtil.SHOWED_NEWS_IDS).toHashSet()
-        var anyNewsShowed = false
+
         for (notification in news.notifications) {
-            if (!ids.contains(notification.id) && !anyNewsShowed) {
+            if (!ids.contains(notification.id) && !presenter.anyNewsShowed) {
 
                 val startDate = notification.startDate ?: Long.MAX_VALUE
                 val endDate = notification.endDate ?: Long.MAX_VALUE
@@ -389,8 +394,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
                     val langCode = preferencesHelper.getLanguage()
                     view.text_title.text = NewsResponse.getTitle(langCode, notification)
-                    view.text_subtitle.text = NewsResponse.getSubtitle(langCode, notification)
+                    markwon.setMarkdown(view.text_subtitle, NewsResponse.getSubtitle(langCode, notification))
                     view.button_ok.click {
+                        presenter.anyNewsShowed = false
                         prefsUtil.addGlobalListValue(PrefsUtil.SHOWED_NEWS_IDS, notification.id)
                         accountFirstOpenDialog?.dismiss()
                     }
@@ -403,7 +409,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                     accountFirstOpenDialog.window?.setGravity(Gravity.BOTTOM)
                     accountFirstOpenDialog.show()
 
-                    anyNewsShowed = true
+                    presenter.anyNewsShowed = true
                 }
             }
         }

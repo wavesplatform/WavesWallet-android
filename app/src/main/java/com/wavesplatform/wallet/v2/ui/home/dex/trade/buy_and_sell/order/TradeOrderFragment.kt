@@ -6,18 +6,15 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatTextView
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.widget.RxTextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.wavesplatform.sdk.model.response.matcher.OrderBookResponse
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
-import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
@@ -29,10 +26,11 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeB
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.dialog_order_attention.view.*
 import kotlinx.android.synthetic.main.fragment_trade_order.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
@@ -172,7 +170,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 })
                 .build()
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+        eventSubscriptions.add(edit_amount.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)
@@ -236,7 +234,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     it.printStackTrace()
                 }))
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_limit_price)
+        eventSubscriptions.add(edit_limit_price.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)
@@ -272,7 +270,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     it.printStackTrace()
                 }))
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_total_price)
+        eventSubscriptions.add(edit_total_price.textChanges()
                 .skipInitialValue()
                 .map(CharSequence::toString)
                 .debounce(500, TimeUnit.MILLISECONDS)

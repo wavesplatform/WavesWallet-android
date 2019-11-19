@@ -13,7 +13,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -52,7 +52,7 @@
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_asset_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -85,7 +85,7 @@
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_recipient_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/recipient_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edit_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                             android:layout_centerVertical="true"
                             android:background="@color/accent100" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/image_view_recipient_action"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                             app:srcCompat="@drawable/ic_qrcode_24_basic_500" />
                     </RelativeLayout>
                 </RelativeLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
             <HorizontalScrollView
@@ -188,13 +188,13 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_info_18_warning_600" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gateway_fee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
                     app:fontFamily="@font/roboto_bold"
                     tools:text="@string/send_gateway_info_gateway_fee" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gateway_limits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -225,14 +225,14 @@
                     android:layout_marginTop="19dp">
 
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_warning"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         app:srcCompat="@drawable/ic_warning_18_disabled_500" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/gateway_warning"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:layout_below="@+id/relative_do_not_withdraw"
@@ -255,7 +255,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/monero_layout"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -275,7 +275,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edit_monero_payment_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -303,7 +303,7 @@
                             android:layout_centerVertical="true"
                             android:background="@color/accent100" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/image_view_monero_action"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -315,14 +315,14 @@
 
                 </RelativeLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <RelativeLayout
                 android:id="@+id/text_amount_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -334,7 +334,7 @@
                     android:textSize="12sp" />
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_amount_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -352,7 +352,7 @@
             </RelativeLayout>
 
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/amount_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -371,7 +371,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edit_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -383,7 +383,7 @@
                         android:singleLine="true"
                         android:textColorHint="@color/accent100" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_amount_asset_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -398,7 +398,7 @@
                         android:visibility="gone"
                         tools:text="≈ $ 00 000.00" />
                 </RelativeLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_amount_suggestion"
@@ -411,7 +411,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_use_total_balance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -427,7 +427,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_50_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -443,7 +443,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_10_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -459,7 +459,7 @@
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_5_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -489,12 +489,12 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_info_18_error_500" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_amount_fee_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

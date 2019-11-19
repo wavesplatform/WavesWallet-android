@@ -16,13 +16,13 @@
         android:layout_height="match_parent"
         app:zxing_scanner_layout="@layout/content_custom_barcode_scanner"/>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:fitsSystemWindows="true"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -30,7 +30,7 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_flash"
             android:layout_width="wrap_content"
             android:clickable="true"
@@ -42,7 +42,7 @@
             android:layout_marginEnd="8dp"
             app:srcCompat="@drawable/ic_topbar_flash_on" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <View
         android:layout_centerInParent="true"
@@ -51,7 +51,7 @@
         android:layout_height="252.5dp"/>
 
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

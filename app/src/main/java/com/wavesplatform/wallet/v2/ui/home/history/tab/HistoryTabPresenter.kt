@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.util.Log
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.v2.data.model.local.Language
@@ -146,7 +146,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             if (transaction.convertFromDb().transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
                 true
             } else {
-                transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
+                transaction.lease?.recipientAddress != App.accessManager.getWallet()?.address
             }
         }
     }

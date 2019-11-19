@@ -18,6 +18,9 @@ object Constants {
     const val URL_GITHUB_PROXY = "https://raw.githubusercontent.com"
     const val URL_GITHUB_CONFIG = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/"
     const val URL_GITHUB_CONFIG_VERSION = "master/version_android.json"
+    const val URL_GITHUB_TEST_CONFIG_VERSION = "master/test_version_android.json"
+    const val URL_GITHUB_CONFIG_DEV = "master/development_configs_android.json"
+    const val URL_GITHUB_TEST_CONFIG_DEV = "master/test_development_configs_android.json"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_privacy_policy.pdf"
     const val URL_TERMS_AND_CONDITIONS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
@@ -101,7 +104,7 @@ object Constants {
         const val STAGE_NET = "3MiZL2gvmPcX4hwjpCUYnHxXEJ95kHBfCws"
     }
 
-    val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
+    val alphabetColor: IntArray = App.appContext.resources.getIntArray(R.array.abc_colors)
 
     fun defaultAssetsAvatar(): MutableMap<String, String> {
         val allConfigAssets = EnvironmentManager.globalConfiguration.generalAssets

@@ -11,7 +11,7 @@
     android:paddingStart="16dp"
     android:paddingTop="10dp">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_name"
         android:layout_width="wrap_content"
         android:textSize="16sp"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         tools:text="Alex Jeff" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_address"
         android:layout_width="wrap_content"
         android:textSize="12sp"
@@ -30,7 +30,7 @@
         android:layout_toEndOf="@+id/image_flag"
         tools:text="pjoqwfjohf2wopjfqopqfoqfwlqfwjnfwkjnlqwfl" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         app:srcCompat="@drawable/ic_edit_address_submit_300"/>
 
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/checkbox_choose"
         android:layout_width="wrap_content"
         android:visibility="gone"

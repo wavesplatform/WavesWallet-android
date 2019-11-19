@@ -33,6 +33,18 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         get() = mPref.getString(KEY_LAST_APP_VERSION, BuildConfig.VERSION_NAME)
         set(value) = mPref.edit().putString(KEY_LAST_APP_VERSION, value).apply()
 
+    var forceUpdateAppVersion: String
+        get() = mPref.getString(KEY_FORCE_UPDATE_APP_VERSION, BuildConfig.VERSION_NAME)
+        set(value) = mPref.edit().putString(KEY_FORCE_UPDATE_APP_VERSION, value).apply()
+
+    var serviceAvailable: Boolean
+        get() = mPref.getBoolean(KEY_SERVICE_AVAILABLE, true)
+        set(value) = mPref.edit().putBoolean(KEY_SERVICE_AVAILABLE, value).apply()
+
+    var matcherSwapTimestamp: Long
+        get() = mPref.getLong(KEY_MATCHER_SWAP_TIMESTAMP, 1575288000L)
+        set(value) = mPref.edit().putLong(KEY_MATCHER_SWAP_TIMESTAMP, value).apply()
+
     fun setTutorialPassed(value: Boolean) {
         mPref.edit().putBoolean(KEY_TUTORIAL, value).apply()
     }
@@ -69,14 +81,22 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         get() = mPref.getBoolean(KEY_USE_TEST_NEWS, false)
         set(value) = mPref.edit().putBoolean(KEY_USE_TEST_NEWS, value).apply()
 
+    var useTest: Boolean
+        get() = mPref.getBoolean(KEY_USE_TEST, false)
+        set(value) = mPref.edit().putBoolean(KEY_USE_TEST, value).apply()
+
     companion object {
         const val PREF_FILE_NAME = "android_waves_pref_file"
         const val KEY_TUTORIAL = "keyTutorial"
         const val KEY_DEVELOPER = "keyDeveloper"
         const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
         const val KEY_LAST_APP_VERSION = "lastAppVersion"
+        const val KEY_FORCE_UPDATE_APP_VERSION = "forceUpdateAppVersion"
+        const val KEY_SERVICE_AVAILABLE = "serviceAvailable"
+        const val KEY_MATCHER_SWAP_TIMESTAMP = "matcherSwapTimestamp"
         const val KEY_LANGUAGE = "keyLanguage"
         const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
         const val KEY_USE_TEST_NEWS = "key_use_test_news"
+        const val KEY_USE_TEST = "key_use_test"
     }
 }

@@ -22,7 +22,7 @@
             android:paddingRight="24dp"
             android:paddingTop="24dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/fingerprint_dialog_title"
@@ -30,7 +30,7 @@
                 android:textSize="20sp"
                 app:fontFamily="@font/roboto_medium" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -44,14 +44,14 @@
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_fingerprint_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/ic_fingerprint_sensor_48_submit_300" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_fingerprint_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -18,13 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_send"
             app:srcCompat="@drawable/ic_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
@@ -50,13 +50,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_receive"
             app:srcCompat="@drawable/ic_receive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
@@ -69,7 +69,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_close"
         android:clickable="true"
         android:background="?attr/selectableItemBackgroundBorderless"

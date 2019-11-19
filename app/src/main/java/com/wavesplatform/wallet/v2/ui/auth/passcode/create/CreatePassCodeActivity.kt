@@ -8,8 +8,8 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -97,7 +97,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                 putExtra(KEY_INTENT_GUID, guid)
                 putExtra(KEY_INTENT_PASS_CODE, passCode)
             }
-        } else if (App.getAccessManager().isUseFingerPrint(guid)
+        } else if (App.accessManager.isUseFingerPrint(guid)
                 && FingerprintAuthDialogFragment.isAvailable(this)) {
             showFingerprintDialog(guid, passCode)
         } else if (intent.hasExtra(KEY_INTENT_GUID)) {
@@ -115,17 +115,17 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
         fingerprintDialog.setFingerPrintDialogListener(
                 object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                     override fun onSuccessRecognizedFingerprint() {
-                        App.getAccessManager().setUseFingerPrint(guid, true)
+                        App.accessManager.setUseFingerPrint(guid, true)
                         closeOrMain()
                     }
 
                     override fun onCancelButtonClicked(dialog: Dialog) {
-                        App.getAccessManager().setUseFingerPrint(guid, false)
+                        App.accessManager.setUseFingerPrint(guid, false)
                         closeOrMain()
                     }
 
                     override fun onFingerprintLocked(message: String) {
-                        App.getAccessManager().setUseFingerPrint(guid, false)
+                        App.accessManager.setUseFingerPrint(guid, false)
                         closeOrMain()
                     }
 

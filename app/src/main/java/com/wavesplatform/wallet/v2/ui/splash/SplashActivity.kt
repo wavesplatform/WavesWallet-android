@@ -8,8 +8,6 @@ package com.wavesplatform.wallet.v2.ui.splash
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -23,6 +21,8 @@ import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.MonkeyTest
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pyxis.uzuki.live.richutilskt.utils.setStatusNavBarColor
 import javax.inject.Inject
 
@@ -56,7 +56,7 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onNotLoggedIn() {
         if (preferencesHelper.isTutorialPassed()) {
-            if (TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
+            if (TextUtils.isEmpty(App.accessManager.getLastLoggedInGuid())) {
                 launchActivity<WelcomeActivity>()
                 overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
             } else {

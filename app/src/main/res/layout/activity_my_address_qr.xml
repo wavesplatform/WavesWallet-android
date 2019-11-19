@@ -7,7 +7,7 @@
     android:id="@+id/root"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -24,7 +24,7 @@
             android:layout_marginTop="6dp"
             android:adjustViewBounds="true" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:textSize="16sp"
             app:fontFamily="@font/roboto_medium" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_copy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
             </FrameLayout>
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/view_dashed"
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -120,7 +120,7 @@
             android:layerType="software"
             app:srcCompat="@drawable/shape_dashed_line" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/card_aliases"
             android:layout_width="match_parent"
             android:clickable="true"
@@ -142,7 +142,7 @@
                 android:paddingRight="14dp"
                 android:paddingTop="6dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_startlease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -157,7 +157,7 @@
                     android:layout_toRightOf="@+id/image_startlease"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_leasing_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                         android:textSize="12sp"
                         app:fontFamily="@font/roboto_bold" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_aliases_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                         android:textSize="12sp" />
 
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -188,9 +188,9 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_recipient_action"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
@@ -198,7 +198,7 @@
             android:layout_centerHorizontal="true"
             android:scaleType="fitXY" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_view_qr_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

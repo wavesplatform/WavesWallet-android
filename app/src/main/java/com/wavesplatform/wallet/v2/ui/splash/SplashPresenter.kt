@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.splash
 
 import android.content.Intent
 import android.text.TextUtils
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
 import com.wavesplatform.sdk.utils.RxUtil
@@ -29,7 +29,7 @@ class SplashPresenter @Inject constructor() : BasePresenter<SplashView>() {
     }
 
     fun resolveNextAction() {
-        if (TextUtils.isEmpty(App.getAccessManager().getLoggedInGuid())) {
+        if (TextUtils.isEmpty(App.accessManager.getLoggedInGuid())) {
             viewState.onNotLoggedIn()
         } else {
             val pubKey = prefsUtil.getValue(PrefsUtil.KEY_PUB_KEY, "")

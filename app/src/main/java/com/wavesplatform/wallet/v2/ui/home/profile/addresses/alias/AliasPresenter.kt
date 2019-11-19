@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.model.request.node.BaseTransaction
 import com.wavesplatform.sdk.model.response.node.transaction.AliasTransactionResponse

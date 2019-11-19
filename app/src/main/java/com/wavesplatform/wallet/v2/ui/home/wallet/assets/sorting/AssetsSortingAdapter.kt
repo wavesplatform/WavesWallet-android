@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -57,7 +57,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         }
     }
 
-    override fun onDragEnd(viewHolder: RecyclerView.ViewHolder) {
+    override fun onDragEnd(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
         dragStartListener?.onEndDrag(viewHolder)
     }
 
@@ -84,7 +84,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                 helper.setText(R.id.text_asset_name, item.getName())
                         .setImageResource(R.id.image_favorite, if (item.isFavorite) R.drawable.ic_favorite_14_submit_300 else R.drawable.ic_favorite_14_disabled_400)
                         .addOnClickListener(R.id.image_favorite)
-                        .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
+                        .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.accessManager.getWallet()?.address)
                         .setOnCheckedChangeListener(R.id.switch_visible, null) // fix bug with incorrect call listener
                         .setChecked(R.id.switch_visible, !item.isHidden)
                         .setOnCheckedChangeListener(R.id.switch_visible) { buttonView, isChecked ->

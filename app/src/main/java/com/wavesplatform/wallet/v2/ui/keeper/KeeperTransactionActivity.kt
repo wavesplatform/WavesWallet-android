@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.sdk.WavesSdk
@@ -58,7 +58,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
             presenter.dApp = it.processData.dApp
         }
 
-        if (App.getAccessManager().isAuthenticated() && presenter.transaction != null) {
+        if (App.accessManager.isAuthenticated() && presenter.transaction != null) {
             init(presenter.transaction!!)
         } else {
             KeeperIntentHelper.exitToRootWithResult(this, failResult())
@@ -133,11 +133,11 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
         presenter.receiveTransactionData(transaction, WavesWallet.getAddress())
 
         Glide.with(this)
-                .load(Identicon().create(App.getAccessManager().getWallet()?.address ?: ""))
+                .load(Identicon().create(App.accessManager.getWallet()?.address ?: ""))
                 .apply(RequestOptions().circleCrop())
                 .into(image_address_from)
-        text_address_from.text = App.getAccessManager().getWalletName(
-                App.getAccessManager().getLoggedInGuid())
+        text_address_from.text = App.accessManager.getWalletName(
+                App.accessManager.getLoggedInGuid())
 
         presenter.dApp.notNull {
             Glide.with(this)
@@ -175,7 +175,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
         transaction_view.setTransaction(transaction)
 
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.accessManager.getWallet()?.seedStr ?: "")
 
         val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
         text_transaction_txid.text = txId
@@ -208,7 +208,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
         transaction_view.setTransaction(transaction)
 
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.accessManager.getWallet()?.seedStr ?: "")
 
         val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
         text_transaction_txid.text = txId
@@ -226,7 +226,7 @@ class KeeperTransactionActivity : BaseActivity(), KeeperTransactionView {
 
         transaction_view.setTransaction(transaction, assetDetail)
 
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.accessManager.getWallet()?.seedStr ?: "")
 
         val txId = WavesCrypto.base58encode(WavesCrypto.blake2b(transaction.toBytes()))
         text_transaction_txid.text = txId

@@ -8,8 +8,6 @@ package com.wavesplatform.wallet.v2.ui.widget.configuration.assets
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.EditDrawableText
 import com.mindorks.editdrawabletext.OnDrawableClickListener
@@ -47,7 +45,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
 
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private lateinit var editSearch: EditDrawableText
-    private lateinit var recycleAssets: RecyclerView
+    private lateinit var recycleAssets: androidx.recyclerview.widget.RecyclerView
     private val defaultAssets: MutableList<String> = mutableListOf()
     @Inject
     lateinit var dataServiceManager: DataServiceManager
@@ -87,7 +85,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         editSearch = rootView.findViewById(R.id.edit_search)
         recycleAssets = rootView.findViewById(R.id.recycle_assets)
 
-        recycleAssets.layoutManager = LinearLayoutManager(baseActivity)
+        recycleAssets.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycleAssets)
 
         adapter.onItemChildClickListener =
@@ -111,7 +109,7 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
             }
         })
 
-        eventSubscriptions.add(RxTextView.textChanges(editSearch)
+        eventSubscriptions.add(editSearch.textChanges()
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
@@ -149,9 +147,10 @@ class MarketWidgetConfigurationAssetsBottomSheetFragment : BaseBottomSheetDialog
         return rootView
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         eventSubscriptions.clear()
         inputMethodManager?.hideSoftInputFromWindow(editSearch.windowToken, 0)
+        super.onDismiss(dialog)
     }
 
     private fun search(query: String) {

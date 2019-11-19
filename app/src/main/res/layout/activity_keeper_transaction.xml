@@ -30,13 +30,13 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/functionLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_function_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_function"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -63,15 +63,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/text_transaction_function_label"
                         tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/scriptAddressLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_scriptAddress_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_scriptAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -98,16 +98,16 @@
                         app:layout_constraintTop_toBottomOf="@+id/text_transaction_scriptAddress_label"
                         tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -115,7 +115,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.5">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_address_from"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
@@ -124,7 +124,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/ic_t_startlease_48" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -140,7 +140,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/image_address_from"
                         app:layout_constraintStart_toStartOf="@+id/image_address_from" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_address_from"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -158,9 +158,9 @@
                         app:layout_constraintTop_toTopOf="@+id/image_address_from"
                         tools:text="My Wallet" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -168,7 +168,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.5">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_address_to"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
@@ -177,7 +177,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/ic_t_startlease_48" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -193,7 +193,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/image_address_to"
                         app:layout_constraintStart_toStartOf="@+id/image_address_to" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_address_to"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -211,16 +211,16 @@
                         app:layout_constraintTop_toTopOf="@+id/image_address_to"
                         tools:text="Crypto Marvel" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_transaction_txid_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_transaction_txid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -248,14 +248,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/text_transaction_txid_label"
                     tools:text="ajnefqjwojOJOPUFiuu5HiuHiUHoiI" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/feeLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -266,7 +266,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.5">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_fee_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -282,7 +282,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_fee_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -294,7 +294,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/text_transaction_fee_label"
                         tools:text="1.99fee" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_tag"
                         style="@style/TickerTag"
                         android:layout_gravity="center_vertical"
@@ -304,9 +304,9 @@
                         app:layout_constraintStart_toEndOf="@+id/text_transaction_fee_value"
                         app:layout_constraintTop_toTopOf="@+id/text_transaction_fee_value" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -316,7 +316,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.5">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_time_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -332,7 +332,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_transaction_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -344,16 +344,16 @@
                         app:layout_constraintTop_toBottomOf="@+id/text_transaction_time_label"
                         tools:text="1.99800118" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>
 
     </ScrollView>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constrain_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -384,23 +384,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_reject" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             style="@style/DashedLine"
             android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toTopOf="@+id/button_reject"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:stateListAnimator="@animator/toolbar_elevation">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -410,6 +410,6 @@
             android:fontFamily="@font/roboto"
             app:titleTextAppearance="@style/Toolbar.Title" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 </RelativeLayout>

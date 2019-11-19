@@ -11,75 +11,72 @@ import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.ActionBar
-import android.support.v7.content.res.AppCompatResources
-import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.*
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
-import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.WavesSdk
-import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.NetworkException
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
+import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
+import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
+import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.ui.force_update.ForceUpdateActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
-import com.wavesplatform.wallet.v2.data.manager.base.BaseServiceManager
-import com.wavesplatform.wallet.v2.data.manager.GithubServiceManager
-import com.wavesplatform.wallet.v2.data.manager.gateway.manager.CoinomatDataManager
-import com.wavesplatform.wallet.v2.data.manager.gateway.manager.GatewayDataManager
-import com.wavesplatform.wallet.v2.ui.widget.MarketPulseAppWidgetProvider
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
+import moxy.MvpAppCompatActivity
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, HasFragmentInjector,
-        HasSupportFragmentInjector, OnLocaleChangedListener {
+abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, HasAndroidInjector, OnLocaleChangedListener {
     private val mCompositeDisposable = CompositeDisposable()
     var eventSubscriptions: CompositeDisposable = CompositeDisposable()
 
     lateinit var toolbar: Toolbar
     var translucentStatusBar = false
     protected var mActionBar: ActionBar? = null
-    val baseFragmentManager: FragmentManager
-        get() = super.getSupportFragmentManager()
     val fragmentContainer: Int
         @IdRes get() = 0
 
     @Inject
-    lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject
-    lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var mRxEventBus: RxEventBus
@@ -100,12 +97,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private var onErrorListener: OnErrorListener? = null
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return supportFragmentInjector
-    }
-
-    override fun fragmentInjector(): AndroidInjector<android.app.Fragment>? {
-        return frameworkFragmentInjector
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -166,6 +159,11 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     mErrorManager.showError(this,
                             errorEvent.retrofitException, errorEvent.retrySubject)
                 }, { t: Throwable? -> t?.printStackTrace() }))
+
+        val needForceUpdate = Version.needAppUpdate(BuildConfig.VERSION_NAME, preferencesHelper.forceUpdateAppVersion)
+        if (this !is ForceUpdateActivity && this !is SplashActivity && needForceUpdate) {
+            launchActivity<ForceUpdateActivity>()
+        }
     }
 
     private fun addErrorListener() {
@@ -192,9 +190,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     protected open fun askPassCode() = true
 
     private fun askPassCodeIfNeed() {
-        val guid = App.getAccessManager().getLastLoggedInGuid()
+        val guid = App.accessManager.getLastLoggedInGuid()
 
-        val notAuthenticated = !App.getAccessManager().isAuthenticated()
+        val notAuthenticated = !App.accessManager.isAuthenticated()
         val hasGuidToLogin = !TextUtils.isEmpty(guid)
 
         if (!MonkeyTest.isTurnedOn() && hasGuidToLogin && notAuthenticated && askPassCode()) {
@@ -214,7 +212,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
             crossinline onClickListener: () -> Unit = { onBackPressed() }
     ) {
         this.toolbar = toolbar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(this.toolbar)
         mActionBar = supportActionBar
 
         mActionBar?.setHomeButtonEnabled(homeEnable)
@@ -313,8 +311,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     protected fun clearAndLogout() {
-        App.getAccessManager().setLastLoggedInGuid("")
-        App.getAccessManager().resetWallet()
+        App.accessManager.setLastLoggedInGuid("")
+        App.accessManager.resetWallet()
         launchActivity<WelcomeActivity>(clear = true)
     }
 

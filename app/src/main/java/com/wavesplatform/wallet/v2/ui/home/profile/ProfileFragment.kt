@@ -11,11 +11,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.view.*
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -26,6 +24,7 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.NodeServiceManager
+import com.wavesplatform.wallet.v2.data.manager.NotificationsManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -43,10 +42,9 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActi
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import pers.victor.ext.click
-import pers.victor.ext.finish
-import pers.victor.ext.telephonyManager
-import pers.victor.ext.visiable
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -55,7 +53,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
     @Inject
-    lateinit var nodeServiceManager: NodeServiceManager
+    lateinit var notificationsManager: NotificationsManager
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
@@ -114,6 +112,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
             analytics.trackEvent(AnalyticEvents.ProfileFeedbackEvent)
             sendFeedbackToSupport()
         }
+        card_notification.click {
+            notificationsManager.openNotificationSettings()
+        }
 
         if (BuildConfig.DEBUG) {
             settings.visiable()
@@ -126,7 +127,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
-            if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+            if (App.accessManager.isCurrentAccountBackupSkipped()) {
                 alertDialog.setView(LayoutInflater.from(baseActivity)
                         .inflate(R.layout.content_delete_account_warning_layout, null))
             }
@@ -135,7 +136,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 if (!MonkeyTest.isTurnedOn()) {
                     analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
 
-                    App.getAccessManager().deleteCurrentWavesWallet()
+                    App.accessManager.deleteCurrentWavesWallet()
 
                     presenter.prefsUtil.logOut()
                     restartApp()
@@ -194,7 +195,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun checkBackUp() {
-        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (App.accessManager.isCurrentAccountBackupSkipped()) {
             skip_backup_indicator.setBackgroundColor(ContextCompat
                     .getColor(context!!, R.color.error500))
             skip_backup_indicator_image.setImageDrawable(ContextCompat
@@ -247,8 +248,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun initFingerPrintControl() {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.setOnCheckedChangeListener(null)
-            val guid = App.getAccessManager().getLoggedInGuid()
-            fingerprint_switch.isChecked = App.getAccessManager().isUseFingerPrint(guid)
+            val guid = App.accessManager.getLoggedInGuid()
+            fingerprint_switch.isChecked = App.accessManager.isUseFingerPrint(guid)
             fingerprint_switch.setOnCheckedChangeListener { _, enable ->
                 launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT) {
@@ -273,7 +274,16 @@ class ProfileFragment : BaseFragment(), ProfileView {
         super.onResume()
         setCurrentLangFlag()
         initFingerPrintControl()
+        initNotificationButtonState()
         SimpleChromeCustomTabs.getInstance().connectTo(baseActivity)
+    }
+
+    private fun initNotificationButtonState() {
+        if (notificationsManager.isNotificationEnabled().not()) {
+            card_notification.visiable()
+        } else {
+            card_notification.gone()
+        }
     }
 
     override fun onPause() {
@@ -292,8 +302,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_logout -> {
                 if (!MonkeyTest.isTurnedOn()) {
                     analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)
@@ -305,8 +315,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        App.getAccessManager().resetWallet()
-        App.getAccessManager().setLastLoggedInGuid("")
+        App.accessManager.resetWallet()
+        App.accessManager.setLastLoggedInGuid("")
         finish()
         launchActivity<WelcomeActivity>(clear = true)
     }
@@ -317,7 +327,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    setFingerprint(App.getAccessManager().getLoggedInGuid(),
+                    setFingerprint(App.accessManager.getLoggedInGuid(),
                             data!!.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
                 } else {
                     initFingerPrintControl()
@@ -331,7 +341,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     launchActivity<CreatePassCodeActivity> {
                         putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
                         putExtra(EnterPassCodeActivity.KEY_INTENT_GUID,
-                                App.getAccessManager().getLoggedInGuid())
+                                App.accessManager.getLoggedInGuid())
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                         putExtra(EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
                     }
@@ -347,8 +357,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun setFingerprint(guid: String, passCode: String) {
-        if (App.getAccessManager().isUseFingerPrint(guid)) {
-            App.getAccessManager().setUseFingerPrint(guid, false)
+        if (App.accessManager.isUseFingerPrint(guid)) {
+            App.accessManager.setUseFingerPrint(guid, false)
         } else {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
@@ -356,8 +366,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            App.getAccessManager().setUseFingerPrint(guid,
-                                    !App.getAccessManager().isUseFingerPrint(guid))
+                            App.accessManager.setUseFingerPrint(guid,
+                                    !App.accessManager.isUseFingerPrint(guid))
                             initFingerPrintControl()
                         }
 

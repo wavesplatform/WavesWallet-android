@@ -8,11 +8,9 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.widget.Button
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.app.AlertDialog
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -24,7 +22,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.github.mikephil.charting.utils.ObjectPool
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding3.view.clicks
 import com.wavesplatform.sdk.model.response.data.LastTradesResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
@@ -44,6 +42,8 @@ import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.content_empty_data.*
 import kotlinx.android.synthetic.main.content_global_server_error_layout.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import pers.victor.ext.gone
@@ -78,7 +78,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             showTimeFrameDialog()
         }
 
-        eventSubscriptions.add(RxView.clicks(image_refresh)
+        eventSubscriptions.add(image_refresh.clicks()
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -90,7 +90,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
                     presenter.getTradesByPair()
                 })
 
-        eventSubscriptions.add(RxView.clicks(button_retry)
+        eventSubscriptions.add(button_retry.clicks()
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome_switch_to_test" translatable="false">Switch to Test</string>
-    <string name="welcome_switch_to_prod" translatable="false">Switch to Prod</string>
-    <string name="welcome_switch_to_stage" translatable="false">Switch to Stage</string>
+    <string name="environment_main_net" translatable="false">MainNet</string>
+    <string name="environment_test_net" translatable="false">TestNet</string>
+    <string name="environment_stage_net" translatable="false">StageNet</string>
+
+    <string name="developer_already" translatable="false">No need. You are already developer!</string>
+    <string name="developer_success" translatable="false">You are developer!</string>
+    <string name="developer_in_progress" translatable="false">You are almost developer! (%1$d)</string>
 </resources>

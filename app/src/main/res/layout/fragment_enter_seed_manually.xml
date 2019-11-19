@@ -6,7 +6,7 @@
     android:background="@color/basic50">
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_asset"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -53,7 +53,7 @@
                     android:background="@drawable/skeleton_basic_100_round_4"
                     android:visibility="gone" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/address_asset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                 app:passwordToggleDrawable="@drawable/show_password_selector"
                 app:passwordToggleEnabled="true">
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edit_seed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,13 +105,13 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_validation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_info_18_warning_600" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_validation_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                     app:fontFamily="@font/roboto_bold"
                     tools:text="@string/enter_seed_manually_validation_seed_is_simple_title" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_validation_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_continue"
                 style="@style/WavesButton"
                 android:layout_width="match_parent"
@@ -146,6 +146,6 @@
                 android:text="@string/enter_seed_manually_continue" />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

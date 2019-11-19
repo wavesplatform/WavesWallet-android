@@ -8,13 +8,13 @@ package com.wavesplatform.wallet.v2.data.service
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Events
@@ -58,7 +58,7 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (!App.getAccessManager().isAuthenticated() ||
+        if (!App.accessManager.isAuthenticated() ||
                 ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 stopForeground(true)

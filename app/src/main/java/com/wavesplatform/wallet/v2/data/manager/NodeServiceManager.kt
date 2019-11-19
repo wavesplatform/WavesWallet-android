@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.model.request.node.*
@@ -54,7 +54,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     lateinit var analyticAssetManager: AnalyticAssetManager
 
     fun transactionsBroadcast(tx: TransferTransaction): Observable<TransferTransactionResponse> {
-        tx.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        tx.sign(App.accessManager.getWallet()?.seedStr ?: "")
         return nodeService.transactionsBroadcast(tx)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
@@ -253,7 +253,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun createAlias(request: AliasTransaction): Observable<AliasTransactionResponse> {
-        request.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        request.sign(App.accessManager.getWallet()?.seedStr ?: "")
         return nodeService.transactionsBroadcast(request)
                 .map {
                     it.address = getAddress()
@@ -267,7 +267,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
     }
 
     fun cancelLeasing(transaction: LeaseCancelTransaction): Observable<LeaseCancelTransactionResponse> {
-        transaction.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        transaction.sign(App.accessManager.getWallet()?.seedStr ?: "")
         return nodeService.transactionsBroadcast(transaction)
                 .map {
                     val first = queryFirst<TransactionDb> {
@@ -287,7 +287,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
             fee: Long
     ): Observable<LeaseTransactionResponse> {
         createLeasingRequest.fee = fee
-        createLeasingRequest.sign(App.getAccessManager().getWallet()?.seedStr ?: "")
+        createLeasingRequest.sign(App.accessManager.getWallet()?.seedStr ?: "")
         return nodeService.transactionsBroadcast(createLeasingRequest)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
@@ -334,7 +334,7 @@ class NodeServiceManager @Inject constructor() : BaseServiceManager() {
                         it.transactionTypeId = getTransactionType(
                                 it, WavesWallet.getAddress())
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
-                                && it.sender == App.getAccessManager().getWallet()?.address
+                                && it.sender == App.accessManager.getWallet()?.address
                     }
                 }
                 .flatMap {

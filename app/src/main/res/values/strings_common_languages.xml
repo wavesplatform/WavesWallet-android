@@ -2,4 +2,5 @@
 <resources>
     <string name="common_waves_asset_name" translatable="false">WAVES</string>
     <string name="common_persist" translatable="false">&amp;</string>
+    <string name="default_notification_channel_id" translatable="false">Waves</string>
 </resources>

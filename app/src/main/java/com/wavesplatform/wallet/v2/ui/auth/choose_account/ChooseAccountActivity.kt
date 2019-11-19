@@ -8,14 +8,14 @@ package com.wavesplatform.wallet.v2.ui.auth.choose_account
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -71,9 +71,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
         presenter.checkKeeperIntent(intent)
 
-        recycle_addresses.layoutManager = LinearLayoutManager(this)
-        recycle_addresses.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recycle_addresses.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        recycle_addresses.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 appbar_layout.isSelected = recycle_addresses.canScrollVertically(-1)
             }
         })
@@ -97,7 +97,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onItemClicked(item: AddressBookUserDb) {
-        val guid = App.getAccessManager().findGuidBy(item.address)
+        val guid = App.accessManager.findGuidBy(item.address)
         if (MonkeyTest.isTurnedOn()) {
             MonkeyTest.startIfNeed()
         } else {
@@ -123,7 +123,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         analytics.trackEvent(AnalyticEvents.StartAccountDeleteEvent)
 
         val item = adapter.getItem(position) as AddressBookUserDb
-        val guid = App.getAccessManager().findGuidBy(item.address)
+        val guid = App.accessManager.findGuidBy(item.address)
 
         val alertDialog = AlertDialog.Builder(this).create()
         alertDialog.setTitle(getString(R.string.choose_account_delete_title))
@@ -135,7 +135,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 getString(R.string.choose_account_yes)) { dialog, which ->
             dialog.dismiss()
 
-            App.getAccessManager().deleteWavesWallet(item.address)
+            App.accessManager.deleteWavesWallet(item.address)
             adapter.remove(position)
 
             showSuccess(R.string.choose_account_deleted, R.id.content)
@@ -157,7 +157,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
-                        App.getAccessManager()
+                        App.accessManager
                                 .storeWalletName(item!!.address, item.name)
                     }
                 }

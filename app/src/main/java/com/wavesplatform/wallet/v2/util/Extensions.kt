@@ -20,17 +20,17 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
 import android.provider.Settings
-import android.support.annotation.ColorRes
-import android.support.annotation.IdRes
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatButton
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
+import androidx.annotation.ColorRes
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import android.text.*
 import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
@@ -299,7 +299,7 @@ fun TransactionType.icon(): Drawable? {
     return ContextCompat.getDrawable(app, this.image)
 }
 
-fun AlertDialog.makeStyled() {
+fun AlertDialog.makeStyled(): AlertDialog {
     val titleTextView = this.findViewById<TextView>(R.id.alertTitle)
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
@@ -316,6 +316,8 @@ fun AlertDialog.makeStyled() {
 
     buttonPositive?.setTextColor(findColor(R.color.submit300))
     buttonNegative?.setTextColor(findColor(R.color.submit300))
+
+    return this
 }
 
 
@@ -593,7 +595,7 @@ fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
 }
 
 fun Snackbar.withMultiline(line: Int = 8): Snackbar {
-    val textView = view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+    val textView = view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
     textView.maxLines = line
     return this
 }
@@ -733,7 +735,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isSpam(assetId: String?): Boolean {
-    return (App.getAccessManager().isAuthenticated()
+    return (App.accessManager.isAuthenticated()
             && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
@@ -746,9 +748,9 @@ fun AssetBalanceResponse.getItemType(): Int {
 }
 
 fun restartApp() {
-    val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
+    val intent = Intent(App.appContext, com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    App.getAppContext().startActivity(intent)
+    App.appContext.startActivity(intent)
 }
 
 fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
@@ -1104,5 +1106,14 @@ fun correctPair(settingsIdsPairs: List<String>, pair: Pair<String, String>): Pai
 private fun ByteArray.toHexString(): String {
     return this.joinToString("") {
         java.lang.String.format("%02x", it)
+    }
+}
+
+fun openAppInPlayMarket(activity: Activity) {
+    val appPackageName = activity.packageName
+    try {
+        activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+    } catch (anfe: android.content.ActivityNotFoundException) {
+        activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
     }
 }

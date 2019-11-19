@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
 import android.text.TextUtils
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
@@ -60,7 +60,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                             }
                         }
                     }, {
-                        viewState.showError(App.getAppContext()
+                        viewState.showError(App.appContext
                                 .getString(R.string.receive_error_network))
                     }))
         }
@@ -119,7 +119,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                 }
             }, {
                 runOnUiThread {
-                    viewState.showError(App.getAppContext()
+                    viewState.showError(App.appContext
                             .getString(R.string.receive_error_network))
                 }
             }))

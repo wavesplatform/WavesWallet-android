@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.sdk.WavesSdk
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -49,7 +49,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            App.getAccessManager().setUseFingerPrint(guid, true)
+                            App.accessManager.setUseFingerPrint(guid, true)
                             launchActivity<MainActivity>(clear = true)
                         }
 
@@ -70,7 +70,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     }
 
     override fun onBackPressed() {
-        App.getAccessManager().setUseFingerPrint(guid, false)
+        App.accessManager.setUseFingerPrint(guid, false)
         if (WavesSdk.keeper().isKeeperIntent(intent)) {
             launchActivity<KeeperTransactionActivity>()
         } else {

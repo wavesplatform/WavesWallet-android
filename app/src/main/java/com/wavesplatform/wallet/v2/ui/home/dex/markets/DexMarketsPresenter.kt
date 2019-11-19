@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.vicpin.krealmextensions.queryAll
 import com.wavesplatform.sdk.model.request.data.PairRequest
 import com.wavesplatform.sdk.model.response.data.AssetInfoResponse
@@ -95,7 +95,7 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
                     viewState.afterSuccessGetMarkets(foundMarkets)
                 }, {
                     if (it.message == ERROR_CANT_FIND_ASSETS) {
-                        viewState.afterFailGetMarkets(App.getAppContext().getString(
+                        viewState.afterFailGetMarkets(App.appContext.getString(
                                 R.string.market_widget_config_cant_find_currency_pair))
                     } else {
                         viewState.afterFailGetMarkets()

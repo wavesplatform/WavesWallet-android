@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.crypto.WavesCrypto.Companion.addressFromPublicKey
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse

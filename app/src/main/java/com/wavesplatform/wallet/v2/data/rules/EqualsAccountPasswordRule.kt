@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.rules
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.App
 import io.github.anderscheow.validator.rules.BaseRule
@@ -34,12 +34,12 @@ class EqualsAccountPasswordRule : BaseRule {
             return try {
                 if (guid.isEmpty()) {
                     WavesWallet(
-                            App.getAccessManager().getCurrentWavesWalletEncryptedData(),
+                            App.accessManager.getCurrentWavesWalletEncryptedData(),
                             value
                     )
                     true
                 } else {
-                    WavesWallet(App.getAccessManager().getWalletData(guid),
+                    WavesWallet(App.accessManager.getWalletData(guid),
                             value.trim())
                     true
                 }

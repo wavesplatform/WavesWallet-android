@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.wavesplatform.sdk.model.response.node.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject

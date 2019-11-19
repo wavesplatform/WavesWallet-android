@@ -7,13 +7,13 @@ package com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.CardView
+import androidx.cardview.widget.CardView
 import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -39,7 +39,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
-    override fun askPassCode() = !App.getAccessManager().isAuthenticated()
+    override fun askPassCode() = !App.accessManager.isAuthenticated()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
@@ -109,7 +109,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
                             launchActivity<CreatePassCodeActivity>(options = intent.extras)
                         } else {
-                            App.getAccessManager().setCurrentAccountBackupDone()
+                            App.accessManager.setCurrentAccountBackupDone()
                             setResult(Constants.RESULT_OK)
                             finish()
                         }

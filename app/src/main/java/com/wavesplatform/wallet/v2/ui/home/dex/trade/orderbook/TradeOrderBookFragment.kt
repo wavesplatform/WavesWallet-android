@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.remote.response.WatchMarketResponse
@@ -45,7 +45,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     @Inject
     lateinit var adapter: TradeOrderBookAdapter
 
-    lateinit var orderBookLinearLayoutManager: LinearLayoutManager
+    lateinit var orderBookLinearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
 
     @ProvidePresenter
     fun providePresenter(): TradeOrderBookPresenter = presenter
@@ -78,7 +78,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             text_sum_title.text = getString(R.string.orderbook_sum_title, it.priceAssetShortName)
         }
 
-        orderBookLinearLayoutManager = LinearLayoutManager(baseActivity)
+        orderBookLinearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(baseActivity)
         recycle_orderbook.layoutManager = orderBookLinearLayoutManager
 
         adapter.bindToRecyclerView(recycle_orderbook)
@@ -153,7 +153,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
 
                     }
                     smartPairInfoDialog.configureDialog(amountAssetInfo, priceAssetInfo, listener)
-                    smartPairInfoDialog.show(fragmentManager, SmartPairInfoBottomSheetFragment::class.java.simpleName)
+                    smartPairInfoDialog.show(requireFragmentManager(), SmartPairInfoBottomSheetFragment::class.java.simpleName)
                 }
             }
         } else {

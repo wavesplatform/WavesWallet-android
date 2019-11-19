@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -45,7 +45,7 @@ class AssetsAdapter @Inject constructor() :
         addItemType(TYPE_SEARCH, R.layout.item_wallet_asset_search)
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    override fun onAttachedToRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         FullSpanUtil.onAttachedToRecyclerView(recyclerView, this, TYPE_HEADER)
     }
@@ -94,7 +94,7 @@ class AssetsAdapter @Inject constructor() :
                                 item.getAvailableBalance(), item.getDecimals()))
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
-                                == App.getAccessManager().getWallet()?.address)
+                                == App.accessManager.getWallet()?.address)
                         .setGone(R.id.text_tag_spam, item.isSpam)
                         .setGone(R.id.text_asset_value, item.isSpam.not())
 

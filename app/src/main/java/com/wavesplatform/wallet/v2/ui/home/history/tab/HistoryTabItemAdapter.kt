@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.RecyclerView
+import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -41,7 +41,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         addItemType(HistoryItem.TYPE_EMPTY, R.layout.content_history_tab_header_space)
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    override fun onAttachedToRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         FullSpanUtil.onAttachedToRecyclerView(recyclerView, this, HistoryItem.TYPE_HEADER)
     }
@@ -186,7 +186,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
-                App.getAccessManager().getWallet()?.address)
+                App.accessManager.getWallet()?.address)
         val secondOrder = if (myOrder.id == transaction.order1!!.id) {
             transaction.order2!!
         } else {

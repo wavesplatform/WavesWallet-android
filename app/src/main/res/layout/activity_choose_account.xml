@@ -5,14 +5,14 @@
     android:id="@+id/content"
     android:background="@color/basic50">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/basic50"
         android:stateListAnimator="@animator/toolbar_elevation">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,9 +21,9 @@
             android:fitsSystemWindows="true"
             android:fontFamily="@font/roboto"
             app:titleTextAppearance="@style/Toolbar.Title" />
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_addresses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

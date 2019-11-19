@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.language.change_welcome
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,14 +39,14 @@ class ChangeLanguageBottomSheetFragment : BaseSuperBottomSheetDialogFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(R.layout.fragment_bottom_sheet_change_language_layout, container, false)
 
-        rootView.recycle_language.layoutManager = LinearLayoutManager(activity)
+        rootView.recycle_language.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         rootView.recycle_language.adapter = adapter
 
         adapter.setNewData(Language.getLanguagesItems())
         markCurrentSelectedLanguage()
 
-        dialog.setOnShowListener { dialog ->
-            val bottomSheetInternal = this.dialog.findViewById<View>(R.id.super_bottom_sheet)
+        dialog?.setOnShowListener { dialog ->
+            val bottomSheetInternal = this.dialog?.findViewById<View>(R.id.super_bottom_sheet)
             behavior = BottomSheetBehavior.from(bottomSheetInternal)
         }
 

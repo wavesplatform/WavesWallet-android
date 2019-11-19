@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.base.view
 
-import com.arellomobile.mvp.MvpView
+import moxy.MvpView
 
 interface BaseMvpView : MvpView {
     fun showNetworkError()

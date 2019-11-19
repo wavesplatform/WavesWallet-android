@@ -5,16 +5,16 @@
 
 package com.wavesplatform.wallet
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import android.os.Handler
 
 class AppLifecycleObserver : LifecycleObserver {
 
     private var handler: Handler = Handler()
     private var resetWalletTask = Runnable {
-        App.getAccessManager().resetWallet()
+        App.accessManager.resetWallet()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

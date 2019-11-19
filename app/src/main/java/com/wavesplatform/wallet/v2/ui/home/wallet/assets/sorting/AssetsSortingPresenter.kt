@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save

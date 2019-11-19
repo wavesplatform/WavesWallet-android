@@ -6,7 +6,7 @@
     android:foreground="?attr/selectableItemBackground"
     android:background="@color/white">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/view_bg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:layout_weight="1">
 
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_amount_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:paddingBottom="14dp"
             android:paddingTop="14dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_price_value"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
             android:paddingBottom="14dp"
             android:paddingTop="14dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_sum_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

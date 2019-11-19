@@ -9,9 +9,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.R
+import com.jakewharton.rxbinding3.view.clicks
 import com.wavesplatform.sdk.model.response.matcher.MarketResponse
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,14 +39,14 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
 
         if (market?.popular == true) rootView.text_popular.visiable()
 
-        eventSubscriptions.add(RxView.clicks(rootView.image_copy_amount_asset)
+        eventSubscriptions.add(rootView.image_copy_amount_asset.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     rootView.image_copy_amount_asset.copyToClipboard(rootView.text_amount_asset_value.text.toString(), R.drawable.ic_copy_18_submit_400)
                 })
 
-        eventSubscriptions.add(RxView.clicks(rootView.image_copy_price_asset)
+        eventSubscriptions.add(rootView.image_copy_price_asset.clicks()
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

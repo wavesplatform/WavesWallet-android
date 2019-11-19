@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.rules
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.App
 
@@ -27,7 +27,7 @@ class NotEqualsAccountPasswordRule : BaseRule {
         if (value is String) {
             return try {
                 val oldWallet = WavesWallet(
-                        App.getAccessManager().getCurrentWavesWalletEncryptedData(),
+                        App.accessManager.getCurrentWavesWalletEncryptedData(),
                         value
                 )
                 false

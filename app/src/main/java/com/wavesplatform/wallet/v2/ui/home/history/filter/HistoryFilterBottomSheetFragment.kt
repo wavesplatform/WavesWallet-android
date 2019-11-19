@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.home.history.filter
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,10 +80,10 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun setupAssetsList() {
-        val recycleAssets = rooView?.findViewById<RecyclerView>(R.id.recycle_assets)
+        val recycleAssets = rooView?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recycle_assets)
         val assetsAdapter = AssetsAdapter()
 
-        recycleAssets?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        recycleAssets?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.RecyclerView.HORIZONTAL, false)
         recycleAssets?.adapter = assetsAdapter
 
         queryAllAsync<AssetBalanceDb> {
@@ -106,10 +106,10 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun setupTransferList() {
-        val recycleTransfer = rooView?.findViewById<RecyclerView>(R.id.recycle_transfer)
+        val recycleTransfer = rooView?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recycle_transfer)
         val transferAdapter = TransferAdapter()
 
-        recycleTransfer?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        recycleTransfer?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.RecyclerView.HORIZONTAL, false)
         recycleTransfer?.adapter = transferAdapter
 
         val transfeeList = arrayListOf<TransferModel>()

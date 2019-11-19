@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.address
 
 import android.graphics.Bitmap
-import android.support.v7.widget.AppCompatImageView
-import com.arellomobile.mvp.InjectViewState
+import androidx.appcompat.widget.AppCompatImageView
+import moxy.InjectViewState
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.vicpin.krealmextensions.queryAllAsSingle

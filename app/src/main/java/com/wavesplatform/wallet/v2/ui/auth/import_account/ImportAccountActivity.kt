@@ -9,8 +9,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.sdk.utils.WAVES_PREFIX
 import com.wavesplatform.wallet.App
@@ -64,7 +64,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                     val seed = result.contents.replace(WAVES_PREFIX, "")
                     if (!TextUtils.isEmpty(seed)) {
                         when {
-                            App.getAccessManager().isAccountWithSeedExist(seed) -> {
+                            App.accessManager.isAccountWithSeedExist(seed) -> {
                                 showError(R.string.enter_seed_manually_validation_seed_exists_error, R.id.root_view)
                             }
                             seed.length < 24 -> {

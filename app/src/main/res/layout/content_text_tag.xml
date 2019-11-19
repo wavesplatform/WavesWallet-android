@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.AppCompatTextView xmlns:tools="http://schemas.android.com/tools"
+<androidx.appcompat.widget.AppCompatTextView xmlns:tools="http://schemas.android.com/tools"
     style="@style/TextTag"
     tools:text="Mike Node" />
